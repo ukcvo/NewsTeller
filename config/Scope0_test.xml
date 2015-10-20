@@ -9,7 +9,7 @@
    <bean id="main" class="edu.kit.anthropomatik.isl.newsTeller.main.Main">
       <property name="msg">
          <bean class="java.lang.String">
-    		<constructor-arg type="java.lang.String" value="Hello, world!" />
+    		<constructor-arg type="java.lang.String" value="beep" />
 		</bean>
        </property>
    </bean>
