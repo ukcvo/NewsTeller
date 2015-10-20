@@ -32,6 +32,8 @@ public class Main {
 		Main m = (Main) context.getBean("main");
 		((AbstractApplicationContext) context).close();
 		log.debug("about to beep");
+		log.trace("a trace");
+		
 		m.beep();
 		log.warn("shutting down!");
 		
