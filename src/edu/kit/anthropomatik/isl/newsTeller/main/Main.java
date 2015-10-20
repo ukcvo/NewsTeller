@@ -1,5 +1,8 @@
 package edu.kit.anthropomatik.isl.newsTeller.main;
 
+import java.io.IOException;
+import java.util.logging.LogManager;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
@@ -8,6 +11,8 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class Main {
 
+	private static Log log;
+	
 	private String msg;
 	
 	public String getMsg() {
@@ -25,18 +30,30 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		Log log = LogFactory.getLog(Main.class);
-		log.info("starting");
+		// setting up logger configuration
+		System.setProperty("java.util.logging.config.file", "./config/logging.properties");
+		try {
+			LogManager.getLogManager().readConfiguration();
+			log = LogFactory.getLog(Main.class);
+		} catch (SecurityException e) {
+			log.error("Can't access logger config file! " + e.toString());
+		} catch (IOException e) {
+			log.error("Can't access logger config file! " + e.toString());
+		}
 		
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope0.xml");
+		log.info("starting the program");
+		
+		String configFile = "config/Scope0.xml"; // use Scope0.xml as default
+		if (args.length >= 1)
+			configFile = args[0];
+		
+		ApplicationContext context = new FileSystemXmlApplicationContext(configFile);
 		Main m = (Main) context.getBean("main");
 		((AbstractApplicationContext) context).close();
-		log.debug("about to beep");
-		log.trace("a trace");
 		
 		m.beep();
-		log.warn("shutting down!");
 		
+		log.info("shutting down");
 	}
 
 }
