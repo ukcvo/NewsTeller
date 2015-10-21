@@ -2,6 +2,11 @@ package edu.kit.anthropomatik.isl.newsTeller.newsTeller;
 
 import java.net.URI;
 import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.util.StringUtils;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.generation.SummaryCreator;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever;
@@ -15,6 +20,8 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
  *
  */
 public class NewsTeller {
+	
+	static Log log = LogFactory.getLog(NewsTeller.class);
 	
 	private UserModel userModel;
 	
@@ -43,6 +50,9 @@ public class NewsTeller {
 	//endregion 
 
 	public String getNews(List<Keyword> userQuery) {
+		
+		if (log.isInfoEnabled())
+			log.info("user query: " + StringUtils.collectionToCommaDelimitedString(userQuery));
 		
 		List<URI> events = retriever.retrieveEvents(userQuery, userModel);
 		URI selectedEvent = selector.selectEvent(events, userQuery, userModel);

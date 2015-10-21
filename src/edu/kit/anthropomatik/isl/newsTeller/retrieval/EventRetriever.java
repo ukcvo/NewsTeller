@@ -4,6 +4,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finders.EventFinder;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
@@ -16,6 +19,8 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
  */
 public class EventRetriever {
 
+	static Log log = LogFactory.getLog(EventRetriever.class);
+	
 	private List<EventFinder> eventFinders;
 	
 	public void setEventFinders(List<EventFinder> eventFinders) {
@@ -23,6 +28,9 @@ public class EventRetriever {
 	}
 
 	public List<URI> retrieveEvents(List<Keyword> userQuery, UserModel userModel) {
+		
+		if (log.isTraceEnabled())
+			log.trace("retrieve events");
 		
 		List<URI> events = new ArrayList<URI>();
 		

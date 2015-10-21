@@ -3,6 +3,9 @@ package edu.kit.anthropomatik.isl.newsTeller.selection;
 import java.net.URI;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.selection.scoring.EventScorer;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
@@ -15,6 +18,8 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
  */
 public class EventSelector {
 
+	static Log log = LogFactory.getLog(EventSelector.class);
+	
 	private List<EventScorer> eventScorers;
 	
 	public void setEventScorers(List<EventScorer> eventScorers) {
@@ -22,6 +27,9 @@ public class EventSelector {
 	}
 		
 	public URI selectEvent(List<URI> events, List<Keyword> userQuery, UserModel userModel) {
+		
+		if (log.isTraceEnabled())
+			log.trace("select Event");
 		
 		//TODO: figure out how to combine scores and pick highest element (might need a bit of infrastructure)
 		return null;

@@ -23,6 +23,7 @@
    <bean id="retriever" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
      <property name="eventFinders">
        <list>
+       <!-- <value>TODO:bean goes here</value> -->
        </list>
      </property>
    </bean>
