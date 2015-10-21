@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.data;
 
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public class ConversationCycle {
 
 	private List<Keyword> userQuery;
 	
-	private String eventURL; //TODO fix dataType once we know how to represent events
+	private URI event;
 	
 	private String systemResponse;
 
@@ -24,12 +25,12 @@ public class ConversationCycle {
 		this.userQuery = userQuery;
 	}
 
-	public String getEventURL() {
-		return eventURL;
+	public URI getEvent() {
+		return event;
 	}
 
-	public void setEventURL(String eventURL) {
-		this.eventURL = eventURL;
+	public void setEvent(URI event) {
+		this.event = event;
 	}
 
 	public String getSystemResponse() {

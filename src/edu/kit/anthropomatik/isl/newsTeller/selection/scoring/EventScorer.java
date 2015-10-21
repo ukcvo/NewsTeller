@@ -1,6 +1,11 @@
 package edu.kit.anthropomatik.isl.newsTeller.selection.scoring;
 
+import java.net.URI;
+import java.util.List;
+
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
 /**
  * Scores an event based on certain criteria.
@@ -17,5 +22,5 @@ public abstract class EventScorer {
 		this.ksAdapter = ksAdapter;
 	}
 	
-	//TODO: public abstract double scoreEvent(Event e);
+	public abstract double scoreEvent(URI event, List<Keyword> userQuery, UserModel userModel);
 }

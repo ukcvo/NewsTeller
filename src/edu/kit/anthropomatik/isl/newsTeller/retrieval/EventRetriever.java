@@ -1,8 +1,12 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finders.EventFinder;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
 /**
  * Takes care of retrieving potentially relevant events from the KnowledgeStore.
@@ -14,6 +18,18 @@ public class EventRetriever {
 
 	private List<EventFinder> eventFinders;
 	
-	//TODO: getEventList() once we know what types events should be
-	
+	public void setEventFinders(List<EventFinder> eventFinders) {
+		this.eventFinders = eventFinders;
+	}
+
+	public List<URI> retrieveEvents(List<Keyword> userQuery, UserModel userModel) {
+		
+		List<URI> events = new ArrayList<URI>();
+		
+		for (EventFinder finder : eventFinders) {
+			events.addAll(finder.findEvents(userQuery, userModel));
+		}
+		
+		return events;
+	}
 }

@@ -47,7 +47,7 @@ public class Main {
 
 	// command-line interface to NewsTeller
 	private void run() {
-		newsTeller.getNews(new ArrayList<Keyword>());
+		System.out.println(newsTeller.getNews(new ArrayList<Keyword>()));
 	}
 	
 	public static void main(String[] args) {

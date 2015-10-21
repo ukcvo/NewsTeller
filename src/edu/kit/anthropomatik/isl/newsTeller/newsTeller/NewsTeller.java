@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.newsTeller;
 
+import java.net.URI;
 import java.util.List;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.generation.SummaryCreator;
@@ -42,7 +43,12 @@ public class NewsTeller {
 	//endregion 
 
 	public String getNews(List<Keyword> userQuery) {
-		return "";
+		
+		List<URI> events = retriever.retrieveEvents(userQuery, userModel);
+		URI selectedEvent = selector.selectEvent(events, userQuery, userModel);
+		String summary = generator.summarizeEvent(selectedEvent);
+		
+		return summary;
 	}
 	
 }

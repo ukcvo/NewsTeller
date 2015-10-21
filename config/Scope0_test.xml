@@ -14,11 +14,17 @@
    </bean>
    
    <bean id="selector" class="edu.kit.anthropomatik.isl.newsTeller.selection.EventSelector">
-     <!-- TODO: set up list of scorers -->
+     <property name="eventScorers">
+       <list>
+       </list>
+     </property>
    </bean>
 
    <bean id="retriever" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
-     <!-- TODO: set up list of finders -->
+     <property name="eventFinders">
+       <list>
+       </list>
+     </property>
    </bean>
    
    <bean id="userModel" class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel">

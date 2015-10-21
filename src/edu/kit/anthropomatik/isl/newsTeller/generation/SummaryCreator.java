@@ -1,5 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.generation;
 
+import java.net.URI;
+
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 
 /**
@@ -17,5 +19,6 @@ public abstract class SummaryCreator {
 		this.ksAdapter = ksAdapter;
 	} 
 	
-	//TODO: public abstract String summarizeEvent(Event e);
+	// summarize the given event
+	public abstract String summarizeEvent(URI event);
 }

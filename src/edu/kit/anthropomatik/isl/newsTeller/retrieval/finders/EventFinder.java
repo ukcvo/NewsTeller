@@ -1,6 +1,11 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.finders;
 
+import java.net.URI;
+import java.util.List;
+
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
 /**
  * Represents one way to find events.
@@ -17,5 +22,6 @@ public abstract class EventFinder {
 		this.ksAdapter = ksAdapter;
 	}
 	
+	public abstract List<URI> findEvents(List<Keyword> userQuery, UserModel userModel);
 	//TODO: findEvents() once we know what events can be represented as
 }
