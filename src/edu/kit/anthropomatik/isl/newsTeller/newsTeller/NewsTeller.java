@@ -1,7 +1,9 @@
 package edu.kit.anthropomatik.isl.newsTeller.newsTeller;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -9,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.generation.SummaryCreator;
+import edu.kit.anthropomatik.isl.newsTeller.main.Main;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever;
 import edu.kit.anthropomatik.isl.newsTeller.selection.EventSelector;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
@@ -21,7 +24,7 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
  */
 public class NewsTeller {
 	
-	static Log log = LogFactory.getLog(NewsTeller.class);
+	private Log log;
 	
 	private UserModel userModel;
 	
@@ -49,6 +52,19 @@ public class NewsTeller {
 	}
 	//endregion 
 
+	public NewsTeller(String loggingFileName) {
+		// setting up logger configuration
+		System.setProperty("java.util.logging.config.file", loggingFileName);
+		try {
+			LogManager.getLogManager().readConfiguration();
+			log = LogFactory.getLog(NewsTeller.class);
+		} catch (SecurityException e) {
+			log.error("Can't access logger config file! " + e.toString());
+		} catch (IOException e) {
+			log.error("Can't access logger config file! " + e.toString());
+		}
+	}
+	
 	public String getNews(List<Keyword> userQuery) {
 		
 		if (log.isInfoEnabled())

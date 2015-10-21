@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.main;
+package edu.kit.anthropomatik.isl.newsTeller.newsTeller;
 
 import static org.junit.Assert.*;
 
@@ -8,20 +8,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-public class MainTester {
+public class NewsTellerTesterScope0 {
 
-	private Main m;
+	NewsTeller newsTeller;
 	
 	@Before
-	public void init() {
+	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope0_test.xml");
-		m = (Main) context.getBean("main");
+		newsTeller = (NewsTeller) context.getBean("newsTeller");
 		((AbstractApplicationContext) context).close();
 	}
-	
+
 	@Test
-	public void shouldReturnBeep() {
-		assertTrue(m.getMsg().equals("beep"));
+	public void shouldReturnDummySummary() {
+		assertTrue(newsTeller.getNews(null).equals("dummySummary"));
 	}
 
 }

@@ -18,7 +18,7 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
  */
 public class EventSelector {
 
-	static Log log = LogFactory.getLog(EventSelector.class);
+	private static Log log = LogFactory.getLog(EventSelector.class);
 	
 	private List<EventScorer> eventScorers;
 	
@@ -31,7 +31,13 @@ public class EventSelector {
 		if (log.isTraceEnabled())
 			log.trace("select Event");
 		
-		//TODO: figure out how to combine scores and pick highest element (might need a bit of infrastructure)
+		for (URI event : events) {
+			for (EventScorer scorer : eventScorers) {
+				//TODO: figure out how to combine scores and pick highest element (might need a bit of infrastructure)
+				scorer.scoreEvent(event, userQuery, userModel);
+			}
+		}
+		
 		return null;
 	}
 

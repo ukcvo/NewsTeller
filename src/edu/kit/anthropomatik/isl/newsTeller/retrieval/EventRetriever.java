@@ -19,7 +19,7 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
  */
 public class EventRetriever {
 
-	static Log log = LogFactory.getLog(EventRetriever.class);
+	private static Log log = LogFactory.getLog(EventRetriever.class);
 	
 	private List<EventFinder> eventFinders;
 	

@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class DummySummaryCreator extends SummaryCreator {
 
-	static Log log = LogFactory.getLog(SummaryCreator.class);
+	private static Log log = LogFactory.getLog(SummaryCreator.class);
 	
 	@Override
 	public String summarizeEvent(URI event) {

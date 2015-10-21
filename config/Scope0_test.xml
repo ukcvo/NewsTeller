@@ -31,6 +31,7 @@
    </bean>
    
    <bean id="newsTeller" class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
+     <constructor-arg value="./config/logging-test.properties"/>
      <property name="userModel" ref="userModel"/>
      <property name="retriever" ref="retriever"/>
      <property name="selector" ref="selector"/>
@@ -40,11 +41,6 @@
    <!-- Definition for main (preliminary testing purposes only) -->
    <bean id="main" class="edu.kit.anthropomatik.isl.newsTeller.main.Main">
       <property name="newsTeller" ref="newsTeller"/>
-      <property name="msg">
-         <bean class="java.lang.String">
-    		<constructor-arg type="java.lang.String" value="beep" />
-		</bean>
-       </property>
    </bean>
 
 </beans>
