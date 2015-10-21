@@ -9,9 +9,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.generation.SummaryCreator;
+import edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller;
+
+/**
+ * Main executable for interactive testing purposes.
+ * 
+ * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
+ *
+ */
 public class Main {
 
 	private static Log log;
+	
+	private NewsTeller newsTeller;
 	
 	private String msg;
 	
@@ -19,11 +30,18 @@ public class Main {
 		return msg;
 	}
 
-
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
 
+	public NewsTeller getNewsTeller() {
+		return newsTeller;
+	}
+
+	public void setNewsTeller(NewsTeller newsTeller) {
+		this.newsTeller = newsTeller;
+	}
+	
 	public void beep() {
 		System.out.println(msg);
 	}
@@ -49,6 +67,7 @@ public class Main {
 		
 		ApplicationContext context = new FileSystemXmlApplicationContext(configFile);
 		Main m = (Main) context.getBean("main");
+		SummaryCreator s = (SummaryCreator) context.getBean("generator");
 		((AbstractApplicationContext) context).close();
 		
 		m.beep();

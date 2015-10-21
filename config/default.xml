@@ -5,8 +5,35 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+   <bean id="ksAdapter" class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
+     <!-- TODO: params (if any) -->
+   </bean>
+
+   <bean id="generator" class="edu.kit.anthropomatik.isl.newsTeller.generation.DummySummaryCreator">
+     <property name="ksAdapter" ref="ksAdapter" />
+   </bean>
+   
+   <bean id="selector" class="edu.kit.anthropomatik.isl.newsTeller.selection.EventSelector">
+     <!-- TODO: set up list of scorers -->
+   </bean>
+
+   <bean id="retriever" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
+     <!-- TODO: set up list of finders -->
+   </bean>
+   
+   <bean id="userModel" class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel">
+   </bean>
+   
+   <bean id="newsTeller" class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
+     <property name="userModel" ref="userModel"/>
+     <property name="retriever" ref="retriever"/>
+     <property name="selector" ref="selector"/>
+     <property name="generator" ref="generator"/>
+   </bean>
+
    <!-- Definition for main (preliminary testing purposes only) -->
    <bean id="main" class="edu.kit.anthropomatik.isl.newsTeller.main.Main">
+      <property name="newsTeller" ref="newsTeller"/>
       <property name="msg">
          <bean class="java.lang.String">
     		<constructor-arg type="java.lang.String" value="Hello, world!" />
