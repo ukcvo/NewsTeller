@@ -1,6 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.main;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -9,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.generation.SummaryCreator;
 import edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller;
 
@@ -24,6 +26,7 @@ public class Main {
 	
 	private NewsTeller newsTeller;
 	
+	// TODO: remove this part as soon as first test is written
 	private String msg;
 	
 	public String getMsg() {
@@ -34,10 +37,6 @@ public class Main {
 		this.msg = msg;
 	}
 
-	public NewsTeller getNewsTeller() {
-		return newsTeller;
-	}
-
 	public void setNewsTeller(NewsTeller newsTeller) {
 		this.newsTeller = newsTeller;
 	}
@@ -46,6 +45,11 @@ public class Main {
 		System.out.println(msg);
 	}
 
+	// command-line interface to NewsTeller
+	private void run() {
+		newsTeller.getNews(new ArrayList<Keyword>());
+	}
+	
 	public static void main(String[] args) {
 
 		// setting up logger configuration
@@ -67,10 +71,9 @@ public class Main {
 		
 		ApplicationContext context = new FileSystemXmlApplicationContext(configFile);
 		Main m = (Main) context.getBean("main");
-		SummaryCreator s = (SummaryCreator) context.getBean("generator");
 		((AbstractApplicationContext) context).close();
 		
-		m.beep();
+		m.run();
 		
 		log.info("shutting down");
 	}

@@ -13,5 +13,9 @@ public abstract class EventFinder {
 	// access to KnowledgeStore
 	protected KnowledgeStoreAdapter ksAdapter;
 	
+	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
+		this.ksAdapter = ksAdapter;
+	}
+	
 	//TODO: findEvents() once we know what events can be represented as
 }

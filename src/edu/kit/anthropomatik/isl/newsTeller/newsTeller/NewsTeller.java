@@ -23,39 +23,23 @@ public class NewsTeller {
 	
 	private SummaryCreator generator;
 	
-	public UserModel getUserModel() {
-		return userModel;
-	}
-
+	//region setters
 	public void setUserModel(UserModel userModel) {
 		this.userModel = userModel;
-	}
-
-	public EventRetriever getRetriever() {
-		return retriever;
 	}
 
 	public void setRetriever(EventRetriever retriever) {
 		this.retriever = retriever;
 	}
 
-	public EventSelector getSelector() {
-		return selector;
-	}
-
 	public void setSelector(EventSelector selector) {
 		this.selector = selector;
-	}
-
-	public SummaryCreator getGenerator() {
-		return generator;
 	}
 
 	public void setGenerator(SummaryCreator generator) {
 		this.generator = generator;
 	}
-
-
+	//endregion 
 
 	public String getNews(List<Keyword> userQuery) {
 		return "";

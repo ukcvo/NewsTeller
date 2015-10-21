@@ -13,5 +13,9 @@ public abstract class EventScorer {
 	// access to KnowledgeStore if necessary
 	protected KnowledgeStoreAdapter ksAdapter;
 	
+	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
+		this.ksAdapter = ksAdapter;
+	}
+	
 	//TODO: public abstract double scoreEvent(Event e);
 }
