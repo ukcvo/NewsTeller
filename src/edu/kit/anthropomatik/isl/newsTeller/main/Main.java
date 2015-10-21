@@ -1,8 +1,8 @@
 package edu.kit.anthropomatik.isl.newsTeller.main;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.LogManager;
+import java.util.List;
+import java.util.Scanner;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,7 +31,28 @@ public class Main {
 		
 	// command-line interface to NewsTeller
 	private void run() {
-		System.out.println(newsTeller.getNews(new ArrayList<Keyword>()));
+		
+		Scanner in = new Scanner(System.in);
+		
+		System.out.print("> ");
+		String input = in.nextLine();
+		
+		while (!input.equalsIgnoreCase("quit")) {
+			List<Keyword> keywords = new ArrayList<Keyword>();
+			
+			String[] words = input.split(" ");
+			for (String word : words) {
+				keywords.add(new Keyword(word));
+			}
+			
+			System.out.println(newsTeller.getNews(keywords));
+			System.out.print("> ");
+			input = in.nextLine();
+		}
+		
+		
+		
+		in.close();
 	}
 	
 	public static void main(String[] args) {

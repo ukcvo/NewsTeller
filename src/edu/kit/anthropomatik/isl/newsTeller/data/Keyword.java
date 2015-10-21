@@ -28,4 +28,23 @@ public class Keyword {
 		this.weight = weight;
 	}
 	
+	public Keyword() {
+		this.word = "";
+		this.weight = 1.0;
+	}
+	
+	public Keyword(String word) {
+		this.word = word;
+		this.weight = 1.0;
+	}
+	
+	public Keyword(String word, double weight) {
+		this.word = word;
+		this.weight = weight;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("<%s|%f>", word, weight);
+	}
 }
