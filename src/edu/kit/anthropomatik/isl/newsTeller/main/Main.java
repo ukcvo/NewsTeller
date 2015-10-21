@@ -43,7 +43,7 @@ public class Main {
 		
 		log.info("starting the program");
 		
-		String configFile = "config/Scope0.xml"; // use Scope0.xml as default
+		String configFile = "config/default.xml";
 		if (args.length >= 1)
 			configFile = args[0];
 		
