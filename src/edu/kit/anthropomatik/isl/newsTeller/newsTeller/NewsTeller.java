@@ -11,7 +11,6 @@ import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.generation.SummaryCreator;
-import edu.kit.anthropomatik.isl.newsTeller.main.Main;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever;
 import edu.kit.anthropomatik.isl.newsTeller.selection.EventSelector;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
