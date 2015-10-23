@@ -1,5 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -7,7 +9,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openrdf.query.BindingSet;
 
 import eu.fbk.knowledgestore.KnowledgeStore;
-import eu.fbk.knowledgestore.OperationException;
 import eu.fbk.knowledgestore.Session;
 import eu.fbk.knowledgestore.client.Client;
 import eu.fbk.knowledgestore.data.Stream;
@@ -22,40 +23,74 @@ public class KnowledgeStoreAdapter {
 	
 	private static Log log = LogFactory.getLog(KnowledgeStoreAdapter.class);
 	
-	public static void main(String[] args) {
-		String serverURL = "http://knowledgestore2.fbk.eu/nwr/wikinews";
-		int timeoutSec = 10;
-		String query = "SELECT ?s WHERE {?s rdf:type sem:Event} LIMIT 10";
+	private boolean isConnectionOpen = false;
+	
+	private KnowledgeStore knowledgeStore;
+	
+	private Session session;
 		
-		KnowledgeStore ks = Client.builder(serverURL).compressionEnabled(true).maxConnections(2).validateServer(false)
-				.connectionTimeout(timeoutSec*1000).build();
-		if(log.isTraceEnabled())
-			log.trace("created KS instance");
-		Session session = ks.newSession();
-		
-		try {
-			Stream<BindingSet> stream = session.sparql(query).timeout((long) (timeoutSec*1000)).execTuples();
-			
-			List<BindingSet> tuples = stream.toList();
-			for (BindingSet tuple : tuples) {
-				System.out.println(tuple.toString());
-			}
-
-			System.out.println(tuples.size());
-			
-			@SuppressWarnings("unchecked")
-			List<String> variables = stream.getProperty("variables", List.class);
-			System.out.println(variables);
-			stream.close();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OperationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public boolean isConnectionOpen() {
+		return isConnectionOpen;
+	}
+	
+	/**
+	 * Open a connection to the given KnowledgeStore with the given timeout (in seconds). Only works if there is no other open connection!
+	 * Remember to call closeConnection() when done querying.
+	 */
+	public void openConnection(String serverURL, int timeoutSec) {
+		if (this.isConnectionOpen) {
+			if (log.isWarnEnabled())
+				log.warn("Trying to open a second connection before closing the first one. Request ignored.");
+		} else {
+			this.knowledgeStore = Client.builder(serverURL).compressionEnabled(true).maxConnections(2).validateServer(false)
+					.connectionTimeout(timeoutSec*1000).build();
+			this.session = knowledgeStore.newSession();
+			this.isConnectionOpen = true;
+		}
+	}
+	
+	/**
+	 * Closing the connection to the KnowledgeStore.
+	 */
+	public void closeConnection() {
+		if (this.isConnectionOpen) {
+			this.session.close();
+			this.knowledgeStore.close();
+			this.isConnectionOpen = false;
+		} else {
+			if (log.isWarnEnabled())
+				log.warn("Trying to close nonexistent connection. Request ignored.");
 		}
 		
-		session.close();
-		ks.close();
 	}
+	
+	/**
+	 * Send the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds) and return the retrieved events.
+	 */
+	public List<URI> getEvents(String sparqlQuery, String eventVariableName, long timeoutMillisec) {
+		List<URI> result = new ArrayList<URI>();
+		
+		if (isConnectionOpen) {
+			 
+			try {
+				Stream<BindingSet> stream = this.session.sparql(sparqlQuery).timeout((long) (timeoutMillisec)).execTuples();
+				List<BindingSet> tuples = stream.toList();
+				for (BindingSet tuple : tuples) {
+					result.add(URI.create(tuple.getValue(eventVariableName).toString()));
+				}
+				stream.close();
+			} catch (Exception e) {
+				if(log.isErrorEnabled())
+					log.error("Query execution failed. Query: " + sparqlQuery + " Exception: " + e.getMessage());					
+				e.printStackTrace();
+			}
+			
+		} else {
+			if (log.isWarnEnabled())
+				log.warn("Trying to access KnowledgeStore without having an open connection. Request ignored, returning empty list."); 
+		}
+				
+		return result;
+	}
+
 }
