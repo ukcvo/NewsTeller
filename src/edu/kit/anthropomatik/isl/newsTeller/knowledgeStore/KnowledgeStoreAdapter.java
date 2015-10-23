@@ -23,27 +23,39 @@ public class KnowledgeStoreAdapter {
 	
 	private static Log log = LogFactory.getLog(KnowledgeStoreAdapter.class);
 	
+	private String serverURL;
+	
+	private int timeoutMsec;
+	
 	private boolean isConnectionOpen = false;
 	
 	private KnowledgeStore knowledgeStore;
 	
 	private Session session;
-		
+	
+	public void setServerURL(String serverURL) {
+		this.serverURL = serverURL;
+	}
+
+	public void setTimeoutMsec(int timeoutMsec) {
+		this.timeoutMsec = timeoutMsec;
+	}
+
 	public boolean isConnectionOpen() {
 		return isConnectionOpen;
 	}
 	
 	/**
-	 * Open a connection to the given KnowledgeStore with the given timeout (in seconds). Only works if there is no other open connection!
+	 * Open a connection to the given KnowledgeStore (configuration done via Spring). Only works if there is no other open connection!
 	 * Remember to call closeConnection() when done querying.
 	 */
-	public void openConnection(String serverURL, int timeoutSec) {
+	public void openConnection() {
 		if (this.isConnectionOpen) {
 			if (log.isWarnEnabled())
 				log.warn("Trying to open a second connection before closing the first one. Request ignored.");
 		} else {
 			this.knowledgeStore = Client.builder(serverURL).compressionEnabled(true).maxConnections(2).validateServer(false)
-					.connectionTimeout(timeoutSec*1000).build();
+					.connectionTimeout(timeoutMsec).build();
 			this.session = knowledgeStore.newSession();
 			this.isConnectionOpen = true;
 		}

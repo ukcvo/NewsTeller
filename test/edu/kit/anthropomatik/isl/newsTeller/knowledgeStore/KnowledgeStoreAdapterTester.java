@@ -8,14 +8,20 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class KnowledgeStoreAdapterTester {
 
-	private KnowledgeStoreAdapter ksAdapter = new KnowledgeStoreAdapter();
+	private KnowledgeStoreAdapter ksAdapter;
 	
 	@Before
 	public void init() {
-		ksAdapter.openConnection("http://knowledgestore2.fbk.eu/nwr/wikinews", 10);
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope0_test.xml");
+		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
+		((AbstractApplicationContext) context).close();
+		ksAdapter.openConnection();
 		
 	}
 	

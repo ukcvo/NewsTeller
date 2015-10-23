@@ -6,7 +6,8 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
    <bean id="ksAdapter" class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
-     <!-- TODO: params (if any) -->
+     <property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews"/>
+     <property name="timeoutMsec" value="10000"/>
    </bean>
 
    <bean id="generator" class="edu.kit.anthropomatik.isl.newsTeller.generation.DummySummaryCreator">
