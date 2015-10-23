@@ -110,8 +110,10 @@ public class KnowledgeStoreAdapter {
 				stream.close();
 			} catch (Exception e) {
 				if(log.isErrorEnabled())
-					log.error("Query execution failed. Query: " + sparqlQuery + " Exception: " + e.getMessage());					
-				e.printStackTrace();
+					log.error(String.format("Query execution failed. Query: [%s] Variable: [%s] Timeout: [%d]", 
+							sparqlQuery, variableName, timeoutMillisec));
+				if(log.isDebugEnabled())
+					log.debug("Query execution exception", e);
 			}
 			
 		} else {
