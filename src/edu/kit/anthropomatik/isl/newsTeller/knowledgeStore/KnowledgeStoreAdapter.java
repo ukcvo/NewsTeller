@@ -77,18 +77,35 @@ public class KnowledgeStoreAdapter {
 	}
 	
 	/**
-	 * Send the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds) and return the retrieved events.
+	 * Sends the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds).
+	 * Returns the retrieved results as URIs.
 	 */
-	public List<URI> getEvents(String sparqlQuery, String eventVariableName, long timeoutMillisec) {
+	public List<URI> runSingleVariableURIQuery(String sparqlQuery, String eventVariableName, long timeoutMillisec) {
 		List<URI> result = new ArrayList<URI>();
+		
+		List<String> stringResults = runSingleVariableStringQuery(sparqlQuery, eventVariableName, timeoutMillisec);
+	
+		for (String str : stringResults) {
+			result.add(URI.create(str));
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Sends the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds).
+	 * Returns the retrieved results as Strings.
+	 */
+	public List<String> runSingleVariableStringQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
+		List<String> result = new ArrayList<String>();
 		
 		if (isConnectionOpen) {
 			 
 			try {
-				Stream<BindingSet> stream = this.session.sparql(sparqlQuery).timeout((long) (timeoutMillisec)).execTuples();
+				Stream<BindingSet> stream = this.session.sparql(sparqlQuery).timeout(timeoutMillisec).execTuples();
 				List<BindingSet> tuples = stream.toList();
 				for (BindingSet tuple : tuples) {
-					result.add(URI.create(tuple.getValue(eventVariableName).toString()));
+					result.add(tuple.getValue(variableName).toString());
 				}
 				stream.close();
 			} catch (Exception e) {
@@ -101,8 +118,7 @@ public class KnowledgeStoreAdapter {
 			if (log.isWarnEnabled())
 				log.warn("Trying to access KnowledgeStore without having an open connection. Request ignored, returning empty list."); 
 		}
-				
+		
 		return result;
 	}
-
 }
