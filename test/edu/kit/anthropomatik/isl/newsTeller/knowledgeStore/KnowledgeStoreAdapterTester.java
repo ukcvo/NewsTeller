@@ -35,5 +35,24 @@ public class KnowledgeStoreAdapterTester {
 		List<URI> events = ksAdapter.getEvents("SELECT ?s WHERE {?s rdf:type sem:Event} LIMIT 10", "s", 10000);
 		assertTrue(events.size() == 10);
 	}
+	
+	@Test
+	public void shouldReturnEmptyListBecauseOfClosedConnection() {
+		ksAdapter.closeConnection();
+		List<URI> events = ksAdapter.getEvents("SELECT ?s WHERE {?s rdf:type sem:Event}", "s", 10000);
+		assertTrue(events.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturnEmptyListBecauseOfNonMatchingEventVariable() {
+		List<URI> events = ksAdapter.getEvents("SELECT ?s WHERE {?s rdf:type sem:Event}", "t", 10000);
+		assertTrue(events.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturnEmptyListBecauseOfBrokenQuery() {
+		List<URI> events = ksAdapter.getEvents("SELECT ?s HERE {?s rdf:type sem:Event}", "s", 10000);
+		assertTrue(events.isEmpty());
+	}
 
 }
