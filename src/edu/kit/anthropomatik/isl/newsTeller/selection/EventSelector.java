@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.selection.scoring.EventScorer;
@@ -27,9 +28,11 @@ public class EventSelector {
 	}
 		
 	public URI selectEvent(List<URI> events, List<Keyword> userQuery, UserModel userModel) {
-		
-		if (log.isTraceEnabled())
-			log.trace("select Event");
+		if (log.isInfoEnabled())
+			log.info(String.format("selectEvent(events = <%s>, userQuery = <%s>, userModel = <%s>)", 
+										StringUtils.collectionToCommaDelimitedString(events), 
+										StringUtils.collectionToCommaDelimitedString(userQuery),
+										userModel.toString()));
 		
 		for (URI event : events) {
 			for (EventScorer scorer : eventScorers) {

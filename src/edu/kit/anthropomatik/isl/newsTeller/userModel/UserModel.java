@@ -2,6 +2,8 @@ package edu.kit.anthropomatik.isl.newsTeller.userModel;
 
 import java.util.List;
 
+import org.springframework.util.StringUtils;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.ConversationCycle;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 
@@ -16,4 +18,11 @@ public abstract class UserModel {
 	public abstract List<Keyword> getInterests();
 	
 	public abstract List<ConversationCycle> getHistory();
+	
+	@Override
+	public String toString() {
+		return String.format("[UM: interests = <%s>, history = <%s>]", 
+								StringUtils.collectionToCommaDelimitedString(getInterests()), 
+								StringUtils.collectionToCommaDelimitedString(getHistory()));
+	}
 }

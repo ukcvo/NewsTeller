@@ -58,16 +58,22 @@ public class NewsTeller {
 			LogManager.getLogManager().readConfiguration();
 			log = LogFactory.getLog(NewsTeller.class);
 		} catch (SecurityException e) {
-			log.error("Can't access logger config file! " + e.toString());
+			if (log.isWarnEnabled())
+				log.warn("Can't access logger config file!");
+			if (log.isDebugEnabled())
+				log.debug("Logger config file access failed", e);
 		} catch (IOException e) {
-			log.error("Can't access logger config file! " + e.toString());
+			if (log.isErrorEnabled())
+				log.warn("Can't access logger config file!");
+			if (log.isDebugEnabled())
+				log.debug("Logger config file access failed", e);
 		}
 	}
 	
 	public String getNews(List<Keyword> userQuery) {
 		
 		if (log.isInfoEnabled())
-			log.info("user query: " + StringUtils.collectionToCommaDelimitedString(userQuery));
+			log.info(String.format("getNews(user query = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
 		
 		List<URI> events = retriever.retrieveEvents(userQuery, userModel);
 		URI selectedEvent = selector.selectEvent(events, userQuery, userModel);

@@ -50,6 +50,9 @@ public class KnowledgeStoreAdapter {
 	 * Remember to call closeConnection() when done querying.
 	 */
 	public void openConnection() {
+		if (log.isInfoEnabled())
+			log.info("openConnection()");
+		
 		if (this.isConnectionOpen) {
 			if (log.isWarnEnabled())
 				log.warn("Trying to open a second connection before closing the first one. Request ignored.");
@@ -65,6 +68,9 @@ public class KnowledgeStoreAdapter {
 	 * Closing the connection to the KnowledgeStore.
 	 */
 	public void closeConnection() {
+		if (log.isInfoEnabled())
+			log.info("closeConnection()");
+		
 		if (this.isConnectionOpen) {
 			this.session.close();
 			this.knowledgeStore.close();
@@ -80,10 +86,14 @@ public class KnowledgeStoreAdapter {
 	 * Sends the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds).
 	 * Returns the retrieved results as URIs.
 	 */
-	public List<URI> runSingleVariableURIQuery(String sparqlQuery, String eventVariableName, long timeoutMillisec) {
+	public List<URI> runSingleVariableURIQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
+		if (log.isInfoEnabled())
+			log.info(String.format("runSingleVariableURIQuery(sparqlQuery = <%s>, variableName = <%s>, timeoutMillisec = <%d>)", 
+									sparqlQuery, variableName, timeoutMillisec));
+		
 		List<URI> result = new ArrayList<URI>();
 		
-		List<String> stringResults = runSingleVariableStringQuery(sparqlQuery, eventVariableName, timeoutMillisec);
+		List<String> stringResults = runSingleVariableStringQuery(sparqlQuery, variableName, timeoutMillisec);
 	
 		for (String str : stringResults) {
 			result.add(URI.create(str));
@@ -97,6 +107,11 @@ public class KnowledgeStoreAdapter {
 	 * Returns the retrieved results as Strings.
 	 */
 	public List<String> runSingleVariableStringQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
+		if (log.isInfoEnabled())
+			log.info(String.format("runSingleVariableStringQuery(sparqlQuery = <%s>, variableName = <%s>, timeoutMillisec = <%d>)", 
+									sparqlQuery, variableName, timeoutMillisec));
+		
+		
 		List<String> result = new ArrayList<String>();
 		
 		if (isConnectionOpen) {

@@ -42,7 +42,7 @@ private static Log log;
 	@Test
 	public void shouldReturnDummySummary() {
 		if(log.isInfoEnabled())
-			log.info("NewsTellerTesterScope0.shouldReturnDummySummary");
+			log.info("shouldReturnDummySummary()");
 		assertTrue(newsTeller.getNews(null).equals("dummySummary"));
 	}
 

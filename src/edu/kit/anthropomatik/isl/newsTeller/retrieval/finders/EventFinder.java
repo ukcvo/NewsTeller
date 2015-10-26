@@ -23,5 +23,5 @@ public abstract class EventFinder {
 	}
 	
 	public abstract List<URI> findEvents(List<Keyword> userQuery, UserModel userModel);
-	//TODO: findEvents() once we know what events can be represented as
+	
 }

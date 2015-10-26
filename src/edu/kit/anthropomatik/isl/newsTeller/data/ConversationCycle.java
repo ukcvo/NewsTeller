@@ -3,6 +3,8 @@ package edu.kit.anthropomatik.isl.newsTeller.data;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.util.StringUtils;
+
 /**
  * Represents one cycle in the conversation (user query - event selected - system response).
  * 
@@ -39,5 +41,11 @@ public class ConversationCycle {
 
 	public void setSystemResponse(String systemResponse) {
 		this.systemResponse = systemResponse;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("[userQuery = <%s>, event = <%s>, systemResponse = <%s>]", 
+								StringUtils.collectionToCommaDelimitedString(userQuery), event.toString(), systemResponse);
 	}
 }

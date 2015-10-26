@@ -45,6 +45,6 @@ public class Keyword {
 	
 	@Override
 	public String toString() {
-		return String.format("<%s|%f>", word, weight);
+		return String.format("[%s|%f]", word, weight);
 	}
 }
