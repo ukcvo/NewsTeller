@@ -42,9 +42,9 @@ public class Main {
 		while (!input.equalsIgnoreCase("quit")) {
 			List<Keyword> keywords = new ArrayList<Keyword>();
 			
-			String[] words = input.split(" ");
+			String[] words = input.split(",");
 			for (String word : words) {
-				keywords.add(new Keyword(word));
+				keywords.add(new Keyword(word.trim()));
 			}
 			
 			System.out.println(newsTeller.getNews(keywords));
