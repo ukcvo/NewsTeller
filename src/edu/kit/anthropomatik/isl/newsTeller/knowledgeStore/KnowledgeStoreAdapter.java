@@ -88,7 +88,7 @@ public class KnowledgeStoreAdapter {
 	 */
 	public List<URI> runSingleVariableURIQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
 		if (log.isInfoEnabled())
-			log.info(String.format("runSingleVariableURIQuery(sparqlQuery = <%s>, variableName = <%s>, timeoutMillisec = <%d>)", 
+			log.info(String.format("runSingleVariableURIQuery(sparqlQuery = '%s', variableName = '%s', timeoutMillisec = %d)", 
 									sparqlQuery, variableName, timeoutMillisec));
 		
 		List<URI> result = new ArrayList<URI>();
@@ -108,7 +108,7 @@ public class KnowledgeStoreAdapter {
 	 */
 	public List<String> runSingleVariableStringQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
 		if (log.isInfoEnabled())
-			log.info(String.format("runSingleVariableStringQuery(sparqlQuery = <%s>, variableName = <%s>, timeoutMillisec = <%d>)", 
+			log.info(String.format("runSingleVariableStringQuery(sparqlQuery = '%s', variableName = '%s', timeoutMillisec = %d)", 
 									sparqlQuery, variableName, timeoutMillisec));
 		
 		
@@ -125,7 +125,7 @@ public class KnowledgeStoreAdapter {
 				stream.close();
 			} catch (Exception e) {
 				if(log.isErrorEnabled())
-					log.error(String.format("Query execution failed. Query: [%s] Variable: [%s] Timeout: [%d]", 
+					log.error(String.format("Query execution failed. Query: '%s' Variable: '%s' Timeout: %d", 
 							sparqlQuery, variableName, timeoutMillisec));
 				if(log.isDebugEnabled())
 					log.debug("Query execution exception", e);

@@ -31,7 +31,7 @@ public class EventRetriever {
 	public List<URI> retrieveEvents(List<Keyword> userQuery, UserModel userModel) {
 		
 		if (log.isInfoEnabled())
-			log.info(String.format("retrieveEvents(userQuery = <%s>, userModel = <%s>)", 
+			log.info(String.format("retrieveEvents(userQuery = <%s>, userModel = %s)", 
 										StringUtils.collectionToCommaDelimitedString(userQuery) , userModel.toString()));
 		
 		List<URI> events = new ArrayList<URI>();

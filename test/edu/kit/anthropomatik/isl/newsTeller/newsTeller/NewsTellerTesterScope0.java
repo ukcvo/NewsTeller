@@ -22,7 +22,7 @@ public class NewsTellerTesterScope0 {
 private static Log log;
 	
 	@BeforeClass
-	public static void initClass() {
+	public static void setUpBeforeClass() {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
@@ -33,7 +33,7 @@ private static Log log;
 	}
 	
 	@Before
-	public void init() throws Exception {
+	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope0_test.xml");
 		newsTeller = (NewsTeller) context.getBean("newsTeller");
 		((AbstractApplicationContext) context).close();

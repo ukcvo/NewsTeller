@@ -29,7 +29,7 @@ public class EventSelector {
 		
 	public URI selectEvent(List<URI> events, List<Keyword> userQuery, UserModel userModel) {
 		if (log.isInfoEnabled())
-			log.info(String.format("selectEvent(events = <%s>, userQuery = <%s>, userModel = <%s>)", 
+			log.info(String.format("selectEvent(events = <%s>, userQuery = <%s>, userModel = %s)", 
 										StringUtils.collectionToCommaDelimitedString(events), 
 										StringUtils.collectionToCommaDelimitedString(userQuery),
 										userModel.toString()));

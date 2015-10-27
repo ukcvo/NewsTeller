@@ -1,0 +1,9 @@
+SELECT ?entity
+WHERE
+{
+    GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> # use dbpedia to get stable entities
+    {
+    ?entity rdfs:label ?label .
+    FILTER(REGEX(STR(?label),"( |^)%s( |$)", "i")) #case-insensitive matching
+    }
+}

@@ -22,7 +22,7 @@ public class KnowledgeStoreAdapterTester {
 	private static Log log;
 	
 	@BeforeClass
-	public static void initClass() {
+	public static void setUpBeforeClass() {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
@@ -33,7 +33,7 @@ public class KnowledgeStoreAdapterTester {
 	}
 	
 	@Before
-	public void init() {
+	public void setUp() {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope0_test.xml");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
@@ -42,7 +42,7 @@ public class KnowledgeStoreAdapterTester {
 	}
 	
 	@After
-	public void cleanup() {
+	public void tearDown() {
 		ksAdapter.closeConnection();
 	}
 	

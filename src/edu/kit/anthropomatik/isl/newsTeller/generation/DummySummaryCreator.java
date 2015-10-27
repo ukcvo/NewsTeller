@@ -17,14 +17,9 @@ public class DummySummaryCreator extends SummaryCreator {
 	
 	@Override
 	public String summarizeEvent(URI event) {
-		if (log.isInfoEnabled()) {
-			if (event == null)
-				log.info("summarizeEvent(URI = null)");
-			else
-				log.info(String.format("summarizeEvent(URI = <%s>)", event.toString()));
-		}
+		if (log.isInfoEnabled()) 
+			log.info(String.format("summarizeEvent(URI = '%s')", (event == null) ? "null" : event.toString()));
 		
 		return "dummySummary";
 	}
-
 }

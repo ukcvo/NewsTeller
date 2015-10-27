@@ -45,7 +45,7 @@ public class ConversationCycle {
 	
 	@Override
 	public String toString() {
-		return String.format("[userQuery = <%s>, event = <%s>, systemResponse = <%s>]", 
+		return String.format("[userQuery = <%s>, event = '%s', systemResponse = '%s']", 
 								StringUtils.collectionToCommaDelimitedString(userQuery), event.toString(), systemResponse);
 	}
 }
