@@ -56,7 +56,7 @@ public class Util {
 	        in.close();
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
-				log.error(String.format("could not read query file, returning empty string: %s", queryFile.toString()));
+				log.error(String.format("could not read query file, returning empty string: '%s'", queryFile.toString()));
 			if (log.isDebugEnabled())
 				log.debug("cannnot read file", e);
 		} 

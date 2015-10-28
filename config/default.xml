@@ -10,25 +10,30 @@
      <property name="timeoutMsec" value="10000"/>
    </bean>
 
-   <bean id="generator" class="edu.kit.anthropomatik.isl.newsTeller.generation.DummySummaryCreator">
-     <property name="ksAdapter" ref="ksAdapter" />
+   <bean id="finder" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
    </bean>
    
-   <bean id="selector" class="edu.kit.anthropomatik.isl.newsTeller.selection.EventSelector">
-     <property name="eventScorers">
-       <list>
-       </list>
-     </property>
+   <bean id="scorer" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.EventScorer">
+   </bean>
+
+   <bean id="aggregator" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.SimpleAverageAggregator">
+   </bean>
+
+   <bean id="selector" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
    </bean>
 
    <bean id="retriever" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
-     <property name="eventFinders">
-       <list>
-       <!-- <value>TODO:bean goes here</value> -->
-       </list>
-     </property>
+     <property name="eventFinder" ref="finder"/>
+     <property name="eventScorer" ref="scorer"/>
+     <property name="scoreAggregator" ref="aggregator"/>
+     <property name="eventSelector" ref="selector"/>
+     
    </bean>
-   
+
+   <bean id="generator" class="edu.kit.anthropomatik.isl.newsTeller.generation.DummySummaryCreator">
+     <property name="ksAdapter" ref="ksAdapter" />
+   </bean>
+
    <bean id="userModel" class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel">
    </bean>
    
@@ -36,11 +41,9 @@
      <constructor-arg value="./config/logging.properties"/>
      <property name="userModel" ref="userModel"/>
      <property name="retriever" ref="retriever"/>
-     <property name="selector" ref="selector"/>
      <property name="generator" ref="generator"/>
    </bean>
 
-   <!-- Definition for main (preliminary testing purposes only) -->
    <bean id="main" class="edu.kit.anthropomatik.isl.newsTeller.main.Main">
       <property name="newsTeller" ref="newsTeller"/>
    </bean>
