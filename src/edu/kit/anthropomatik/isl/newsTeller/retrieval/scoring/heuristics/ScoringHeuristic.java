@@ -12,9 +12,11 @@ import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
  */
 public abstract class ScoringHeuristic {
 
-	protected ScoringFormula formula;
+	private ScoringFormula formula;
 	
-	protected INumberGetter numberGetter;
+	private INumberGetter numberGetter;
+	
+	private String name;
 	
 	public void setFormula(ScoringFormula formula) {
 		this.formula = formula;
@@ -24,9 +26,18 @@ public abstract class ScoringHeuristic {
 		this.numberGetter = numberGetter;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	// get the score by finding a relevant number and applying a formula
 	protected double getScore(NewsEvent event, Keyword keyword, ConversationCycle historicalCycle) {
 		
-		double number = numberGetter.getNumber(event, keyword, historicalCycle);
+		double number = numberGetter.getNumber(event.getEventURI(), keyword.getWord(), historicalCycle.getEventURI());
 		double score = formula.apply(number);
 		
 		return score;

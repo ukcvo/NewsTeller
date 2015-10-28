@@ -11,6 +11,9 @@ import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
  */
 public class KeywordHeuristic extends ScoringHeuristic {
 
+	/**
+	 * Score the event based on a keyword.
+	 */
 	public double getScore(NewsEvent event, Keyword keyword) {
 		return getScore(event, keyword, null);
 	}

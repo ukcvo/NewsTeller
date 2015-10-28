@@ -21,6 +21,13 @@ public class Util {
 
 	private static Log log = LogFactory.getLog(Util.class);
 	
+	public static final String PLACEHOLDER_EVENT = "*e*";
+	public static final String PLACEHOLDER_KEYWORD = "*k*";
+	public static final String PLACEHOLDER_HISTORICAL_EVENT = "*h*";
+	
+	public static final String VARIABLE_EVENT = "event";
+	public static final String VARIABLE_NUMBER = "number";
+	
 	// private constructor to prevent instantiation
 	private Util() {}
 	

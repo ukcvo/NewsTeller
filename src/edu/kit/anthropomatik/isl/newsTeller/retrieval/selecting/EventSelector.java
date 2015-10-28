@@ -22,9 +22,16 @@ public class EventSelector {
 		if (log.isInfoEnabled())
 			log.info(String.format("selectEvent(events = <%s>)", StringUtils.collectionToCommaDelimitedString(events)));
 		
-		//TODO: implement maximum selection!
+		double maxValue = Double.NEGATIVE_INFINITY;
+		NewsEvent selectedEvent = null;
+		for (NewsEvent event : events) {
+			if (event.getTotalScore() > maxValue) {
+				maxValue = event.getTotalScore();
+				selectedEvent = event;
+			}
+		}
 		
-		return null;
+		return selectedEvent;
 		
 	}
 

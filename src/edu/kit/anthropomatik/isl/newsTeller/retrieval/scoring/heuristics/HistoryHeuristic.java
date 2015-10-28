@@ -11,6 +11,9 @@ import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
  */
 public class HistoryHeuristic extends ScoringHeuristic {
 
+	/**
+	 * Score the event based on a conversation cycle from the history.
+	 */
 	public double getScore(NewsEvent event, ConversationCycle cycle) {
 		return getScore(event, null, cycle);
 	}

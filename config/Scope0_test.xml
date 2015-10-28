@@ -11,6 +11,9 @@
    </bean>
 
    <bean id="finder" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
+     <constructor-arg name="queryQueryFolder" value=""/>
+     <constructor-arg name="interestQueryFolder" value=""/>
+     <constructor-arg name="historyQueryFolder" value=""/>
    </bean>
    
    <bean id="scorer" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.EventScorer">

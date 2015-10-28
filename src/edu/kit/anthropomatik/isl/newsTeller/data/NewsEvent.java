@@ -42,4 +42,8 @@ public class NewsEvent {
 		this.scorings = new ArrayList<Scoring>();
 		this.totalScore = Double.NaN; // encodes that there is no total score, yet
 	}
+
+	public void addScoring(Scoring scoring) {
+		scorings.add(scoring);
+	}
 }

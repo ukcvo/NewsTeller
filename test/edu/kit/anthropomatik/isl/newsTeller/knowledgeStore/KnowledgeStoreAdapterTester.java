@@ -2,7 +2,6 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 
 import static org.junit.Assert.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.logging.LogManager;
 
@@ -15,6 +14,8 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+
+import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 
 public class KnowledgeStoreAdapterTester {
 
@@ -50,7 +51,7 @@ public class KnowledgeStoreAdapterTester {
 	public void shouldReturn10Events() {
 		if(log.isInfoEnabled())
 			log.info("shouldReturn10Events()");
-		List<URI> events = ksAdapter.runSingleVariableURIQuery("SELECT ?s WHERE {?s rdf:type sem:Event} LIMIT 10", "s", 10000);
+		List<NewsEvent> events = ksAdapter.runSingleVariableEventQuery("SELECT ?s WHERE {?s rdf:type sem:Event} LIMIT 10", "s", 10000);
 		assertTrue(events.size() == 10);
 	}
 	
@@ -59,7 +60,7 @@ public class KnowledgeStoreAdapterTester {
 		if(log.isInfoEnabled())
 			log.info("shouldReturnEmptyListBecauseOfClosedConnection()");
 		ksAdapter.closeConnection();
-		List<URI> events = ksAdapter.runSingleVariableURIQuery("SELECT ?s WHERE {?s rdf:type sem:Event}", "s", 10000);
+		List<NewsEvent> events = ksAdapter.runSingleVariableEventQuery("SELECT ?s WHERE {?s rdf:type sem:Event} LIMIT 10", "s", 10000);
 		assertTrue(events.isEmpty());
 	}
 	
@@ -67,7 +68,7 @@ public class KnowledgeStoreAdapterTester {
 	public void shouldReturnEmptyListBecauseOfNonMatchingEventVariable() {
 		if(log.isInfoEnabled())
 			log.info("shouldReturnEmptyListBecauseOfNonMatchingEventVariable()");
-		List<URI> events = ksAdapter.runSingleVariableURIQuery("SELECT ?s WHERE {?s rdf:type sem:Event}", "t", 10000);
+		List<NewsEvent> events = ksAdapter.runSingleVariableEventQuery("SELECT ?s WHERE {?s rdf:type sem:Event} LIMIT 10", "t", 10000);
 		assertTrue(events.isEmpty());
 	}
 	
@@ -75,7 +76,7 @@ public class KnowledgeStoreAdapterTester {
 	public void shouldReturnEmptyListBecauseOfBrokenQuery() {
 		if(log.isInfoEnabled())
 			log.info("shouldReturnEmptyListBecauseOfBrokenQuery()");
-		List<URI> events = ksAdapter.runSingleVariableURIQuery("SELECT ?s HERE {?s rdf:type sem:Event}", "s", 10000);
+		List<NewsEvent> events = ksAdapter.runSingleVariableEventQuery("SELECT ?s HERE {?s rdf:type sem:Event} LIMIT 10", "s", 10000);
 		assertTrue(events.isEmpty());
 	}
 

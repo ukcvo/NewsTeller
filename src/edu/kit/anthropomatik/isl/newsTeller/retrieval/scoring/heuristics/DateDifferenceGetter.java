@@ -1,9 +1,11 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics;
 
-import edu.kit.anthropomatik.isl.newsTeller.data.ConversationCycle;
-import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
-import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import java.util.Date;
+import java.util.List;
+
+import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.date.IDateProvider;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
  * Calculates the "age" in days of a news event.
@@ -15,10 +17,26 @@ public class DateDifferenceGetter implements INumberGetter {
 
 	private IDateProvider dateProvider;
 	
+	private KnowledgeStoreAdapter ksAdapter;
+	
 	private String query; 
 	
-	public double getNumber(NewsEvent event, Keyword keyword, ConversationCycle historicalCycle) {
-		// TODO Auto-generated method stub
+	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
+		this.ksAdapter = ksAdapter;
+	}
+
+	public DateDifferenceGetter(String queryFileName) {
+		this.query = Util.readQueryFromFile(queryFileName);
+	}
+	
+	@SuppressWarnings("unused")
+	public double getNumber(String eventURI, String keyword, String historicalEventURI) {
+		
+		List<String> dateStrings = ksAdapter.runSingleVariableStringQuery(query, "date");
+		Date currentDate = dateProvider.getDate();
+		
+		//TODO: actual computation (Scope 2)
+		
 		return 0;
 	}
 

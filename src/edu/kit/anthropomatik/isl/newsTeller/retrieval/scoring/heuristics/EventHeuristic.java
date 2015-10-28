@@ -10,6 +10,9 @@ import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
  */
 public class EventHeuristic extends ScoringHeuristic {
 	
+	/**
+	 * Score the event itself.
+	 */
 	public double getScore(NewsEvent event) {
 		return getScore(event, null, null);
 	}

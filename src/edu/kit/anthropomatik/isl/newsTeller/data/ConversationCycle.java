@@ -15,7 +15,7 @@ public class ConversationCycle {
 
 	private List<Keyword> userQuery;
 	
-	private URI event;
+	private String eventURI;
 	
 	private String systemResponse;
 
@@ -27,12 +27,12 @@ public class ConversationCycle {
 		this.userQuery = userQuery;
 	}
 
-	public URI getEvent() {
-		return event;
+	public String getEventURI() {
+		return eventURI;
 	}
 
-	public void setEvent(URI event) {
-		this.event = event;
+	public void setEventURI(String eventURI) {
+		this.eventURI = eventURI;
 	}
 
 	public String getSystemResponse() {
@@ -46,6 +46,6 @@ public class ConversationCycle {
 	@Override
 	public String toString() {
 		return String.format("[userQuery = <%s>, event = '%s', systemResponse = '%s']", 
-								StringUtils.collectionToCommaDelimitedString(userQuery), event.toString(), systemResponse);
+								StringUtils.collectionToCommaDelimitedString(userQuery), eventURI, systemResponse);
 	}
 }

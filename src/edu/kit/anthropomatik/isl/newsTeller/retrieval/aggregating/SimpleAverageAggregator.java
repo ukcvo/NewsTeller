@@ -1,6 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.Scoring;
 
 /**
  * Aggregates event scores by taking a simple average.
@@ -12,7 +13,12 @@ public class SimpleAverageAggregator extends ScoreAggregator {
 
 	@Override
 	protected void aggregateScoresForEvent(NewsEvent event) {
-		// TODO implement
+		
+		double sum = 0;
+		for (Scoring scoring : event.getScorings())
+			sum += scoring.getScore();
+	
+		event.setTotalScore(sum / event.getScorings().size());
 	}
 
 }

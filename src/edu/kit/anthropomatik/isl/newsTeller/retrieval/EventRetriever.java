@@ -32,6 +32,7 @@ public class EventRetriever {
 	
 	private EventSelector eventSelector;
 	
+	//region setters
 	public void setEventFinder(EventFinder eventFinder) {
 		this.eventFinder = eventFinder;
 	}
@@ -47,14 +48,15 @@ public class EventRetriever {
 	public void setEventSelector(EventSelector eventSelector) {
 		this.eventSelector = eventSelector;
 	}
-
+	//endregion
+	
 	public NewsEvent retrieveEvent(List<Keyword> userQuery, UserModel userModel) {
 		if (log.isInfoEnabled())
 			log.info(String.format("retrieveEvents(userQuery = <%s>, userModel = %s)", 
 										StringUtils.collectionToCommaDelimitedString(userQuery) , userModel.toString()));
 		
 		List<NewsEvent> events = eventFinder.findEvents(userQuery, userModel);
-		eventScorer.scoreEvents(events);
+		eventScorer.scoreEvents(events, userQuery, userModel);
 		scoreAggregator.aggregateScores(events);
 		NewsEvent event = eventSelector.selectEvent(events);
 				
