@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring;
+package edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.date;
 
 import java.util.Date;
 

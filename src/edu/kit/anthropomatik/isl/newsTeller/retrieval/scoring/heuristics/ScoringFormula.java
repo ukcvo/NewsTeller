@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring;
+package edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics;
 
 /**
  * Represents a formula used for transforming the retrieved number into a score between 0 and 1.

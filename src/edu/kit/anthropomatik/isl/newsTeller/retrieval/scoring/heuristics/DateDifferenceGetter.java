@@ -1,8 +1,9 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring;
+package edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.ConversationCycle;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.date.IDateProvider;
 
 /**
  * Calculates the "age" in days of a news event.
