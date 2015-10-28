@@ -31,7 +31,7 @@ public abstract class ScoreAggregator {
 		for (NewsEvent event : events) {
 			aggregateScoresForEvent(event);
 			if(log.isDebugEnabled())
-				log.debug(String.format("event total score: [%s|%d]", event.getEventURI(), event.getTotalScore()));
+				log.debug(String.format("event total score: [%s|%f]", event.getEventURI(), event.getTotalScore()));
 		}
 	}
 }

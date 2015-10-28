@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-   <bean id="ksAdapter" class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
-     <property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews"/>
-     <property name="timeoutMsec" value="10000"/>
-   </bean>
+	<bean id="ksAdapter"
+		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
+		<property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews" />
+		<property name="timeoutMsec" value="10000" />
+	</bean>
 
-   <bean id="finder"
+	<bean id="finder"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
 		<constructor-arg name="queryQueryFolder" value="" /> <!-- TODO: fill in folder name (Scope 1) -->
 		<constructor-arg name="interestQueryFolder" value="" /> <!-- TODO: fill in folder name (Scope 1) -->
@@ -62,18 +63,20 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
-   <bean id="userModel" class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel">
-   </bean>
-   
-   <bean id="newsTeller" class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
-     <constructor-arg value="./config/logging-test.properties"/>
-     <property name="userModel" ref="userModel"/>
-     <property name="retriever" ref="retriever"/>
-     <property name="generator" ref="generator"/>
-   </bean>
+	<bean id="userModel"
+		class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel">
+	</bean>
 
-   <bean id="main" class="edu.kit.anthropomatik.isl.newsTeller.main.Main">
-      <property name="newsTeller" ref="newsTeller"/>
-   </bean>
+	<bean id="newsTeller"
+		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
+		<constructor-arg value="./config/logging-test.properties" />
+		<property name="userModel" ref="userModel" />
+		<property name="retriever" ref="retriever" />
+		<property name="generator" ref="generator" />
+	</bean>
+
+	<bean id="main" class="edu.kit.anthropomatik.isl.newsTeller.main.Main">
+		<property name="newsTeller" ref="newsTeller" />
+	</bean>
 
 </beans>

@@ -13,9 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapterTester;
-
-public class NewsTellerTesterScope0 {
+public class NewsTellerTestScope0 {
 
 	NewsTeller newsTeller;
 	
@@ -26,7 +24,7 @@ private static Log log;
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(KnowledgeStoreAdapterTester.class);
+			log = LogFactory.getLog(NewsTellerTestScope0.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

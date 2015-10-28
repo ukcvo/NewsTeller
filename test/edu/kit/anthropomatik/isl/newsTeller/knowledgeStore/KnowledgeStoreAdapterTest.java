@@ -17,7 +17,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 
-public class KnowledgeStoreAdapterTester {
+public class KnowledgeStoreAdapterTest {
 
 	private KnowledgeStoreAdapter ksAdapter;
 	private static Log log;
@@ -27,7 +27,7 @@ public class KnowledgeStoreAdapterTester {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(KnowledgeStoreAdapterTester.class);
+			log = LogFactory.getLog(KnowledgeStoreAdapterTest.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -79,5 +79,21 @@ public class KnowledgeStoreAdapterTester {
 		List<NewsEvent> events = ksAdapter.runSingleVariableEventQuery("SELECT ?s HERE {?s rdf:type sem:Event} LIMIT 10", "s", 10000);
 		assertTrue(events.isEmpty());
 	}
+	
+	@Test
+	public void shouldReturnOneElementedList() {
+		if(log.isInfoEnabled())
+			log.info("shouldReturnOneElementedList()");
+		List<Double> numbers = ksAdapter.runSingleVariableDoubleQuery("SELECT (count(?s) as ?n) WHERE {?s rdf:type sem:Event}", "n");
+		assertTrue(numbers.size() == 1);
+	}
 
+	@Test
+	public void shouldReturn624439() {
+		if(log.isInfoEnabled())
+			log.info("shouldReturn624439()");
+		double number = ksAdapter.runSingleVariableDoubleQuerySingleResult("SELECT (count(?s) as ?n) WHERE {?s rdf:type sem:Event}", "n");
+		assertTrue(number == 624439);
+	}
+	
 }

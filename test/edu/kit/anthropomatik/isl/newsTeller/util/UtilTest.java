@@ -10,9 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapterTester;
-
-public class UtilTester {
+public class UtilTest {
 
 	private static Log log;
 	
@@ -21,7 +19,7 @@ public class UtilTester {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(KnowledgeStoreAdapterTester.class);
+			log = LogFactory.getLog(UtilTest.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
