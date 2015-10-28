@@ -26,7 +26,7 @@ public class DateDifferenceGetter implements INumberGetter {
 	}
 
 	public DateDifferenceGetter(String queryFileName) {
-		this.query = Util.readQueryFromFile(queryFileName);
+		this.query = Util.readStringFromFile(queryFileName);
 	}
 	
 	@SuppressWarnings("unused")

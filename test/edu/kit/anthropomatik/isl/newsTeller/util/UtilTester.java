@@ -31,7 +31,7 @@ public class UtilTester {
 	public void shouldReturnEmptyString() {
 		if(log.isInfoEnabled())
 			log.info("shouldReturnEmptyString()");
-		String query = Util.readQueryFromFile("");
+		String query = Util.readStringFromFile("");
 		assertTrue(query.isEmpty());
 	}
 
@@ -39,7 +39,7 @@ public class UtilTester {
 	public void shouldReturnEmptyList() {
 		if(log.isInfoEnabled())
 			log.info("shouldReturnEmptyList()");
-		List<String> queries = Util.readQueriesFromFolder("resources/SPARQL/non-existing-directory");
+		List<String> queries = Util.readStringsFromFolder("resources/SPARQL/non-existing-directory");
 		assertTrue(queries.isEmpty());
 	}
 	
@@ -47,7 +47,7 @@ public class UtilTester {
 	public void shouldReturnSPARQLQuery() {
 		if(log.isInfoEnabled())
 			log.info("shouldReturnSPARQLQuery()");
-		String query = Util.readQueryFromFile("resources/SPARQL/general/retrieveEntity.qry");
+		String query = Util.readStringFromFile("resources/SPARQL/general/retrieveEntity.qry");
 		assertTrue(!query.isEmpty());
 	}
 	
@@ -55,7 +55,7 @@ public class UtilTester {
 	public void shouldReturnOneElementedList() {
 		if(log.isInfoEnabled())
 			log.info("shouldReturnOneElementedList()");
-		List<String> queries = Util.readQueriesFromFolder("resources/SPARQL/general");
+		List<String> queries = Util.readStringsFromFolder("resources/SPARQL/general");
 		assertTrue(queries.size() == 1);
 	}
 }

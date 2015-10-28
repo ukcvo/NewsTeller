@@ -52,8 +52,6 @@ public class Main {
 			input = in.nextLine();
 		}
 		
-		
-		
 		in.close();
 	}
 	

@@ -32,21 +32,21 @@ public class Util {
 	private Util() {}
 	
 	/**
-	 * Reads the file given by the fileName and returns the contained SPARQL query as String.
+	 * Reads the file given by the fileName and returns the contained String.
 	 */
-	public static String readQueryFromFile(String fileName) {
+	public static String readStringFromFile(String fileName) {
 		if (log.isInfoEnabled())
 			log.info(String.format("readQueryFromFile(fileName = '%s')", fileName));
 		
 		File queryFile = new File(fileName);
 		
-		return readQueryFromFile(queryFile);
+		return readStringFromFile(queryFile);
 	}
 	
 	/**
-	 * Reads the given queryFile and returns the contained SPARQL query as String.
+	 * Reads the given queryFile and returns the contained String.
 	 */
-	public static String readQueryFromFile(File queryFile) {
+	public static String readStringFromFile(File queryFile) {
 		if (log.isInfoEnabled())
 			log.info(String.format("readQueryFromFile(queryFile = '%s')", queryFile.toString()));
 		
@@ -71,9 +71,9 @@ public class Util {
 	}
 	
 	/**
-	 * Reads all files from the given folder and returns the contained SPARQL queries as a list of Strings.
+	 * Reads all files from the given folder and returns the contained Strings.
 	 */
-	public static List<String> readQueriesFromFolder(String folderName) {
+	public static List<String> readStringsFromFolder(String folderName) {
 		if (log.isInfoEnabled())
 			log.info(String.format("readQueriesFromFolder(folderName = '%s')", folderName));
 		
@@ -83,7 +83,7 @@ public class Util {
 		if (queryFolder.exists()) {
 			for (File queryFile : queryFolder.listFiles(new FilenameFilter() 
 			{public boolean accept(File dir, String name) {return name.toLowerCase().endsWith(".qry");}})) {
-			String content = readQueryFromFile(queryFile);
+			String content = readStringFromFile(queryFile);
 			if (!content.isEmpty()) // empty file --> 
 				result.add(content);
 			else if (log.isWarnEnabled())

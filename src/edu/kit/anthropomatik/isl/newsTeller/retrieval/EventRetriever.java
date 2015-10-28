@@ -15,7 +15,7 @@ import edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
 /**
- * Takes care of retrieving potentially relevant events from the KnowledgeStore.
+ * Takes care of retrieving the most relevant event from the KnowledgeStore (IR task).
  * 
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *

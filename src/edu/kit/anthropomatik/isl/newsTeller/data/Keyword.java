@@ -16,16 +16,8 @@ public class Keyword {
 		return word;
 	}
 
-	public void setWord(String word) {
-		this.word = word;
-	}
-
 	public double getWeight() {
 		return weight;
-	}
-
-	public void setWeight(double weight) {
-		this.weight = weight;
 	}
 	
 	public Keyword() {

@@ -17,8 +17,9 @@ public class SimpleAverageAggregator extends ScoreAggregator {
 		double sum = 0;
 		for (Scoring scoring : event.getScorings())
 			sum += scoring.getScore();
-	
-		event.setTotalScore(sum / event.getScorings().size());
+		double totalScore = sum / event.getScorings().size();
+		
+		event.setTotalScore(totalScore);
 	}
 
 }

@@ -18,6 +18,9 @@ public class EventSelector {
 
 	private static Log log = LogFactory.getLog(EventSelector.class);
 	
+	/**
+	 * Select the highest scoring event.
+	 */
 	public NewsEvent selectEvent(List<NewsEvent> events) {
 		if (log.isInfoEnabled())
 			log.info(String.format("selectEvent(events = <%s>)", StringUtils.collectionToCommaDelimitedString(events)));
@@ -31,6 +34,8 @@ public class EventSelector {
 			}
 		}
 		
+		if (log.isInfoEnabled())
+			log.info(String.format("selected event: %s", selectedEvent.toVerboseString()));
 		return selectedEvent;
 		
 	}

@@ -16,20 +16,17 @@ public class Scoring {
 		return nameOfHeuristic;
 	}
 
-	public void setNameOfHeuristic(String nameOfHeuristic) {
-		this.nameOfHeuristic = nameOfHeuristic;
-	}
-
 	public double getScore() {
 		return score;
 	}
 
-	public void setScore(double score) {
-		this.score = score;
-	}
-	
 	public Scoring(String nameOfHeuristic, double score) {
 		this.nameOfHeuristic = nameOfHeuristic;
 		this.score = score;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("[%s:%f]", nameOfHeuristic, score);
 	}
 }

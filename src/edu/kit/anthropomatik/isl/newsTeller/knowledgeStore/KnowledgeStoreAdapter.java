@@ -87,9 +87,6 @@ public class KnowledgeStoreAdapter {
 	 * Returns the retrieved results as NewsEvents.
 	 */
 	public List<NewsEvent> runSingleVariableEventQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
-		if (log.isInfoEnabled())
-			log.info(String.format("runSingleVariableURIQuery(sparqlQuery = '%s', variableName = '%s', timeoutMillisec = %d)", 
-									sparqlQuery, variableName, timeoutMillisec));
 		
 		List<NewsEvent> result = new ArrayList<NewsEvent>();
 		

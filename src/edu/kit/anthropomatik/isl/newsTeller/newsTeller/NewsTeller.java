@@ -62,7 +62,6 @@ public class NewsTeller {
 	}
 	
 	public String getNews(List<Keyword> userQuery) {
-		
 		if (log.isInfoEnabled())
 			log.info(String.format("getNews(user query = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
 		

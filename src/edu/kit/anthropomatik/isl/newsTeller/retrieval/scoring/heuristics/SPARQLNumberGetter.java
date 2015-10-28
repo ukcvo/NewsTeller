@@ -25,7 +25,7 @@ public class SPARQLNumberGetter implements INumberGetter {
 	private boolean queryContainsHistoricalEvent;
 	
 	public SPARQLNumberGetter(String queryFileName) {
-		this.query = Util.readQueryFromFile(queryFileName);
+		this.query = Util.readStringFromFile(queryFileName);
 		this.queryContainsEvent = query.contains(Util.PLACEHOLDER_EVENT);
 		this.queryContainsKeyword = query.contains(Util.PLACEHOLDER_KEYWORD);
 		this.queryContainsHistoricalEvent = query.contains(Util.PLACEHOLDER_HISTORICAL_EVENT);

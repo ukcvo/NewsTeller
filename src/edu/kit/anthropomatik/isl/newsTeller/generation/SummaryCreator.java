@@ -18,6 +18,8 @@ public abstract class SummaryCreator {
 		this.ksAdapter = ksAdapter;
 	} 
 	
-	// summarize the given event
+	/**
+	 * Summarize the given event.
+	 */
 	public abstract String summarizeEvent(NewsEvent event);
 }

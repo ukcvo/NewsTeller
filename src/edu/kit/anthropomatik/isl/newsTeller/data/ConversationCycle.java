@@ -1,6 +1,5 @@
 package edu.kit.anthropomatik.isl.newsTeller.data;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.util.StringUtils;

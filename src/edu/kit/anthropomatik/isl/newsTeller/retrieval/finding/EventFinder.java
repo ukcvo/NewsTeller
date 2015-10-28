@@ -3,6 +3,10 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.finding;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.util.StringUtils;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.ConversationCycle;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
@@ -11,13 +15,15 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
- * Represents one way to find events.
+ * Responsible for finding many potentially relevant events.
  * 
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
 public class EventFinder {
 
+	private static Log log = LogFactory.getLog(EventFinder.class);
+	
 	// access to KnowledgeStore
 	private KnowledgeStoreAdapter ksAdapter;
 	
@@ -34,12 +40,15 @@ public class EventFinder {
 	}
 	
 	public EventFinder(String queryQueryFolder, String interestQueryFolder, String historyQueryFolder) {
-		this.queryQueries = Util.readQueriesFromFolder(queryQueryFolder);
-		this.interestQueries = Util.readQueriesFromFolder(interestQueryFolder);
-		this.historyQueries = Util.readQueriesFromFolder(historyQueryFolder);
+		this.queryQueries = Util.readStringsFromFolder(queryQueryFolder);
+		this.interestQueries = Util.readStringsFromFolder(interestQueryFolder);
+		this.historyQueries = Util.readStringsFromFolder(historyQueryFolder);
 	}
 	
+	// use keywords from user query to find events
 	private List<NewsEvent> processUserQuery(List<Keyword> userQuery) {
+		if (log.isTraceEnabled())
+			log.trace(String.format("processUserQuery(userQuery = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
 		
 		List<NewsEvent> events = new ArrayList<NewsEvent>();
 		
@@ -50,17 +59,31 @@ public class EventFinder {
 		return events;
 	}
 	
+	// use keywords from user interests to find events
 	private List<NewsEvent> processUserInterests(List<Keyword> userInterests) {
+		if (log.isTraceEnabled())
+			log.trace(String.format("processUserInterests(userInterests = <%s>)", StringUtils.collectionToCommaDelimitedString(userInterests)));
 		// TODO: implement (Scope 4)
 		return new ArrayList<NewsEvent>();
 	}
 	
+	// use events from previous conversation cycles to find events
 	private List<NewsEvent> processConversationHistory(List<ConversationCycle> converstaionHistory) {
+		if (log.isTraceEnabled())
+			log.trace(String.format("processConversationHistory(converstaionHistory = <%s>)", 
+					StringUtils.collectionToCommaDelimitedString(converstaionHistory)));
 		// TODO: implement (Scope 7)
 		return new ArrayList<NewsEvent>();
 	}
 	
+	/**
+	 * Find potentially relevant events.
+	 */
 	public List<NewsEvent> findEvents(List<Keyword> userQuery, UserModel userModel) {
+		if (log.isInfoEnabled())
+			log.info(String.format("findEvents(userQuery = <%s>, userModel = %s)", 
+					StringUtils.collectionToCommaDelimitedString(userQuery), userModel.toString()));
+		
 		List<NewsEvent> events = new ArrayList<NewsEvent>();
 		
 		events.addAll(processUserQuery(userQuery));
