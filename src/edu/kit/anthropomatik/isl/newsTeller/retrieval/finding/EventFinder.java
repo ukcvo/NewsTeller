@@ -27,23 +27,22 @@ public class EventFinder {
 	// access to KnowledgeStore
 	private KnowledgeStoreAdapter ksAdapter;
 	
-	//TODO: name (Scope 0)
-	private List<String> queryQueries;		// SPARQL queries based on user query keyword
+	private List<String> userQuerySPARQLTemplates;		// SPARQL queries based on user query keyword
 	
 	@SuppressWarnings("unused")
-	private List<String> interestQueries;	// SPARQL queries based on user interests keyword
+	private List<String> userInterestSPARQLTemplates;	// SPARQL queries based on user interests keyword
 	
 	@SuppressWarnings("unused")
-	private List<String> historyQueries;	// SPARQL queries based on conversation history event
+	private List<String> previousEventSPARQLTemplates;	// SPARQL queries based on conversation history event
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
 	
-	public EventFinder(String queryQueryFolder, String interestQueryFolder, String historyQueryFolder) {
-		this.queryQueries = Util.readStringsFromFolder(queryQueryFolder);
-		this.interestQueries = Util.readStringsFromFolder(interestQueryFolder);
-		this.historyQueries = Util.readStringsFromFolder(historyQueryFolder);
+	public EventFinder(String userQueryFolder, String userInterestFolder, String previousEventFolder) {
+		this.userQuerySPARQLTemplates = Util.readStringsFromFolder(userQueryFolder);
+		this.userInterestSPARQLTemplates = Util.readStringsFromFolder(userInterestFolder);
+		this.previousEventSPARQLTemplates = Util.readStringsFromFolder(previousEventFolder);
 	}
 	
 	// use keywords from user query to find events
@@ -53,7 +52,7 @@ public class EventFinder {
 		
 		List<NewsEvent> events = new ArrayList<NewsEvent>();
 		
-		for (String sparqlQuery : queryQueries) {
+		for (String sparqlQuery : userQuerySPARQLTemplates) {
 			// TODO: generalize to multiple keywords (Scope 3)
 			events.addAll(ksAdapter.runSingleVariableEventQuery(sparqlQuery.replace("*k*", userQuery.get(0).getWord()), "event"));
 		}

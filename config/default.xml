@@ -13,9 +13,9 @@
 
 	<bean id="finder"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
-		<constructor-arg name="queryQueryFolder" value="" /> <!-- TODO: fill in folder name (Scope 1) -->
-		<constructor-arg name="interestQueryFolder" value="" /> <!-- TODO: fill in folder name (Scope 1) -->
-		<constructor-arg name="historyQueryFolder" value="" /> <!-- TODO: fill in folder name (Scope 1) -->
+		<constructor-arg name="userQueryFolder" value="resources/SPARQL/retrieval/Scope0/userQuery" /> 
+		<constructor-arg name="userInterestFolder" value="resources/SPARQL/retrieval/Scope0/userInterest" /> 
+		<constructor-arg name="previousEventFolder" value="resources/SPARQL/retrieval/Scope0/previousEvent" /> 
 	</bean>
 
 	<bean id="scorer"

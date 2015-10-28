@@ -7,14 +7,14 @@ import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
- * Gets a number by executing a SPARQL query.
+ * Gets a coefficient by executing a SPARQL count query.
  * 
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class SPARQLNumberGetter implements INumberGetter {
+public class SPARQLCoefficientDeterminer implements ICoefficientDeterminer {
 
-	private static Log log = LogFactory.getLog(SPARQLNumberGetter.class);
+	private static Log log = LogFactory.getLog(SPARQLCoefficientDeterminer.class);
 	
 	private KnowledgeStoreAdapter ksAdapter;
 	
@@ -24,14 +24,14 @@ public class SPARQLNumberGetter implements INumberGetter {
 	private boolean queryContainsKeyword;
 	private boolean queryContainsHistoricalEvent;
 	
-	public SPARQLNumberGetter(String queryFileName) {
+	public SPARQLCoefficientDeterminer(String queryFileName) {
 		this.query = Util.readStringFromFile(queryFileName);
 		this.queryContainsEvent = query.contains(Util.PLACEHOLDER_EVENT);
 		this.queryContainsKeyword = query.contains(Util.PLACEHOLDER_KEYWORD);
 		this.queryContainsHistoricalEvent = query.contains(Util.PLACEHOLDER_HISTORICAL_EVENT);
 	}
 	
-	public double getNumber(String eventURI, String keyword, String historicalEventURI) {
+	public double getCoefficient(String eventURI, String keyword, String historicalEventURI) {
 		
 		//region checking correct parameters for query
 		if ((eventURI != null) && !queryContainsEvent) {

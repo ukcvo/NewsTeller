@@ -14,7 +14,7 @@ public abstract class ScoringHeuristic {
 
 	private ScoringFormula formula;
 	
-	private INumberGetter numberGetter;
+	private ICoefficientDeterminer numberGetter;
 	
 	private String name;
 	
@@ -22,7 +22,7 @@ public abstract class ScoringHeuristic {
 		this.formula = formula;
 	}
 
-	public void setNumberGetter(INumberGetter numberGetter) {
+	public void setNumberGetter(ICoefficientDeterminer numberGetter) {
 		this.numberGetter = numberGetter;
 	}
 
@@ -37,7 +37,7 @@ public abstract class ScoringHeuristic {
 	// get the score by finding a relevant number and applying a formula
 	protected double getScore(NewsEvent event, Keyword keyword, ConversationCycle historicalCycle) {
 		
-		double number = numberGetter.getNumber(event.getEventURI(), keyword.getWord(), historicalCycle.getEventURI());
+		double number = numberGetter.getCoefficient(event.getEventURI(), keyword.getWord(), historicalCycle.getEventURI());
 		double score = formula.apply(number);
 		
 		return score;

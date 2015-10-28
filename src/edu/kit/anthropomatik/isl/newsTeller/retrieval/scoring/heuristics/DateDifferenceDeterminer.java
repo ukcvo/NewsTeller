@@ -13,7 +13,7 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class DateDifferenceGetter implements INumberGetter {
+public class DateDifferenceDeterminer implements ICoefficientDeterminer {
 
 	private IDateProvider dateProvider;
 	
@@ -25,12 +25,12 @@ public class DateDifferenceGetter implements INumberGetter {
 		this.ksAdapter = ksAdapter;
 	}
 
-	public DateDifferenceGetter(String queryFileName) {
+	public DateDifferenceDeterminer(String queryFileName) {
 		this.query = Util.readStringFromFile(queryFileName);
 	}
 	
 	@SuppressWarnings("unused")
-	public double getNumber(String eventURI, String keyword, String historicalEventURI) {
+	public double getCoefficient(String eventURI, String keyword, String historicalEventURI) {
 		
 		List<String> dateStrings = ksAdapter.runSingleVariableStringQuery(query, "date");
 		Date currentDate = dateProvider.getDate();
