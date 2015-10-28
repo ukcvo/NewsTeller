@@ -27,6 +27,7 @@ public class EventFinder {
 	// access to KnowledgeStore
 	private KnowledgeStoreAdapter ksAdapter;
 	
+	//TODO: name (Scope 0)
 	private List<String> queryQueries;		// SPARQL queries based on user query keyword
 	
 	@SuppressWarnings("unused")
