@@ -1,0 +1,5 @@
+SELECT ?mention
+WHERE
+{
+    <*e*> gaf:denotedBy ?mention
+}

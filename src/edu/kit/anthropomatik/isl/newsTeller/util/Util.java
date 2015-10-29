@@ -24,9 +24,13 @@ public class Util {
 	public static final String PLACEHOLDER_EVENT = "*e*";
 	public static final String PLACEHOLDER_KEYWORD = "*k*";
 	public static final String PLACEHOLDER_HISTORICAL_EVENT = "*h*";
+	public static final String PLACEHOLDER_MENTION = "*m*";
 	
 	public static final String VARIABLE_EVENT = "event";
 	public static final String VARIABLE_NUMBER = "number";
+	public static final String VARIABLE_MENTION = "mention";
+	public static final String VARIABLE_RESOURCE = "resource";
+
 	
 	// private constructor to prevent instantiation
 	private Util() {}
@@ -35,12 +39,7 @@ public class Util {
 	 * Reads the file given by the fileName and returns the contained String.
 	 */
 	public static String readStringFromFile(String fileName) {
-		if (log.isInfoEnabled())
-			log.info(String.format("readQueryFromFile(fileName = '%s')", fileName));
-		
-		File queryFile = new File(fileName);
-		
-		return readStringFromFile(queryFile);
+		return readStringFromFile(new File(fileName));
 	}
 	
 	/**

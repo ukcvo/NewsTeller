@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.LogManager;
 
@@ -96,4 +97,23 @@ public class KnowledgeStoreAdapterTest {
 		assertTrue(number == 624439);
 	}
 	
+	@Test
+	public void shouldReturnCorrectSentenceForSingleMentionEvent() {
+		if(log.isInfoEnabled())
+			log.info("shouldReturnCorrectSentence()");
+		String expectedResult = "The Live 8 event, however, was broadcast live.";
+		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev27");
+		assertTrue(expectedResult.equals(retrievedSentence));
+	}
+	
+	@Test
+	public void shouldReturnCorrectSentenceForMultipleMentionEvent() {
+		if(log.isInfoEnabled())
+			log.info("shouldReturnCorrectSentence()");
+		List<String> expectedResults = 
+				Arrays.asList(	"Under the act, nuclear power generation is specified as a prohibited activity.",
+								"Dr Clive Hamilton, executive director of the Australia Institute said that the government is yet to give an indication on potential nuclear power sites and there is only a small number of sites which would be suitable for a power generation reactor.");
+		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/The_Australia_Institute_identifies_ideal_sites_for_nuclear_power_stations#ev27_4");
+		assertTrue(expectedResults.contains(retrievedSentence));
+	}
 }
