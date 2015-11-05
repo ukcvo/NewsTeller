@@ -22,8 +22,8 @@ public class EventSelector {
 	 * Select the highest scoring event.
 	 */
 	public NewsEvent selectEvent(List<NewsEvent> events) {
-		if (log.isInfoEnabled())
-			log.info(String.format("selectEvent(events = <%s>)", StringUtils.collectionToCommaDelimitedString(events)));
+		if (log.isTraceEnabled())
+			log.trace(String.format("selectEvent(events = <%s>)", StringUtils.collectionToCommaDelimitedString(events)));
 		
 		double maxValue = Double.NEGATIVE_INFINITY;
 		NewsEvent selectedEvent = null;
@@ -34,8 +34,8 @@ public class EventSelector {
 			}
 		}
 		
-		if (log.isInfoEnabled())
-			log.info(String.format("selected event: %s", (selectedEvent == null ? "null" : selectedEvent.toVerboseString())));
+		if (log.isTraceEnabled())
+			log.trace(String.format("selected event: %s", (selectedEvent == null ? "null" : selectedEvent.toVerboseString())));
 		return selectedEvent;
 		
 	}

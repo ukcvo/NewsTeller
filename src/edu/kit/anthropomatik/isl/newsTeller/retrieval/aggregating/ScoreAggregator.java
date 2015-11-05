@@ -25,8 +25,8 @@ public abstract class ScoreAggregator {
 	 * For each event aggregates the scores into a total score.
 	 */
 	public void aggregateScores(List<NewsEvent> events) {
-		if (log.isInfoEnabled())
-			log.info(String.format("aggregateScores(#events = %d)", events.size()));
+		if (log.isTraceEnabled())
+			log.trace(String.format("aggregateScores(#events = %d)", events.size()));
 		
 		for (NewsEvent event : events) {
 			aggregateScoresForEvent(event);

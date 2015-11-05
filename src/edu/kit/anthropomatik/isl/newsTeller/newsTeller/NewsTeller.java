@@ -62,8 +62,8 @@ public class NewsTeller {
 	}
 	
 	public String getNews(List<Keyword> userQuery) {
-		if (log.isInfoEnabled())
-			log.info(String.format("getNews(user query = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
+		if (log.isTraceEnabled())
+			log.trace(String.format("getNews(user query = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
 		
 		NewsEvent selectedEvent = retriever.retrieveEvent(userQuery, userModel);
 		String summary = generator.summarizeEvent(selectedEvent);

@@ -39,8 +39,8 @@ private static Log log;
 
 	@Test
 	public void shouldReturnDummySummary() {
-		if(log.isInfoEnabled())
-			log.info("shouldReturnDummySummary()");
+		if(log.isTraceEnabled())
+			log.trace("shouldReturnDummySummary()");
 		assertTrue(newsTeller.getNews(null).equals("dummySummary"));
 	}
 

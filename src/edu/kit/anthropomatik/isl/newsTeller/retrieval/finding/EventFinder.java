@@ -80,8 +80,8 @@ public class EventFinder {
 	 * Find potentially relevant events.
 	 */
 	public List<NewsEvent> findEvents(List<Keyword> userQuery, UserModel userModel) {
-		if (log.isInfoEnabled())
-			log.info(String.format("findEvents(userQuery = <%s>, userModel = %s)", 
+		if (log.isTraceEnabled())
+			log.trace(String.format("findEvents(userQuery = <%s>, userModel = %s)", 
 					StringUtils.collectionToCommaDelimitedString(userQuery), userModel.toString()));
 		
 		List<NewsEvent> events = new ArrayList<NewsEvent>();

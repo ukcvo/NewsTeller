@@ -59,8 +59,8 @@ public class KnowledgeStoreAdapter {
 	 * Remember to call closeConnection() when done querying.
 	 */
 	public void openConnection() {
-		if (log.isInfoEnabled())
-			log.info("openConnection()");
+		if (log.isTraceEnabled())
+			log.trace("openConnection()");
 		
 		if (this.isConnectionOpen) {
 			if (log.isWarnEnabled())
@@ -77,8 +77,8 @@ public class KnowledgeStoreAdapter {
 	 * Closing the connection to the KnowledgeStore.
 	 */
 	public void closeConnection() {
-		if (log.isInfoEnabled())
-			log.info("closeConnection()");
+		if (log.isTraceEnabled())
+			log.trace("closeConnection()");
 		
 		if (this.isConnectionOpen) {
 			this.session.close();
@@ -97,8 +97,8 @@ public class KnowledgeStoreAdapter {
 	 * Returns the retrieved results as Strings.
 	 */
 	public List<String> runSingleVariableStringQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
-		if (log.isInfoEnabled())
-			log.info(String.format("runSingleVariableStringQuery(sparqlQuery = '%s', variableName = '%s', timeoutMillisec = %d)", 
+		if (log.isTraceEnabled())
+			log.trace(String.format("runSingleVariableStringQuery(sparqlQuery = '%s', variableName = '%s', timeoutMillisec = %d)", 
 									sparqlQuery, variableName, timeoutMillisec));
 		
 		

@@ -99,8 +99,8 @@ public class EventScorer {
 	 * Score all the events based on all the available heuristics.
 	 */
 	public void scoreEvents(List<NewsEvent> events, List<Keyword> userQuery, UserModel userModel) {
-		if (log.isInfoEnabled())
-			log.info(String.format("scoreEvents(events = <%s>, userQuery = <%s>, userModel = %s)", 
+		if (log.isTraceEnabled())
+			log.trace(String.format("scoreEvents(events = <%s>, userQuery = <%s>, userModel = %s)", 
 					StringUtils.collectionToCommaDelimitedString(events),
 					StringUtils.collectionToCommaDelimitedString(userQuery),
 					userModel.toString()));

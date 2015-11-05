@@ -54,8 +54,8 @@ public class EventSelectorTest {
 
 	@Test
 	public void shouldReturnEvent2() {
-		if (log.isInfoEnabled())
-			log.info("shouldReturnEvent2");
+		if (log.isTraceEnabled())
+			log.trace("shouldReturnEvent2");
 		
 		NewsEvent selectedEvent = this.selector.selectEvent(this.events);
 		assertTrue(selectedEvent == this.events.get(1));

@@ -31,8 +31,8 @@ public class Main {
 		
 	// command-line interface to NewsTeller
 	private void run() {
-		if (log.isInfoEnabled())
-			log.info("run()");
+		if (log.isTraceEnabled())
+			log.trace("run()");
 		
 		Scanner in = new Scanner(System.in);
 		
@@ -56,8 +56,8 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		if (log.isInfoEnabled())
-			log.info("starting the program");
+		if (log.isTraceEnabled())
+			log.trace("starting the program");
 		
 		String configFile = "config/default.xml";
 		if (args.length >= 1)
@@ -69,8 +69,8 @@ public class Main {
 		
 		m.run();
 		
-		if (log.isInfoEnabled())
-			log.info("shutting down");
+		if (log.isTraceEnabled())
+			log.trace("shutting down");
 	}
 
 }

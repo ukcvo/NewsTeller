@@ -50,8 +50,8 @@ public class SimpleAverageAggregatorTest {
 
 	@Test
 	public void shouldDoAverageAggregation() {
-		if (log.isInfoEnabled())
-			log.info("shouldDoAverageAggregation");
+		if (log.isTraceEnabled())
+			log.trace("shouldDoAverageAggregation");
 			
 		this.aggregator.aggregateScores(this.events);
 		assertTrue(this.events.get(0).getTotalScore() - (1.7/3) < 0.00001);

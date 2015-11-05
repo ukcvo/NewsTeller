@@ -34,22 +34,22 @@ public class ScoringFormulaTest {
 
 	@Test
 	public void shouldReturn1() {
-		if (log.isInfoEnabled())
-			log.info("shouldReturn1");
+		if (log.isTraceEnabled())
+			log.trace("shouldReturn1");
 		assertTrue(this.formula.apply(0.5) == 1);
 	}
 	
 	@Test
 	public void shouldReturn0DueToOverflow() {
-		if (log.isInfoEnabled())
-			log.info("shouldReturn0DueToOverflow");
+		if (log.isTraceEnabled())
+			log.trace("shouldReturn0DueToOverflow");
 		assertTrue(this.formula.apply(0.7) == 0);
 	}
 	
 	@Test
 	public void shouldReturn0DueToUnderflow() {
-		if (log.isInfoEnabled())
-			log.info("shouldReturn0DueToUnderflow");
+		if (log.isTraceEnabled())
+			log.trace("shouldReturn0DueToUnderflow");
 		assertTrue(this.formula.apply(-0.1) == 0);
 	}
 

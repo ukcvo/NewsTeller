@@ -51,8 +51,8 @@ public class EventRetriever {
 	//endregion
 	
 	public NewsEvent retrieveEvent(List<Keyword> userQuery, UserModel userModel) {
-		if (log.isInfoEnabled())
-			log.info(String.format("retrieveEvents(userQuery = <%s>, userModel = %s)", 
+		if (log.isTraceEnabled())
+			log.trace(String.format("retrieveEvents(userQuery = <%s>, userModel = %s)", 
 										StringUtils.collectionToCommaDelimitedString(userQuery) , userModel.toString()));
 		
 		List<NewsEvent> events = eventFinder.findEvents(userQuery, userModel);

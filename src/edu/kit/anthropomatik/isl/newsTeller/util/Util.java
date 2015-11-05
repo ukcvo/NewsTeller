@@ -46,8 +46,8 @@ public class Util {
 	 * Reads the given queryFile and returns the contained String.
 	 */
 	public static String readStringFromFile(File queryFile) {
-		if (log.isInfoEnabled())
-			log.info(String.format("readQueryFromFile(queryFile = '%s')", queryFile.toString()));
+		if (log.isTraceEnabled())
+			log.trace(String.format("readQueryFromFile(queryFile = '%s')", queryFile.toString()));
 		
 		String result = "";
 		try {
@@ -73,8 +73,8 @@ public class Util {
 	 * Reads all files from the given folder and returns the contained Strings.
 	 */
 	public static List<String> readStringsFromFolder(String folderName) {
-		if (log.isInfoEnabled())
-			log.info(String.format("readQueriesFromFolder(folderName = '%s')", folderName));
+		if (log.isTraceEnabled())
+			log.trace(String.format("readQueriesFromFolder(folderName = '%s')", folderName));
 		
 		List<String> result = new ArrayList<String>();
 		
