@@ -14,6 +14,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jumpmind.symmetric.csv.CsvReader;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+
 /**
  * Provides some static utility functions.
  * 
@@ -36,12 +38,17 @@ public class Util {
 
 	public static final String COLUMN_NAME_URI = "URI";
 	public static final String COLUMN_NAME_RATING = "rating";
+	public static final String COLUMN_NAME_FILENAME = "filename";
+	public static final String COLUMN_NAME_KEYWORD = "keyword_";
 	
 	public static final double EPSILON = 0.00001;
+	
+	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 5;
 	
 	// private constructor to prevent instantiation
 	private Util() {}
 	
+	//region reading strings from files
 	/**
 	 * Reads the file given by the fileName and returns the contained String.
 	 */
@@ -103,13 +110,15 @@ public class Util {
 		
 		return result;
 	}
+	//endregion
 	
+	//region reading csv files
 	/**
 	 * Reads a benchmark query csv file and returns a mapping from URI to Double.
 	 */
 	public static Map<String,Double> readBenchmarkQueryFromFile(String fileName) {
 		if (log.isTraceEnabled())
-			log.trace(String.format("readBenchmarkQueryFromFile(benchmarkFile = '%s')", fileName));
+			log.trace(String.format("readBenchmarkQueryFromFile(fileName = '%s')", fileName));
 		
 		Map<String,Double> result = new HashMap<String,Double>();
 				
@@ -134,4 +143,41 @@ public class Util {
 		
 		return result;
 	}
+	
+	/**
+	 * Reads a benchmark config file and returns a map of benchmark query files and corresponding keywords.
+	 */
+	public static Map<String,List<Keyword>> readBenchmarkConfigFile(String fileName) {
+		if (log.isTraceEnabled())
+			log.trace(String.format("readBenchmarkConfigFile(fileName = '%s')", fileName));
+		
+		Map<String,List<Keyword>> result = new HashMap<String, List<Keyword>>();
+		
+		try {
+			CsvReader in = new CsvReader(fileName);
+			in.readHeaders();
+			
+			while (in.readRecord()) {
+				String queryFileName = in.get(Util.COLUMN_NAME_FILENAME);
+				List<Keyword> queryKeywords = new ArrayList<Keyword>(Util.MAX_NUMBER_OF_BENCHMARK_KEYWORDS);
+				for (int i = 1; i <= Util.MAX_NUMBER_OF_BENCHMARK_KEYWORDS; i++) {
+					String s = in.get(Util.COLUMN_NAME_KEYWORD + i);
+					if (s != null && !s.isEmpty())
+						queryKeywords.add(new Keyword(s));
+				}
+				result.put(queryFileName, queryKeywords);
+			}
+			
+			in.close();
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error(String.format("could not read benchmark config file, returning empty result: '%s'", fileName.toString()));
+			if (log.isDebugEnabled())
+				log.debug("cannnot read file", e);
+		} 
+		
+		return result;
+	}
+	//endregion
 }

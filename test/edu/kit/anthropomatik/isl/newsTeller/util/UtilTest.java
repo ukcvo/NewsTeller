@@ -11,6 +11,8 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+
 public class UtilTest {
 
 	private static Log log;
@@ -59,17 +61,17 @@ public class UtilTest {
 	}
 	
 	@Test
-	public void shouldReturnEmptyMap() {
+	public void shouldReturnEmptyBenchmarkMap() {
 		if(log.isTraceEnabled())
-			log.trace("shouldReturn82ElementMap()");
+			log.trace("shouldReturnEmptyBenchmarkMap()");
 		Map<String, Double> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/nonexisting-file.csv");
 		assertTrue(map.isEmpty());
 	}
 	
 	@Test
-	public void shouldReturn82ElementMap() {
+	public void shouldReturn82ElementBenchmarkMap() {
 		if(log.isTraceEnabled())
-			log.trace("shouldReturn82ElementMap()");
+			log.trace("shouldReturn82ElementBenchmarkMap()");
 		Map<String, Double> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
 		assertTrue(map.size() == 82);
 	}
@@ -81,5 +83,30 @@ public class UtilTest {
 		Map<String, Double> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
 		
 		assertTrue(map.get("http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev67") - 1.0 < Util.EPSILON);
+	}
+	
+	@Test
+	public void shouldReturnEmptyConfigMap() {
+		if(log.isTraceEnabled())
+			log.trace("shouldReturnEmptyConfigMap()");
+		Map<String, List<Keyword>> map = Util.readBenchmarkConfigFile("resources/benchmark/nonexisting-file.csv");
+		assertTrue(map.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturn45ElementConfigMap() {
+		if(log.isTraceEnabled())
+			log.trace("shouldReturn45ElementConfigMap()");
+		Map<String, List<Keyword>> map = Util.readBenchmarkConfigFile("resources/benchmark/Scope 0.csv");
+		assertTrue(map.size() == 45);
+	}
+	
+	@Test
+	public void shouldReturnAlbum() {
+		if(log.isTraceEnabled())
+			log.trace("shouldReturnAlbum()");
+		Map<String, List<Keyword>> map = Util.readBenchmarkConfigFile("resources/benchmark/Scope 0.csv");
+		
+		assertTrue(map.get("resources/benchmark/queries/album.csv").get(0).getWord().equals("album"));
 	}
 }
