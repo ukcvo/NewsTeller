@@ -1,0 +1,46 @@
+filename,keyword_1,keyword_2,keyword_3,keyword_4
+"resources/benchmark/queries/album.csv",album
+"resources/benchmark/queries/artificial intelligence.csv",artificial intelligence
+"resources/benchmark/queries/Berlin.csv",Berlin
+"resources/benchmark/queries/champions league.csv",champions league
+"resources/benchmark/queries/chancellor.csv",chancellor
+"resources/benchmark/queries/charity.csv",charity
+"resources/benchmark/queries/Chernobyl.csv",Chernobyl
+"resources/benchmark/queries/cinema.csv",cinema
+"resources/benchmark/queries/climate.csv",climate
+"resources/benchmark/queries/comedy.csv",comedy
+"resources/benchmark/queries/concert.csv",concert
+"resources/benchmark/queries/contradict.csv",contradict
+"resources/benchmark/queries/dance.csv",dance
+"resources/benchmark/queries/earthquake.csv",earthquake
+"resources/benchmark/queries/Edinburgh.csv",Edinburgh
+"resources/benchmark/queries/Edmund Hillary.csv",Edmund Hillary
+"resources/benchmark/queries/erupt.csv",erupt
+"resources/benchmark/queries/European Space Agency.csv",European Space Agency
+"resources/benchmark/queries/Facebook.csv",Facebook
+"resources/benchmark/queries/Fukushima.csv",Fukushima
+"resources/benchmark/queries/Hawking.csv",Hawking
+"resources/benchmark/queries/Himalaya.csv",Himalaya
+"resources/benchmark/queries/hurricane Katrina.csv",hurricane Katrina
+"resources/benchmark/queries/IBM.csv",IBM
+"resources/benchmark/queries/Iceland.csv",Iceland
+"resources/benchmark/queries/kiss.csv",kiss
+"resources/benchmark/queries/Lehman Brothers.csv",Lehman Brothers
+"resources/benchmark/queries/manipulate.csv",manipulate
+"resources/benchmark/queries/marathon.csv",marathon
+"resources/benchmark/queries/Medvedev.csv",Medvedev
+"resources/benchmark/queries/Merkel.csv",Merkel
+"resources/benchmark/queries/Michael Jackson.csv",Michael Jackson
+"resources/benchmark/queries/Mount Everest.csv",Mount Everest
+"resources/benchmark/queries/museum.csv",museum
+"resources/benchmark/queries/power station.csv",power station
+"resources/benchmark/queries/Real Madrid.csv",Real Madrid
+"resources/benchmark/queries/Rhine.csv",Rhine
+"resources/benchmark/queries/riot.csv",riot
+"resources/benchmark/queries/Rome.csv",Rome
+"resources/benchmark/queries/Sahara.csv",Sahara
+"resources/benchmark/queries/Star Wars.csv",Star Wars
+"resources/benchmark/queries/Tom Cruise.csv",Tom Cruise
+"resources/benchmark/queries/upload.csv",upload
+"resources/benchmark/queries/volcano.csv",volcano
+"resources/benchmark/queries/Watson.csv",Watson
