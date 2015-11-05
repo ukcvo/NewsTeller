@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.Scoring;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class SimpleAverageAggregatorTest {
 
@@ -54,7 +55,7 @@ public class SimpleAverageAggregatorTest {
 			log.trace("shouldDoAverageAggregation");
 			
 		this.aggregator.aggregateScores(this.events);
-		assertTrue(this.events.get(0).getTotalScore() - (1.7/3) < 0.00001);
+		assertTrue(this.events.get(0).getTotalScore() - (1.7/3) < Util.EPSILON);
 	}
 
 }
