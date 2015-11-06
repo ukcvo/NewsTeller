@@ -2,6 +2,8 @@ package edu.kit.anthropomatik.isl.newsTeller.newsTeller;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.LogManager;
 
 import org.junit.Before;
@@ -11,9 +13,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker;
+
 public class NewsTellerTest {
 
 	NewsTeller newsTellerScope0;
+	NewsTeller newsTellerScope1;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() {
@@ -30,11 +36,35 @@ public class NewsTellerTest {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope0_test.xml");
 		newsTellerScope0 = (NewsTeller) context.getBean("newsTeller");
 		((AbstractApplicationContext) context).close();
+		
+		context = new FileSystemXmlApplicationContext("config/Scope1_test.xml");
+		newsTellerScope1 = (NewsTeller) context.getBean("newsTeller");
+		((AbstractApplicationContext) context).close();
 	}
 
+	//region Scope 0
 	@Test
 	public void shouldReturnDummySummary() {
 		assertTrue(newsTellerScope0.getNews(null).equals("dummySummary"));
 	}
-
+	//endregion
+	
+	//region Scope 1
+	@Test
+	public void shouldReturnExtractedSentence() {
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(new Keyword("artificial intelligence"));
+		String result = newsTellerScope1.getNews(keywords);
+		assertTrue(!result.isEmpty() && !result.equals(SentencePicker.EMPTY_EVENT_RESPONSE));
+	}
+	
+	@Test
+	public void shouldReturnEmptyEventResponse() {
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(new Keyword("artificial brain"));
+		String result = newsTellerScope1.getNews(keywords);
+		assertTrue(result.equals(SentencePicker.EMPTY_EVENT_RESPONSE));
+	}
+	
+	//endregion
 }
