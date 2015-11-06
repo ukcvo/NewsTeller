@@ -262,6 +262,11 @@ public class KnowledgeStoreAdapter {
 		String mentionURI = runSingleVariableStringQuerySingleResult(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, eventURI), 
 																		Util.VARIABLE_MENTION);
 
+		if (mentionURI.isEmpty()) {
+			if(log.isErrorEnabled())
+				log.error(String.format("Could not retrieve mention for event, returning empty string: '%s'", eventURI));
+			return "";
+		}
 		// get mention information TODO: better way to access this?
 		String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
 		int startIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf("=")+1, mentionURI.indexOf(",")));

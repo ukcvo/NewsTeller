@@ -62,7 +62,7 @@
 	</bean>
 
 	<bean id="generator"
-		class="edu.kit.anthropomatik.isl.newsTeller.generation.DummySummaryCreator">
+		class="edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker">
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
