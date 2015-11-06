@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.LogManager;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -19,8 +17,6 @@ import edu.kit.anthropomatik.isl.newsTeller.data.Scoring;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class SimpleAverageAggregatorTest {
-
-	private static Log log;
 	
 	private Set<NewsEvent> events; 
 	
@@ -31,7 +27,6 @@ public class SimpleAverageAggregatorTest {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(SimpleAverageAggregatorTest.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -53,9 +48,6 @@ public class SimpleAverageAggregatorTest {
 
 	@Test
 	public void shouldDoAverageAggregation() {
-		if (log.isTraceEnabled())
-			log.trace("shouldDoAverageAggregation");
-			
 		this.aggregator.aggregateScores(this.events);
 		assertTrue(((NewsEvent) this.events.toArray()[0]).getTotalScore() - (1.7/3) < Util.EPSILON);
 	}

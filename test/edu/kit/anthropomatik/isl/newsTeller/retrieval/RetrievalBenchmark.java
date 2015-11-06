@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
-import edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTellerTestScope0;
+import edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTellerTest;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.ScoreAggregator;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.EventScorer;
@@ -128,12 +128,12 @@ public class RetrievalBenchmark {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(NewsTellerTestScope0.class);
+			log = LogFactory.getLog(NewsTellerTest.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope0_test.xml");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope1_test.xml");
 		RetrievalBenchmark benchmark = (RetrievalBenchmark) context.getBean("benchmark");
 		((AbstractApplicationContext) context).close();
 

@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.LogManager;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,8 +13,6 @@ import org.junit.Test;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 
 public class EventSelectorTest {
-
-	private static Log log;
 	
 	private EventSelector selector;
 	
@@ -28,7 +24,6 @@ public class EventSelectorTest {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(EventSelectorTest.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -56,8 +51,6 @@ public class EventSelectorTest {
 
 	@Test
 	public void shouldReturnEvent2() {
-		if (log.isTraceEnabled())
-			log.trace("shouldReturnEvent2");
 		
 		NewsEvent selectedEvent = this.selector.selectEvent(this.events);
 		assertTrue(selectedEvent == this.eventToBeSelected);

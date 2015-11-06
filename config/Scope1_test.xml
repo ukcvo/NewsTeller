@@ -17,7 +17,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
 		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/finding_userQuery_Scope1.txt" />
 		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope1.txt" />
-		<constructor-arg name="previousEventConfigFileName" value="config/SPARQL/finding_previousEvent_Scope1.txt" />
+		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope1.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
@@ -40,7 +40,7 @@
 		</property>
 		<property name="historyHeuristics">
 			<list>
-				<!-- TODO: historyHeuristics beans go here! (Scope 6/7) -->
+				<!-- TODO: historyHeuristics beans go here! (Socpe 6/7) -->
 			</list>
 		</property>
 	</bean>
@@ -72,7 +72,7 @@
 
 	<bean id="newsTeller"
 		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
-		<constructor-arg value="./config/logging.properties" />
+		<constructor-arg value="./config/logging-test.properties" />
 		<property name="userModel" ref="userModel" />
 		<property name="retriever" ref="retriever" />
 		<property name="generator" ref="generator" />
@@ -80,6 +80,15 @@
 
 	<bean id="main" class="edu.kit.anthropomatik.isl.newsTeller.main.Main">
 		<property name="newsTeller" ref="newsTeller" />
+	</bean>
+
+	<bean id="benchmark"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.RetrievalBenchmark">
+		<property name="finder" ref="finder" />
+		<property name="scorer" ref="scorer" />
+		<property name="aggregator" ref="aggregator" />
+		<property name="userModel" ref="userModel" />
+		<property name="configFileName" value="resources/benchmark/Scope 0.csv" />
 	</bean>
 
 </beans>
