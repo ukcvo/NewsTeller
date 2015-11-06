@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
+import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.ext.englishStemmer;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.ConversationCycle;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
@@ -27,19 +29,16 @@ public class EventFinder {
 	// access to KnowledgeStore
 	private KnowledgeStoreAdapter ksAdapter;
 
-	private List<String> userQuerySPARQLTemplates; // SPARQL queries based on
-													// user query keyword
+	private List<String> userQuerySPARQLTemplates; // SPARQL queries based on user query keyword
 
 	@SuppressWarnings("unused")
-	private List<String> userInterestSPARQLTemplates; // SPARQL queries based on
-														// user interests
-														// keyword
+	private List<String> userInterestSPARQLTemplates; // SPARQL queries based on user interests keyword
 
 	@SuppressWarnings("unused")
-	private List<String> previousEventSPARQLTemplates; // SPARQL queries based
-														// on conversation
-														// history event
+	private List<String> previousEventSPARQLTemplates; // SPARQL queries based on conversation history event
 
+	private SnowballStemmer stemmer;
+	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
@@ -48,8 +47,19 @@ public class EventFinder {
 		this.userQuerySPARQLTemplates = Util.readQueriesFromConfigFile(userQueryConfigFileName);
 		this.userInterestSPARQLTemplates = Util.readQueriesFromConfigFile(userInterestConfigFileName);
 		this.previousEventSPARQLTemplates = Util.readQueriesFromConfigFile(previousEventConfigFileName);
+		this.stemmer = new englishStemmer();
 	}
 
+	// stem the keyword before applying the query
+	private String stemKeyword(String keyword) {
+		stemmer.setCurrent(keyword);
+		stemmer.stem();
+		String result = stemmer.getCurrent();
+		if (result.endsWith("i"))
+			result = result.substring(0, result.length()-1) + "(i|y)";
+		return result;
+	}
+	
 	// use keywords from user query to find events
 	private List<NewsEvent> processUserQuery(List<Keyword> userQuery) {
 		if (log.isTraceEnabled())
@@ -59,7 +69,9 @@ public class EventFinder {
 
 		for (String sparqlQuery : userQuerySPARQLTemplates) {
 			// TODO: generalize to multiple keywords (Scope 3)
-			events.addAll(ksAdapter.runSingleVariableEventQuery(sparqlQuery.replace("*k*", userQuery.get(0).getWord()), "event"));
+			String keywordStem = userQuery.get(0).getWord();
+			keywordStem = stemKeyword(keywordStem);
+			events.addAll(ksAdapter.runSingleVariableEventQuery(sparqlQuery.replace("*k*", keywordStem), "event"));
 		}
 		return events;
 	}
