@@ -80,4 +80,12 @@
 		<property name="newsTeller" ref="newsTeller" />
 	</bean>
 
+	<bean id="benchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.RetrievalBenchmark">
+		<property name="finder" ref="finder" />
+		<property name="scorer" ref="scorer" />
+		<property name="aggregator" ref="aggregator" />
+		<property name="userModel" ref="userModel" />
+		<property name="configFileName" value="resources/benchmark/Scope 0.csv" />
+	</bean>
+
 </beans>

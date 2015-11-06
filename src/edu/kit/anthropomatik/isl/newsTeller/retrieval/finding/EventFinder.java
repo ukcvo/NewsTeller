@@ -68,10 +68,10 @@ public class EventFinder {
 	}
 	
 	// use events from previous conversation cycles to find events
-	private List<NewsEvent> processConversationHistory(List<ConversationCycle> converstaionHistory) {
+	private List<NewsEvent> processConversationHistory(List<ConversationCycle> conversationHistory) {
 		if (log.isTraceEnabled())
-			log.trace(String.format("processConversationHistory(converstaionHistory = <%s>)", 
-					StringUtils.collectionToCommaDelimitedString(converstaionHistory)));
+			log.trace(String.format("processConversationHistory(conversationHistory = <%s>)", 
+					StringUtils.collectionToCommaDelimitedString(conversationHistory)));
 		// TODO: implement (Scope 7)
 		return new ArrayList<NewsEvent>();
 	}
