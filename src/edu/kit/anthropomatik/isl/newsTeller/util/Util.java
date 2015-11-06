@@ -62,7 +62,7 @@ public class Util {
 	 */
 	public static String readStringFromFile(File file) {
 		if (log.isTraceEnabled())
-			log.trace(String.format("readQueryFromFile(file = '%s')", file.toString()));
+			log.trace(String.format("readStringFromFile(file = '%s')", file.toString()));
 
 		String result = "";
 		try {
@@ -90,7 +90,7 @@ public class Util {
 	 */
 	public static List<String> readStringsFromFolder(String folderName) {
 		if (log.isTraceEnabled())
-			log.trace(String.format("readQueriesFromFolder(folderName = '%s')", folderName));
+			log.trace(String.format("readStringsFromFolder(folderName = '%s')", folderName));
 
 		List<String> result = new ArrayList<String>();
 
@@ -120,7 +120,7 @@ public class Util {
 	 */
 	public static List<String> readQueriesFromConfigFile(String configFileName) {
 		if (log.isTraceEnabled())
-			log.trace(String.format("readFileNamesFromConfigFile(configFileName = '%s')", configFileName));
+			log.trace(String.format("readQueriesFromConfigFile(configFileName = '%s')", configFileName));
 
 		List<String> result = new ArrayList<String>();
 
@@ -151,20 +151,26 @@ public class Util {
 
 		try {
 			CsvReader in = new CsvReader(fileName);
+			in.setTextQualifier('"');
+			in.setUseTextQualifier(true);
 			in.readHeaders();
 
 			while (in.readRecord()) {
-				String eventURI = in.get(Util.COLUMN_NAME_URI);
-				Double rating = Double.parseDouble(in.get(Util.COLUMN_NAME_RATING));
-				result.put(eventURI, rating);
+				try {
+					String eventURI = in.get(Util.COLUMN_NAME_URI);
+					Double rating = Double.parseDouble(in.get(Util.COLUMN_NAME_RATING));
+					result.put(eventURI, rating);
+				} catch (NumberFormatException e) {
+					if (log.isWarnEnabled())
+						log.warn(String.format("malformed entry, skipping: '%s'", in.getRawRecord()));
+				}
 			}
 
 			in.close();
 
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
-				log.error(
-						String.format("could not read benchmark file, returning empty map: '%s'", fileName.toString()));
+				log.error(String.format("could not read benchmark file, returning empty map: '%s'", fileName.toString()));
 			if (log.isDebugEnabled())
 				log.debug("cannnot read file", e);
 		}

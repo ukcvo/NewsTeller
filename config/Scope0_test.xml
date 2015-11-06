@@ -7,16 +7,18 @@
 
 	<bean id="ksAdapter"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
-		<constructor-arg name="getMentionFromEventFileName" value="resources/SPARQL/general/getMentionFromEvent.qry"/>
+		<constructor-arg name="getMentionFromEventFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
 	</bean>
 
 	<bean id="finder"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
-		<constructor-arg name="userQueryFolder" value="resources/SPARQL/retrieval/Scope0/userQuery" /> 
-		<constructor-arg name="userInterestFolder" value="resources/SPARQL/retrieval/Scope0/userInterest" /> 
-		<constructor-arg name="previousEventFolder" value="resources/SPARQL/retrieval/Scope0/previousEvent" />
+		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/finding_userQuery_Scope0.txt" />
+		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope0.txt" />
+		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope0.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
 	<bean id="scorer"
@@ -80,7 +82,8 @@
 		<property name="newsTeller" ref="newsTeller" />
 	</bean>
 
-	<bean id="benchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.RetrievalBenchmark">
+	<bean id="benchmark"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.RetrievalBenchmark">
 		<property name="finder" ref="finder" />
 		<property name="scorer" ref="scorer" />
 		<property name="aggregator" ref="aggregator" />

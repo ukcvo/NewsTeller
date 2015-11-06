@@ -23,42 +23,47 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 public class EventFinder {
 
 	private static Log log = LogFactory.getLog(EventFinder.class);
-	
+
 	// access to KnowledgeStore
 	private KnowledgeStoreAdapter ksAdapter;
-	
-	private List<String> userQuerySPARQLTemplates;		// SPARQL queries based on user query keyword
-	
+
+	private List<String> userQuerySPARQLTemplates; // SPARQL queries based on
+													// user query keyword
+
 	@SuppressWarnings("unused")
-	private List<String> userInterestSPARQLTemplates;	// SPARQL queries based on user interests keyword
-	
+	private List<String> userInterestSPARQLTemplates; // SPARQL queries based on
+														// user interests
+														// keyword
+
 	@SuppressWarnings("unused")
-	private List<String> previousEventSPARQLTemplates;	// SPARQL queries based on conversation history event
-	
+	private List<String> previousEventSPARQLTemplates; // SPARQL queries based
+														// on conversation
+														// history event
+
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
-	
-	public EventFinder(String userQueryFolder, String userInterestFolder, String previousEventFolder) {
-		this.userQuerySPARQLTemplates = Util.readStringsFromFolder(userQueryFolder);
-		this.userInterestSPARQLTemplates = Util.readStringsFromFolder(userInterestFolder);
-		this.previousEventSPARQLTemplates = Util.readStringsFromFolder(previousEventFolder);
+
+	public EventFinder(String userQueryConfigFileName, String userInterestConfigFileName, String previousEventConfigFileName) {
+		this.userQuerySPARQLTemplates = Util.readQueriesFromConfigFile(userQueryConfigFileName);
+		this.userInterestSPARQLTemplates = Util.readQueriesFromConfigFile(userInterestConfigFileName);
+		this.previousEventSPARQLTemplates = Util.readQueriesFromConfigFile(previousEventConfigFileName);
 	}
-	
+
 	// use keywords from user query to find events
 	private List<NewsEvent> processUserQuery(List<Keyword> userQuery) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("processUserQuery(userQuery = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
-		
+
 		List<NewsEvent> events = new ArrayList<NewsEvent>();
-		
+
 		for (String sparqlQuery : userQuerySPARQLTemplates) {
 			// TODO: generalize to multiple keywords (Scope 3)
 			events.addAll(ksAdapter.runSingleVariableEventQuery(sparqlQuery.replace("*k*", userQuery.get(0).getWord()), "event"));
 		}
 		return events;
 	}
-	
+
 	// use keywords from user interests to find events
 	private List<NewsEvent> processUserInterests(List<Keyword> userInterests) {
 		if (log.isTraceEnabled())
@@ -66,31 +71,34 @@ public class EventFinder {
 		// TODO: implement (Scope 4)
 		return new ArrayList<NewsEvent>();
 	}
-	
+
 	// use events from previous conversation cycles to find events
 	private List<NewsEvent> processConversationHistory(List<ConversationCycle> conversationHistory) {
 		if (log.isTraceEnabled())
-			log.trace(String.format("processConversationHistory(conversationHistory = <%s>)", 
-					StringUtils.collectionToCommaDelimitedString(conversationHistory)));
+			log.trace(String.format("processConversationHistory(conversationHistory = <%s>)", StringUtils.collectionToCommaDelimitedString(conversationHistory)));
 		// TODO: implement (Scope 7)
 		return new ArrayList<NewsEvent>();
 	}
-	
+
 	/**
 	 * Find potentially relevant events.
 	 */
 	public List<NewsEvent> findEvents(List<Keyword> userQuery, UserModel userModel) {
 		if (log.isTraceEnabled())
-			log.trace(String.format("findEvents(userQuery = <%s>, userModel = %s)", 
-					StringUtils.collectionToCommaDelimitedString(userQuery), userModel.toString()));
-		
+			log.trace(String.format("findEvents(userQuery = <%s>, userModel = %s)", StringUtils.collectionToCommaDelimitedString(userQuery), userModel.toString()));
+
 		List<NewsEvent> events = new ArrayList<NewsEvent>();
+
+		this.ksAdapter.openConnection();
 		
-		events.addAll(processUserQuery(userQuery));
+		if (userQuery != null && !userQuery.isEmpty()) //TODO: temporary fix, remove in Scope 3
+			events.addAll(processUserQuery(userQuery));
 		events.addAll(processUserInterests(userModel.getInterests()));
 		events.addAll(processConversationHistory(userModel.getHistory()));
+
+		this.ksAdapter.closeConnection();
 		
 		return events;
 	}
-	
+
 }

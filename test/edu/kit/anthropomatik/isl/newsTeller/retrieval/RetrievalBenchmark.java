@@ -78,7 +78,17 @@ public class RetrievalBenchmark {
 			aggregator.aggregateScores(events);
 
 			for (NewsEvent event : events) {
-				double eventScore = event.getTotalScore() * groundTruth.get(event.getEventURI());
+				
+				double eventScore;
+				
+				if (groundTruth.containsKey(event.getEventURI())) {
+					eventScore  = event.getTotalScore() * groundTruth.get(event.getEventURI());
+				} else {
+					if (log.isWarnEnabled())
+						log.warn(String.format("event not in ground truth, giving score 0: %s", event.getEventURI()));
+					eventScore = 0;
+				}
+				
 				if (log.isTraceEnabled())
 					log.trace(String.format("%s,%f,%f,%f", 
 								event.getEventURI(), event.getTotalScore(), groundTruth.get(event.getEventURI()), eventScore));
