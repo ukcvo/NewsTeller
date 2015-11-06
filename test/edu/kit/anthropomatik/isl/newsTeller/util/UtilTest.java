@@ -28,6 +28,7 @@ public class UtilTest {
 		}
 	}
 
+	// region reading strings
 	@Test
 	public void shouldReturnEmptyString() {
 		if(log.isTraceEnabled())
@@ -37,14 +38,6 @@ public class UtilTest {
 	}
 
 	@Test
-	public void shouldReturnEmptyList() {
-		if(log.isTraceEnabled())
-			log.trace("shouldReturnEmptyList()");
-		List<String> queries = Util.readStringsFromFolder("resources/SPARQL/test/non-existing-directory");
-		assertTrue(queries.isEmpty());
-	}
-	
-	@Test
 	public void shouldReturnSPARQLQuery() {
 		if(log.isTraceEnabled())
 			log.trace("shouldReturnSPARQLQuery()");
@@ -53,13 +46,55 @@ public class UtilTest {
 	}
 	
 	@Test
-	public void shouldReturnOneElementedList() {
+	public void shouldReturnEmptyListFromFolder() {
 		if(log.isTraceEnabled())
-			log.trace("shouldReturnOneElementedList()");
+			log.trace("shouldReturnEmptyListFromFolder()");
+		List<String> queries = Util.readStringsFromFolder("resources/SPARQL/test/non-existing-directory");
+		assertTrue(queries.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturnOneElementedListFromFolder() {
+		if(log.isTraceEnabled())
+			log.trace("shouldReturnOneElementedListFromFolder()");
 		List<String> queries = Util.readStringsFromFolder("resources/SPARQL/test");
 		assertTrue(queries.size() == 1);
 	}
 	
+	@Test
+	public void shouldReturnOneElementedListFromConfigFile() {
+		if(log.isTraceEnabled())
+			log.trace("shouldReturnOneElementedListFromConfigFile()");
+		List<String> queries = Util.readQueriesFromConfigFile("config/SPARQL/test/configTest.txt");
+		assertTrue(queries.size() == 1);
+	}
+	
+	@Test
+	public void shouldReturnEmptyListFromConfigFileBecauseConfigNonExistent() {
+		if(log.isTraceEnabled())
+			log.trace("shouldReturnEmptyListFromConfigFileBecauseConfigNonExistent()");
+		List<String> queries = Util.readQueriesFromConfigFile("config/SPARQL/test/non-existing-config-file.txt");
+		assertTrue(queries.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturnEmptyListFromConfigFileBecauseConfigEmpty() {
+		if(log.isTraceEnabled())
+			log.trace("shouldReturnEmptyListFromConfigFileBecauseConfigEmpty()");
+		List<String> queries = Util.readQueriesFromConfigFile("config/SPARQL/test/configEmpty.txt");
+		assertTrue(queries.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturnEmptyListFromConfigFileBecauseFileNonExistent() {
+		if(log.isTraceEnabled())
+			log.trace("shouldReturnEmptyListFromConfigFileBecauseFileNonExistent()");
+		List<String> queries = Util.readQueriesFromConfigFile("config/SPARQL/test/configWrongFile.txt");
+		assertTrue(queries.isEmpty());
+	}
+	//endregion
+	
+	//region reading CSV
 	@Test
 	public void shouldReturnEmptyBenchmarkMap() {
 		if(log.isTraceEnabled())
@@ -109,4 +144,5 @@ public class UtilTest {
 		
 		assertTrue(map.get("resources/benchmark/queries/album.csv").get(0).getWord().equals("album"));
 	}
+	//endregion
 }

@@ -1,0 +1,1 @@
+resources/SPARQL/test/non-existent-file.qry
