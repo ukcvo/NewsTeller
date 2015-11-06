@@ -1,6 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -98,7 +99,7 @@ public class EventScorer {
 	/**
 	 * Score all the events based on all the available heuristics.
 	 */
-	public void scoreEvents(List<NewsEvent> events, List<Keyword> userQuery, UserModel userModel) {
+	public void scoreEvents(Set<NewsEvent> events, List<Keyword> userQuery, UserModel userModel) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("scoreEvents(events = <%s>, userQuery = <%s>, userModel = %s)", 
 					StringUtils.collectionToCommaDelimitedString(events),

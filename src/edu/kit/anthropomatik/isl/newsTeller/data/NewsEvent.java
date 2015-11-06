@@ -55,4 +55,14 @@ public class NewsEvent {
 	public String toVerboseString() {
 		return String.format("[%s|<%s>|%f]", eventURI, StringUtils.collectionToCommaDelimitedString(scorings), totalScore);
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return ((o != null) && this.toString().equals(o.toString()));
+	}
+	
+	@Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
 }

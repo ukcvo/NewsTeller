@@ -6,7 +6,7 @@ WHERE
     GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> # use dbpedia to get stable entities
     {
     ?class rdfs:label ?label .
-    FILTER(REGEX(STR(?label),"(-| |^)*k*(\\w)*(-| |$)", "i")) #case-insensitive matching
+    FILTER(REGEX(STR(?label),"(-| |^|\\()*k*(\\w)*(-| |$|\\))", "i")) #case-insensitive matching
     }
 }
 GROUP BY ?event

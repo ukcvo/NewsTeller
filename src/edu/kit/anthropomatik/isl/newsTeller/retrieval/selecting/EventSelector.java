@@ -1,6 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,7 +21,7 @@ public class EventSelector {
 	/**
 	 * Select the highest scoring event.
 	 */
-	public NewsEvent selectEvent(List<NewsEvent> events) {
+	public NewsEvent selectEvent(Set<NewsEvent> events) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("selectEvent(events = <%s>)", StringUtils.collectionToCommaDelimitedString(events)));
 		

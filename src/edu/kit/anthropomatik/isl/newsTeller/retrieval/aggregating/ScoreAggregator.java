@@ -1,6 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +24,7 @@ public abstract class ScoreAggregator {
 	/**
 	 * For each event aggregates the scores into a total score.
 	 */
-	public void aggregateScores(List<NewsEvent> events) {
+	public void aggregateScores(Set<NewsEvent> events) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("aggregateScores(#events = %d)", events.size()));
 		

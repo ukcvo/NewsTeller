@@ -1,7 +1,9 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -9,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
@@ -73,10 +76,24 @@ public class RetrievalBenchmark {
 			Map<String, Double> groundTruth = Util.readBenchmarkQueryFromFile(fileName);
 			List<Keyword> keywords = keywordFiles.get(fileName);
 
-			List<NewsEvent> events = finder.findEvents(keywords, userModel);
+			Set<NewsEvent> events = finder.findEvents(keywords, userModel);
 			scorer.scoreEvents(events, keywords, userModel);
 			aggregator.aggregateScores(events);
 
+			if (events.size() != groundTruth.size()) {
+				if (log.isWarnEnabled())
+					log.warn(String.format("unexpected number of events (expected %d, found %d): %s", groundTruth.size(), events.size(), fileName));
+				if (log.isDebugEnabled()) {
+					Set<String> difference = new HashSet<String>();
+					difference.addAll(groundTruth.keySet());
+					for (NewsEvent e : events) {
+						difference.remove(e.toString());
+					}
+					log.debug(StringUtils.collectionToDelimitedString(difference, "\n"));
+				}
+			}
+				
+			
 			for (NewsEvent event : events) {
 				
 				double eventScore;

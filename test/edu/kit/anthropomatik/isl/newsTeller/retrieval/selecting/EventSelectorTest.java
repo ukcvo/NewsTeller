@@ -2,8 +2,8 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -20,7 +20,8 @@ public class EventSelectorTest {
 	
 	private EventSelector selector;
 	
-	private List<NewsEvent> events;
+	private Set<NewsEvent> events;
+	private NewsEvent eventToBeSelected;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -37,7 +38,7 @@ public class EventSelectorTest {
 	public void setUp() throws Exception {
 		this.selector = new EventSelector();
 		
-		this.events = new ArrayList<NewsEvent>();
+		this.events = new HashSet<NewsEvent>();
 		NewsEvent event1 = new NewsEvent("event-1");
 		event1.setTotalScore(0.2);
 		NewsEvent event2 = new NewsEvent("event-2");
@@ -45,11 +46,12 @@ public class EventSelectorTest {
 		NewsEvent event3 = new NewsEvent("event-3");
 		event3.setTotalScore(0.3);
 		NewsEvent event4 = new NewsEvent("event-4");
-		event4.setTotalScore(0.7);
+		event4.setTotalScore(0.6);
 		this.events.add(event1);
 		this.events.add(event2);
 		this.events.add(event3);
 		this.events.add(event4);
+		this.eventToBeSelected = event2;
 	}
 
 	@Test
@@ -58,7 +60,7 @@ public class EventSelectorTest {
 			log.trace("shouldReturnEvent2");
 		
 		NewsEvent selectedEvent = this.selector.selectEvent(this.events);
-		assertTrue(selectedEvent == this.events.get(1));
+		assertTrue(selectedEvent == this.eventToBeSelected);
 	}
 
 }

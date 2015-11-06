@@ -3,7 +3,9 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -20,7 +22,7 @@ public class SimpleAverageAggregatorTest {
 
 	private static Log log;
 	
-	private List<NewsEvent> events; 
+	private Set<NewsEvent> events; 
 	
 	private SimpleAverageAggregator aggregator;
 	
@@ -40,7 +42,7 @@ public class SimpleAverageAggregatorTest {
 		
 		this.aggregator = new SimpleAverageAggregator();
 		
-		this.events = new ArrayList<NewsEvent>();
+		this.events = new HashSet<NewsEvent>();
 		List<Scoring> scoringSet1 = new ArrayList<Scoring>();
 		scoringSet1.add(new Scoring("heuristic-1", 1));
 		scoringSet1.add(new Scoring("heuristic-2", 0));
@@ -55,7 +57,7 @@ public class SimpleAverageAggregatorTest {
 			log.trace("shouldDoAverageAggregation");
 			
 		this.aggregator.aggregateScores(this.events);
-		assertTrue(this.events.get(0).getTotalScore() - (1.7/3) < Util.EPSILON);
+		assertTrue(((NewsEvent) this.events.toArray()[0]).getTotalScore() - (1.7/3) < Util.EPSILON);
 	}
 
 }

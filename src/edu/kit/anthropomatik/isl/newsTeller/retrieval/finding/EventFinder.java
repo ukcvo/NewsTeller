@@ -1,7 +1,8 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.finding;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -61,11 +62,11 @@ public class EventFinder {
 	}
 	
 	// use keywords from user query to find events
-	private List<NewsEvent> processUserQuery(List<Keyword> userQuery) {
+	private Set<NewsEvent> processUserQuery(List<Keyword> userQuery) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("processUserQuery(userQuery = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
 
-		List<NewsEvent> events = new ArrayList<NewsEvent>();
+		Set<NewsEvent> events = new HashSet<NewsEvent>();
 
 		for (String sparqlQuery : userQuerySPARQLTemplates) {
 			// TODO: generalize to multiple keywords (Scope 3)
@@ -77,29 +78,29 @@ public class EventFinder {
 	}
 
 	// use keywords from user interests to find events
-	private List<NewsEvent> processUserInterests(List<Keyword> userInterests) {
+	private Set<NewsEvent> processUserInterests(List<Keyword> userInterests) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("processUserInterests(userInterests = <%s>)", StringUtils.collectionToCommaDelimitedString(userInterests)));
 		// TODO: implement (Scope 4)
-		return new ArrayList<NewsEvent>();
+		return new HashSet<NewsEvent>();
 	}
 
 	// use events from previous conversation cycles to find events
-	private List<NewsEvent> processConversationHistory(List<ConversationCycle> conversationHistory) {
+	private Set<NewsEvent> processConversationHistory(List<ConversationCycle> conversationHistory) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("processConversationHistory(conversationHistory = <%s>)", StringUtils.collectionToCommaDelimitedString(conversationHistory)));
 		// TODO: implement (Scope 7)
-		return new ArrayList<NewsEvent>();
+		return new HashSet<NewsEvent>();
 	}
 
 	/**
 	 * Find potentially relevant events.
 	 */
-	public List<NewsEvent> findEvents(List<Keyword> userQuery, UserModel userModel) {
+	public Set<NewsEvent> findEvents(List<Keyword> userQuery, UserModel userModel) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("findEvents(userQuery = <%s>, userModel = %s)", StringUtils.collectionToCommaDelimitedString(userQuery), userModel.toString()));
 
-		List<NewsEvent> events = new ArrayList<NewsEvent>();
+		Set<NewsEvent> events = new HashSet<NewsEvent>();
 
 		this.ksAdapter.openConnection();
 		

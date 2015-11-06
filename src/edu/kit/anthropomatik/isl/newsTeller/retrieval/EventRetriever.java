@@ -1,6 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -55,7 +56,7 @@ public class EventRetriever {
 			log.trace(String.format("retrieveEvents(userQuery = <%s>, userModel = %s)", 
 										StringUtils.collectionToCommaDelimitedString(userQuery) , userModel.toString()));
 		
-		List<NewsEvent> events = eventFinder.findEvents(userQuery, userModel);
+		Set<NewsEvent> events = eventFinder.findEvents(userQuery, userModel);
 		eventScorer.scoreEvents(events, userQuery, userModel);
 		scoreAggregator.aggregateScores(events);
 		NewsEvent event = eventSelector.selectEvent(events);
