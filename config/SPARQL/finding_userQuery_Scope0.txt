@@ -1,1 +1,2 @@
 resources/SPARQL/finding/findByActor.qry
+resources/SPARQL/finding/findByPlace.qry
