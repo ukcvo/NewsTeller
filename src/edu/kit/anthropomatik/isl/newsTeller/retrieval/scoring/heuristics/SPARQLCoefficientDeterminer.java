@@ -24,6 +24,10 @@ public class SPARQLCoefficientDeterminer implements ICoefficientDeterminer {
 	private boolean queryContainsKeyword;
 	private boolean queryContainsHistoricalEvent;
 	
+	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
+		this.ksAdapter = ksAdapter;
+	}
+	
 	public SPARQLCoefficientDeterminer(String queryFileName) {
 		this.query = Util.readStringFromFile(queryFileName);
 		this.queryContainsEvent = query.contains(Util.PLACEHOLDER_EVENT);
@@ -76,8 +80,10 @@ public class SPARQLCoefficientDeterminer implements ICoefficientDeterminer {
 		if (queryContainsHistoricalEvent)
 			modifiedQuery = modifiedQuery.replace(Util.PLACEHOLDER_HISTORICAL_EVENT, historicalEventURI);
 		
+		ksAdapter.openConnection();
 		// TODO: maybe just picking first result is too simple
 		double number = ksAdapter.runSingleVariableDoubleQuerySingleResult(modifiedQuery, Util.VARIABLE_NUMBER);
+		ksAdapter.closeConnection();
 		
 		return number;
 	}

@@ -3,8 +3,6 @@ package edu.kit.anthropomatik.isl.newsTeller.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.util.StringUtils;
-
 /**
  * Represents a news event being processed by the NewsTeller. Includes the event URI and scoring information.
  * 
@@ -79,7 +77,7 @@ public class NewsEvent implements Comparable<NewsEvent>{
 	}
 	
 	public String toVerboseString() {
-		return String.format("[%s|<%s>|%f]", eventURI, StringUtils.collectionToCommaDelimitedString(relevanceScorings), totalRelevanceScore);
+		return String.format("[%s|%f|%f]", eventURI, totalUsabilityScore, totalRelevanceScore);
 	}
 	
 	@Override

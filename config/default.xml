@@ -25,6 +25,20 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer">
 		<property name="eventHeuristics">
 			<list>
+				<bean id="hasActor" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+					<property name="name" value="hasActor" />
+					<property name="numberGetter">
+						<bean id="hasActorQuery" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+							<constructor-arg name="queryFileName" value="resources/SPARQL/usability/hasActor.qry"/>
+							<property name="ksAdapter" ref="ksAdapter" />
+						</bean>
+					</property>
+					<property name="formula">
+						<bean id="hasActorFormula" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+							<constructor-arg name="formula" value="MAX(0,MIN(x, 1 - ((x-2)/3)))"/>
+						</bean>
+					</property>
+				</bean>
 				<!-- TODO: eventHeuristics beans go here! (Scope 2) -->
 			</list>
 		</property>
@@ -45,7 +59,7 @@
 
 	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.EventFilter">
 		<property name="scoreAggregator" ref="usabilityAggregator" />
-		<property name="threshold" value="0.0" />
+		<property name="threshold" value="0.5" />
 	</bean>
 
 	<bean id="relevanceScorer"

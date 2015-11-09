@@ -114,8 +114,8 @@ public class RetrievalBenchmark {
 				fileScore += eventScore;
 			}
 			fileScore /= events.size();
-			if (log.isDebugEnabled())
-				log.debug(String.format("%s,%f", fileName, fileScore));
+			if (log.isInfoEnabled())
+				log.info(String.format("%s,%f", fileName, fileScore));
 			
 			totalScore += fileScore;
 		}

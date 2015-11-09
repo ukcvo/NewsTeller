@@ -37,7 +37,11 @@ public abstract class ScoringHeuristic {
 	// get the score by finding a relevant number and applying a formula
 	protected double getScore(NewsEvent event, Keyword keyword, ConversationCycle historicalCycle) {
 		
-		double number = numberGetter.getCoefficient(event.getEventURI(), keyword.getWord(), historicalCycle.getEventURI());
+		String eventURI = (event != null) ? event.getEventURI() : null;
+		String keywordText = (keyword != null) ? keyword.getWord() : null;
+		String oldEventURI = (historicalCycle != null) ? historicalCycle.getEventURI() : null;
+		
+		double number = numberGetter.getCoefficient(eventURI, keywordText, oldEventURI);
 		double score = formula.apply(number);
 		
 		return score;
