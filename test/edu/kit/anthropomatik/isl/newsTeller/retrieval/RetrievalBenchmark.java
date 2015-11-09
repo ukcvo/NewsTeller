@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTellerTest;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.ScoreAggregator;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.IScoreAggregator;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.EventScorer;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
@@ -34,7 +34,7 @@ public class RetrievalBenchmark {
 
 	private EventFinder finder;
 	private EventScorer scorer;
-	private ScoreAggregator aggregator;
+	private IScoreAggregator aggregator;
 	private UserModel userModel;
 	private String configFileName;
 
@@ -47,7 +47,7 @@ public class RetrievalBenchmark {
 		this.scorer = scorer;
 	}
 
-	public void setAggregator(ScoreAggregator aggregator) {
+	public void setAggregator(IScoreAggregator aggregator) {
 		this.aggregator = aggregator;
 	}
 
@@ -78,7 +78,9 @@ public class RetrievalBenchmark {
 
 			Set<NewsEvent> events = finder.findEvents(keywords, userModel);
 			scorer.scoreEvents(events, keywords, userModel);
-			aggregator.aggregateScores(events);
+			for (NewsEvent event : events) {
+				event.setTotalRelevanceScore(aggregator.getTotalScore(event.getRelevanceScorings()));
+			}
 
 			if (events.size() != groundTruth.size()) {
 				if (log.isWarnEnabled())

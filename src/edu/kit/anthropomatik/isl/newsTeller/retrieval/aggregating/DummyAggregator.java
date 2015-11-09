@@ -6,7 +6,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
 
-import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.Scoring;
 
 /**
@@ -15,16 +14,10 @@ import edu.kit.anthropomatik.isl.newsTeller.data.Scoring;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class DummyAggregator extends ScoreAggregator implements IScoreAggregator{
+public class DummyAggregator implements IScoreAggregator{
 
 	private static Log log = LogFactory.getLog(DummyAggregator.class);
 	
-	@Override
-	protected void aggregateScoresForEvent(NewsEvent event) {
-		event.setTotalUsabilityScore(0);
-		event.setTotalRelevanceScore(0);
-	}
-
 	public double getTotalScore(List<Scoring> scorings) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("getTotalScore(scorings = <%s>)", StringUtils.collectionToCommaDelimitedString(scorings)));
