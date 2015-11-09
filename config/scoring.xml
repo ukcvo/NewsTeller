@@ -5,7 +5,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-
 	<bean id="hasActor"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
 		<property name="name" value="hasActor" />
@@ -41,6 +40,44 @@
 				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
 				<constructor-arg name="formula"
 					value="IF( x == 1, 1, IF (x == 2 || x == 0, 0.5, 0))" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="A0"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="A0" />
+		<property name="numberGetter">
+			<bean id="A0Query"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/A0.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="A0Formula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula" value="MAX(0,MIN((3*x + 1)/4, 1 - ((x-1)/2)))" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="A1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="A1" />
+		<property name="numberGetter">
+			<bean id="A1Query"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/A1.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="A1Formula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula" value="MAX(0,MIN((3*x + 1)/4, 1 - ((x-1)/2)))" />
 			</bean>
 		</property>
 	</bean>

@@ -118,8 +118,8 @@ public abstract class EventScorer {
 			applyInterestHeuristics(event, userModel.getInterests());
 			applyHistoryHeuristics(event, userModel.getHistory());
 			
-			if (log.isDebugEnabled())
-				log.debug(String.format("event scored: %s", event.toVerboseString()));
+			if (log.isTraceEnabled())
+				log.trace(String.format("event scored: %s", event.toVerboseString()));
 		}
 		
 	}

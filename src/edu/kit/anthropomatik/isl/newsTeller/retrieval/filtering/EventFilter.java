@@ -51,6 +51,9 @@ public class EventFilter {
 		if(log.isDebugEnabled())
 			log.debug(String.format("keeping %d out of %d events", result.size(), events.size()));
 		
+		if(log.isTraceEnabled())
+			log.trace(String.format("events kept: <%s>", StringUtils.collectionToCommaDelimitedString(result)));
+		
 		return result;
 	}
 }
