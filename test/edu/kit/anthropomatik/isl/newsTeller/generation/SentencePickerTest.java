@@ -43,7 +43,6 @@ public class SentencePickerTest {
 	@Test
 	public void shouldReturnEmptyEventResponseBecauseOfNonexistentEvent() {
 		String result = sentencePicker.summarizeEvent(new NewsEvent("http://en.wikinews.org/wiki/Non_existing_text#ev999"));
-		System.out.println("XXX:" + result);
 		assertTrue(result.equals(SentencePicker.EMPTY_EVENT_RESPONSE));
 	}
 	

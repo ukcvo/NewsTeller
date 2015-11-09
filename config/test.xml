@@ -189,8 +189,8 @@
 	<bean id="benchmark"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.RetrievalBenchmark">
 		<property name="finder" ref="finder1" />
-		<property name="scorer" ref="relevanceScorer2" />
-		<property name="aggregator" ref="relevanceAggregator" />
+		<property name="scorer" ref="usabilityScorer2" />
+		<property name="filter" ref="filter0" />
 		<property name="userModel" ref="userModel0" />
 		<property name="configFileName" value="resources/benchmark/Scope 0.csv" />
 	</bean>

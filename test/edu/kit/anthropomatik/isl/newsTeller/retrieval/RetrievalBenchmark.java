@@ -16,9 +16,9 @@ import org.springframework.util.StringUtils;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTellerTest;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.IScoreAggregator;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.EventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.EventScorer;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
@@ -33,8 +33,8 @@ public class RetrievalBenchmark {
 	private static Log log;
 
 	private EventFinder finder;
-	private EventScorer scorer;
-	private IScoreAggregator aggregator;
+	private UsabilityScorer scorer;
+	private EventFilter filter;
 	private UserModel userModel;
 	private String configFileName;
 
@@ -43,14 +43,14 @@ public class RetrievalBenchmark {
 		this.finder = finder;
 	}
 
-	public void setScorer(EventScorer scorer) {
+	public void setScorer(UsabilityScorer scorer) {
 		this.scorer = scorer;
 	}
 
-	public void setAggregator(IScoreAggregator aggregator) {
-		this.aggregator = aggregator;
+	public void setFilter(EventFilter filter) {
+		this.filter = filter;
 	}
-
+	
 	public void setUserModel(UserModel userModel) {
 		this.userModel = userModel;
 	}
@@ -76,12 +76,8 @@ public class RetrievalBenchmark {
 			Map<String,GroundTruth> groundTruth = Util.readBenchmarkQueryFromFile(fileName);
 			List<Keyword> keywords = keywordFiles.get(fileName);
 
+			// find events
 			Set<NewsEvent> events = finder.findEvents(keywords, userModel);
-			scorer.scoreEvents(events, keywords, userModel);
-			for (NewsEvent event : events) {
-				event.setTotalRelevanceScore(aggregator.getTotalScore(event.getRelevanceScorings()));
-			}
-
 			if (events.size() != groundTruth.size()) {
 				if (log.isWarnEnabled())
 					log.warn(String.format("unexpected number of events (expected %d, found %d): %s", groundTruth.size(), events.size(), fileName));
@@ -95,7 +91,11 @@ public class RetrievalBenchmark {
 				}
 			}
 			
-			
+			// score and filter events
+			scorer.scoreEvents(events, keywords, userModel);
+			@SuppressWarnings("unused") //TODO: remove
+			Set<NewsEvent> filteredEvents = filter.filterEvents(events);
+						
 			for (NewsEvent event : events) {
 				
 				double eventScore;
