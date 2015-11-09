@@ -67,6 +67,7 @@ public class NewsEvent implements Comparable<NewsEvent>{
 	public NewsEvent(String eventURI, List<Scoring> relevanceScorings) {
 		this.eventURI = eventURI;
 		this.relevanceScorings = relevanceScorings;
+		this.usabilityScorings = new ArrayList<Scoring>();
 		this.totalRelevanceScore = Double.NaN; // encodes that there is no total score, yet
 	}
 	

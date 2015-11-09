@@ -21,11 +21,15 @@ public class SimpleAverageAggregator implements IScoreAggregator{
 	public double getTotalScore(List<Scoring> scorings) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("getTotalScore(scorings = <%s>)", StringUtils.collectionToCommaDelimitedString(scorings)));
-			
-		double sum = 0;
-		for (Scoring scoring : scorings)
-			sum += scoring.getScore();
-		double totalScore = sum / scorings.size();
+		
+		double totalScore = 0;
+		
+		if (!scorings.isEmpty()) {
+			double sum = 0;
+			for (Scoring scoring : scorings)
+				sum += scoring.getScore();
+			totalScore = sum / scorings.size();
+		}
 		
 		if (log.isTraceEnabled())
 			log.trace(String.format("total score: %f", totalScore));

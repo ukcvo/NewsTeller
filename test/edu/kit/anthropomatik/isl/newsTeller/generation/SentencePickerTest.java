@@ -29,8 +29,8 @@ public class SentencePickerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope1_test.xml");
-		sentencePicker = (SummaryCreator) context.getBean("generator");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
+		sentencePicker = (SummaryCreator) context.getBean("generator1");
 		((AbstractApplicationContext) context).close();
 	}
 

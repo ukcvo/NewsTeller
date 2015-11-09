@@ -135,7 +135,7 @@ public class RetrievalBenchmark {
 			e.printStackTrace();
 		}
 
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope1_test.xml");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
 		RetrievalBenchmark benchmark = (RetrievalBenchmark) context.getBean("benchmark");
 		((AbstractApplicationContext) context).close();
 

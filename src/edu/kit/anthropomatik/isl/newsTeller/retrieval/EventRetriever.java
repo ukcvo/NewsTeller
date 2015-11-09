@@ -9,9 +9,11 @@ import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.EventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.EventRanker;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.EventScorer;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.RelevanceScorer;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
@@ -27,7 +29,11 @@ public class EventRetriever {
 	
 	private EventFinder eventFinder;
 	
-	private EventScorer eventScorer;
+	private UsabilityScorer usabilityScorer;
+	
+	private EventFilter eventFilter;
+	
+	private RelevanceScorer relevanceScorer;
 	
 	private EventRanker eventRanker;
 
@@ -38,8 +44,16 @@ public class EventRetriever {
 		this.eventFinder = eventFinder;
 	}
 
-	public void setEventScorer(EventScorer eventScorer) {
-		this.eventScorer = eventScorer;
+	public void setUsabilityScorer(UsabilityScorer usabilityScorer) {
+		this.usabilityScorer = usabilityScorer;
+	}
+
+	public void setEventFilter(EventFilter eventFilter) {
+		this.eventFilter = eventFilter;
+	}
+	
+	public void setRelevanceScorer(RelevanceScorer relevanceScorer) {
+		this.relevanceScorer = relevanceScorer;
 	}
 
 	public void setEventRanker(EventRanker eventRanker) {
@@ -57,8 +71,10 @@ public class EventRetriever {
 										StringUtils.collectionToCommaDelimitedString(userQuery) , userModel.toString()));
 		
 		Set<NewsEvent> events = eventFinder.findEvents(userQuery, userModel);
-		eventScorer.scoreEvents(events, userQuery, userModel);
-		List<NewsEvent> rankedEvents = eventRanker.getRankedEvents(events);
+		usabilityScorer.scoreEvents(events, userQuery, userModel);
+		Set<NewsEvent> filteredEvents = eventFilter.filterEvents(events);
+		relevanceScorer.scoreEvents(filteredEvents, userQuery, userModel);
+		List<NewsEvent> rankedEvents = eventRanker.getRankedEvents(filteredEvents);
 		NewsEvent event = eventSelector.selectEvent(rankedEvents);
 				
 		return event;

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="ksAdapter"
+		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
+		<constructor-arg name="getMentionFromEventFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews" />
+		<property name="timeoutMsec" value="10000" />
+	</bean>
+
+	<bean id="finder0"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
+		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/finding_userQuery_Scope0.txt" />
+		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope0.txt" />
+		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope0.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+	</bean>
+
+	<bean id="finder1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
+		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/finding_userQuery_Scope1.txt" />
+		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope1.txt" />
+		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope1.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+	</bean>
+
+	<bean id="usabilityScorer0"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer">
+		<property name="eventHeuristics">
+			<list></list>
+		</property>
+		<property name="queryHeuristics">
+			<list></list>
+		</property>
+		<property name="interestHeuristics">
+			<list></list>
+		</property>
+		<property name="historyHeuristics">
+			<list></list>
+		</property>
+	</bean>
+
+	<bean id="usabilityScorer2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer">
+		<property name="eventHeuristics">
+			<list>
+				<!-- TODO: eventHeuristics beans go here! (Scope 2) -->
+			</list>
+		</property>
+		<property name="queryHeuristics">
+			<list></list>
+		</property>
+		<property name="interestHeuristics">
+			<list></list>
+		</property>
+		<property name="historyHeuristics">
+			<list></list>
+		</property>
+	</bean>
+
+	<bean id="usabilityAggregator"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.SimpleAverageAggregator">
+	</bean>
+
+	<bean id="filter0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.EventFilter">
+		<property name="scoreAggregator" ref="usabilityAggregator" />
+		<property name="threshold" value="0.0" />
+	</bean>
+
+	<bean id="relevanceScorer0"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.RelevanceScorer">
+		<property name="eventHeuristics">
+			<list></list>
+		</property>
+		<property name="queryHeuristics">
+			<list></list>
+		</property>
+		<property name="interestHeuristics">
+			<list></list>
+		</property>
+		<property name="historyHeuristics">
+			<list></list>
+		</property>
+	</bean>
+
+	<bean id="relevanceScorer2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.RelevanceScorer">
+		<property name="eventHeuristics">
+			<list>
+				<!-- TODO: eventHeuristics beans go here! (Scope 2) -->
+			</list>
+		</property>
+		<property name="queryHeuristics">
+			<list></list>
+		</property>
+		<property name="interestHeuristics">
+			<list></list>
+		</property>
+		<property name="historyHeuristics">
+			<list></list>
+		</property>
+	</bean>
+
+	<bean id="relevanceAggregator"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.SimpleAverageAggregator">
+	</bean>
+
+	<bean id="ranker0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.EventRanker">
+		<property name="scoreAggregator" ref="relevanceAggregator" />
+	</bean>
+
+	<bean id="selector0"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+	</bean>
+
+	<bean id="retriever0"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
+		<property name="eventFinder" ref="finder0" />
+		<property name="usabilityScorer" ref="usabilityScorer0" />
+		<property name="eventFilter" ref="filter0" />
+		<property name="relevanceScorer" ref="relevanceScorer0"/>
+		<property name="eventRanker" ref="ranker0" />
+		<property name="eventSelector" ref="selector0" />
+	</bean>
+
+	<bean id="retriever1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
+		<property name="eventFinder" ref="finder1" />
+		<property name="usabilityScorer" ref="usabilityScorer0" />
+		<property name="eventFilter" ref="filter0" />
+		<property name="relevanceScorer" ref="relevanceScorer0"/>
+		<property name="eventRanker" ref="ranker0" />
+		<property name="eventSelector" ref="selector0" />
+	</bean>
+
+	<bean id="retriever2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
+		<property name="eventFinder" ref="finder1" />
+		<property name="usabilityScorer" ref="usabilityScorer2" />
+		<property name="eventFilter" ref="filter0" />
+		<property name="relevanceScorer" ref="relevanceScorer2"/>
+		<property name="eventRanker" ref="ranker0" />
+		<property name="eventSelector" ref="selector0" />
+	</bean>
+
+	<bean id="generator0"
+		class="edu.kit.anthropomatik.isl.newsTeller.generation.DummySummaryCreator">
+		<property name="ksAdapter" ref="ksAdapter" />
+	</bean>
+
+	<bean id="generator1"
+		class="edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker">
+		<property name="ksAdapter" ref="ksAdapter" />
+	</bean>
+
+	<bean id="userModel0"
+		class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel">
+	</bean>
+
+	<bean id="newsTeller0"
+		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
+		<constructor-arg value="./config/logging-test.properties" />
+		<property name="userModel" ref="userModel0" />
+		<property name="retriever" ref="retriever0" />
+		<property name="generator" ref="generator0" />
+	</bean>
+	
+	<bean id="newsTeller1"
+		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
+		<constructor-arg value="./config/logging-test.properties" />
+		<property name="userModel" ref="userModel0" />
+		<property name="retriever" ref="retriever1" />
+		<property name="generator" ref="generator1" />
+	</bean>
+
+	<bean id="newsTeller2"
+		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
+		<constructor-arg value="./config/logging-test.properties" />
+		<property name="userModel" ref="userModel0" />
+		<property name="retriever" ref="retriever2" />
+		<property name="generator" ref="generator1" />
+	</bean>
+
+	<bean id="benchmark"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.RetrievalBenchmark">
+		<property name="finder" ref="finder1" />
+		<property name="scorer" ref="relevanceScorer2" />
+		<property name="aggregator" ref="relevanceAggregator" />
+		<property name="userModel" ref="userModel0" />
+		<property name="configFileName" value="resources/benchmark/Scope 0.csv" />
+	</bean>
+
+</beans>

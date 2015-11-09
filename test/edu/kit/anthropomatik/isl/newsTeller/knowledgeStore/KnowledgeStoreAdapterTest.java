@@ -32,7 +32,7 @@ public class KnowledgeStoreAdapterTest {
 	
 	@Before
 	public void setUp() {
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope0_test.xml");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.openConnection();

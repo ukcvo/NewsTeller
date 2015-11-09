@@ -1,9 +1,8 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval.finding;
+package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.LogManager;
 
@@ -13,15 +12,15 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.util.StringUtils;
 
-import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
-import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
-public class EventFinderTest {
+public class EventFilterTest {
 
-	private EventFinder finder;
-	private UserModel userModel;
+	private EventFilter filter;
+	
+	private Set<NewsEvent> events;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -35,18 +34,22 @@ public class EventFinderTest {
 
 	@Before
 	public void setUp() throws Exception {
+		
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		finder = (EventFinder) context.getBean("finder1");
-		userModel = (UserModel) context.getBean("userModel0");
+		filter = (EventFilter) context.getBean("filter0");
 		((AbstractApplicationContext) context).close();
+		
+		this.events = new HashSet<NewsEvent>();
+		this.events.add(new NewsEvent("event-1"));
+		this.events.add(new NewsEvent("event-2"));
 	}
 
 	@Test
-	public void shouldReturn8Events() {
-		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(new Keyword("artificial intelligence"));
-		Set<NewsEvent> result = finder.findEvents(keywords, userModel);
-		assertTrue(result.size() == 8);
+	public void shouldReturnFullSet() {
+		Set<NewsEvent> filteredEvents = this.filter.filterEvents(events);
+		System.out.println(StringUtils.collectionToCommaDelimitedString(events));
+		System.out.println(StringUtils.collectionToCommaDelimitedString(filteredEvents));
+		assertTrue(filteredEvents.equals(events));
 	}
 
 }

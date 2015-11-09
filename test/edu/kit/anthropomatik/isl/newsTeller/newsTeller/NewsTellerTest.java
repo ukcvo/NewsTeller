@@ -33,12 +33,12 @@ public class NewsTellerTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/Scope0_test.xml");
-		newsTellerScope0 = (NewsTeller) context.getBean("newsTeller");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
+		newsTellerScope0 = (NewsTeller) context.getBean("newsTeller0");
 		((AbstractApplicationContext) context).close();
 		
-		context = new FileSystemXmlApplicationContext("config/Scope1_test.xml");
-		newsTellerScope1 = (NewsTeller) context.getBean("newsTeller");
+		context = new FileSystemXmlApplicationContext("config/test.xml");
+		newsTellerScope1 = (NewsTeller) context.getBean("newsTeller1");
 		((AbstractApplicationContext) context).close();
 	}
 
