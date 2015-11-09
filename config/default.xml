@@ -22,7 +22,7 @@
 	</bean>
 
 	<bean id="scorer"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.EventScorer">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer">
 		<property name="eventHeuristics">
 			<list>
 				<!-- TODO: eventHeuristics beans go here! (Scope 2) -->

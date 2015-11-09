@@ -14,12 +14,12 @@ public class SimpleAverageAggregator extends ScoreAggregator {
 	@Override
 	protected void aggregateScoresForEvent(NewsEvent event) {
 		
-		double sum = 0;
-		for (Scoring scoring : event.getScorings())
-			sum += scoring.getScore();
-		double totalScore = sum / event.getScorings().size();
+		double relevanceSum = 0;
+		for (Scoring scoring : event.getRelevanceScorings())
+			relevanceSum += scoring.getScore();
+		double totalRelevanceScore = relevanceSum / event.getRelevanceScorings().size();
 		
-		event.setTotalScore(totalScore);
+		event.setTotalRelevanceScore(totalRelevanceScore);
 	}
 
 }

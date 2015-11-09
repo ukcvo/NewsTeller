@@ -99,7 +99,7 @@ public class RetrievalBenchmark {
 				double eventScore;
 				
 				if (groundTruth.containsKey(event.getEventURI())) {
-					eventScore  = event.getTotalScore() * groundTruth.get(event.getEventURI());
+					eventScore  = event.getTotalRelevanceScore() * groundTruth.get(event.getEventURI());
 				} else {
 					if (log.isWarnEnabled())
 						log.warn(String.format("event not in ground truth, giving score 0: %s", event.getEventURI()));
@@ -108,7 +108,7 @@ public class RetrievalBenchmark {
 				
 				if (log.isTraceEnabled())
 					log.trace(String.format("%s,%f,%f,%f", 
-								event.getEventURI(), event.getTotalScore(), groundTruth.get(event.getEventURI()), eventScore));
+								event.getEventURI(), event.getTotalRelevanceScore(), groundTruth.get(event.getEventURI()), eventScore));
 				fileScore += eventScore;
 			}
 			fileScore /= events.size();

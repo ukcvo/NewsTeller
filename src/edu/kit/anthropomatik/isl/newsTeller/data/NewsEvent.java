@@ -13,36 +13,61 @@ import org.springframework.util.StringUtils;
  */
 public class NewsEvent {
 
+	// URI of the event - identifies the event unambiguously
 	private String eventURI;
-	
-	List<Scoring> scorings;
-	
-	double totalScore;
 
+	// scorings with respect to usability of the event (i.e. well-formedness)
+	List<Scoring> usabilityScorings;
+	
+	double totalUsabilityScore;
+	
+	// scorings with respect to relevance of the event
+	List<Scoring> relevanceScorings;
+	
+	double totalRelevanceScore;
+
+	//region getters & setters
 	public String getEventURI() {
 		return eventURI;
 	}
 
-	public List<Scoring> getScorings() {
-		return scorings;
+	public List<Scoring> getUsabilityScorings() {
+		return usabilityScorings;
 	}
 
-	public void addScoring(Scoring scoring) {
-		scorings.add(scoring);
+	public void addUsabilityScoring(Scoring usabilityScoring) {
+		usabilityScorings.add(usabilityScoring);
 	}
 	
-	public double getTotalScore() {
-		return totalScore;
+	public double getTotalUsabilityScore() {
+		return totalUsabilityScore;
 	}
 
-	public void setTotalScore(double totalScore) {
-		this.totalScore = totalScore;
+	public void setTotalUsabilityScore(double totalUsabilityScore) {
+		this.totalUsabilityScore = totalUsabilityScore;
 	}
 	
-	public NewsEvent(String eventURI, List<Scoring> scorings) {
+	public List<Scoring> getRelevanceScorings() {
+		return relevanceScorings;
+	}
+
+	public void addRelevanceScoring(Scoring relevanceScoring) {
+		relevanceScorings.add(relevanceScoring);
+	}
+	
+	public double getTotalRelevanceScore() {
+		return totalRelevanceScore;
+	}
+
+	public void setTotalRelevanceScore(double totalRelevanceScore) {
+		this.totalRelevanceScore = totalRelevanceScore;
+	}
+	//endregion
+	
+	public NewsEvent(String eventURI, List<Scoring> relevanceScorings) {
 		this.eventURI = eventURI;
-		this.scorings = scorings;
-		this.totalScore = Double.NaN; // encodes that there is no total score, yet
+		this.relevanceScorings = relevanceScorings;
+		this.totalRelevanceScore = Double.NaN; // encodes that there is no total score, yet
 	}
 	
 	public NewsEvent(String eventURI) { this(eventURI, new ArrayList<Scoring>());}
@@ -53,7 +78,7 @@ public class NewsEvent {
 	}
 	
 	public String toVerboseString() {
-		return String.format("[%s|<%s>|%f]", eventURI, StringUtils.collectionToCommaDelimitedString(scorings), totalScore);
+		return String.format("[%s|<%s>|%f]", eventURI, StringUtils.collectionToCommaDelimitedString(relevanceScorings), totalRelevanceScore);
 	}
 	
 	@Override

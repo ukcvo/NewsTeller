@@ -35,13 +35,13 @@ public class EventSelectorTest {
 		
 		this.events = new HashSet<NewsEvent>();
 		NewsEvent event1 = new NewsEvent("event-1");
-		event1.setTotalScore(0.2);
+		event1.setTotalRelevanceScore(0.2);
 		NewsEvent event2 = new NewsEvent("event-2");
-		event2.setTotalScore(0.7);
+		event2.setTotalRelevanceScore(0.7);
 		NewsEvent event3 = new NewsEvent("event-3");
-		event3.setTotalScore(0.3);
+		event3.setTotalRelevanceScore(0.3);
 		NewsEvent event4 = new NewsEvent("event-4");
-		event4.setTotalScore(0.6);
+		event4.setTotalRelevanceScore(0.6);
 		this.events.add(event1);
 		this.events.add(event2);
 		this.events.add(event3);

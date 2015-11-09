@@ -12,7 +12,8 @@ public class DummyAggregator extends ScoreAggregator {
 
 	@Override
 	protected void aggregateScoresForEvent(NewsEvent event) {
-		event.setTotalScore(0);
+		event.setTotalUsabilityScore(0);
+		event.setTotalRelevanceScore(0);
 	}
 
 }

@@ -22,7 +22,7 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class EventScorer {
+public abstract class EventScorer {
 
 	private static Log log = LogFactory.getLog(EventScorer.class);
 	
@@ -52,6 +52,8 @@ public class EventScorer {
 	}
 	//endregion
 
+	//region application of heuristics
+	
 	/**
 	 * Apply all eventHeuristics to a certain event.
 	 */
@@ -62,7 +64,7 @@ public class EventScorer {
 		for (EventHeuristic eventHeuristic : eventHeuristics) {
 			double score = eventHeuristic.getScore(event);
 			Scoring scoring = new Scoring(eventHeuristic.getName(), score);
-			event.addScoring(scoring);
+			addScoringToEvent(event, scoring);
 		}
 	}
 	
@@ -95,6 +97,10 @@ public class EventScorer {
 					event.toString(), StringUtils.collectionToCommaDelimitedString(conversationHistory)));
 		//TODO: implement (Scope 6/7) --> weighted average! (decaying over time)
 	}
+	// endregion
+	
+	// needs to be implemented by subclasses
+	protected abstract void addScoringToEvent(NewsEvent event, Scoring scoring);
 	
 	/**
 	 * Score all the events based on all the available heuristics.

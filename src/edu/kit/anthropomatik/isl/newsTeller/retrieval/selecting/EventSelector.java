@@ -28,8 +28,8 @@ public class EventSelector {
 		double maxValue = Double.NEGATIVE_INFINITY;
 		NewsEvent selectedEvent = null;
 		for (NewsEvent event : events) {
-			if (event.getTotalScore() > maxValue) {
-				maxValue = event.getTotalScore();
+			if (event.getTotalRelevanceScore() > maxValue) {
+				maxValue = event.getTotalRelevanceScore();
 				selectedEvent = event;
 			}
 		}

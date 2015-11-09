@@ -49,7 +49,7 @@ public class SimpleAverageAggregatorTest {
 	@Test
 	public void shouldDoAverageAggregation() {
 		this.aggregator.aggregateScores(this.events);
-		assertTrue(((NewsEvent) this.events.toArray()[0]).getTotalScore() - (1.7/3) < Util.EPSILON);
+		assertTrue(((NewsEvent) this.events.toArray()[0]).getTotalRelevanceScore() - (1.7/3) < Util.EPSILON);
 	}
 
 }
