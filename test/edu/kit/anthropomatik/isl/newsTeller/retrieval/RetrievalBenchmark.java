@@ -98,19 +98,20 @@ public class RetrievalBenchmark {
 						
 			for (NewsEvent event : events) {
 				
+				String eventURI = event.getEventURI();
 				double eventScore;
 				
-				if (groundTruth.containsKey(event.getEventURI())) {
-					eventScore  = event.getTotalUsabilityScore() * groundTruth.get(event.getEventURI()).getUsabilityRating();
+				if (groundTruth.containsKey(eventURI)) {
+					eventScore  = Math.pow(event.getTotalUsabilityScore() - groundTruth.get(eventURI).getUsabilityRating(), 2);
 				} else {
 					if (log.isWarnEnabled())
-						log.warn(String.format("event not in ground truth, giving score 0: %s", event.getEventURI()));
+						log.warn(String.format("event not in ground truth, giving score 0: %s", eventURI));
 					eventScore = 0;
 				}
 				
 				if (log.isTraceEnabled())
 					log.trace(String.format("%s,%f,%f,%f", 
-								event.getEventURI(), event.getTotalUsabilityScore(), groundTruth.get(event.getEventURI()).getUsabilityRating(), eventScore));
+							eventURI, event.getTotalUsabilityScore(), groundTruth.get(eventURI).getUsabilityRating(), eventScore));
 				fileScore += eventScore;
 			}
 			fileScore /= events.size();
@@ -123,7 +124,7 @@ public class RetrievalBenchmark {
 		totalScore /= keywordFiles.size();
 		
 		if (log.isInfoEnabled())
-			log.info(String.format("overall benchmark score: %f", totalScore));
+			log.info(String.format("overall benchmark score (MSE): %f", totalScore));
 	}
 
 	public static void main(String[] args) {

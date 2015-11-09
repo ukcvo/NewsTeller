@@ -1,0 +1,5 @@
+SELECT (COUNT(?place) AS ?number)
+WHERE
+{
+    <*e*> sem:hasPlace ?place
+}
