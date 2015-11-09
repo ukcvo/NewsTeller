@@ -10,6 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
 
 public class UtilTest {
 	
@@ -76,21 +77,30 @@ public class UtilTest {
 	//region reading CSV
 	@Test
 	public void shouldReturnEmptyBenchmarkMap() {
-		Map<String, Double> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/nonexisting-file.csv");
+		Map<String, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/nonexisting-file.csv");
 		assertTrue(map.isEmpty());
 	}
 	
 	@Test
 	public void shouldReturn77ElementBenchmarkMap() {
-		Map<String, Double> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
+		Map<String, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
 		assertTrue(map.size() == 77);
 	}
 	
 	@Test
 	public void shouldReturnRating1() {
-		Map<String, Double> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
+		Map<String, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
+		GroundTruth buf = map.get("http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev67");
 		
-		assertTrue(map.get("http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev67") - 1.0 < Util.EPSILON);
+		assertTrue(buf.getUsabilityRating() - 1.0 < Util.EPSILON);
+	}
+	
+	@Test
+	public void shouldReturnRank1() {
+		Map<String, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
+		GroundTruth buf = map.get("http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev67");
+		
+		assertTrue(buf.getRelevanceRank() == 1);
 	}
 	
 	@Test

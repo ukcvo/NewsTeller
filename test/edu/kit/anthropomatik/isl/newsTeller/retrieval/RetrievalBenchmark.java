@@ -73,7 +73,7 @@ public class RetrievalBenchmark {
 
 		for (String fileName : keywordFiles.keySet()) {
 			double fileScore = 0;
-			Map<String, Double> groundTruth = Util.readBenchmarkQueryFromFile(fileName);
+			Map<String,GroundTruth> groundTruth = Util.readBenchmarkQueryFromFile(fileName);
 			List<Keyword> keywords = keywordFiles.get(fileName);
 
 			Set<NewsEvent> events = finder.findEvents(keywords, userModel);
@@ -94,14 +94,14 @@ public class RetrievalBenchmark {
 					log.debug(StringUtils.collectionToDelimitedString(difference, "\n"));
 				}
 			}
-				
+			
 			
 			for (NewsEvent event : events) {
 				
 				double eventScore;
 				
 				if (groundTruth.containsKey(event.getEventURI())) {
-					eventScore  = event.getTotalRelevanceScore() * groundTruth.get(event.getEventURI());
+					eventScore  = event.getTotalUsabilityScore() * groundTruth.get(event.getEventURI()).getUsabilityRating();
 				} else {
 					if (log.isWarnEnabled())
 						log.warn(String.format("event not in ground truth, giving score 0: %s", event.getEventURI()));
@@ -110,7 +110,7 @@ public class RetrievalBenchmark {
 				
 				if (log.isTraceEnabled())
 					log.trace(String.format("%s,%f,%f,%f", 
-								event.getEventURI(), event.getTotalRelevanceScore(), groundTruth.get(event.getEventURI()), eventScore));
+								event.getEventURI(), event.getTotalUsabilityScore(), groundTruth.get(event.getEventURI()).getUsabilityRating(), eventScore));
 				fileScore += eventScore;
 			}
 			fileScore /= events.size();

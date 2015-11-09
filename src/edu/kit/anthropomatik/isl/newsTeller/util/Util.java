@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jumpmind.symmetric.csv.CsvReader;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
 
 /**
  * Provides some static utility functions.
@@ -37,7 +38,8 @@ public class Util {
 	public static final String VARIABLE_RESOURCE = "resource";
 
 	public static final String COLUMN_NAME_URI = "URI";
-	public static final String COLUMN_NAME_RATING = "rating";
+	public static final String COLUMN_NAME_USABILITY_RATING = "usabilityRating";
+	public static final String COLUMN_NAME_RELEVANCE_RANK = "relevanceRank";
 	public static final String COLUMN_NAME_FILENAME = "filename";
 	public static final String COLUMN_NAME_KEYWORD = "keyword_";
 
@@ -143,11 +145,11 @@ public class Util {
 	 * Reads a benchmark query csv file and returns a mapping from URI to
 	 * Double.
 	 */
-	public static Map<String, Double> readBenchmarkQueryFromFile(String fileName) {
+	public static Map<String, GroundTruth> readBenchmarkQueryFromFile(String fileName) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("readBenchmarkQueryFromFile(fileName = '%s')", fileName));
 
-		Map<String, Double> result = new HashMap<String, Double>();
+		Map<String, GroundTruth> result = new HashMap<String, GroundTruth>();
 
 		try {
 			CsvReader in = new CsvReader(fileName);
@@ -158,8 +160,9 @@ public class Util {
 			while (in.readRecord()) {
 				try {
 					String eventURI = in.get(Util.COLUMN_NAME_URI);
-					Double rating = Double.parseDouble(in.get(Util.COLUMN_NAME_RATING));
-					result.put(eventURI, rating);
+					double usabilityRating = Double.parseDouble(in.get(Util.COLUMN_NAME_USABILITY_RATING));
+					int relevanceRank = Integer.parseInt(in.get(Util.COLUMN_NAME_RELEVANCE_RANK));
+					result.put(eventURI, new GroundTruth(usabilityRating, relevanceRank));
 				} catch (NumberFormatException e) {
 					if (log.isWarnEnabled())
 						log.warn(String.format("malformed entry, skipping: '%s'", in.getRawRecord()));
