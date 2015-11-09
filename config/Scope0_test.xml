@@ -49,6 +49,10 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.DummyAggregator">
 	</bean>
 
+	<bean id="ranker" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.EventRanker">
+		<property name="scoreAggregator" ref="aggregator" />
+	</bean>
+	
 	<bean id="selector"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
 	</bean>
@@ -57,7 +61,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
 		<property name="eventFinder" ref="finder" />
 		<property name="eventScorer" ref="scorer" />
-		<property name="scoreAggregator" ref="aggregator" />
+		<property name="eventRanker" ref="ranker" />
 		<property name="eventSelector" ref="selector" />
 	</bean>
 

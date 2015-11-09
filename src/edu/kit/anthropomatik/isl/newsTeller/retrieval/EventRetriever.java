@@ -9,8 +9,8 @@ import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.ScoreAggregator;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.EventRanker;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.EventScorer;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
@@ -29,8 +29,8 @@ public class EventRetriever {
 	
 	private EventScorer eventScorer;
 	
-	private ScoreAggregator scoreAggregator;
-	
+	private EventRanker eventRanker;
+
 	private EventSelector eventSelector;
 	
 	//region setters
@@ -42,8 +42,8 @@ public class EventRetriever {
 		this.eventScorer = eventScorer;
 	}
 
-	public void setScoreAggregator(ScoreAggregator scoreAggregator) {
-		this.scoreAggregator = scoreAggregator;
+	public void setEventRanker(EventRanker eventRanker) {
+		this.eventRanker = eventRanker;
 	}
 	
 	public void setEventSelector(EventSelector eventSelector) {
@@ -58,8 +58,8 @@ public class EventRetriever {
 		
 		Set<NewsEvent> events = eventFinder.findEvents(userQuery, userModel);
 		eventScorer.scoreEvents(events, userQuery, userModel);
-		scoreAggregator.aggregateScores(events);
-		NewsEvent event = eventSelector.selectEvent(events);
+		List<NewsEvent> rankedEvents = eventRanker.getRankedEvents(events);
+		NewsEvent event = eventSelector.selectEvent(rankedEvents);
 				
 		return event;
 	}

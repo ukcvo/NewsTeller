@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class NewsEvent {
+public class NewsEvent implements Comparable<NewsEvent>{
 
 	// URI of the event - identifies the event unambiguously
 	private String eventURI;
@@ -90,4 +90,13 @@ public class NewsEvent {
     public int hashCode() {
         return this.toString().hashCode();
     }
+
+	public int compareTo(NewsEvent o) {
+		if (this.totalRelevanceScore > o.getTotalRelevanceScore())
+			return -1;
+		else if (this.totalRelevanceScore < o.getTotalRelevanceScore())
+			return 1;
+		else
+			return 0;
+	}
 }
