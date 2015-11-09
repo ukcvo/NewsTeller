@@ -269,8 +269,8 @@ public class KnowledgeStoreAdapter {
 		}
 		// get mention information TODO: better way to access this?
 		String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
-		int startIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf("=")+1, mentionURI.indexOf(",")));
-		int endIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf(",")+1));
+		int startIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf("=")+1, mentionURI.indexOf(",", mentionURI.indexOf("="))));
+		int endIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf(",", mentionURI.indexOf("="))+1));
 		
 		// get original text
 		String originalText = "";

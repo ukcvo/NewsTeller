@@ -34,8 +34,8 @@ public class EventSelector {
 			}
 		}
 		
-		if (log.isTraceEnabled())
-			log.trace(String.format("selected event: %s", (selectedEvent == null ? "null" : selectedEvent.toVerboseString())));
+		if (log.isInfoEnabled())
+			log.info(String.format("selected event: %s", (selectedEvent == null ? "null" : selectedEvent.toVerboseString())));
 		return selectedEvent;
 		
 	}
