@@ -19,11 +19,12 @@
 		<property name="formula">
 			<bean id="hasActorFormula"
 				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
-				<constructor-arg name="formula" value="MAX(0,MIN(x, 1 - ((x-2)/3)))" />
+				<constructor-arg name="formula" value="MAX(0,MIN(x, 2 - (x/2)))" />
+				<!-- 0: 0.0, 1: 1.0, 2: 1.0, 3: 0.5, 4: 0.0 -->
 			</bean>
 		</property>
 	</bean>
-	
+
 	<bean id="hasPlace"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
 		<property name="name" value="hasPlace" />
@@ -40,6 +41,7 @@
 				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
 				<constructor-arg name="formula"
 					value="IF( x == 1, 1, IF (x == 2 || x == 0, 0.5, 0))" />
+				<!-- 0: 0.5, 1: 1.0, 2: 0.5, 3: 0.0 -->
 			</bean>
 		</property>
 	</bean>
@@ -58,7 +60,9 @@
 		<property name="formula">
 			<bean id="A0Formula"
 				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
-				<constructor-arg name="formula" value="MAX(0,MIN((3*x + 1)/4, 1 - ((x-1)/2)))" />
+				<constructor-arg name="formula"
+					value="MAX(0,MIN((3*x + 1)/4, 1 - ((x-1)/2)))" />
+				<!-- 0: 0.25, 1: 1.0, 2: 0.5, 3: 0.0 -->
 			</bean>
 		</property>
 	</bean>
@@ -77,16 +81,101 @@
 		<property name="formula">
 			<bean id="A1Formula"
 				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
-				<constructor-arg name="formula" value="MAX(0,MIN((3*x + 1)/4, 1 - ((x-1)/2)))" />
+				<constructor-arg name="formula"
+					value="MAX(0,MIN((3*x + 1)/4, 1 - ((x-1)/2)))" />
+				<!-- 0: 0.25, 1: 1.0, 2: 0.5, 3: 0.0 -->
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="alwaysTrue"
+	<bean id="isSpeechCognitive"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="isSpeechCognitive" />
+		<property name="numberGetter">
+			<bean id="isSpeechCognitiveQuery"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/isSpeechCognitive.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="isSpeechCognitiveFormula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula" value="IF(x == 0, 1, 0)" />
+				<!-- 0: 1.0, 1: 0.0, 2: 0.0 -->
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="eventLabel"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="isSpeechCognitive" />
+		<property name="numberGetter">
+			<bean id="eventLabelQuery"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/eventLabel.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="eventLabelFormula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula"
+					value="IF( x == 1, 1, IF (x == 2 || x == 0, 0.5, 0))" />
+				<!-- 0: 0.5, 1: 1.0, 2: 0.5, 3: 0.0 -->
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="mentions"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="isSpeechCognitive" />
+		<property name="numberGetter">
+			<bean id="mentionsQuery"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/numberOfMentions.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="mentionsFormula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula"
+					value="IF( x == 0, 0, MAX(0, (4-x)/3))" />
+				<!-- 0: 0.0, 1: 1.0, 2: 0.667, 3: 0.333, 4: 0.0-->
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="areLabelsVerbs"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="isSpeechCognitive" />
+		<property name="numberGetter">
+			<bean id="areLabelsVerbsQuery"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.WordNetVerbCountDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/areLabelsVerbs.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="areLabelsVerbsFormula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula"
+					value="x" />
+				<!-- coefficientDeterminer already returns value between 0 and 1-->
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="baseline"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
 		<property name="name" value="hasActor" />
 		<property name="numberGetter">
-			<bean id="alwaysTrueQuery"
+			<bean id="baselineQuery"
 				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
 				<constructor-arg name="queryFileName"
 					value="resources/SPARQL/usability/hasPlace.qry" />
@@ -94,9 +183,9 @@
 			</bean>
 		</property>
 		<property name="formula">
-			<bean id="alwaysTrueFormula"
+			<bean id="baselineFormula"
 				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
-				<constructor-arg name="formula" value="1" />
+				<constructor-arg name="formula" value="0.5" />
 			</bean>
 		</property>
 	</bean>

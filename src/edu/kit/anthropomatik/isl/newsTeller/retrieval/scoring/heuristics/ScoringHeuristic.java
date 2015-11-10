@@ -14,7 +14,7 @@ public abstract class ScoringHeuristic {
 
 	private ScoringFormula formula;
 	
-	private ICoefficientDeterminer numberGetter;
+	private CoefficientDeterminer numberGetter;
 	
 	private String name;
 	
@@ -22,7 +22,7 @@ public abstract class ScoringHeuristic {
 		this.formula = formula;
 	}
 
-	public void setNumberGetter(ICoefficientDeterminer numberGetter) {
+	public void setNumberGetter(CoefficientDeterminer numberGetter) {
 		this.numberGetter = numberGetter;
 	}
 

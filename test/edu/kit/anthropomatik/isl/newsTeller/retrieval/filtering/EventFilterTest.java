@@ -12,8 +12,6 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
-import org.springframework.util.StringUtils;
-
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 
 public class EventFilterTest {
@@ -47,8 +45,6 @@ public class EventFilterTest {
 	@Test
 	public void shouldReturnFullSet() {
 		Set<NewsEvent> filteredEvents = this.filter.filterEvents(events);
-		System.out.println(StringUtils.collectionToCommaDelimitedString(events));
-		System.out.println(StringUtils.collectionToCommaDelimitedString(filteredEvents));
 		assertTrue(filteredEvents.equals(events));
 	}
 

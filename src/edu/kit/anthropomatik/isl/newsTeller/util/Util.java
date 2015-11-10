@@ -36,6 +36,7 @@ public class Util {
 	public static final String VARIABLE_NUMBER = "number";
 	public static final String VARIABLE_MENTION = "mention";
 	public static final String VARIABLE_RESOURCE = "resource";
+	public static final String VARIABLE_LABEL = "label";
 
 	public static final String COLUMN_NAME_URI = "URI";
 	public static final String COLUMN_NAME_USABILITY_RATING = "usabilityRating";

@@ -27,9 +27,11 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer">
 		<property name="eventHeuristics">
 			<list>
-				<ref bean="hasActor"/>
+				<ref bean="areLabelsVerbs"/>
+				<!-- unused beans
 				<ref bean="hasPlace"/>
-				<!-- TODO: eventHeuristics beans go here! (Scope 2) -->
+				<ref bean="hasActor"/>
+				-->
 			</list>
 		</property>
 		<property name="queryHeuristics">

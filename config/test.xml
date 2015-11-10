@@ -53,7 +53,15 @@
 			<list>
 				<ref bean="hasActor"/>
 				<ref bean="hasPlace"/>
-				<!-- TODO: eventHeuristics beans go here! (Scope 2) -->
+				<ref bean="A0"/>
+				<ref bean="A1"/>
+				<ref bean="isSpeechCognitive"/>
+				<ref bean="eventLabel"/>
+				<ref bean="mentions"/>
+				<ref bean="areLabelsVerbs"/>
+				<!-- unused beans:
+				<ref bean="baseline"/>
+				 -->
 			</list>
 		</property>
 		<property name="queryHeuristics">

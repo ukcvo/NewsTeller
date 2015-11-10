@@ -1,0 +1,5 @@
+SELECT (COUNT(?mention) AS ?number)
+WHERE
+{
+    <*e*> gaf:denotedBy ?mention
+}
