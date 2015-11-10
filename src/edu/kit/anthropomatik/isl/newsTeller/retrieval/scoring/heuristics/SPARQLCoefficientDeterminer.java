@@ -31,7 +31,7 @@ public class SPARQLCoefficientDeterminer extends CoefficientDeterminer {
 		else if (retrievalResults.size() == 0 && log.isErrorEnabled())
 			log.error("executeQuery returned empty result; returning zero");
 		else
-			number = Double.parseDouble(retrievalResults.get(0));
+			number = Util.parseXMLDouble(retrievalResults.get(0));
 		return number;
 	}
 

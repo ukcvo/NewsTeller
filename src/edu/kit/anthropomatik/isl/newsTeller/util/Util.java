@@ -220,4 +220,19 @@ public class Util {
 		return result;
 	}
 	// endregion
+
+	/**
+	 * Parses an XML-style double like ""2"^^<http://www.w3.org/2001/XMLSchema#short>".
+	 */
+	public static double parseXMLDouble(String str) {
+		String substring = str.substring(0, str.indexOf("^")).replace("\"", "");
+		double result = Double.parseDouble(substring);
+		if (Double.isNaN(result)) {
+			if (log.isWarnEnabled())
+				log.warn(String.format("error parsing double: '%s'", str));
+			result = 0;
+		}
+			
+		return result;
+	}
 }

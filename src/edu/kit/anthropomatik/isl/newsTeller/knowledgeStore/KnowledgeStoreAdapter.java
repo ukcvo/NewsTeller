@@ -217,8 +217,7 @@ public class KnowledgeStoreAdapter {
 		List<String> stringResults = runSingleVariableStringQuery(sparqlQuery, variableName, timeoutMillisec);
 		
 		for (String str : stringResults) {
-			String substring = str.substring(0, str.indexOf("^")).replace("\"", "");
-			results.add(Double.parseDouble(substring));
+			results.add(Util.parseXMLDouble(str));
 		}
 		
 		return results;

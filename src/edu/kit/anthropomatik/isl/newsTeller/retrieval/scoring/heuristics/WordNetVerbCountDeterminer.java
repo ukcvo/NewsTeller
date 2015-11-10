@@ -44,7 +44,10 @@ public class WordNetVerbCountDeterminer extends CoefficientDeterminer {
 			totalNumberOfSenses += indexWords.getSenseCount(POS.ADVERB);
 			totalNumberOfSenses += indexWords.getSenseCount(POS.NOUN);
 			
-			double relativeNumberOfVerbSenses = (1.0 * numberOfVerbSenses) / totalNumberOfSenses;
+			double relativeNumberOfVerbSenses = 0;
+			if (totalNumberOfSenses > 0)
+				relativeNumberOfVerbSenses = (1.0 * numberOfVerbSenses) / totalNumberOfSenses;
+							
 			return relativeNumberOfVerbSenses;
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
@@ -58,6 +61,12 @@ public class WordNetVerbCountDeterminer extends CoefficientDeterminer {
 	public double getCoefficient(String eventURI, String keyword, String historicalEventURI) {
 
 		List<String> labels = executeQuery(eventURI, keyword, historicalEventURI, Util.VARIABLE_LABEL);
+		
+		if (labels.isEmpty()) {
+			if (log.isWarnEnabled())
+				log.warn("empty label set, returning 0");
+			return 0;
+		}
 		
 		double sum = 0;
 		for (String label : labels) {
