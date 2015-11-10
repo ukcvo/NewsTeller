@@ -69,14 +69,56 @@ public class EventRetriever {
 		if (log.isTraceEnabled())
 			log.trace(String.format("retrieveEvents(userQuery = <%s>, userModel = %s)", 
 										StringUtils.collectionToCommaDelimitedString(userQuery) , userModel.toString()));
-		
+		//region time logging
+		long old = System.currentTimeMillis();
+		//endregion
 		Set<NewsEvent> events = eventFinder.findEvents(userQuery, userModel);
+		//region time logging
+		if (log.isDebugEnabled()) {
+			long l = System.currentTimeMillis();
+			log.debug(String.format("find events: % d ms", l - old));
+			old = l;
+		}
+		//endregion
 		usabilityScorer.scoreEvents(events, userQuery, userModel);
+		//region time logging
+		if (log.isDebugEnabled()) {
+			long l = System.currentTimeMillis();
+			log.debug(String.format("usability scoring: % d ms", l - old));
+			old = l;
+		}
+		//endregion
 		Set<NewsEvent> filteredEvents = eventFilter.filterEvents(events);
+		//region time logging
+		if (log.isDebugEnabled()) {
+			long l = System.currentTimeMillis();
+			log.debug(String.format("filter events: % d ms", l - old));
+			old = l;
+		}
+		//endregion
 		relevanceScorer.scoreEvents(filteredEvents, userQuery, userModel);
+		//region time logging
+		if (log.isDebugEnabled()) {
+			long l = System.currentTimeMillis();
+			log.debug(String.format("relevance scoring: % d ms", l - old));
+			old = l;
+		}
+		//endregion
 		List<NewsEvent> rankedEvents = eventRanker.getRankedEvents(filteredEvents);
+		//region time logging
+		if (log.isDebugEnabled()) {
+			long l = System.currentTimeMillis();
+			log.debug(String.format("rank events: % d ms", l - old));
+			old = l;
+		}
+		//endregion
 		NewsEvent event = eventSelector.selectEvent(rankedEvents);
-				
+		//region time logging
+		if (log.isDebugEnabled()) {
+			long l = System.currentTimeMillis();
+			log.debug(String.format("select event: % d ms", l - old));
+		}
+		//endregion		
 		return event;
 	}
 }
