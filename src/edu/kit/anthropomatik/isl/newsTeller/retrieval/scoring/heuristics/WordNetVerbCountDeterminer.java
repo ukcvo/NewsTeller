@@ -36,6 +36,13 @@ public class WordNetVerbCountDeterminer extends CoefficientDeterminer {
 	}
 
 	private double getLabelVerbFrequency(String label) {
+		
+		if (label.length() > 20) {
+			if (log.isWarnEnabled())
+				log.warn(String.format("label with more than 20 characters; ignoring and returning 0: '%s'", label));
+			return 0;
+		}
+		
 		try {
 			IndexWordSet indexWords = dict.lookupAllIndexWords(label);
 			int numberOfVerbSenses = indexWords.getSenseCount(POS.VERB);

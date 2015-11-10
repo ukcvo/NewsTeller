@@ -1,0 +1,5 @@
+SELECT (COUNT(?time) AS ?number)
+WHERE
+{
+    <*e*> sem:hasTime ?time
+}

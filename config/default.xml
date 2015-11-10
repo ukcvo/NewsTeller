@@ -27,6 +27,8 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer">
 		<property name="eventHeuristics">
 			<list>
+				<ref bean="areLabelsVerbs"/>
+				<!-- unused beans
 				<ref bean="hasActor"/>
 				<ref bean="hasPlace"/>
 				<ref bean="A0"/>
@@ -34,9 +36,7 @@
 				<ref bean="isSpeechCognitive"/>
 				<ref bean="eventLabel"/>
 				<ref bean="mentions"/>
-				<ref bean="areLabelsVerbs"/>
-				<!-- unused beans
-				
+				<ref bean="hasTime"/>
 				-->
 			</list>
 		</property>

@@ -69,7 +69,9 @@ public class RetrievalBenchmark {
 
 		Map<String, List<Keyword>> keywordFiles = Util.readBenchmarkConfigFile(this.configFileName);
 
-		double totalScore = 0;
+		double totalSum = 0;
+		double fileSum = 0;
+		double totalNumberOfEvents = 0;
 
 		for (String fileName : keywordFiles.keySet()) {
 			double fileScore = 0;
@@ -114,17 +116,23 @@ public class RetrievalBenchmark {
 							eventURI, event.getTotalUsabilityScore(), groundTruth.get(eventURI).getUsabilityRating(), eventScore));
 				fileScore += eventScore;
 			}
+			totalSum += fileScore;
+			totalNumberOfEvents += events.size();
+			
 			fileScore /= events.size();
 			if (log.isInfoEnabled())
 				log.info(String.format("%s,%f", fileName, fileScore));
-			
-			totalScore += fileScore;
+			fileSum += fileScore;
 		}
 
-		totalScore /= keywordFiles.size();
+		double benchmarkScore = totalSum / totalNumberOfEvents;
+		double averageMSE = fileSum / keywordFiles.size();
 		
-		if (log.isInfoEnabled())
-			log.info(String.format("overall benchmark score (MSE): %f", totalScore));
+		if (log.isInfoEnabled()) {
+			log.info(String.format("overall benchmark score (MSE): %f", benchmarkScore));
+			log.info(String.format("average MSE over all files: %f", averageMSE));
+		}
+			
 	}
 
 	public static void main(String[] args) {

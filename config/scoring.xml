@@ -46,6 +46,27 @@
 		</property>
 	</bean>
 
+	<bean id="hasTime"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="hasPlace" />
+		<property name="numberGetter">
+			<bean id="hasTimeQuery"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/hasTime.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="hasTimeFormula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula"
+					value="IF( x == 1 || x == 2, 1, IF (x == 3, 0.5, 0))" />
+				<!-- 0: 0.0, 1: 1.0, 2: 1.0, 3: 0.5, 4: 0.0 -->
+			</bean>
+		</property>
+	</bean>
+
 	<bean id="A0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
 		<property name="name" value="A0" />
@@ -171,11 +192,11 @@
 		</property>
 	</bean>
 
-	<bean id="baseline"
+	<bean id="baseline1.0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
 		<property name="name" value="hasActor" />
 		<property name="numberGetter">
-			<bean id="baselineQuery"
+			<bean id="baseline1.0Query"
 				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
 				<constructor-arg name="queryFileName"
 					value="resources/SPARQL/usability/hasPlace.qry" />
@@ -183,9 +204,66 @@
 			</bean>
 		</property>
 		<property name="formula">
-			<bean id="baselineFormula"
+			<bean id="baseline1.0Formula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula" value="1.0" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="baseline0.5"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="hasActor" />
+		<property name="numberGetter">
+			<bean id="baseline0.5Query"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/hasPlace.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="baseline0.5Formula"
 				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
 				<constructor-arg name="formula" value="0.5" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="baseline0.2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="hasActor" />
+		<property name="numberGetter">
+			<bean id="baseline0.2Query"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/hasPlace.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="baseline0.2Formula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula" value="0.2" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="baseline0.0"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.EventHeuristic">
+		<property name="name" value="hasActor" />
+		<property name="numberGetter">
+			<bean id="baseline0.0Query"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.SPARQLCoefficientDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/hasPlace.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="formula">
+			<bean id="baseline0.0Formula"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.ScoringFormula">
+				<constructor-arg name="formula" value="0.0" />
 			</bean>
 		</property>
 	</bean>
