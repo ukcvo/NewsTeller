@@ -35,7 +35,7 @@ public class WordNetVerbCountDeterminer extends CoefficientDeterminer {
 		}
 	}
 
-	private double getLabelVerbFrequency(String label) {
+	public double getLabelVerbFrequency(String label) {
 		
 		if (label.length() > 20) {
 			if (log.isWarnEnabled())

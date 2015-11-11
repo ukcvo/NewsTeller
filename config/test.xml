@@ -213,4 +213,18 @@
 		<property name="configFileName" value="resources/benchmark/Scope 0.csv" />
 	</bean>
 
+	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark">
+		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="wordNetFeature">
+			<bean id="wordNetFeatureImpl"
+				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.WordNetVerbCountDeterminer">
+				<constructor-arg name="queryFileName"
+					value="resources/SPARQL/usability/areLabelsVerbs.qry" />
+				<property name="ksAdapter" ref="ksAdapter" />
+			</bean>
+		</property>
+		<property name="doWordNetAnalysis" value="true" />
+	</bean>
+
 </beans>
