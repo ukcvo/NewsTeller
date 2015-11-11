@@ -193,7 +193,7 @@ public class FilteringBenchmark {
 			Map<Integer,DoubleTriple> probabilityMap = new HashMap<Integer, DoubleTriple>();
 			for (Integer value : possibleValues) {
 				int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
-				double posProbability = (posCount + 0.0) / (positiveEvents.size() + 0.0); //TODO: laplace smoothing
+				double posProbability = (posCount + 0.0) / (positiveEvents.size() + 0.0); //TODO: laplace smoothing https://en.wikipedia.org/wiki/Additive_smoothing
 				int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
 				double negProbability = (negCount + 0.0) / (negativeEvents.size() + 0.0);
 				double overallProbabiliy = (1.0 * (negCount + posCount)) / (positiveEvents.size() + negativeEvents.size());
@@ -212,9 +212,37 @@ public class FilteringBenchmark {
 			}
 			double conditionalEntropy = posProb * posEntropy + negProb * negEntropy;
 			
+			// do MLE prediction
+			int tp = 0;
+			int fp = 0;
+			int tn = 0;
+			int fn = 0;
+			ksAdapter.openConnection();
+			for (String eventURI : positiveEvents) {
+				int value = feature.getValue(eventURI);
+				DoubleTriple triple = probabilityMap.get(value);
+				if(triple.first > triple.second)
+					tp++;
+				else
+					fn++;
+			}
+			for (String eventURI : negativeEvents) {
+				int value = feature.getValue(eventURI);
+				DoubleTriple triple = probabilityMap.get(value);
+				if(triple.first > triple.second)
+					fp++;
+				else
+					tn++;
+			}
+			ksAdapter.closeConnection();
+			double precision = (1.0 * tp) / (tp + fp);
+			double recall = (1.0 * tp) / (tp + fn);
+			double fscore = 2 * (precision * recall) / (precision + recall);
+			
 			if(log.isInfoEnabled()) {
 				log.info(String.format("feature: %s", feature.getName()));
 				log.info(String.format("entropy: %f, condEntropy: %f", overallEntropy, conditionalEntropy));
+				log.info(String.format("precision: %f, recall: %f, fscore: %f", precision, recall, fscore));
 				log.info("value; posProb; negProb; overallProb");
 				for(Map.Entry<Integer, DoubleTriple> entry : probabilityMap.entrySet()) {
 					log.info(String.format("%d;%s", entry.getKey(),entry.getValue().toString()));
