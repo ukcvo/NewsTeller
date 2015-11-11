@@ -22,9 +22,28 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class FilteringBenchmark {
 
+	private class DoubleTriple {
+		public double first;
+		public double second;
+		public double third;
+		
+		public DoubleTriple(double first, double second, double third) {
+			this.first = first;
+			this.second = second;
+			this.third = third;
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("%f;%f;%f", first, second, third);
+		}
+	}
+	
 	private static Log log;
 	
 	private boolean doWordNetAnalysis;
+	
+	private boolean doFeatureAnalysis;
 	
 	private WordNetVerbCountDeterminer wordNetFeature;
 	
@@ -32,10 +51,24 @@ public class FilteringBenchmark {
 	
 	private Map<String,Map<String,GroundTruth>> benchmark;
 	
+	private Map<String,Set<String>> positiveEventsMap;
+	
+	private Set<String> positiveEvents;
+	
+	private Map<String,Set<String>> negativeEventsMap;
+	
+	private Set<String> negativeEvents;
+	
 	private KnowledgeStoreAdapter ksAdapter;
+	
+	private List<UsabilityFeature> features;
 	
 	public void setDoWordNetAnalysis(boolean doWordNetAnalysis) {
 		this.doWordNetAnalysis = doWordNetAnalysis;
+	}
+	
+	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
+		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
 	
 	public void setWordNetFeature(WordNetVerbCountDeterminer wordNetFeature) {
@@ -46,14 +79,33 @@ public class FilteringBenchmark {
 		this.ksAdapter = ksAdapter;
 	}
 	
+	public void setFeatures(List<UsabilityFeature> features) {
+		this.features = features;
+	}
+	
 	public FilteringBenchmark(String configFileName) {
 		this.benchmarkFiles = Util.readBenchmarkConfigFile(configFileName);
 		this.benchmark = new HashMap<String, Map<String,GroundTruth>>();
+		this.positiveEventsMap = new HashMap<String, Set<String>>();
+		this.positiveEvents = new HashSet<String>();
+		this.negativeEventsMap = new HashMap<String, Set<String>>();
+		this.negativeEvents = new HashSet<String>();
+		
 		for (String fileName : benchmarkFiles.keySet()) {
-			this.benchmark.put(fileName, Util.readBenchmarkQueryFromFile(fileName));
+			Map<String,GroundTruth> fileContent = Util.readBenchmarkQueryFromFile(fileName);
+			this.benchmark.put(fileName, fileContent);
+			for (Map.Entry<String, GroundTruth> entry : fileContent.entrySet()) {
+				if (entry.getValue().getUsabilityRating() < Util.EPSILON) {
+					negativeEvents.add(entry.getKey());
+				} else {
+					positiveEvents.add(entry.getKey());
+				}
+					
+			}
 		}
 	}
 	
+	//region analyzeVerbNetFeature
 	private void analyzeVerbNetFeature() {
 		if(log.isTraceEnabled())
 			log.trace("analyzeVerbNetFeature()");
@@ -110,10 +162,73 @@ public class FilteringBenchmark {
 				log.info(String.format("bin %d (%f - %f): %d", i, (i / 20.0), ((i + 1) / 20.0), bins[i]));
 		}
 	}
+	//endregion
+	
+	//region analzyeFeatures
+	private void analyzeFeatures() {
+		
+		double posProb = (1.0 * positiveEvents.size()) / (positiveEvents.size() + negativeEvents.size());
+		double negProb = 1.0 - posProb;
+		
+		for (UsabilityFeature feature : this.features) {
+			Map<Integer,Integer> posCounts = new HashMap<Integer, Integer>();
+			ksAdapter.openConnection();
+			for (String eventURI : positiveEvents) {
+				int key = feature.getValue(eventURI);
+				int currentCount = posCounts.containsKey(key) ? posCounts.get(key) : 0;
+				posCounts.put(key, currentCount + 1);
+			}
+			
+			Map<Integer,Integer> negCounts = new HashMap<Integer, Integer>();
+			for (String eventURI : negativeEvents) {
+				int key = feature.getValue(eventURI);
+				int currentCount = negCounts.containsKey(key) ? negCounts.get(key) : 0;
+				negCounts.put(key, currentCount + 1);
+			}
+			ksAdapter.closeConnection();
+			Set<Integer> possibleValues = new HashSet<Integer>();
+			possibleValues.addAll(posCounts.keySet());
+			possibleValues.addAll(negCounts.keySet());
+			
+			Map<Integer,DoubleTriple> probabilityMap = new HashMap<Integer, DoubleTriple>();
+			for (Integer value : possibleValues) {
+				int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
+				double posProbability = (posCount + 0.0) / (positiveEvents.size() + 0.0); //TODO: laplace smoothing
+				int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
+				double negProbability = (negCount + 0.0) / (negativeEvents.size() + 0.0);
+				double overallProbabiliy = (1.0 * (negCount + posCount)) / (positiveEvents.size() + negativeEvents.size());
+				probabilityMap.put(value, new DoubleTriple(posProbability, negProbability, overallProbabiliy));
+			}
+			
+			double overallEntropy = 0;
+			double posEntropy = 0;
+			double negEntropy = 0;
+			for(Map.Entry<Integer, DoubleTriple> entry : probabilityMap.entrySet()) {
+				if (entry.getValue().first > 0)
+					posEntropy -= entry.getValue().first * (Math.log(entry.getValue().first)/Math.log(2)); 
+				if (entry.getValue().second > 0)
+					negEntropy -= entry.getValue().second * (Math.log(entry.getValue().second)/Math.log(2));
+				overallEntropy -= entry.getValue().third * (Math.log(entry.getValue().third)/Math.log(2));
+			}
+			double conditionalEntropy = posProb * posEntropy + negProb * negEntropy;
+			
+			if(log.isInfoEnabled()) {
+				log.info(String.format("feature: %s", feature.getName()));
+				log.info(String.format("entropy: %f, condEntropy: %f", overallEntropy, conditionalEntropy));
+				log.info("value; posProb; negProb; overallProb");
+				for(Map.Entry<Integer, DoubleTriple> entry : probabilityMap.entrySet()) {
+					log.info(String.format("%d;%s", entry.getKey(),entry.getValue().toString()));
+				}
+			}
+		}
+	}
+	//endregion
 	
 	public void run() {
 		if (this.doWordNetAnalysis)
 			analyzeVerbNetFeature();
+		if (this.doFeatureAnalysis)
+			analyzeFeatures();
 	}
 	
 	public static void main(String[] args) {

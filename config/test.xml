@@ -224,7 +224,18 @@
 				<property name="ksAdapter" ref="ksAdapter" />
 			</bean>
 		</property>
-		<property name="doWordNetAnalysis" value="true" />
+		<property name="doWordNetAnalysis" value="false" />
+		<property name="doFeatureAnalysis" value="true" />
+		<property name="features">
+			<list>
+				<bean id="hasActorFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
+					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/hasActor.qry"/>
+					<constructor-arg name="probabilityFileName" value=""/>
+					<property name= "ksAdapter" ref="ksAdapter"/>
+					<property name="name" value="hasActor"/>
+				</bean>
+			</list>
+		</property>
 	</bean>
 
 </beans>
