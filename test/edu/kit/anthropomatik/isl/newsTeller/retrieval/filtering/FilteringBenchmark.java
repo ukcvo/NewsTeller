@@ -1,5 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jumpmind.symmetric.csv.CsvWriter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -193,7 +196,7 @@ public class FilteringBenchmark {
 			Map<Integer,DoubleTriple> probabilityMap = new HashMap<Integer, DoubleTriple>();
 			for (Integer value : possibleValues) {
 				int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
-				double posProbability = (posCount + 0.0) / (positiveEvents.size() + 0.0); //TODO: laplace smoothing https://en.wikipedia.org/wiki/Additive_smoothing
+				double posProbability = (posCount + 0.0) / (positiveEvents.size() + 0.0); //TODO: laplace smoothing? https://en.wikipedia.org/wiki/Additive_smoothing
 				int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
 				double negProbability = (negCount + 0.0) / (negativeEvents.size() + 0.0);
 				double overallProbabiliy = (1.0 * (negCount + posCount)) / (positiveEvents.size() + negativeEvents.size());
@@ -243,11 +246,32 @@ public class FilteringBenchmark {
 				log.info(String.format("feature: %s", feature.getName()));
 				log.info(String.format("entropy: %f, condEntropy: %f", overallEntropy, conditionalEntropy));
 				log.info(String.format("precision: %f, recall: %f, fscore: %f", precision, recall, fscore));
-				log.info("value; posProb; negProb; overallProb");
-				for(Map.Entry<Integer, DoubleTriple> entry : probabilityMap.entrySet()) {
-					log.info(String.format("%d;%s", entry.getKey(),entry.getValue().toString()));
-				}
 			}
+			
+			String fileName = String.format("csv-out/%s.csv", feature.getName());
+			try {
+				CsvWriter w = new CsvWriter(new FileWriter(fileName, false), ';');
+				w.write("value");
+				w.write("posProb");
+				w.write("negProb");
+				w.write("overallProb");
+				w.endRecord();
+				
+				for(Map.Entry<Integer, DoubleTriple> entry : probabilityMap.entrySet()) {
+					w.write(entry.getKey().toString());
+					w.write(Double.toString(entry.getValue().first));
+					w.write(Double.toString(entry.getValue().second));
+					w.write(Double.toString(entry.getValue().third));
+					w.endRecord();
+				}
+				w.close();
+			} catch (IOException e) {
+				if(log.isErrorEnabled())
+					log.error(String.format("cannot write file '%s'", fileName));
+				if(log.isDebugEnabled())
+					log.debug("csv write error", e);
+			}
+			
 		}
 	}
 	//endregion
