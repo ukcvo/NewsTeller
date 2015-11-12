@@ -226,6 +226,7 @@
 		</property>
 		<property name="doWordNetAnalysis" value="false" />
 		<property name="doFeatureAnalysis" value="true" />
+		<property name="doCreateFeatureMap" value="false" />
 		<property name="features">
 			<list>
 				

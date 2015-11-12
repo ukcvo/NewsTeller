@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jumpmind.symmetric.csv.CsvReader;
 import org.jumpmind.symmetric.csv.CsvWriter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -44,10 +46,14 @@ public class FilteringBenchmark {
 
 	private static Log log;
 
+	private static final String FEATURE_MAP_FILENAME = "resources/benchmark/featureMap.csv";
+	
 	private boolean doWordNetAnalysis;
 
 	private boolean doFeatureAnalysis;
 
+	private boolean doCreateFeatureMap;
+	
 	private WordNetVerbCountDeterminer wordNetFeature;
 
 	private Map<String, List<Keyword>> benchmarkFiles;
@@ -62,6 +68,10 @@ public class FilteringBenchmark {
 
 	private Set<String> negativeEvents;
 
+	private Set<String> allEvents;
+	
+	Map<String,Map<String,Integer>> featureMap;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 
 	private List<UsabilityFeature> features;
@@ -74,6 +84,10 @@ public class FilteringBenchmark {
 		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
 
+	public void setDoCreateFeatureMap(boolean doCreateFeatureMap) {
+		this.doCreateFeatureMap = doCreateFeatureMap;
+	}
+	
 	public void setWordNetFeature(WordNetVerbCountDeterminer wordNetFeature) {
 		this.wordNetFeature = wordNetFeature;
 	}
@@ -110,6 +124,10 @@ public class FilteringBenchmark {
 
 			}
 		}
+		
+		this.allEvents = new HashSet<String>();
+		this.allEvents.addAll(positiveEvents);
+		this.allEvents.addAll(negativeEvents);
 	}
 
 	// region analyzeVerbNetFeature
@@ -180,20 +198,20 @@ public class FilteringBenchmark {
 		
 		for (UsabilityFeature feature : this.features) {
 			Map<Integer,Integer> posCounts = new HashMap<Integer, Integer>();
-			ksAdapter.openConnection();
+
 			for (String eventURI : positiveEvents) {
-				int key = feature.getValue(eventURI);
+				int key = featureMap.get(eventURI).get(feature.getName());
 				int currentCount = posCounts.containsKey(key) ? posCounts.get(key) : 0;
 				posCounts.put(key, currentCount + 1);
 			}
 			
 			Map<Integer,Integer> negCounts = new HashMap<Integer, Integer>();
 			for (String eventURI : negativeEvents) {
-				int key = feature.getValue(eventURI);
+				int key = featureMap.get(eventURI).get(feature.getName());
 				int currentCount = negCounts.containsKey(key) ? negCounts.get(key) : 0;
 				negCounts.put(key, currentCount + 1);
 			}
-			ksAdapter.closeConnection();
+			
 			Set<Integer> possibleValues = new HashSet<Integer>();
 			possibleValues.addAll(posCounts.keySet());
 			possibleValues.addAll(negCounts.keySet());
@@ -234,21 +252,20 @@ public class FilteringBenchmark {
 			double nominator = 0;
 			double denominatorFeature = 0;
 			double denominatorLabel = 0;
-			ksAdapter.openConnection();
+			
 			for (String eventURI : positiveEvents) {
-				int value = feature.getValue(eventURI);
+				int value = featureMap.get(eventURI).get(feature.getName());
 				nominator += (value - averageFeature)*(1.0 - averageLabel);
 				denominatorFeature += Math.pow((value - averageFeature), 2);
 				denominatorLabel += Math.pow((1.0 - averageLabel),2);
 			}
 			for (String eventURI : negativeEvents) {
-				int value = feature.getValue(eventURI);
+				int value = featureMap.get(eventURI).get(feature.getName());
 				nominator += (value - averageFeature)*(0.0 - averageLabel);
 				denominatorFeature += Math.pow((value - averageFeature), 2);
 				denominatorLabel += Math.pow((0.0 - averageLabel),2);
 			}
-			ksAdapter.closeConnection();
-
+			
 			denominatorFeature = Math.sqrt(denominatorFeature);
 			denominatorLabel = Math.sqrt(denominatorLabel);
 			
@@ -258,9 +275,9 @@ public class FilteringBenchmark {
 			int tp = 0;
 			int fp = 0;
 			int fn = 0;
-			ksAdapter.openConnection();
+			
 			for (String eventURI : positiveEvents) {
-				int value = feature.getValue(eventURI);
+				int value = featureMap.get(eventURI).get(feature.getName());
 				DoubleTriple triple = probabilityMap.get(value);
 				if(triple.first > triple.second)
 					tp++;
@@ -268,13 +285,13 @@ public class FilteringBenchmark {
 					fn++;
 			}
 			for (String eventURI : negativeEvents) {
-				int value = feature.getValue(eventURI);
+				int value = featureMap.get(eventURI).get(feature.getName());
 				DoubleTriple triple = probabilityMap.get(value);
 				if(triple.first > triple.second)
 					fp++;
 				// don't count tn, as we don't need them 
 			}
-			ksAdapter.closeConnection();
+
 			double precision = (1.0 * tp) / (tp + fp);
 			double recall = (1.0 * tp) / (tp + fn);
 			double fscore = 2 * (precision * recall) / (precision + recall);
@@ -315,7 +332,90 @@ public class FilteringBenchmark {
 	}
 	// endregion
 
+	//region set up feature map
+	// create feature map by querying the knowledge store and storing the result in a csv file
+	private void createFeatureMap() {
+		
+		this.featureMap = new HashMap<String, Map<String,Integer>>();
+				
+		this.ksAdapter.openConnection();
+		for (String eventURI : this.allEvents) {
+			Map<String, Integer> featureValues = new HashMap<String, Integer>();
+			
+			for (UsabilityFeature f : features) {
+				featureValues.put(f.getName(), f.getValue(eventURI));
+			}
+			
+			this.featureMap.put(eventURI, featureValues);
+		}
+		this.ksAdapter.closeConnection();
+		
+		List<String> featureNames = new ArrayList<String>();
+		for (UsabilityFeature f : features) {
+			featureNames.add(f.getName());
+		}
+		
+		// write to file
+		try {
+			CsvWriter w = new CsvWriter(new FileWriter(FEATURE_MAP_FILENAME, false), ';');
+			w.write("eventURI");
+			for (String s : featureNames)
+				w.write(s);
+			w.endRecord();
+			
+			for(Map.Entry<String, Map<String,Integer>> entry : featureMap.entrySet()) {
+				w.write(entry.getKey());
+				for (String s: featureNames)
+					w.write(entry.getValue().get(s).toString());
+				w.endRecord();
+			}
+			
+			w.close();
+		} catch (IOException e) {
+			if(log.isErrorEnabled())
+				log.error(String.format("cannot write file '%s'", FEATURE_MAP_FILENAME));
+			if(log.isDebugEnabled())
+				log.debug("csv write error", e);
+		}
+	}
+	
+	// read feature values from file
+	private void readFeatureMap() {
+		this.featureMap = new HashMap<String, Map<String,Integer>>();
+		
+		try {
+			CsvReader r = new CsvReader(new FileReader(FEATURE_MAP_FILENAME), ';');
+			
+			r.readHeaders();
+			List<String> featureNames = new ArrayList<String>();
+			for (int i = 1; i < r.getHeaderCount(); i++)
+				featureNames.add(r.getHeader(i));
+			
+			while(r.readRecord()) {
+				String eventURI = r.get("eventURI");
+				Map<String,Integer> featureValues = new HashMap<String, Integer>();
+				for (String s : featureNames)
+					featureValues.put(s, Integer.parseInt(r.get(s)));
+				featureMap.put(eventURI, featureValues);
+			}
+			
+			r.close();
+			
+		} catch (IOException e) {
+			if(log.isFatalEnabled())
+				log.fatal(String.format("cannot write file '%s'", FEATURE_MAP_FILENAME));
+			if(log.isDebugEnabled())
+				log.debug("csv write error", e);
+		}
+	}
+	//endregion
+	
 	public void run() {
+		if (this.doCreateFeatureMap)
+			createFeatureMap();
+		else
+			readFeatureMap();
+		
 		if (this.doWordNetAnalysis)
 			analyzeVerbNetFeature();
 		if (this.doFeatureAnalysis)
