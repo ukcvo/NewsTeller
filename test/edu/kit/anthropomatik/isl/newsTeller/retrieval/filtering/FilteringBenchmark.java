@@ -76,6 +76,7 @@ public class FilteringBenchmark {
 
 	private List<UsabilityFeature> features;
 
+	//region setters
 	public void setDoWordNetAnalysis(boolean doWordNetAnalysis) {
 		this.doWordNetAnalysis = doWordNetAnalysis;
 	}
@@ -99,7 +100,8 @@ public class FilteringBenchmark {
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
 	}
-
+	//endregion
+	
 	public FilteringBenchmark(String configFileName) {
 		this.benchmarkFiles = Util.readBenchmarkConfigFile(configFileName);
 		this.benchmark = new HashMap<String, Map<String, GroundTruth>>();
@@ -130,6 +132,84 @@ public class FilteringBenchmark {
 		this.allEvents.addAll(negativeEvents);
 	}
 
+	//region set up feature map
+	// create feature map by querying the knowledge store and storing the result in a csv file
+	private void createFeatureMap() {
+		
+		this.featureMap = new HashMap<String, Map<String,Integer>>();
+				
+		this.ksAdapter.openConnection();
+		for (String eventURI : this.allEvents) {
+			Map<String, Integer> featureValues = new HashMap<String, Integer>();
+			
+			for (UsabilityFeature f : features) {
+				featureValues.put(f.getName(), f.getValue(eventURI));
+			}
+			
+			this.featureMap.put(eventURI, featureValues);
+		}
+		this.ksAdapter.closeConnection();
+		
+		List<String> featureNames = new ArrayList<String>();
+		for (UsabilityFeature f : features) {
+			featureNames.add(f.getName());
+		}
+		
+		// write to file
+		try {
+			CsvWriter w = new CsvWriter(new FileWriter(FEATURE_MAP_FILENAME, false), ';');
+			w.write("eventURI");
+			for (String s : featureNames)
+				w.write(s);
+			w.endRecord();
+			
+			for(Map.Entry<String, Map<String,Integer>> entry : featureMap.entrySet()) {
+				w.write(entry.getKey());
+				for (String s: featureNames)
+					w.write(entry.getValue().get(s).toString());
+				w.endRecord();
+			}
+			
+			w.close();
+		} catch (IOException e) {
+			if(log.isErrorEnabled())
+				log.error(String.format("cannot write file '%s'", FEATURE_MAP_FILENAME));
+			if(log.isDebugEnabled())
+				log.debug("csv write error", e);
+		}
+	}
+	
+	// read feature values from file
+	private void readFeatureMap() {
+		this.featureMap = new HashMap<String, Map<String,Integer>>();
+		
+		try {
+			CsvReader r = new CsvReader(new FileReader(FEATURE_MAP_FILENAME), ';');
+			
+			r.readHeaders();
+			List<String> featureNames = new ArrayList<String>();
+			for (int i = 1; i < r.getHeaderCount(); i++)
+				featureNames.add(r.getHeader(i));
+			
+			while(r.readRecord()) {
+				String eventURI = r.get("eventURI");
+				Map<String,Integer> featureValues = new HashMap<String, Integer>();
+				for (String s : featureNames)
+					featureValues.put(s, Integer.parseInt(r.get(s)));
+				featureMap.put(eventURI, featureValues);
+			}
+			
+			r.close();
+			
+		} catch (IOException e) {
+			if(log.isFatalEnabled())
+				log.fatal(String.format("cannot write file '%s'", FEATURE_MAP_FILENAME));
+			if(log.isDebugEnabled())
+				log.debug("csv write error", e);
+		}
+	}
+	//endregion
+	
 	// region analyzeVerbNetFeature
 	private void analyzeVerbNetFeature() {
 		if (log.isTraceEnabled())
@@ -194,8 +274,6 @@ public class FilteringBenchmark {
 		double posProb = (1.0 * positiveEvents.size()) / (positiveEvents.size() + negativeEvents.size());
 		double negProb = 1.0 - posProb;
 				
-		// TODO: store feature values in map, so we can access it later and don't need to run everything again
-		
 		for (UsabilityFeature feature : this.features) {
 			Map<Integer,Integer> posCounts = new HashMap<Integer, Integer>();
 
@@ -331,84 +409,6 @@ public class FilteringBenchmark {
 		}
 	}
 	// endregion
-
-	//region set up feature map
-	// create feature map by querying the knowledge store and storing the result in a csv file
-	private void createFeatureMap() {
-		
-		this.featureMap = new HashMap<String, Map<String,Integer>>();
-				
-		this.ksAdapter.openConnection();
-		for (String eventURI : this.allEvents) {
-			Map<String, Integer> featureValues = new HashMap<String, Integer>();
-			
-			for (UsabilityFeature f : features) {
-				featureValues.put(f.getName(), f.getValue(eventURI));
-			}
-			
-			this.featureMap.put(eventURI, featureValues);
-		}
-		this.ksAdapter.closeConnection();
-		
-		List<String> featureNames = new ArrayList<String>();
-		for (UsabilityFeature f : features) {
-			featureNames.add(f.getName());
-		}
-		
-		// write to file
-		try {
-			CsvWriter w = new CsvWriter(new FileWriter(FEATURE_MAP_FILENAME, false), ';');
-			w.write("eventURI");
-			for (String s : featureNames)
-				w.write(s);
-			w.endRecord();
-			
-			for(Map.Entry<String, Map<String,Integer>> entry : featureMap.entrySet()) {
-				w.write(entry.getKey());
-				for (String s: featureNames)
-					w.write(entry.getValue().get(s).toString());
-				w.endRecord();
-			}
-			
-			w.close();
-		} catch (IOException e) {
-			if(log.isErrorEnabled())
-				log.error(String.format("cannot write file '%s'", FEATURE_MAP_FILENAME));
-			if(log.isDebugEnabled())
-				log.debug("csv write error", e);
-		}
-	}
-	
-	// read feature values from file
-	private void readFeatureMap() {
-		this.featureMap = new HashMap<String, Map<String,Integer>>();
-		
-		try {
-			CsvReader r = new CsvReader(new FileReader(FEATURE_MAP_FILENAME), ';');
-			
-			r.readHeaders();
-			List<String> featureNames = new ArrayList<String>();
-			for (int i = 1; i < r.getHeaderCount(); i++)
-				featureNames.add(r.getHeader(i));
-			
-			while(r.readRecord()) {
-				String eventURI = r.get("eventURI");
-				Map<String,Integer> featureValues = new HashMap<String, Integer>();
-				for (String s : featureNames)
-					featureValues.put(s, Integer.parseInt(r.get(s)));
-				featureMap.put(eventURI, featureValues);
-			}
-			
-			r.close();
-			
-		} catch (IOException e) {
-			if(log.isFatalEnabled())
-				log.fatal(String.format("cannot write file '%s'", FEATURE_MAP_FILENAME));
-			if(log.isDebugEnabled())
-				log.debug("csv write error", e);
-		}
-	}
-	//endregion
 	
 	public void run() {
 		if (this.doCreateFeatureMap)
