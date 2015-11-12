@@ -282,10 +282,15 @@
 					<property name= "ksAdapter" ref="ksAdapter"/>
 					<property name="name" value="numberOfMentions"/>
 				</bean>
+				<bean id="isStatementFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
+					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/isStatement.qry"/>
+					<constructor-arg name="probabilityFileName" value=""/>
+					<property name= "ksAdapter" ref="ksAdapter"/>
+					<property name="name" value="isStatement"/>
+				</bean>
 				<!-- 
-				
+								
 				 -->
-				
 			</list>
 		</property>
 	</bean>

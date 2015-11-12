@@ -82,14 +82,22 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 	public int getValue(String eventURI) {
 		double relativeCount = getRelativeCount(eventURI);
 		
+		/*
 		if (relativeCount < Util.EPSILON)
 			return 0;	// zero
 		else if (relativeCount < 0.5)
 			return 1;	// not zero, but less than 0.5
-		else if ((1.0 - relativeCount) >= Util.EPSILON)
+		else if ((1.0 - relativeCount) < Util.EPSILON)
 			return 2;	// more than 0.5 but not one
 		else
 			return 3;	// one
+		*/
+		if (relativeCount < Util.EPSILON)
+			return 10;
+		else if ((1.0 - relativeCount) < Util.EPSILON)
+			return 11;
+		else
+			return (int) (relativeCount * 10);
 	}
 
 }

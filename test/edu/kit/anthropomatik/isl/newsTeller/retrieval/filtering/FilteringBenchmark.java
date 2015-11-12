@@ -29,124 +29,127 @@ public class FilteringBenchmark {
 		public double first;
 		public double second;
 		public double third;
-		
+
 		public DoubleTriple(double first, double second, double third) {
 			this.first = first;
 			this.second = second;
 			this.third = third;
 		}
-		
+
 		@Override
 		public String toString() {
 			return String.format("%f;%f;%f", first, second, third);
 		}
 	}
-	
+
 	private static Log log;
-	
+
 	private boolean doWordNetAnalysis;
-	
+
 	private boolean doFeatureAnalysis;
-	
+
 	private WordNetVerbCountDeterminer wordNetFeature;
-	
-	private Map<String,List<Keyword>> benchmarkFiles;
-	
-	private Map<String,Map<String,GroundTruth>> benchmark;
-	
-	private Map<String,Set<String>> positiveEventsMap;
-	
+
+	private Map<String, List<Keyword>> benchmarkFiles;
+
+	private Map<String, Map<String, GroundTruth>> benchmark;
+
+	private Map<String, Set<String>> positiveEventsMap;
+
 	private Set<String> positiveEvents;
-	
-	private Map<String,Set<String>> negativeEventsMap;
-	
+
+	private Map<String, Set<String>> negativeEventsMap;
+
 	private Set<String> negativeEvents;
-	
+
 	private KnowledgeStoreAdapter ksAdapter;
-	
+
 	private List<UsabilityFeature> features;
-	
+
 	public void setDoWordNetAnalysis(boolean doWordNetAnalysis) {
 		this.doWordNetAnalysis = doWordNetAnalysis;
 	}
-	
+
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
 		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
-	
+
 	public void setWordNetFeature(WordNetVerbCountDeterminer wordNetFeature) {
 		this.wordNetFeature = wordNetFeature;
 	}
-	
+
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
-	
+
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
 	}
-	
+
 	public FilteringBenchmark(String configFileName) {
 		this.benchmarkFiles = Util.readBenchmarkConfigFile(configFileName);
-		this.benchmark = new HashMap<String, Map<String,GroundTruth>>();
+		this.benchmark = new HashMap<String, Map<String, GroundTruth>>();
 		this.positiveEventsMap = new HashMap<String, Set<String>>();
 		this.positiveEvents = new HashSet<String>();
 		this.negativeEventsMap = new HashMap<String, Set<String>>();
 		this.negativeEvents = new HashSet<String>();
-		
+
 		for (String fileName : benchmarkFiles.keySet()) {
-			Map<String,GroundTruth> fileContent = Util.readBenchmarkQueryFromFile(fileName);
+			Map<String, GroundTruth> fileContent = Util.readBenchmarkQueryFromFile(fileName);
 			this.benchmark.put(fileName, fileContent);
+			this.positiveEventsMap.put(fileName, new HashSet<String>());
+			this.negativeEventsMap.put(fileName, new HashSet<String>());
 			for (Map.Entry<String, GroundTruth> entry : fileContent.entrySet()) {
 				if (entry.getValue().getUsabilityRating() < Util.EPSILON) {
 					negativeEvents.add(entry.getKey());
+					negativeEventsMap.get(fileName).add(entry.getKey());
 				} else {
 					positiveEvents.add(entry.getKey());
+					positiveEventsMap.get(fileName).add(entry.getKey());
 				}
-					
+
 			}
 		}
 	}
-	
-	//region analyzeVerbNetFeature
+
+	// region analyzeVerbNetFeature
 	private void analyzeVerbNetFeature() {
-		if(log.isTraceEnabled())
+		if (log.isTraceEnabled())
 			log.trace("analyzeVerbNetFeature()");
-		
+
 		// collect labels
 		Set<String> labels = new HashSet<String>();
 		ksAdapter.openConnection();
-		for (Map<String,GroundTruth> line : this.benchmark.values()) {
+		for (Map<String, GroundTruth> line : this.benchmark.values()) {
 			for (String eventURI : line.keySet()) {
-				labels.addAll(ksAdapter.runSingleVariableStringQuery(
-						Util.readStringFromFile("resources/SPARQL/usability/areLabelsVerbs.qry").replace("*e*", eventURI), Util.VARIABLE_LABEL));
+				labels.addAll(ksAdapter.runSingleVariableStringQuery(Util.readStringFromFile("resources/SPARQL/usability/areLabelsVerbs.qry").replace("*e*", eventURI), Util.VARIABLE_LABEL));
 			}
 		}
 		ksAdapter.closeConnection();
-		
+
 		// collect values
 		List<Double> values = new ArrayList<Double>();
 		for (String label : labels) {
 			values.add(wordNetFeature.getLabelVerbFrequency(label));
 		}
-		
+
 		// compute mean
 		double meanSum = 0;
 		for (Double val : values)
 			meanSum += val;
 		double mean = meanSum / values.size();
-		
+
 		// compute variance
 		double varSum = 0;
 		for (Double val : values)
 			varSum += Math.pow((mean - val), 2);
 		double variance = varSum / values.size();
-		
+
 		// compute bins
 		int[] bins = new int[20];
 		for (Double val : values)
-			bins[(int)(Math.min(val, 1.0 - Util.EPSILON)*20)]++;
-		
+			bins[(int) (Math.min(val, 1.0 - Util.EPSILON) * 20)]++;
+
 		// get counts for 0.0 and 1.0
 		int numberOfZeroes = 0;
 		int numberOfOnes = 0;
@@ -156,7 +159,7 @@ public class FilteringBenchmark {
 			if (val < Util.EPSILON)
 				numberOfZeroes++;
 		}
-		
+
 		// output everything
 		if (log.isInfoEnabled()) {
 			log.info(String.format("mean: %f, variance %f", mean, variance));
@@ -165,13 +168,15 @@ public class FilteringBenchmark {
 				log.info(String.format("bin %d (%f - %f): %d", i, (i / 20.0), ((i + 1) / 20.0), bins[i]));
 		}
 	}
-	//endregion
-	
-	//region analzyeFeatures
+	// endregion
+
+	// region analzyeFeatures
 	private void analyzeFeatures() {
 		
 		double posProb = (1.0 * positiveEvents.size()) / (positiveEvents.size() + negativeEvents.size());
 		double negProb = 1.0 - posProb;
+				
+		// TODO: store feature values in map, so we can access it later and don't need to run everything again
 		
 		for (UsabilityFeature feature : this.features) {
 			Map<Integer,Integer> posCounts = new HashMap<Integer, Integer>();
@@ -202,11 +207,12 @@ public class FilteringBenchmark {
 				double overallProbabiliy = (1.0 * (negCount + posCount)) / (positiveEvents.size() + negativeEvents.size());
 				probabilityMap.put(value, new DoubleTriple(posProbability, negProbability, overallProbabiliy));
 			}
-			
+						
+			// entropy calculation
 			double overallEntropy = 0;
 			double posEntropy = 0;
 			double negEntropy = 0;
-			for(Map.Entry<Integer, DoubleTriple> entry : probabilityMap.entrySet()) {
+			for (Map.Entry<Integer, DoubleTriple> entry : probabilityMap.entrySet()) {
 				if (entry.getValue().first > 0)
 					posEntropy -= entry.getValue().first * (Math.log(entry.getValue().first)/Math.log(2)); 
 				if (entry.getValue().second > 0)
@@ -215,10 +221,42 @@ public class FilteringBenchmark {
 			}
 			double conditionalEntropy = posProb * posEntropy + negProb * negEntropy;
 			
+			// calculate Pearson correlation coefficient
+			double averageLabel = posProb;
+			double averageFeature = 0;
+			for (Integer value : possibleValues) {
+				int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
+				int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
+				averageFeature += (posCount + negCount)*value;
+			}
+			averageFeature /= (positiveEvents.size() + negativeEvents.size());
+
+			double nominator = 0;
+			double denominatorFeature = 0;
+			double denominatorLabel = 0;
+			ksAdapter.openConnection();
+			for (String eventURI : positiveEvents) {
+				int value = feature.getValue(eventURI);
+				nominator += (value - averageFeature)*(1.0 - averageLabel);
+				denominatorFeature += Math.pow((value - averageFeature), 2);
+				denominatorLabel += Math.pow((1.0 - averageLabel),2);
+			}
+			for (String eventURI : negativeEvents) {
+				int value = feature.getValue(eventURI);
+				nominator += (value - averageFeature)*(0.0 - averageLabel);
+				denominatorFeature += Math.pow((value - averageFeature), 2);
+				denominatorLabel += Math.pow((0.0 - averageLabel),2);
+			}
+			ksAdapter.closeConnection();
+
+			denominatorFeature = Math.sqrt(denominatorFeature);
+			denominatorLabel = Math.sqrt(denominatorLabel);
+			
+			double correlation = nominator / (denominatorFeature * denominatorLabel);
+			
 			// do MLE prediction
 			int tp = 0;
 			int fp = 0;
-			int tn = 0;
 			int fn = 0;
 			ksAdapter.openConnection();
 			for (String eventURI : positiveEvents) {
@@ -234,8 +272,7 @@ public class FilteringBenchmark {
 				DoubleTriple triple = probabilityMap.get(value);
 				if(triple.first > triple.second)
 					fp++;
-				else
-					tn++;
+				// don't count tn, as we don't need them 
 			}
 			ksAdapter.closeConnection();
 			double precision = (1.0 * tp) / (tp + fp);
@@ -245,6 +282,8 @@ public class FilteringBenchmark {
 			if(log.isInfoEnabled()) {
 				log.info(String.format("feature: %s", feature.getName()));
 				log.info(String.format("entropy: %f, condEntropy: %f", overallEntropy, conditionalEntropy));
+				log.info(String.format("normalized entropy: %f, normalized condEntropy: %f", overallEntropy/possibleValues.size(), conditionalEntropy/possibleValues.size()));
+				log.info(String.format("correlation: %f", correlation));
 				log.info(String.format("precision: %f, recall: %f, fscore: %f", precision, recall, fscore));
 			}
 			
@@ -274,15 +313,15 @@ public class FilteringBenchmark {
 			
 		}
 	}
-	//endregion
-	
+	// endregion
+
 	public void run() {
 		if (this.doWordNetAnalysis)
 			analyzeVerbNetFeature();
 		if (this.doFeatureAnalysis)
 			analyzeFeatures();
 	}
-	
+
 	public static void main(String[] args) {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
