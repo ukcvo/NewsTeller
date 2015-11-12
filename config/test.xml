@@ -228,18 +228,32 @@
 		<property name="doFeatureAnalysis" value="true" />
 		<property name="features">
 			<list>
-				<bean id="wordNet" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.WordNetVerbCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/areLabelsVerbs.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="areLabelsVerbs"/>
-				</bean>
+				
 				<bean id="hasActorFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/hasActor.qry"/>
 					<constructor-arg name="probabilityFileName" value=""/>
 					<property name= "ksAdapter" ref="ksAdapter"/>
 					<property name="name" value="hasActor"/>
+					<property name="possibleValues">
+						<set>
+							<value>0</value>
+							<value>1</value>
+							<value>2</value>
+							<value>3</value>
+							<value>4</value>
+						</set>
+					</property>
+					<property name="defaultValue" value="4"/>
 				</bean>
+				
+				<!-- 
+				<bean id="wordNet" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.WordNetVerbCountFeature">
+					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/areLabelsVerbs.qry"/>
+					<constructor-arg name="probabilityFileName" value=""/>
+					<property name= "ksAdapter" ref="ksAdapter"/>
+					<property name="name" value="areLabelsVerbs"/>
+				</bean>			
+				
 				<bean id="hasPlaceFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/hasPlace.qry"/>
 					<constructor-arg name="probabilityFileName" value=""/>
@@ -288,8 +302,6 @@
 					<property name= "ksAdapter" ref="ksAdapter"/>
 					<property name="name" value="isStatement"/>
 				</bean>
-				<!-- 
-								
 				 -->
 			</list>
 		</property>
