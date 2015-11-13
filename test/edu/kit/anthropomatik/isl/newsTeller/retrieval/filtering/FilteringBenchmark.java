@@ -231,7 +231,8 @@ public class FilteringBenchmark {
 
 			// calculate the probability map based on the counts 
 			// (contains overall probability and conditional probability for positive and negative examples)
-			Map<Integer, Map<String, Double>> probabilityMap = createProbabilityMap(positiveValueCounts, negativeValueCounts, possibleValues, false);
+			Map<Integer, Map<String, Double>> probabilityMap = createProbabilityMap(positiveValueCounts, negativeValueCounts, 
+																	positiveEvents.size(), negativeEvents.size(), possibleValues, false);
 
 			// calculate entropy
 			double overallEntropy = calculateEntropy(probabilityMap, Util.COLUMN_NAME_OVERALL_PROBABILITY);
@@ -363,6 +364,7 @@ public class FilteringBenchmark {
 
 	// given the positive and negative counts, create a probability map "value --> (probabilityName --> probability)"
 	private Map<Integer, Map<String, Double>> createProbabilityMap(Map<Integer, Integer> posCounts, Map<Integer, Integer> negCounts, 
+																	int numberOfPosEvents, int numberOfNegEvents,
 																	Set<Integer> possibleValues, boolean useLogProbabilities) {
 		
 		Map<Integer, Map<String, Double>> probabilityMap = new HashMap<Integer, Map<String, Double>>();
@@ -371,14 +373,14 @@ public class FilteringBenchmark {
 			Map<String, Double> valueMap = new HashMap<String, Double>();
 
 			int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
-			double posProbability = (posCount + 1.0) / (positiveEvents.size() + possibleValues.size());
+			double posProbability = (posCount + 1.0) / (numberOfPosEvents + possibleValues.size());
 			valueMap.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, useLogProbabilities ? Math.log(posProbability): posProbability);
 
 			int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
-			double negProbability = (negCount + 1.0) / (negativeEvents.size() + possibleValues.size());
+			double negProbability = (negCount + 1.0) / (numberOfNegEvents + possibleValues.size());
 			valueMap.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, useLogProbabilities ? Math.log(negProbability) : negProbability);
 
-			double overallProbabiliy = (1.0 * (negCount + posCount + 1.0)) / (positiveEvents.size() + negativeEvents.size() + possibleValues.size());
+			double overallProbabiliy = (1.0 * (negCount + posCount + 1.0)) / (numberOfPosEvents + numberOfNegEvents + possibleValues.size());
 			valueMap.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, useLogProbabilities ? Math.log(overallProbabiliy) : overallProbabiliy);
 
 			probabilityMap.put(value, valueMap);
@@ -439,7 +441,8 @@ public class FilteringBenchmark {
 
 		// calculate the probability map based on the counts 
 		// (contains overall probability and conditional probability for positive and negative examples)
-		Map<Integer, Map<String, Double>> probabilityMap = createProbabilityMap(positiveValueCounts, negativeValueCounts, possibleValues, true);
+		Map<Integer, Map<String, Double>> probabilityMap = createProbabilityMap(positiveValueCounts, negativeValueCounts, 
+																positiveEvents.size(), negativeEvents.size(), possibleValues, true);
 
 		return probabilityMap;
 	}
