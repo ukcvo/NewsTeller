@@ -17,7 +17,6 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.WordNetVerbCountDeterminer;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class FilteringBenchmark {
@@ -32,8 +31,6 @@ public class FilteringBenchmark {
 
 	private boolean doCreateFeatureMap;
 	
-	private WordNetVerbCountDeterminer wordNetFeature;
-
 	private Map<String, List<Keyword>> benchmarkFiles;
 
 	private Map<String, Map<String, GroundTruth>> benchmark;
@@ -52,6 +49,8 @@ public class FilteringBenchmark {
 	
 	private KnowledgeStoreAdapter ksAdapter;
 
+	private WordNetVerbCountFeature wordNetFeature;
+	
 	private List<UsabilityFeature> features;
 
 	//region setters
@@ -67,7 +66,7 @@ public class FilteringBenchmark {
 		this.doCreateFeatureMap = doCreateFeatureMap;
 	}
 	
-	public void setWordNetFeature(WordNetVerbCountDeterminer wordNetFeature) {
+	public void setWordNetFeature(WordNetVerbCountFeature wordNetFeature) {
 		this.wordNetFeature = wordNetFeature;
 	}
 

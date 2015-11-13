@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<import resource="scoring.xml" />
+	<import resource="usabilityFeatures.xml" />
 
 	<bean id="ksAdapter"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
@@ -51,23 +51,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer">
 		<property name="eventHeuristics">
 			<list>
-				<ref bean="hasTime"/>
-				
-				<!-- unused beans:
-				<ref bean="baseline1.0"/>
-				<ref bean="baseline0.5"/>
-				<ref bean="baseline0.2"/>
-				<ref bean="baseline0.0"/>
-				<ref bean="hasActor"/>
-				<ref bean="hasPlace"/>
-				<ref bean="A0"/>
-				<ref bean="A1"/>
-				<ref bean="eventLabel"/>
-				<ref bean="isSpeechCognitive"/>
-				<ref bean="mentions"/>
-				<ref bean="areLabelsVerbs"/>
-				
-				 -->
 			</list>
 		</property>
 		<property name="queryHeuristics">
@@ -216,161 +199,22 @@
 	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark">
 		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="wordNetFeature">
-			<bean id="wordNetFeatureImpl"
-				class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.WordNetVerbCountDeterminer">
-				<constructor-arg name="queryFileName"
-					value="resources/SPARQL/usability/areLabelsVerbs.qry" />
-				<property name="ksAdapter" ref="ksAdapter" />
-			</bean>
-		</property>
-		<property name="doWordNetAnalysis" value="false" />
-		<property name="doFeatureAnalysis" value="true" />
+		<property name="wordNetFeature" ref="wordNetFeature" />
+		<property name="doWordNetAnalysis" value="true" />
+		<property name="doFeatureAnalysis" value="false" />
 		<property name="doCreateFeatureMap" value="false" />
 		<property name="features">
 			<list>
-				
-				<bean id="hasActorFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/hasActor.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="hasActor"/>
-					<property name="possibleValues">
-						<set>
-							<value>0</value>
-							<value>1</value>
-							<value>2</value>
-							<value>3</value>
-							<value>4</value>
-						</set>
-					</property>
-					<property name="defaultValue" value="4"/>
-				</bean>
-				<bean id="hasPlaceFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/hasPlace.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="hasPlace"/>
-					<property name="possibleValues">
-						<set>
-							<value>0</value>
-							<value>1</value>
-							<value>2</value>
-							<value>3</value>
-						</set>
-					</property>
-					<property name="defaultValue" value="3"/>
-				</bean>
-				<bean id="A0Feature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/A0.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="A0"/>
-					<property name="possibleValues">
-						<set>
-							<value>0</value>
-							<value>1</value>
-							<value>2</value>
-							<value>3</value>
-						</set>
-					</property>
-					<property name="defaultValue" value="3"/>
-				</bean>
-				<bean id="A1Feature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/A1.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="A1"/>
-					<property name="possibleValues">
-						<set>
-							<value>0</value>
-							<value>1</value>
-							<value>2</value>
-							<value>3</value>
-						</set>
-					</property>
-					<property name="defaultValue" value="3"/>
-				</bean>
-				<bean id="eventLabelFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/eventLabel.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="eventLabel"/>
-					<property name="possibleValues">
-						<set>
-							<value>0</value>
-							<value>1</value>
-							<value>2</value>
-							<value>3</value>
-							<value>4</value>
-						</set>
-					</property>
-					<property name="defaultValue" value="4"/>
-				</bean>
-				<bean id="hasTimeFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/hasTime.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="hasTime"/>
-					<property name="possibleValues">
-						<set>
-							<value>1</value>
-							<value>2</value>
-							<value>3</value>
-						</set>
-					</property>
-					<property name="defaultValue" value="3"/>
-				</bean>
-				<bean id="isSpeechCognitiveFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/isSpeechCognitive.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="isSpeechCognitive"/>
-					<property name="possibleValues">
-						<set>
-							<value>0</value>
-							<value>1</value>
-						</set>
-					</property>
-					<property name="defaultValue" value="1"/>
-				</bean>
-				<bean id="numberOfMentionsFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/numberOfMentions.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="numberOfMentions"/>
-					<property name="possibleValues">
-						<set>
-							<value>0</value>
-							<value>1</value>
-							<value>2</value>
-							<value>3</value>
-							<value>4</value>
-							<value>5</value>
-						</set>
-					</property>
-					<property name="defaultValue" value="5"/>
-				</bean>
-				<bean id="isStatementFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/isStatement.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="isStatement"/>
-					<property name="possibleValues">
-						<set>
-							<value>0</value>
-							<value>1</value>
-						</set>
-					</property>
-					<property name="defaultValue" value="1"/>
-				</bean>
-				
-				<bean id="wordNet" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.WordNetVerbCountFeature">
-					<constructor-arg name="queryFileName" value="resources/SPARQL/usability/areLabelsVerbs.qry"/>
-					<constructor-arg name="probabilityFileName" value=""/>
-					<property name= "ksAdapter" ref="ksAdapter"/>
-					<property name="name" value="areLabelsVerbs"/>
-				</bean>	
+				<ref bean="A0Feature"/>
+				<ref bean="A1Feature"/>
+				<ref bean="wordNetFeature"/>
+				<ref bean="eventLabelFeature"/>
+				<ref bean="hasActorFeature"/>
+				<ref bean="hasPlaceFeature"/>
+				<ref bean="hasTimeFeature"/>
+				<ref bean="isSpeechCognitiveFeature"/>
+				<ref bean="isStatementFeature"/>
+				<ref bean="numberOfMentionsFeature"/>
 				
 				<!-- 
 				
