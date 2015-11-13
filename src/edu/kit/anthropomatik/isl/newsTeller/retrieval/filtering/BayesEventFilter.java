@@ -8,30 +8,36 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.IScoreAggregator;
+import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 
 /**
- * Filters events based on their usability score and a threshold.
+ * Filters events based on the posterior probability estimated by naive bayes and a threshold.
  * 
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class EventFilter {
+public class BayesEventFilter implements IEventFilter {
 
-	private static Log log = LogFactory.getLog(EventFilter.class);
+	private static Log log = LogFactory.getLog(BayesEventFilter.class);
 	
 	private double threshold;
 	
-	private IScoreAggregator scoreAggregator;
+	private KnowledgeStoreAdapter ksAdapter;
+	
+	private NaiveBayesFusion bayes;
 	
 	public void setThreshold(double threshold) {
 		this.threshold = threshold;
 	}
 
-	public void setScoreAggregator(IScoreAggregator scoreAggregator) {
-		this.scoreAggregator = scoreAggregator;
+	public void setBayes(NaiveBayesFusion bayes) {
+		this.bayes = bayes;
 	}
-
+	
+	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
+		this.ksAdapter = ksAdapter;
+	}
+	
 	/**
 	 * Filter the given set of events based on the aggregated scores.
 	 */
@@ -41,12 +47,13 @@ public class EventFilter {
 			
 		Set<NewsEvent> result = new HashSet<NewsEvent>();
 		
+		ksAdapter.openConnection();
 		for (NewsEvent event : events) {
-			double totalUsabilityScore = scoreAggregator.getTotalScore(event.getUsabilityScorings());
-			event.setTotalUsabilityScore(totalUsabilityScore);
-			if (totalUsabilityScore >= this.threshold)
+			double probability = bayes.getProbabilityOfEvent(event);
+			if (probability >= threshold)
 				result.add(event);
 		}
+		ksAdapter.closeConnection();
 		
 		if(log.isDebugEnabled())
 			log.debug(String.format("keeping %d out of %d events", result.size(), events.size()));

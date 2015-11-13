@@ -16,7 +16,7 @@ import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 
 public class EventFilterTest {
 
-	private EventFilter filter;
+	private DummyEventFilter dummyFilter;
 	
 	private Set<NewsEvent> events;
 	
@@ -34,7 +34,7 @@ public class EventFilterTest {
 	public void setUp() throws Exception {
 		
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		filter = (EventFilter) context.getBean("filter0");
+		dummyFilter = (DummyEventFilter) context.getBean("filter0");
 		((AbstractApplicationContext) context).close();
 		
 		this.events = new HashSet<NewsEvent>();
@@ -44,7 +44,7 @@ public class EventFilterTest {
 
 	@Test
 	public void shouldReturnFullSet() {
-		Set<NewsEvent> filteredEvents = this.filter.filterEvents(events);
+		Set<NewsEvent> filteredEvents = this.dummyFilter.filterEvents(events);
 		assertTrue(filteredEvents.equals(events));
 	}
 

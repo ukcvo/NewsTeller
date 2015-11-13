@@ -31,46 +31,12 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
-	<bean id="usabilityScorer0"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer">
-		<property name="eventHeuristics">
-			<list></list>
-		</property>
-		<property name="queryHeuristics">
-			<list></list>
-		</property>
-		<property name="interestHeuristics">
-			<list></list>
-		</property>
-		<property name="historyHeuristics">
-			<list></list>
-		</property>
+	<bean id="filter0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.DummyEventFilter">
 	</bean>
 
-	<bean id="usabilityScorer2"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer">
-		<property name="eventHeuristics">
-			<list>
-			</list>
-		</property>
-		<property name="queryHeuristics">
-			<list></list>
-		</property>
-		<property name="interestHeuristics">
-			<list></list>
-		</property>
-		<property name="historyHeuristics">
-			<list></list>
-		</property>
-	</bean>
-
-	<bean id="usabilityAggregator"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.SimpleAverageAggregator">
-	</bean>
-
-	<bean id="filter0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.EventFilter">
-		<property name="scoreAggregator" ref="usabilityAggregator" />
-		<property name="threshold" value="0.0" />
+	<bean id="filter2" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.BayesEventFilter">
+		<property name="bayes" ref="bayesFusion" />
+		<property name="threshold" value="0.5" />
 	</bean>
 
 	<bean id="relevanceScorer0"
@@ -122,7 +88,6 @@
 	<bean id="retriever0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
 		<property name="eventFinder" ref="finder0" />
-		<property name="usabilityScorer" ref="usabilityScorer0" />
 		<property name="eventFilter" ref="filter0" />
 		<property name="relevanceScorer" ref="relevanceScorer0"/>
 		<property name="eventRanker" ref="ranker0" />
@@ -132,7 +97,6 @@
 	<bean id="retriever1"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
 		<property name="eventFinder" ref="finder1" />
-		<property name="usabilityScorer" ref="usabilityScorer0" />
 		<property name="eventFilter" ref="filter0" />
 		<property name="relevanceScorer" ref="relevanceScorer0"/>
 		<property name="eventRanker" ref="ranker0" />
@@ -142,7 +106,6 @@
 	<bean id="retriever2"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
 		<property name="eventFinder" ref="finder1" />
-		<property name="usabilityScorer" ref="usabilityScorer2" />
 		<property name="eventFilter" ref="filter0" />
 		<property name="relevanceScorer" ref="relevanceScorer2"/>
 		<property name="eventRanker" ref="ranker0" />
@@ -210,6 +173,9 @@
 				<ref bean="isSpeechCognitiveFeature"/>
 				<ref bean="isStatementFeature"/>
 				<ref bean="numberOfMentionsFeature"/>
+				<!-- 
+				
+				 -->
 			</set>
 		</property>
 	</bean>

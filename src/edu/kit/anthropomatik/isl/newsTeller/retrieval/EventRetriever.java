@@ -9,11 +9,10 @@ import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.EventFilter;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.EventRanker;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.RelevanceScorer;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.UsabilityScorer;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
@@ -29,9 +28,7 @@ public class EventRetriever {
 	
 	private EventFinder eventFinder;
 	
-	private UsabilityScorer usabilityScorer;
-	
-	private EventFilter eventFilter;
+	private IEventFilter eventFilter;
 	
 	private RelevanceScorer relevanceScorer;
 	
@@ -44,11 +41,7 @@ public class EventRetriever {
 		this.eventFinder = eventFinder;
 	}
 
-	public void setUsabilityScorer(UsabilityScorer usabilityScorer) {
-		this.usabilityScorer = usabilityScorer;
-	}
-
-	public void setEventFilter(EventFilter eventFilter) {
+	public void setEventFilter(IEventFilter eventFilter) {
 		this.eventFilter = eventFilter;
 	}
 	
@@ -77,14 +70,6 @@ public class EventRetriever {
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();
 			log.debug(String.format("find events: % d ms", l - old));
-			old = l;
-		}
-		//endregion
-		usabilityScorer.scoreEvents(events, userQuery, userModel);
-		//region time logging
-		if (log.isDebugEnabled()) {
-			long l = System.currentTimeMillis();
-			log.debug(String.format("usability scoring: % d ms", l - old));
 			old = l;
 		}
 		//endregion
