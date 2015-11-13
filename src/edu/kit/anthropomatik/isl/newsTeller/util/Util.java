@@ -52,6 +52,7 @@ public class Util {
 	public static final String COLUMN_NAME_POSITIVE_PROBABILITY = "posProb";
 	public static final String COLUMN_NAME_NEGATIVE_PROBABILITY = "negProb";
 	public static final String COLUMN_NAME_OVERALL_PROBABILITY = "overallProb";
+	public static final String COLUMN_NAME_PRIOR_PROBABILITY = "priorProb";
 	
 
 	public static final double EPSILON = 0.00001;
@@ -302,7 +303,7 @@ public class Util {
 	/**
 	 * Writes the given probability map to the given file (overrides/creates file).
 	 */
-	public static void writeProbabilityMapToFile(Map<Integer, Map<String,Double>> probabilityMap, String fileName) {
+	public static void writeProbabilityMapToFile(Map<Integer, Map<String,Double>> probabilityMap, String fileName, boolean inLogProbabilities) {
 		try {
 			CsvWriter w = new CsvWriter(new FileWriter(fileName, false), ';');
 			w.write(COLUMN_NAME_VALUE);
@@ -314,9 +315,12 @@ public class Util {
 			for(Map.Entry<Integer, Map<String,Double>> entry : probabilityMap.entrySet()) {
 				w.write(entry.getKey().toString());
 				Map<String,Double> valueMap = entry.getValue();
-				w.write(Double.toString(valueMap.get(COLUMN_NAME_POSITIVE_PROBABILITY)));
-				w.write(Double.toString(valueMap.get(COLUMN_NAME_NEGATIVE_PROBABILITY)));
-				w.write(Double.toString(valueMap.get(COLUMN_NAME_OVERALL_PROBABILITY)));
+				Double posProb = inLogProbabilities ? Math.log(valueMap.get(COLUMN_NAME_POSITIVE_PROBABILITY)) : valueMap.get(COLUMN_NAME_POSITIVE_PROBABILITY);
+				w.write(posProb.toString());
+				Double negProb = inLogProbabilities ? Math.log(valueMap.get(COLUMN_NAME_NEGATIVE_PROBABILITY)) : valueMap.get(COLUMN_NAME_NEGATIVE_PROBABILITY);
+				w.write(negProb.toString());
+				Double overallProb = inLogProbabilities ? Math.log(valueMap.get(COLUMN_NAME_OVERALL_PROBABILITY)) : valueMap.get(COLUMN_NAME_OVERALL_PROBABILITY);
+				w.write(overallProb.toString());
 				w.endRecord();
 			}
 			w.close();
@@ -352,6 +356,60 @@ public class Util {
 				internalMap.put(COLUMN_NAME_OVERALL_PROBABILITY, overallProb);
 				
 				result.put(value, internalMap);
+			}
+			
+			r.close();
+			
+		} catch (IOException e) {
+			if(log.isFatalEnabled())
+				log.fatal(String.format("cannot read file '%s'", fileName));
+			if(log.isDebugEnabled())
+				log.debug("csv read error", e);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Write the given priorProbabilityMap to the given file (creates/overrides).
+	 */
+	public static void writePriorProbabilityMapToFile(Map<String,Double> priorProbabilityMap, String fileName, boolean inLogProbabilities) {
+		try {
+			CsvWriter w = new CsvWriter(new FileWriter(fileName, false), ';');
+			w.write(COLUMN_NAME_VALUE);
+			w.write(COLUMN_NAME_PRIOR_PROBABILITY);
+			w.endRecord();
+			
+			for(Map.Entry<String,Double> entry : priorProbabilityMap.entrySet()) {
+				w.write(entry.getKey());
+				Double value = inLogProbabilities ? Math.log(entry.getValue()) : entry.getValue();
+				w.write(value.toString());
+				w.endRecord();
+			}
+			w.close();
+		} catch (IOException e) {
+			if(log.isErrorEnabled())
+				log.error(String.format("cannot write file '%s'", fileName));
+			if(log.isDebugEnabled())
+				log.debug("csv write error", e);
+		}
+	}
+	
+	/**
+	 * Reads a map of prior probabilites from the given file.
+	 */
+	public static Map<String,Double> readPriorProbabilityMapFromFile(String fileName) {
+		Map<String, Double> result = new HashMap<String, Double>();
+		
+		try {
+			CsvReader r = new CsvReader(new FileReader(fileName), ';');
+			
+			r.readHeaders();
+			
+			while(r.readRecord()) {
+				String value = r.get(COLUMN_NAME_VALUE);
+				Double probability = Double.parseDouble(r.get(COLUMN_NAME_PRIOR_PROBABILITY));
+				result.put(value, probability);
 			}
 			
 			r.close();

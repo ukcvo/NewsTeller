@@ -32,6 +32,8 @@ public class FilteringBenchmark {
 
 	private boolean doCreateFeatureMap;
 
+	private boolean doWriteLogarithmicProbabilities;
+	
 	private Map<String, List<Keyword>> benchmarkKeywords;
 
 	private Map<BenchmarkEvent, GroundTruth> benchmark;
@@ -61,6 +63,10 @@ public class FilteringBenchmark {
 
 	public void setDoCreateFeatureMap(boolean doCreateFeatureMap) {
 		this.doCreateFeatureMap = doCreateFeatureMap;
+	}
+	
+	public void setDoWriteLogarithmicProbabilities(boolean doWriteLogarithmicProbabilities) {
+		this.doWriteLogarithmicProbabilities = doWriteLogarithmicProbabilities;
 	}
 
 	public void setWordNetFeature(WordNetVerbCountFeature wordNetFeature) {
@@ -197,6 +203,8 @@ public class FilteringBenchmark {
 		double overallPositiveProbability = (1.0 * positiveEvents.size()) / (positiveEvents.size() + negativeEvents.size());
 		double overallNegativeProbability = 1.0 - overallPositiveProbability;
 
+		writePriorProbabilityMap(overallPositiveProbability, overallNegativeProbability, doWriteLogarithmicProbabilities);
+		
 		for (UsabilityFeature feature : this.features) {
 			
 			// count #occurences for each feature value - separate for positive and negative training examples
@@ -236,8 +244,16 @@ public class FilteringBenchmark {
 						
 			// write probability map to file
 			String fileName = String.format("csv-out/%s.csv", feature.getName());
-			Util.writeProbabilityMapToFile(probabilityMap, fileName);
+			Util.writeProbabilityMapToFile(probabilityMap, fileName, doWriteLogarithmicProbabilities);
 		}
+	}
+
+	// writes the given prior probabilities to a csv file
+	private void writePriorProbabilityMap(double overallPositiveProbability, double overallNegativeProbability, boolean inLogProbabilities) {
+		Map<String,Double> priorProbabilityMap = new HashMap<String, Double>();
+		priorProbabilityMap.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, overallPositiveProbability);
+		priorProbabilityMap.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, overallNegativeProbability);
+		Util.writePriorProbabilityMapToFile(priorProbabilityMap, "csv-out/priors.csv", inLogProbabilities);
 	}
 
 	//region helper methods

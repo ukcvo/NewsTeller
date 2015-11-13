@@ -187,6 +187,15 @@
 		<property name="generator" ref="generator1" />
 	</bean>
 
+	<bean id="bayesFusionTest" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.NaiveBayesFusion">
+		<constructor-arg name="fileName" value="resources/test/priors.csv"/>
+		<property name="features">
+			<set>
+				<ref bean="A0FeatureTest"/>
+			</set>
+		</property>
+	</bean>
+
 	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark">
 		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -194,6 +203,7 @@
 		<property name="doWordNetAnalysis" value="false" />
 		<property name="doFeatureAnalysis" value="true" />
 		<property name="doCreateFeatureMap" value="false" />
+		<property name="doWriteLogarithmicProbabilities" value="false" />
 		<property name="features">
 			<list>
 				<ref bean="A0Feature"/>

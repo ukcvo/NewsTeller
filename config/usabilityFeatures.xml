@@ -60,6 +60,24 @@
 		<property name="defaultValue" value="3" />
 	</bean>
 	
+	<bean id="A0FeatureTest"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/A0.qry" />
+		<constructor-arg name="probabilityFileName" value="resources/test/A0Log.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="A0" />
+		<property name="possibleValues">
+			<set>
+				<value>0</value>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+			</set>
+		</property>
+		<property name="defaultValue" value="3" />
+	</bean>
+	
 	<bean id="A1Feature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
