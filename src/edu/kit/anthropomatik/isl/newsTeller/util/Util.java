@@ -19,6 +19,7 @@ import org.jumpmind.symmetric.csv.CsvReader;
 import org.jumpmind.symmetric.csv.CsvWriter;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
 
 /**
@@ -155,11 +156,11 @@ public class Util {
 	 * Reads a benchmark query csv file and returns a mapping from URI to
 	 * Double.
 	 */
-	public static Map<String, GroundTruth> readBenchmarkQueryFromFile(String fileName) {
+	public static Map<BenchmarkEvent, GroundTruth> readBenchmarkQueryFromFile(String fileName) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("readBenchmarkQueryFromFile(fileName = '%s')", fileName));
 
-		Map<String, GroundTruth> result = new HashMap<String, GroundTruth>();
+		Map<BenchmarkEvent, GroundTruth> result = new HashMap<BenchmarkEvent, GroundTruth>();
 
 		try {
 			CsvReader in = new CsvReader(fileName);
@@ -172,7 +173,7 @@ public class Util {
 					String eventURI = in.get(Util.COLUMN_NAME_URI);
 					double usabilityRating = Double.parseDouble(in.get(Util.COLUMN_NAME_USABILITY_RATING));
 					int relevanceRank = Integer.parseInt(in.get(Util.COLUMN_NAME_RELEVANCE_RANK));
-					result.put(eventURI, new GroundTruth(usabilityRating, relevanceRank));
+					result.put(new BenchmarkEvent(fileName, eventURI), new GroundTruth(usabilityRating, relevanceRank));
 				} catch (NumberFormatException e) {
 					if (log.isWarnEnabled())
 						log.warn(String.format("malformed entry, skipping: '%s'", in.getRawRecord()));
@@ -232,16 +233,19 @@ public class Util {
 	/**
 	 * Writes the given featureMap to the given file (will be created/overwritten), using the given list of featureNames as headers (and for accessing the map).
 	 */
-	public static void writeFeatureMapToFile(Map<String,Map<String,Integer>> featureMap, List<String> featureNames, String fileName) {
+	public static void writeFeatureMapToFile(Map<BenchmarkEvent,Map<String,Integer>> featureMap, List<String> featureNames, String fileName) {
 		try {
 			CsvWriter w = new CsvWriter(new FileWriter(fileName, false), ';');
-			w.write("eventURI");
+			w.write(COLUMN_NAME_FILENAME);
+			w.write(COLUMN_NAME_URI);
 			for (String s : featureNames)
 				w.write(s);
 			w.endRecord();
 			
-			for(Map.Entry<String, Map<String,Integer>> entry : featureMap.entrySet()) {
-				w.write(entry.getKey());
+			for(Map.Entry<BenchmarkEvent, Map<String,Integer>> entry : featureMap.entrySet()) {
+				BenchmarkEvent event = entry.getKey();
+				w.write(event.getFileName());
+				w.write(event.getEventURI());
 				for (String s: featureNames)
 					w.write(entry.getValue().get(s).toString());
 				w.endRecord();
@@ -259,9 +263,9 @@ public class Util {
 	/**
 	 * Reads a featureMap from the given file and returns it.
 	 */
-	public static Map<String,Map<String,Integer>> readFeatureMapFromFile(String fileName) {
+	public static Map<BenchmarkEvent,Map<String,Integer>> readFeatureMapFromFile(String fileName) {
 		
-		Map<String,Map<String,Integer>> result = new HashMap<String, Map<String,Integer>>();
+		Map<BenchmarkEvent,Map<String,Integer>> result = new HashMap<BenchmarkEvent, Map<String,Integer>>();
 		
 		try {
 			CsvReader r = new CsvReader(new FileReader(fileName), ';');
@@ -272,11 +276,13 @@ public class Util {
 				featureNames.add(r.getHeader(i));
 			
 			while(r.readRecord()) {
-				String eventURI = r.get("eventURI");
+				String eventFileName = r.get(COLUMN_NAME_FILENAME);
+				String eventURI = r.get(COLUMN_NAME_URI);
+				BenchmarkEvent event = new BenchmarkEvent(eventFileName, eventURI);
 				Map<String,Integer> featureValues = new HashMap<String, Integer>();
 				for (String s : featureNames)
 					featureValues.put(s, Integer.parseInt(r.get(s)));
-				result.put(eventURI, featureValues);
+				result.put(event, featureValues);
 			}
 			
 			r.close();
