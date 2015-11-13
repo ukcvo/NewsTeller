@@ -272,7 +272,7 @@ public class Util {
 			
 			r.readHeaders();
 			List<String> featureNames = new ArrayList<String>();
-			for (int i = 1; i < r.getHeaderCount(); i++)
+			for (int i = 2; i < r.getHeaderCount(); i++)
 				featureNames.add(r.getHeader(i));
 			
 			while(r.readRecord()) {
@@ -324,6 +324,41 @@ public class Util {
 			if(log.isDebugEnabled())
 				log.debug("csv write error", e);
 		}
+	}
+	
+	public static Map<Integer, Map<String,Double>> readProbabilityMapFromFile(String fileName) {
+		Map<Integer, Map<String,Double>> result = new HashMap<Integer, Map<String,Double>>();
+		
+		try {
+			CsvReader r = new CsvReader(new FileReader(fileName), ';');
+			
+			r.readHeaders();
+			
+			while(r.readRecord()) {
+				Integer value = Integer.parseInt(r.get(COLUMN_NAME_VALUE));
+				
+				Map<String,Double> internalMap = new HashMap<String, Double>();
+				Double posProb = Double.parseDouble(r.get(COLUMN_NAME_POSITIVE_PROBABILITY));
+				Double negProb = Double.parseDouble(r.get(COLUMN_NAME_NEGATIVE_PROBABILITY));
+				Double overallProb = Double.parseDouble(r.get(COLUMN_NAME_OVERALL_PROBABILITY));
+				
+				internalMap.put(COLUMN_NAME_POSITIVE_PROBABILITY, posProb);
+				internalMap.put(COLUMN_NAME_NEGATIVE_PROBABILITY, negProb);
+				internalMap.put(COLUMN_NAME_OVERALL_PROBABILITY, overallProb);
+				
+				result.put(value, internalMap);
+			}
+			
+			r.close();
+			
+		} catch (IOException e) {
+			if(log.isFatalEnabled())
+				log.fatal(String.format("cannot read file '%s'", fileName));
+			if(log.isDebugEnabled())
+				log.debug("csv read error", e);
+		}
+		
+		return result;
 	}
 	
 	// endregion
