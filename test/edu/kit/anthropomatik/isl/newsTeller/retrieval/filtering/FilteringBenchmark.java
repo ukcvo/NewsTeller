@@ -15,6 +15,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
@@ -26,13 +27,15 @@ public class FilteringBenchmark {
 
 	private static final String FEATURE_MAP_FILENAME = "resources/benchmark/featureMap.csv";
 
+	private boolean useLogarithmicProbabilities;
+	
 	private boolean doWordNetAnalysis;
 
 	private boolean doFeatureAnalysis;
 
 	private boolean doCreateFeatureMap;
 
-	private boolean doWriteLogarithmicProbabilities;
+	private boolean doResubstitutionTest;
 	
 	private Map<String, List<Keyword>> benchmarkKeywords;
 
@@ -52,6 +55,8 @@ public class FilteringBenchmark {
 
 	private List<UsabilityFeature> features;
 
+	private NaiveBayesFusion bayesFusion;
+	
 	// region setters
 	public void setDoWordNetAnalysis(boolean doWordNetAnalysis) {
 		this.doWordNetAnalysis = doWordNetAnalysis;
@@ -65,8 +70,12 @@ public class FilteringBenchmark {
 		this.doCreateFeatureMap = doCreateFeatureMap;
 	}
 	
-	public void setDoWriteLogarithmicProbabilities(boolean doWriteLogarithmicProbabilities) {
-		this.doWriteLogarithmicProbabilities = doWriteLogarithmicProbabilities;
+	public void setDoResubstitutionTest(boolean doResubstitutionTest) {
+		this.doResubstitutionTest = doResubstitutionTest;
+	}
+	
+	public void setUseLogarithmicProbabilities(boolean useLogarithmicProbabilities) {
+		this.useLogarithmicProbabilities = useLogarithmicProbabilities;
 	}
 
 	public void setWordNetFeature(WordNetVerbCountFeature wordNetFeature) {
@@ -79,6 +88,10 @@ public class FilteringBenchmark {
 
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
+	}
+	
+	public void setBayesFusion(NaiveBayesFusion bayesFusion) {
+		this.bayesFusion = bayesFusion;
 	}
 	// endregion
 
@@ -203,7 +216,7 @@ public class FilteringBenchmark {
 		double overallPositiveProbability = (1.0 * positiveEvents.size()) / (positiveEvents.size() + negativeEvents.size());
 		double overallNegativeProbability = 1.0 - overallPositiveProbability;
 
-		writePriorProbabilityMap(overallPositiveProbability, overallNegativeProbability, doWriteLogarithmicProbabilities);
+		writePriorProbabilityMap(overallPositiveProbability, overallNegativeProbability, useLogarithmicProbabilities);
 		
 		for (UsabilityFeature feature : this.features) {
 			
@@ -244,7 +257,7 @@ public class FilteringBenchmark {
 						
 			// write probability map to file
 			String fileName = String.format("csv-out/%s.csv", feature.getName());
-			Util.writeProbabilityMapToFile(probabilityMap, fileName, doWriteLogarithmicProbabilities);
+			Util.writeProbabilityMapToFile(probabilityMap, fileName, useLogarithmicProbabilities);
 		}
 	}
 
@@ -376,6 +389,52 @@ public class FilteringBenchmark {
 	// endregion
 	// endregion
 
+	private void runTest(Set<BenchmarkEvent> events, double[] thresholds) {
+
+		int[] tp = new int[thresholds.length];
+		int[] fp = new int[thresholds.length];
+		int[] fn = new int[thresholds.length];
+		
+		ksAdapter.openConnection();
+		for (BenchmarkEvent event : events) {
+			double probability = bayesFusion.getProbabilityOfEvent(new NewsEvent(event.getEventURI()));
+			if (positiveEvents.contains(event)) {
+				for (int i = 0; i < thresholds.length; i++) {
+					if (probability >= thresholds[i])
+						tp[i]++;
+					else
+						fn[i]++;
+				}
+			} else if (negativeEvents.contains(event)) {
+				for (int i = 0; i < thresholds.length; i++) {
+					if (probability >= thresholds[i])
+						fp[i]++;
+					else
+						fn[i]++;
+				}
+			}
+		}
+		ksAdapter.closeConnection();
+		
+		for (int i = 0; i < thresholds.length; i++) {
+			double precision = (1.0 * tp[i]) / (tp[i] + fp[i]);
+			double recall = (1.0 * tp[i]) / (tp[i] + fn[i]);
+			double fscore = 2 * (precision * recall) / (precision + recall);
+			if (log.isInfoEnabled())
+				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], precision, recall, fscore));
+		}
+		
+	}
+	
+	// region resubstitutionTest
+	// do a resubstitution test - use the extracted probabilities on overall set w/ threshold 0.5 and see what you get
+	private void resubstitutionTest() {
+		
+		double[] thresholds = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
+		runTest(allEvents, thresholds);
+	}
+	// endregion
+	
 	/**
 	 * Runs the benchmark, depending on the boolean flags being set.
 	 */
@@ -389,6 +448,8 @@ public class FilteringBenchmark {
 			analyzeVerbNetFeature();
 		if (this.doFeatureAnalysis)
 			analyzeFeatures();
+		if (this.doResubstitutionTest)
+			resubstitutionTest();
 	}
 
 	public static void main(String[] args) {

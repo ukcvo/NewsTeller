@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,13 +28,13 @@ public class NaiveBayesFusion {
 		this.priorProbabilityMap = Util.readPriorProbabilityMapFromFile(fileName);
 	}
 	
-	private double getNominator(NewsEvent event, String type) {
+	private double getNominator(Map<UsabilityFeature,Integer> featureValues, String type) {
 		double logNominator = 0;
 		
 		logNominator += priorProbabilityMap.get(type);
 		
 		for (UsabilityFeature feature : features) {
-			logNominator += feature.getLogProbability(feature.getValue(event.getEventURI()), type);
+			logNominator += feature.getLogProbability(featureValues.get(feature), type);
 		}
 		
 		double nominator = Math.exp(logNominator);
@@ -45,8 +46,12 @@ public class NaiveBayesFusion {
 	 */
 	public double getProbabilityOfEvent(NewsEvent event) {
 		
-		double positiveNominator = getNominator(event, Util.COLUMN_NAME_POSITIVE_PROBABILITY);
-		double negativeNominator = getNominator(event, Util.COLUMN_NAME_NEGATIVE_PROBABILITY);
+		Map<UsabilityFeature, Integer> featureValues = new HashMap<UsabilityFeature, Integer>();
+		for (UsabilityFeature f : features)
+			featureValues.put(f, f.getValue(event.getEventURI()));
+			
+		double positiveNominator = getNominator(featureValues, Util.COLUMN_NAME_POSITIVE_PROBABILITY);
+		double negativeNominator = getNominator(featureValues, Util.COLUMN_NAME_NEGATIVE_PROBABILITY);
 		
 		double posteriorProbability = positiveNominator / (positiveNominator + negativeNominator);
 		

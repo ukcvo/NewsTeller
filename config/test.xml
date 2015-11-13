@@ -196,14 +196,37 @@
 		</property>
 	</bean>
 
+	<bean id="bayesFusion" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.NaiveBayesFusion">
+		<constructor-arg name="fileName" value="resources/usabilityProbabilities/priors.csv"/>
+		<property name="features">
+			<set>
+				<ref bean="A0Feature"/>
+				<ref bean="A1Feature"/>
+				<ref bean="wordNetFeature"/>
+				<ref bean="eventLabelFeature"/>
+				<ref bean="hasActorFeature"/>
+				<ref bean="hasPlaceFeature"/>
+				<ref bean="hasTimeFeature"/>
+				<ref bean="isSpeechCognitiveFeature"/>
+				<ref bean="isStatementFeature"/>
+				<ref bean="numberOfMentionsFeature"/>
+			</set>
+		</property>
+	</bean>
+	
 	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark">
 		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="wordNetFeature" ref="wordNetFeature" />
+		<property name="bayesFusion" ref="bayesFusion" />
+		
 		<property name="doWordNetAnalysis" value="false" />
-		<property name="doFeatureAnalysis" value="true" />
+		<property name="doFeatureAnalysis" value="false" />
 		<property name="doCreateFeatureMap" value="false" />
-		<property name="doWriteLogarithmicProbabilities" value="false" />
+		<property name="doResubstitutionTest" value="true" />
+		
+		<property name="useLogarithmicProbabilities" value="false" />
+		
 		<property name="features">
 			<list>
 				<ref bean="A0Feature"/>
@@ -216,9 +239,7 @@
 				<ref bean="isSpeechCognitiveFeature"/>
 				<ref bean="isStatementFeature"/>
 				<ref bean="numberOfMentionsFeature"/>
-				
 				<!-- 
-				
 				
 				 -->
 			</list>
