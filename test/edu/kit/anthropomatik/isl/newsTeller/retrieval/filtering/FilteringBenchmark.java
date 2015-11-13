@@ -1,8 +1,5 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,8 +10,6 @@ import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jumpmind.symmetric.csv.CsvReader;
-import org.jumpmind.symmetric.csv.CsvWriter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -26,23 +21,6 @@ import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.heuristics.WordNet
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class FilteringBenchmark {
-
-	private class DoubleTriple {
-		public double first;
-		public double second;
-		public double third;
-
-		public DoubleTriple(double first, double second, double third) {
-			this.first = first;
-			this.second = second;
-			this.third = third;
-		}
-
-		@Override
-		public String toString() {
-			return String.format("%f;%f;%f", first, second, third);
-		}
-	}
 
 	private static Log log;
 
@@ -156,57 +134,12 @@ public class FilteringBenchmark {
 		}
 		
 		// write to file
-		try {
-			CsvWriter w = new CsvWriter(new FileWriter(FEATURE_MAP_FILENAME, false), ';');
-			w.write("eventURI");
-			for (String s : featureNames)
-				w.write(s);
-			w.endRecord();
-			
-			for(Map.Entry<String, Map<String,Integer>> entry : featureMap.entrySet()) {
-				w.write(entry.getKey());
-				for (String s: featureNames)
-					w.write(entry.getValue().get(s).toString());
-				w.endRecord();
-			}
-			
-			w.close();
-		} catch (IOException e) {
-			if(log.isErrorEnabled())
-				log.error(String.format("cannot write file '%s'", FEATURE_MAP_FILENAME));
-			if(log.isDebugEnabled())
-				log.debug("csv write error", e);
-		}
+		Util.writeFeatureMapToFile(featureMap, featureNames, FEATURE_MAP_FILENAME);
 	}
 	
 	// read feature values from file
 	private void readFeatureMap() {
-		this.featureMap = new HashMap<String, Map<String,Integer>>();
-		
-		try {
-			CsvReader r = new CsvReader(new FileReader(FEATURE_MAP_FILENAME), ';');
-			
-			r.readHeaders();
-			List<String> featureNames = new ArrayList<String>();
-			for (int i = 1; i < r.getHeaderCount(); i++)
-				featureNames.add(r.getHeader(i));
-			
-			while(r.readRecord()) {
-				String eventURI = r.get("eventURI");
-				Map<String,Integer> featureValues = new HashMap<String, Integer>();
-				for (String s : featureNames)
-					featureValues.put(s, Integer.parseInt(r.get(s)));
-				featureMap.put(eventURI, featureValues);
-			}
-			
-			r.close();
-			
-		} catch (IOException e) {
-			if(log.isFatalEnabled())
-				log.fatal(String.format("cannot write file '%s'", FEATURE_MAP_FILENAME));
-			if(log.isDebugEnabled())
-				log.debug("csv write error", e);
-		}
+		this.featureMap = Util.readFeatureMapFromFile(FEATURE_MAP_FILENAME);		
 	}
 	//endregion
 	
@@ -271,8 +204,8 @@ public class FilteringBenchmark {
 	// region analzyeFeatures
 	private void analyzeFeatures() {
 		
-		double posProb = (1.0 * positiveEvents.size()) / (positiveEvents.size() + negativeEvents.size());
-		double negProb = 1.0 - posProb;
+		double overallPositiveProbability = (1.0 * positiveEvents.size()) / (positiveEvents.size() + negativeEvents.size());
+		double overallNegativeProbability = 1.0 - overallPositiveProbability;
 				
 		for (UsabilityFeature feature : this.features) {
 			Map<Integer,Integer> posCounts = new HashMap<Integer, Integer>();
@@ -294,31 +227,43 @@ public class FilteringBenchmark {
 			possibleValues.addAll(posCounts.keySet());
 			possibleValues.addAll(negCounts.keySet());
 			
-			Map<Integer,DoubleTriple> probabilityMap = new HashMap<Integer, DoubleTriple>();
+			Map<Integer,Map<String,Double>> probabilityMap = new HashMap<Integer, Map<String,Double>>();
 			for (Integer value : possibleValues) {
+				Map<String,Double> valueMap = new HashMap<String, Double>();
+				
 				int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
 				double posProbability = (posCount + 0.0) / (positiveEvents.size() + 0.0); //TODO: laplace smoothing? https://en.wikipedia.org/wiki/Additive_smoothing
+				valueMap.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, posProbability);
+				
 				int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
 				double negProbability = (negCount + 0.0) / (negativeEvents.size() + 0.0);
+				valueMap.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, negProbability);
+				
 				double overallProbabiliy = (1.0 * (negCount + posCount)) / (positiveEvents.size() + negativeEvents.size());
-				probabilityMap.put(value, new DoubleTriple(posProbability, negProbability, overallProbabiliy));
+				valueMap.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, overallProbabiliy);
+				
+				probabilityMap.put(value, valueMap);
 			}
 						
 			// entropy calculation
 			double overallEntropy = 0;
 			double posEntropy = 0;
 			double negEntropy = 0;
-			for (Map.Entry<Integer, DoubleTriple> entry : probabilityMap.entrySet()) {
-				if (entry.getValue().first > 0)
-					posEntropy -= entry.getValue().first * (Math.log(entry.getValue().first)/Math.log(2)); 
-				if (entry.getValue().second > 0)
-					negEntropy -= entry.getValue().second * (Math.log(entry.getValue().second)/Math.log(2));
-				overallEntropy -= entry.getValue().third * (Math.log(entry.getValue().third)/Math.log(2));
+			for (Map.Entry<Integer, Map<String,Double>> entry : probabilityMap.entrySet()) {
+				double posProbability = entry.getValue().get(Util.COLUMN_NAME_POSITIVE_PROBABILITY);
+				double negProbability = entry.getValue().get(Util.COLUMN_NAME_NEGATIVE_PROBABILITY);
+				double overallProbablity = entry.getValue().get(Util.COLUMN_NAME_OVERALL_PROBABILITY);
+				
+				if (posProbability > 0)
+					posEntropy -= posProbability * (Math.log(posProbability)/Math.log(2)); 
+				if (negProbability > 0)
+					negEntropy -= negProbability * (Math.log(negProbability)/Math.log(2));
+				overallEntropy -= overallProbablity * (Math.log(overallProbablity)/Math.log(2));
 			}
-			double conditionalEntropy = posProb * posEntropy + negProb * negEntropy;
+			double conditionalEntropy = overallPositiveProbability * posEntropy + overallNegativeProbability * negEntropy;
 			
 			// calculate Pearson correlation coefficient
-			double averageLabel = posProb;
+			double averageLabel = overallPositiveProbability;
 			double averageFeature = 0;
 			for (Integer value : possibleValues) {
 				int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
@@ -356,16 +301,16 @@ public class FilteringBenchmark {
 			
 			for (String eventURI : positiveEvents) {
 				int value = featureMap.get(eventURI).get(feature.getName());
-				DoubleTriple triple = probabilityMap.get(value);
-				if(triple.first > triple.second)
+				Map<String,Double> valueMap = probabilityMap.get(value);
+				if (valueMap.get(Util.COLUMN_NAME_POSITIVE_PROBABILITY) > valueMap.get(Util.COLUMN_NAME_NEGATIVE_PROBABILITY))
 					tp++;
 				else
 					fn++;
 			}
 			for (String eventURI : negativeEvents) {
 				int value = featureMap.get(eventURI).get(feature.getName());
-				DoubleTriple triple = probabilityMap.get(value);
-				if(triple.first > triple.second)
+				Map<String,Double> valueMap = probabilityMap.get(value);
+				if (valueMap.get(Util.COLUMN_NAME_POSITIVE_PROBABILITY) > valueMap.get(Util.COLUMN_NAME_NEGATIVE_PROBABILITY))
 					fp++;
 				// don't count tn, as we don't need them 
 			}
@@ -383,32 +328,13 @@ public class FilteringBenchmark {
 			}
 			
 			String fileName = String.format("csv-out/%s.csv", feature.getName());
-			try {
-				CsvWriter w = new CsvWriter(new FileWriter(fileName, false), ';');
-				w.write("value");
-				w.write("posProb");
-				w.write("negProb");
-				w.write("overallProb");
-				w.endRecord();
-				
-				for(Map.Entry<Integer, DoubleTriple> entry : probabilityMap.entrySet()) {
-					w.write(entry.getKey().toString());
-					w.write(Double.toString(entry.getValue().first));
-					w.write(Double.toString(entry.getValue().second));
-					w.write(Double.toString(entry.getValue().third));
-					w.endRecord();
-				}
-				w.close();
-			} catch (IOException e) {
-				if(log.isErrorEnabled())
-					log.error(String.format("cannot write file '%s'", fileName));
-				if(log.isDebugEnabled())
-					log.debug("csv write error", e);
-			}
+			Util.writeProbabilityMapToFile(probabilityMap, fileName);
 			
 		}
 	}
 	// endregion
+
+	
 	
 	public void run() {
 		if (this.doCreateFeatureMap)

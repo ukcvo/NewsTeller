@@ -3,7 +3,10 @@ package edu.kit.anthropomatik.isl.newsTeller.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +16,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jumpmind.symmetric.csv.CsvReader;
+import org.jumpmind.symmetric.csv.CsvWriter;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
@@ -43,6 +47,11 @@ public class Util {
 	public static final String COLUMN_NAME_RELEVANCE_RANK = "relevanceRank";
 	public static final String COLUMN_NAME_FILENAME = "filename";
 	public static final String COLUMN_NAME_KEYWORD = "keyword_";
+	public static final String COLUMN_NAME_VALUE = "value";
+	public static final String COLUMN_NAME_POSITIVE_PROBABILITY = "posProb";
+	public static final String COLUMN_NAME_NEGATIVE_PROBABILITY = "negProb";
+	public static final String COLUMN_NAME_OVERALL_PROBABILITY = "overallProb";
+	
 
 	public static final double EPSILON = 0.00001;
 
@@ -141,7 +150,7 @@ public class Util {
 	}
 	// endregion
 
-	// region reading csv files
+	// region reading/writing csv files
 	/**
 	 * Reads a benchmark query csv file and returns a mapping from URI to
 	 * Double.
@@ -219,6 +228,98 @@ public class Util {
 
 		return result;
 	}
+	
+	/**
+	 * Writes the given featureMap to the given file (will be created/overwritten), using the given list of featureNames as headers (and for accessing the map).
+	 */
+	public static void writeFeatureMapToFile(Map<String,Map<String,Integer>> featureMap, List<String> featureNames, String fileName) {
+		try {
+			CsvWriter w = new CsvWriter(new FileWriter(fileName, false), ';');
+			w.write("eventURI");
+			for (String s : featureNames)
+				w.write(s);
+			w.endRecord();
+			
+			for(Map.Entry<String, Map<String,Integer>> entry : featureMap.entrySet()) {
+				w.write(entry.getKey());
+				for (String s: featureNames)
+					w.write(entry.getValue().get(s).toString());
+				w.endRecord();
+			}
+			
+			w.close();
+		} catch (IOException e) {
+			if(log.isErrorEnabled())
+				log.error(String.format("cannot write file '%s'", fileName));
+			if(log.isDebugEnabled())
+				log.debug("csv write error", e);
+		}
+	}
+	
+	/**
+	 * Reads a featureMap from the given file and returns it.
+	 */
+	public static Map<String,Map<String,Integer>> readFeatureMapFromFile(String fileName) {
+		
+		Map<String,Map<String,Integer>> result = new HashMap<String, Map<String,Integer>>();
+		
+		try {
+			CsvReader r = new CsvReader(new FileReader(fileName), ';');
+			
+			r.readHeaders();
+			List<String> featureNames = new ArrayList<String>();
+			for (int i = 1; i < r.getHeaderCount(); i++)
+				featureNames.add(r.getHeader(i));
+			
+			while(r.readRecord()) {
+				String eventURI = r.get("eventURI");
+				Map<String,Integer> featureValues = new HashMap<String, Integer>();
+				for (String s : featureNames)
+					featureValues.put(s, Integer.parseInt(r.get(s)));
+				result.put(eventURI, featureValues);
+			}
+			
+			r.close();
+			
+		} catch (IOException e) {
+			if(log.isFatalEnabled())
+				log.fatal(String.format("cannot read file '%s'", fileName));
+			if(log.isDebugEnabled())
+				log.debug("csv read error", e);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Writes the given probability map to the given file (overrides/creates file).
+	 */
+	public static void writeProbabilityMapToFile(Map<Integer, Map<String,Double>> probabilityMap, String fileName) {
+		try {
+			CsvWriter w = new CsvWriter(new FileWriter(fileName, false), ';');
+			w.write(COLUMN_NAME_VALUE);
+			w.write(COLUMN_NAME_POSITIVE_PROBABILITY);
+			w.write(COLUMN_NAME_NEGATIVE_PROBABILITY);
+			w.write(COLUMN_NAME_OVERALL_PROBABILITY);
+			w.endRecord();
+			
+			for(Map.Entry<Integer, Map<String,Double>> entry : probabilityMap.entrySet()) {
+				w.write(entry.getKey().toString());
+				Map<String,Double> valueMap = entry.getValue();
+				w.write(Double.toString(valueMap.get(COLUMN_NAME_POSITIVE_PROBABILITY)));
+				w.write(Double.toString(valueMap.get(COLUMN_NAME_NEGATIVE_PROBABILITY)));
+				w.write(Double.toString(valueMap.get(COLUMN_NAME_OVERALL_PROBABILITY)));
+				w.endRecord();
+			}
+			w.close();
+		} catch (IOException e) {
+			if(log.isErrorEnabled())
+				log.error(String.format("cannot write file '%s'", fileName));
+			if(log.isDebugEnabled())
+				log.debug("csv write error", e);
+		}
+	}
+	
 	// endregion
 
 	/**
