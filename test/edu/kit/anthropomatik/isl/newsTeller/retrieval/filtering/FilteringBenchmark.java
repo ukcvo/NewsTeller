@@ -342,14 +342,14 @@ public class FilteringBenchmark {
 			Map<String, Double> valueMap = new HashMap<String, Double>();
 
 			int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
-			double posProbability = (posCount + 0.0) / (positiveEvents.size() + 0.0); // TODO: laplace smoothing? https://en.wikipedia.org/wiki/Additive_smoothing
+			double posProbability = (posCount + 1.0) / (positiveEvents.size() + possibleValues.size());
 			valueMap.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, posProbability);
 
 			int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
-			double negProbability = (negCount + 0.0) / (negativeEvents.size() + 0.0);
+			double negProbability = (negCount + 1.0) / (negativeEvents.size() + possibleValues.size());
 			valueMap.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, negProbability);
 
-			double overallProbabiliy = (1.0 * (negCount + posCount)) / (positiveEvents.size() + negativeEvents.size());
+			double overallProbabiliy = (1.0 * (negCount + posCount + 1.0)) / (positiveEvents.size() + negativeEvents.size() + possibleValues.size());
 			valueMap.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, overallProbabiliy);
 
 			probabilityMap.put(value, valueMap);
