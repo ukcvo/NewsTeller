@@ -231,7 +231,7 @@ public class FilteringBenchmark {
 
 			// calculate the probability map based on the counts 
 			// (contains overall probability and conditional probability for positive and negative examples)
-			Map<Integer, Map<String, Double>> probabilityMap = createProbabilityMap(positiveValueCounts, negativeValueCounts, possibleValues);
+			Map<Integer, Map<String, Double>> probabilityMap = createProbabilityMap(positiveValueCounts, negativeValueCounts, possibleValues, false);
 
 			// calculate entropy
 			double overallEntropy = calculateEntropy(probabilityMap, Util.COLUMN_NAME_OVERALL_PROBABILITY);
@@ -363,7 +363,7 @@ public class FilteringBenchmark {
 
 	// given the positive and negative counts, create a probability map "value --> (probabilityName --> probability)"
 	private Map<Integer, Map<String, Double>> createProbabilityMap(Map<Integer, Integer> posCounts, Map<Integer, Integer> negCounts, 
-																	Set<Integer> possibleValues) {
+																	Set<Integer> possibleValues, boolean useLogProbabilities) {
 		
 		Map<Integer, Map<String, Double>> probabilityMap = new HashMap<Integer, Map<String, Double>>();
 		
@@ -372,14 +372,14 @@ public class FilteringBenchmark {
 
 			int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
 			double posProbability = (posCount + 1.0) / (positiveEvents.size() + possibleValues.size());
-			valueMap.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, posProbability);
+			valueMap.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, useLogProbabilities ? Math.log(posProbability): posProbability);
 
 			int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
 			double negProbability = (negCount + 1.0) / (negativeEvents.size() + possibleValues.size());
-			valueMap.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, negProbability);
+			valueMap.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, useLogProbabilities ? Math.log(negProbability) : negProbability);
 
 			double overallProbabiliy = (1.0 * (negCount + posCount + 1.0)) / (positiveEvents.size() + negativeEvents.size() + possibleValues.size());
-			valueMap.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, overallProbabiliy);
+			valueMap.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, useLogProbabilities ? Math.log(overallProbabiliy) : overallProbabiliy);
 
 			probabilityMap.put(value, valueMap);
 		}
@@ -426,12 +426,61 @@ public class FilteringBenchmark {
 		
 	}
 	
+	// get the probabilities for a certain set of positive and negative events and a certain feature
+	private Map<Integer, Map<String, Double>> estimateProbabilities(Set<BenchmarkEvent> positiveEvents, Set<BenchmarkEvent> negativeEvents, UsabilityFeature feature, boolean useLogProbabilities) {
+	
+		// count #occurences for each feature value - separate for positive and negative training examples
+		Map<Integer, Integer> positiveValueCounts = countValues(feature, positiveEvents);
+		Map<Integer, Integer> negativeValueCounts = countValues(feature, negativeEvents);
+			
+		// collect set of all possible feature values observed in the training set
+		Set<Integer> possibleValues = new HashSet<Integer>();
+		possibleValues.addAll(positiveValueCounts.keySet());
+		possibleValues.addAll(negativeValueCounts.keySet());
+
+		// calculate the probability map based on the counts 
+		// (contains overall probability and conditional probability for positive and negative examples)
+		Map<Integer, Map<String, Double>> probabilityMap = createProbabilityMap(positiveValueCounts, negativeValueCounts, possibleValues, true);
+
+		return probabilityMap;
+	}
+	
 	// region resubstitutionTest
 	// do a resubstitution test - use the extracted probabilities on overall set w/ threshold 0.5 and see what you get
 	private void resubstitutionTest() {
 		
 		double[] thresholds = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 		runTest(allEvents, thresholds);
+		
+		for (String fileName : this.benchmarkKeywords.keySet()) {
+			if (log.isInfoEnabled())
+				log.info(fileName);
+			
+			Set<BenchmarkEvent> posEvents = new HashSet<BenchmarkEvent>();
+			Set<BenchmarkEvent> negEvents = new HashSet<BenchmarkEvent>();
+			for (BenchmarkEvent e : allEvents) {
+				if (e.getFileName().equals(fileName)) {
+					if (positiveEvents.contains(e))
+						posEvents.add(e);
+					else if (negativeEvents.contains(e))
+						negEvents.add(e);
+				}
+			}
+			Map<String, Double> priors = new HashMap<String, Double>();
+			priors.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, (1.0 * posEvents.size()) / (posEvents.size() + negEvents.size()));
+			priors.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, (1.0 * negEvents.size()) / (posEvents.size() + negEvents.size()));
+			bayesFusion.setPriorProbabilityMap(priors);
+			
+			Set<BenchmarkEvent> fileEvents = new HashSet<BenchmarkEvent>();
+			fileEvents.addAll(posEvents);
+			fileEvents.addAll(negEvents);
+			
+			for (UsabilityFeature feature : features) {
+				feature.setProbabilityMap(estimateProbabilities(posEvents, negEvents, feature, true));
+			}
+			
+			runTest(fileEvents, thresholds);
+		}
 	}
 	// endregion
 	

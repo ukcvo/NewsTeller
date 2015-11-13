@@ -33,6 +33,10 @@ public abstract class UsabilityFeature {
 		this.ksAdapter = ksAdapter;
 	}
 	
+	public void setProbabilityMap(Map<Integer, Map<String, Double>> probabilityMap) {
+		this.probabilityMap = probabilityMap;
+	}
+	
 	public UsabilityFeature(String queryFileName, String probabilityFileName) {
 		this.sparqlQuery = Util.readStringFromFile(queryFileName);
 		this.probabilityMap = Util.readProbabilityMapFromFile(probabilityFileName);

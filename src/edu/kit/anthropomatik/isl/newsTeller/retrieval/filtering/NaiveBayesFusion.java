@@ -24,6 +24,10 @@ public class NaiveBayesFusion {
 		this.features = features;
 	}
 	
+	public void setPriorProbabilityMap(Map<String, Double> priorProbabilityMap) {
+		this.priorProbabilityMap = priorProbabilityMap;
+	}
+	
 	public NaiveBayesFusion(String fileName) {
 		this.priorProbabilityMap = Util.readPriorProbabilityMapFromFile(fileName);
 	}
