@@ -409,8 +409,7 @@ public class FilteringBenchmark {
 				for (int i = 0; i < thresholds.length; i++) {
 					if (probability >= thresholds[i])
 						fp[i]++;
-					else
-						fn[i]++;
+					// ignore tn, as they are not used for precision and recall
 				}
 			}
 		}
