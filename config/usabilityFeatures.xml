@@ -9,7 +9,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasActor.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/hasActor.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasActor" />
 		<property name="possibleValues">
@@ -28,7 +28,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasPlace.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/hasPlace.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasPlace" />
 		<property name="possibleValues">
@@ -46,25 +46,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/A0.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="A0" />
-		<property name="possibleValues">
-			<set>
-				<value>0</value>
-				<value>1</value>
-				<value>2</value>
-				<value>3</value>
-			</set>
-		</property>
-		<property name="defaultValue" value="3" />
-	</bean>
-	
-	<bean id="A0FeatureTest"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/A0.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/test/A0Log.csv" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/A0.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="A0" />
 		<property name="possibleValues">
@@ -82,7 +64,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/A1.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/A1.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="A1" />
 		<property name="possibleValues">
@@ -100,7 +82,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/eventLabel.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/eventLabel.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="eventLabel" />
 		<property name="possibleValues">
@@ -119,7 +101,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasTime.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/hasTime.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasTime" />
 		<property name="possibleValues">
@@ -136,7 +118,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/isSpeechCognitive.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/isSpeechCognitive.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="isSpeechCognitive" />
 		<property name="possibleValues">
@@ -152,7 +134,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfMentions.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/numberOfMentions.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="numberOfMentions" />
 		<property name="possibleValues">
@@ -172,7 +154,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/isStatement.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/isStatement.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="isStatement" />
 		<property name="possibleValues">
@@ -188,9 +170,27 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.WordNetVerbCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/areLabelsVerbs.qry" />
-		<constructor-arg name="probabilityFileName" value="" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/areLabelsVerbs.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="areLabelsVerbs" />
 	</bean>
 
+
+	<bean id="A0FeatureTest"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/A0.qry" />
+		<constructor-arg name="probabilityFileName" value="resources/test/A0Log.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="A0" />
+		<property name="possibleValues">
+			<set>
+				<value>0</value>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+			</set>
+		</property>
+		<property name="defaultValue" value="3" />
+	</bean>
 </beans>
