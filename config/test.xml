@@ -191,9 +191,9 @@
 		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="wordNetFeature" ref="wordNetFeature" />
-		<property name="doWordNetAnalysis" value="true" />
+		<property name="doWordNetAnalysis" value="false" />
 		<property name="doFeatureAnalysis" value="true" />
-		<property name="doCreateFeatureMap" value="true" />
+		<property name="doCreateFeatureMap" value="false" />
 		<property name="features">
 			<list>
 				<ref bean="A0Feature"/>

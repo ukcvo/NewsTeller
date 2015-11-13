@@ -29,6 +29,9 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 		}
 	}
 
+	/**
+	 * Looks up the given label in WordNet and counts the percentage of verb synsets for this label.
+	 */
 	public double getLabelVerbFrequency(String label) {
 
 		if (label.length() > 20) {
@@ -59,6 +62,7 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 		}
 	}
 
+	// aggregates the verb frequencies across all labels for the given event.
 	private double getRelativeCount(String eventURI) {
 
 		List<String> labels = this.ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_LABEL);

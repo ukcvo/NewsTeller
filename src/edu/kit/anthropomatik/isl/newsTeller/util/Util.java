@@ -230,6 +230,7 @@ public class Util {
 		return result;
 	}
 	
+	//region featureMap
 	/**
 	 * Writes the given featureMap to the given file (will be created/overwritten), using the given list of featureNames as headers (and for accessing the map).
 	 */
@@ -296,7 +297,8 @@ public class Util {
 		
 		return result;
 	}
-	
+	//endregion
+	//region probability map
 	/**
 	 * Writes the given probability map to the given file (overrides/creates file).
 	 */
@@ -326,6 +328,9 @@ public class Util {
 		}
 	}
 	
+	/**
+	 * Reads a probability map from the given file.
+	 */
 	public static Map<Integer, Map<String,Double>> readProbabilityMapFromFile(String fileName) {
 		Map<Integer, Map<String,Double>> result = new HashMap<Integer, Map<String,Double>>();
 		
@@ -360,7 +365,7 @@ public class Util {
 		
 		return result;
 	}
-	
+	//endregion
 	// endregion
 
 	/**

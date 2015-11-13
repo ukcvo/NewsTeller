@@ -32,7 +32,7 @@ public class FilteringBenchmark {
 
 	private boolean doCreateFeatureMap;
 
-	private Map<String, List<Keyword>> benchmarkFiles;
+	private Map<String, List<Keyword>> benchmarkKeywords;
 
 	private Map<BenchmarkEvent, GroundTruth> benchmark;
 
@@ -77,12 +77,12 @@ public class FilteringBenchmark {
 	// endregion
 
 	public FilteringBenchmark(String configFileName) {
-		this.benchmarkFiles = Util.readBenchmarkConfigFile(configFileName);
+		this.benchmarkKeywords = Util.readBenchmarkConfigFile(configFileName);
 		this.benchmark = new HashMap<BenchmarkEvent, GroundTruth>();
 		this.positiveEvents = new HashSet<BenchmarkEvent>();
 		this.negativeEvents = new HashSet<BenchmarkEvent>();
 
-		for (String fileName : benchmarkFiles.keySet()) {
+		for (String fileName : benchmarkKeywords.keySet()) {
 			Map<BenchmarkEvent, GroundTruth> fileContent = Util.readBenchmarkQueryFromFile(fileName);
 			this.benchmark.putAll(fileContent);
 			for (Map.Entry<BenchmarkEvent, GroundTruth> entry : fileContent.entrySet()) {
@@ -101,8 +101,7 @@ public class FilteringBenchmark {
 	}
 
 	// region set up feature map
-	// create feature map by querying the knowledge store and storing the result
-	// in a csv file
+	// create feature map by querying the knowledge store and storing the result in a csv file
 	private void createFeatureMap() {
 
 		this.featureMap = new HashMap<BenchmarkEvent, Map<String, Integer>>();
@@ -199,135 +198,171 @@ public class FilteringBenchmark {
 		double overallNegativeProbability = 1.0 - overallPositiveProbability;
 
 		for (UsabilityFeature feature : this.features) {
-			Map<Integer, Integer> posCounts = new HashMap<Integer, Integer>();
-
-			for (BenchmarkEvent event : positiveEvents) {
-				int key = featureMap.get(event).get(feature.getName());
-				int currentCount = posCounts.containsKey(key) ? posCounts.get(key) : 0;
-				posCounts.put(key, currentCount + 1);
-			}
-
-			Map<Integer, Integer> negCounts = new HashMap<Integer, Integer>();
-			for (BenchmarkEvent event : negativeEvents) {
-				int key = featureMap.get(event).get(feature.getName());
-				int currentCount = negCounts.containsKey(key) ? negCounts.get(key) : 0;
-				negCounts.put(key, currentCount + 1);
-			}
-
+			
+			// count #occurences for each feature value - separate for positive and negative training examples
+			Map<Integer, Integer> positiveValueCounts = countValues(feature, positiveEvents);
+			Map<Integer, Integer> negativeValueCounts = countValues(feature, negativeEvents);
+			
+			// collect set of all possible feature values observed in the training set
 			Set<Integer> possibleValues = new HashSet<Integer>();
-			possibleValues.addAll(posCounts.keySet());
-			possibleValues.addAll(negCounts.keySet());
+			possibleValues.addAll(positiveValueCounts.keySet());
+			possibleValues.addAll(negativeValueCounts.keySet());
 
-			Map<Integer, Map<String, Double>> probabilityMap = new HashMap<Integer, Map<String, Double>>();
-			for (Integer value : possibleValues) {
-				Map<String, Double> valueMap = new HashMap<String, Double>();
+			// calculate the probability map based on the counts 
+			// (contains overall probability and conditional probability for positive and negative examples)
+			Map<Integer, Map<String, Double>> probabilityMap = createProbabilityMap(positiveValueCounts, negativeValueCounts, possibleValues);
 
-				int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
-				double posProbability = (posCount + 0.0) / (positiveEvents.size() + 0.0); // TODO:
-																							// laplace
-																							// smoothing?
-																							// https://en.wikipedia.org/wiki/Additive_smoothing
-				valueMap.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, posProbability);
-
-				int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
-				double negProbability = (negCount + 0.0) / (negativeEvents.size() + 0.0);
-				valueMap.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, negProbability);
-
-				double overallProbabiliy = (1.0 * (negCount + posCount)) / (positiveEvents.size() + negativeEvents.size());
-				valueMap.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, overallProbabiliy);
-
-				probabilityMap.put(value, valueMap);
-			}
-
-			// entropy calculation
-			double overallEntropy = 0;
-			double posEntropy = 0;
-			double negEntropy = 0;
-			for (Map.Entry<Integer, Map<String, Double>> entry : probabilityMap.entrySet()) {
-				double posProbability = entry.getValue().get(Util.COLUMN_NAME_POSITIVE_PROBABILITY);
-				double negProbability = entry.getValue().get(Util.COLUMN_NAME_NEGATIVE_PROBABILITY);
-				double overallProbablity = entry.getValue().get(Util.COLUMN_NAME_OVERALL_PROBABILITY);
-
-				if (posProbability > 0)
-					posEntropy -= posProbability * (Math.log(posProbability) / Math.log(2));
-				if (negProbability > 0)
-					negEntropy -= negProbability * (Math.log(negProbability) / Math.log(2));
-				overallEntropy -= overallProbablity * (Math.log(overallProbablity) / Math.log(2));
-			}
+			// calculate entropy
+			double overallEntropy = calculateEntropy(probabilityMap, Util.COLUMN_NAME_OVERALL_PROBABILITY);
+			double posEntropy = calculateEntropy(probabilityMap, Util.COLUMN_NAME_POSITIVE_PROBABILITY);
+			double negEntropy = calculateEntropy(probabilityMap, Util.COLUMN_NAME_NEGATIVE_PROBABILITY);
 			double conditionalEntropy = overallPositiveProbability * posEntropy + overallNegativeProbability * negEntropy;
 
 			// calculate Pearson correlation coefficient
 			double averageLabel = overallPositiveProbability;
-			double averageFeature = 0;
-			for (Integer value : possibleValues) {
-				int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
-				int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
-				averageFeature += (posCount + negCount) * value;
-			}
-			averageFeature /= (positiveEvents.size() + negativeEvents.size());
+			double averageFeature = calculateAverageFeatureValue(positiveValueCounts, negativeValueCounts, possibleValues);
+			double correlation = calculateCorrelation(feature, averageLabel, averageFeature);
 
-			double nominator = 0;
-			double denominatorFeature = 0;
-			double denominatorLabel = 0;
-
-			for (BenchmarkEvent event : positiveEvents) {
-				int value = featureMap.get(event).get(feature.getName());
-				nominator += (value - averageFeature) * (1.0 - averageLabel);
-				denominatorFeature += Math.pow((value - averageFeature), 2);
-				denominatorLabel += Math.pow((1.0 - averageLabel), 2);
-			}
-			for (BenchmarkEvent event : negativeEvents) {
-				int value = featureMap.get(event).get(feature.getName());
-				nominator += (value - averageFeature) * (0.0 - averageLabel);
-				denominatorFeature += Math.pow((value - averageFeature), 2);
-				denominatorLabel += Math.pow((0.0 - averageLabel), 2);
-			}
-
-			denominatorFeature = Math.sqrt(denominatorFeature);
-			denominatorLabel = Math.sqrt(denominatorLabel);
-
-			double correlation = nominator / (denominatorFeature * denominatorLabel);
-
-			// do MLE prediction
-			int tp = 0;
-			int fp = 0;
-			int fn = 0;
-
-			for (BenchmarkEvent event : positiveEvents) {
-				int value = featureMap.get(event).get(feature.getName());
-				Map<String, Double> valueMap = probabilityMap.get(value);
-				if (valueMap.get(Util.COLUMN_NAME_POSITIVE_PROBABILITY) > valueMap.get(Util.COLUMN_NAME_NEGATIVE_PROBABILITY))
-					tp++;
-				else
-					fn++;
-			}
-			for (BenchmarkEvent event : negativeEvents) {
-				int value = featureMap.get(event).get(feature.getName());
-				Map<String, Double> valueMap = probabilityMap.get(value);
-				if (valueMap.get(Util.COLUMN_NAME_POSITIVE_PROBABILITY) > valueMap.get(Util.COLUMN_NAME_NEGATIVE_PROBABILITY))
-					fp++;
-				// don't count tn, as we don't need them
-			}
-
-			double precision = (1.0 * tp) / (tp + fp);
-			double recall = (1.0 * tp) / (tp + fn);
-			double fscore = 2 * (precision * recall) / (precision + recall);
-
+			// output metrics
 			if (log.isInfoEnabled()) {
 				log.info(String.format("feature: %s", feature.getName()));
 				log.info(String.format("entropy: %f, condEntropy: %f", overallEntropy, conditionalEntropy));
 				log.info(String.format("normalized entropy: %f, normalized condEntropy: %f", overallEntropy / possibleValues.size(), conditionalEntropy / possibleValues.size()));
 				log.info(String.format("correlation: %f", correlation));
-				log.info(String.format("precision: %f, recall: %f, fscore: %f", precision, recall, fscore));
 			}
 
+			// do MLE prediction (does output internally)
+			doMLEPrediction(feature, probabilityMap);
+						
+			// write probability map to file
 			String fileName = String.format("csv-out/%s.csv", feature.getName());
 			Util.writeProbabilityMapToFile(probabilityMap, fileName);
-
 		}
 	}
+
+	//region helper methods
+	// evaluates a single feature as MLE predictor; calculates precision, recall and f-score
+	private void doMLEPrediction(UsabilityFeature feature, Map<Integer, Map<String, Double>> probabilityMap) {
+		
+		int tp = 0;
+		int fp = 0;
+		int fn = 0;
+
+		for (BenchmarkEvent event : positiveEvents) {
+			int value = featureMap.get(event).get(feature.getName());
+			Map<String, Double> valueMap = probabilityMap.get(value);
+			if (valueMap.get(Util.COLUMN_NAME_POSITIVE_PROBABILITY) > valueMap.get(Util.COLUMN_NAME_NEGATIVE_PROBABILITY))
+				tp++;
+			else
+				fn++;
+		}
+		for (BenchmarkEvent event : negativeEvents) {
+			int value = featureMap.get(event).get(feature.getName());
+			Map<String, Double> valueMap = probabilityMap.get(value);
+			if (valueMap.get(Util.COLUMN_NAME_POSITIVE_PROBABILITY) > valueMap.get(Util.COLUMN_NAME_NEGATIVE_PROBABILITY))
+				fp++;
+			// don't count tn, as we don't need them
+		}
+
+		double precision = (1.0 * tp) / (tp + fp);
+		double recall = (1.0 * tp) / (tp + fn);
+		double fscore = 2 * (precision * recall) / (precision + recall);
+		if (log.isInfoEnabled())
+			log.info(String.format("precision: %f, recall: %f, fscore: %f", precision, recall, fscore));
+	}
+
+	// calculates the correlation between feature and target
+	private double calculateCorrelation(UsabilityFeature feature, double averageLabel, double averageFeature) {
+		double nominator = 0;
+		double denominatorFeature = 0;
+		double denominatorLabel = 0;
+
+		for (BenchmarkEvent event : positiveEvents) {
+			int value = featureMap.get(event).get(feature.getName());
+			nominator += (value - averageFeature) * (1.0 - averageLabel);
+			denominatorFeature += Math.pow((value - averageFeature), 2);
+			denominatorLabel += Math.pow((1.0 - averageLabel), 2);
+		}
+		for (BenchmarkEvent event : negativeEvents) {
+			int value = featureMap.get(event).get(feature.getName());
+			nominator += (value - averageFeature) * (0.0 - averageLabel);
+			denominatorFeature += Math.pow((value - averageFeature), 2);
+			denominatorLabel += Math.pow((0.0 - averageLabel), 2);
+		}
+
+		denominatorFeature = Math.sqrt(denominatorFeature);
+		denominatorLabel = Math.sqrt(denominatorLabel);
+
+		double correlation = nominator / (denominatorFeature * denominatorLabel);
+		return correlation;
+	}
+
+	// calculates the average value of a feature, given the counts
+	private double calculateAverageFeatureValue(Map<Integer, Integer> positiveValueCounts, Map<Integer, Integer> negativeValueCounts, Set<Integer> possibleValues) {
+		double averageValue = 0;
+		for (Integer value : possibleValues) {
+			int posCount = (positiveValueCounts.containsKey(value) ? positiveValueCounts.get(value) : 0);
+			int negCount = (negativeValueCounts.containsKey(value) ? negativeValueCounts.get(value) : 0);
+			averageValue += (posCount + negCount) * value;
+		}
+		averageValue /= (positiveEvents.size() + negativeEvents.size());
+		return averageValue;
+	}
+
+	// calculates the entropy for the given probability measure and the given probabilityMap
+	private double calculateEntropy(Map<Integer, Map<String, Double>> probabilityMap, String probabilityName) {
+		
+		double entropy = 0;
+		for (Map.Entry<Integer, Map<String, Double>> entry : probabilityMap.entrySet()) {
+			double probability = entry.getValue().get(probabilityName);
+			if (probability > 0)
+				entropy -= probability * (Math.log(probability) / Math.log(2));
+		}
+		return entropy;
+	}
+	
+	// counts the number of occurrences for the different feature values; returns a map "value --> count"
+	private Map<Integer, Integer> countValues(UsabilityFeature feature, Set<BenchmarkEvent> events) {
+		Map<Integer, Integer> posCounts = new HashMap<Integer, Integer>();
+		for (BenchmarkEvent event : events) {
+			int key = featureMap.get(event).get(feature.getName());
+			int currentCount = posCounts.containsKey(key) ? posCounts.get(key) : 0;
+			posCounts.put(key, currentCount + 1);
+		}
+		return posCounts;
+	}
+
+	// given the positive and negative counts, create a probability map "value --> (probabilityName --> probability)"
+	private Map<Integer, Map<String, Double>> createProbabilityMap(Map<Integer, Integer> posCounts, Map<Integer, Integer> negCounts, 
+																	Set<Integer> possibleValues) {
+		
+		Map<Integer, Map<String, Double>> probabilityMap = new HashMap<Integer, Map<String, Double>>();
+		
+		for (Integer value : possibleValues) {
+			Map<String, Double> valueMap = new HashMap<String, Double>();
+
+			int posCount = (posCounts.containsKey(value) ? posCounts.get(value) : 0);
+			double posProbability = (posCount + 0.0) / (positiveEvents.size() + 0.0); // TODO: laplace smoothing? https://en.wikipedia.org/wiki/Additive_smoothing
+			valueMap.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, posProbability);
+
+			int negCount = (negCounts.containsKey(value) ? negCounts.get(value) : 0);
+			double negProbability = (negCount + 0.0) / (negativeEvents.size() + 0.0);
+			valueMap.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, negProbability);
+
+			double overallProbabiliy = (1.0 * (negCount + posCount)) / (positiveEvents.size() + negativeEvents.size());
+			valueMap.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, overallProbabiliy);
+
+			probabilityMap.put(value, valueMap);
+		}
+		
+		return probabilityMap;
+	}
+	// endregion
 	// endregion
 
+	/**
+	 * Runs the benchmark, depending on the boolean flags being set.
+	 */
 	public void run() {
 		if (this.doCreateFeatureMap)
 			createFeatureMap();
