@@ -189,9 +189,11 @@
 		<property name="doWordNetAnalysis" value="false" />
 		<property name="doFeatureAnalysis" value="false" />
 		<property name="doCreateFeatureMap" value="false" />
-		<property name="doResubstitutionTest" value="true" />
+		<property name="doResubstitutionTest" value="false" />
+		<property name="doIndividualResubstitutionTests" value="true" />
 		
 		<property name="useLogarithmicProbabilities" value="false" />
+		<property name="outputOnlyFalsePositives" value="true" />
 		
 		<property name="features">
 			<list>

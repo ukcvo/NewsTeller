@@ -29,6 +29,8 @@ public class FilteringBenchmark {
 
 	private boolean useLogarithmicProbabilities;
 	
+	private boolean outputOnlyFalsePositives;
+	
 	private boolean doWordNetAnalysis;
 
 	private boolean doFeatureAnalysis;
@@ -36,6 +38,8 @@ public class FilteringBenchmark {
 	private boolean doCreateFeatureMap;
 
 	private boolean doResubstitutionTest;
+	
+	private boolean doIndividualResubstitutionTests;
 	
 	private Map<String, List<Keyword>> benchmarkKeywords;
 
@@ -74,10 +78,18 @@ public class FilteringBenchmark {
 		this.doResubstitutionTest = doResubstitutionTest;
 	}
 	
+	public void setDoIndividualResubstitutionTests(boolean doIndividualResubstitutionTests) {
+		this.doIndividualResubstitutionTests = doIndividualResubstitutionTests;
+	}
+	
 	public void setUseLogarithmicProbabilities(boolean useLogarithmicProbabilities) {
 		this.useLogarithmicProbabilities = useLogarithmicProbabilities;
 	}
 
+	public void setOutputOnlyFalsePositives(boolean outputOnlyFalsePositives) {
+		this.outputOnlyFalsePositives = outputOnlyFalsePositives;
+	}
+	
 	public void setWordNetFeature(WordNetVerbCountFeature wordNetFeature) {
 		this.wordNetFeature = wordNetFeature;
 	}
@@ -397,6 +409,8 @@ public class FilteringBenchmark {
 		int[] fp = new int[thresholds.length];
 		int[] fn = new int[thresholds.length];
 		
+		Set<String> falsePositiveURIs = new HashSet<String>();
+		
 		ksAdapter.openConnection();
 		for (BenchmarkEvent event : events) {
 			double probability = bayesFusion.getProbabilityOfEvent(new NewsEvent(event.getEventURI()));
@@ -409,20 +423,27 @@ public class FilteringBenchmark {
 				}
 			} else if (negativeEvents.contains(event)) {
 				for (int i = 0; i < thresholds.length; i++) {
-					if (probability >= thresholds[i])
+					if (probability >= thresholds[i]) {
+						falsePositiveURIs.add(event.getEventURI());
 						fp[i]++;
+					}
 					// ignore tn, as they are not used for precision and recall
 				}
 			}
 		}
 		ksAdapter.closeConnection();
 		
-		for (int i = 0; i < thresholds.length; i++) {
-			double precision = (1.0 * tp[i]) / (tp[i] + fp[i]);
-			double recall = (1.0 * tp[i]) / (tp[i] + fn[i]);
-			double fscore = 2 * (precision * recall) / (precision + recall);
-			if (log.isInfoEnabled())
-				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], precision, recall, fscore));
+		if (this.outputOnlyFalsePositives && log.isInfoEnabled()) {
+			for (String uri : falsePositiveURIs)
+				log.info(uri);
+		} else {
+			for (int i = 0; i < thresholds.length; i++) {
+				double precision = (1.0 * tp[i]) / (tp[i] + fp[i]);
+				double recall = (1.0 * tp[i]) / (tp[i] + fn[i]);
+				double fscore = 2 * (precision * recall) / (precision + recall);
+				if (log.isInfoEnabled())
+					log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], precision, recall, fscore));
+			}
 		}
 		
 	}
@@ -448,11 +469,30 @@ public class FilteringBenchmark {
 	}
 	
 	// region resubstitutionTest
-	// do a resubstitution test - use the extracted probabilities on overall set w/ threshold 0.5 and see what you get
+	// do a resubstitution test - use the extracted probabilities on overall set w/ different thresholds and see what you get
 	private void resubstitutionTest() {
 		
 		double[] thresholds = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 		runTest(allEvents, thresholds);
+		
+		for (String fileName : this.benchmarkKeywords.keySet()) {
+			if (log.isInfoEnabled())
+				log.info(fileName);
+			
+			Set<BenchmarkEvent> fileEvents = new HashSet<BenchmarkEvent>();
+			for (BenchmarkEvent e : allEvents) {
+				if (e.getFileName().equals(fileName))
+					fileEvents.add(e);
+			}
+			
+			runTest(fileEvents, thresholds);
+		}
+		
+	}
+	
+	// do an individualized resubstitution test for each benchmark file
+	private void individualResubstitutionTests() {
+		double[] thresholds = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
 		
 		for (String fileName : this.benchmarkKeywords.keySet()) {
 			if (log.isInfoEnabled())
@@ -501,10 +541,12 @@ public class FilteringBenchmark {
 			analyzeFeatures();
 		if (this.doResubstitutionTest)
 			resubstitutionTest();
+		if (this.doIndividualResubstitutionTests)
+			individualResubstitutionTests();
 	}
 
 	public static void main(String[] args) {
-		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
+		System.setProperty("java.util.logging.config.file", "./config/logging.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
 			log = LogFactory.getLog(FilteringBenchmark.class);
