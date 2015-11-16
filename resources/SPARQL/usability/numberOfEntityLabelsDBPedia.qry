@@ -1,0 +1,14 @@
+SELECT (AVG(?count) AS ?number)
+WHERE
+{
+    SELECT (COUNT(?label) AS ?count)
+    WHERE
+    {
+        <*e*> sem:hasActor|sem:hasPlace ?entity .
+        GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> 
+        {
+            ?entity rdfs:label ?label
+        }
+    }
+    GROUP BY ?entity
+}

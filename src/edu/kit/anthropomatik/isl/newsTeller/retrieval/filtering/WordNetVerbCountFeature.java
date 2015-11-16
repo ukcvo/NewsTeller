@@ -1,6 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,12 +12,24 @@ import net.sf.extjwnl.data.IndexWordSet;
 import net.sf.extjwnl.data.POS;
 import net.sf.extjwnl.dictionary.Dictionary;
 
+/**
+ * Special feature counting relative number of WordNet verb senses.
+ * 
+ * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
+ *
+ */
 public class WordNetVerbCountFeature extends UsabilityFeature {
 
 	private static Log log = LogFactory.getLog(WordNetVerbCountFeature.class);
 
+	private Set<ValueBin> bins;
+	
 	private Dictionary dict = null;
 
+	public void setBins(Set<ValueBin> bins) {
+		this.bins = bins;
+	}
+	
 	public WordNetVerbCountFeature(String queryFileName, String probabilityFileName) {
 		super(queryFileName, probabilityFileName);
 		try {
@@ -85,6 +98,16 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 	public int getValue(String eventURI) {
 		double relativeCount = getRelativeCount(eventURI);
 
+		for (ValueBin bin : bins) {
+			if (bin.contains(relativeCount)) 
+				return bin.getLabel();
+		}
+		
+		if (log.isErrorEnabled())
+			log.error(String.format("relativeCount does not fit any bin: %f '%s'", relativeCount, eventURI));
+		return -1;
+		
+		/*
 		if (relativeCount < Util.EPSILON)
 			return 0; // zero
 		else if (relativeCount < 0.5)
@@ -95,6 +118,7 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 			return 3; // [0.8, 1)
 		else
 			return 4; // one
+			*/
 	}
 
 }

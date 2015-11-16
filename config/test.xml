@@ -187,19 +187,30 @@
 		<property name="bayesFusion" ref="bayesFusion" />
 		
 		<property name="doWordNetAnalysis" value="false" />
-		<property name="doFeatureAnalysis" value="false" />
-		<property name="doCreateFeatureMap" value="false" />
+		<property name="doFeatureAnalysis" value="true" />
+		<property name="doCreateFeatureMap" value="true" />
 		<property name="doResubstitutionTest" value="false" />
-		<property name="doIndividualResubstitutionTests" value="true" />
+		<property name="doIndividualResubstitutionTests" value="false" />
 		
 		<property name="useLogarithmicProbabilities" value="false" />
 		<property name="outputOnlyFalsePositives" value="true" />
 		
 		<property name="features">
 			<list>
+				<ref bean="numberOfEntityLabelsDBPediaFeature" />
+				<ref bean="A2Feature" />
+				<ref bean="numberOfFramesFeature" />
+				<ref bean="numberOfLinksFeature" />
+				<ref bean="areActorsAgentsFeature"/>
+				<ref bean="arePlacesPlacesFeature"/>
+				
+				<!-- 
+				
+				
+				<ref bean="hasKeywordAsLabelFeature"/>
+				
 				<ref bean="A0Feature"/>
 				<ref bean="A1Feature"/>
-				<ref bean="wordNetFeature"/>
 				<ref bean="eventLabelFeature"/>
 				<ref bean="hasActorFeature"/>
 				<ref bean="hasPlaceFeature"/>
@@ -207,8 +218,7 @@
 				<ref bean="isSpeechCognitiveFeature"/>
 				<ref bean="isStatementFeature"/>
 				<ref bean="numberOfMentionsFeature"/>
-				<!-- 
-				
+				<ref bean="wordNetFeature"/>
 				 -->
 			</list>
 		</property>

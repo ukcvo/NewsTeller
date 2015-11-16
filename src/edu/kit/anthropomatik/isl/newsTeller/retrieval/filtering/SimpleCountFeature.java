@@ -4,6 +4,12 @@ import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
+/**
+ * Represents a feature based on a COUNT query.
+ * 
+ * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
+ *
+ */
 public class SimpleCountFeature extends UsabilityFeature {
 
 	private Set<Integer> possibleValues;
@@ -29,7 +35,7 @@ public class SimpleCountFeature extends UsabilityFeature {
 
 		int value = (int) result;
 		
-		if (!this.possibleValues.contains(value))
+		if (!this.possibleValues.isEmpty() && !this.possibleValues.contains(value))
 			value = this.defaultValue;
 		
 		return value;

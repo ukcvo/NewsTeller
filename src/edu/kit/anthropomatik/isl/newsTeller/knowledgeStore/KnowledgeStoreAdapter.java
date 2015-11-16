@@ -240,7 +240,7 @@ public class KnowledgeStoreAdapter {
 		if (results.size() > 0)
 			return results.get(0);
 		else
-			return 0;
+			return Double.NaN;
 	}
 	
 	/**

@@ -546,7 +546,7 @@ public class FilteringBenchmark {
 	}
 
 	public static void main(String[] args) {
-		System.setProperty("java.util.logging.config.file", "./config/logging.properties");
+		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
 			log = LogFactory.getLog(FilteringBenchmark.class);

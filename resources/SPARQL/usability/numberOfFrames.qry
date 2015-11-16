@@ -1,0 +1,6 @@
+SELECT (COUNT(?frame) AS ?number)
+WHERE
+{
+    <*e*> ?link ?frame .
+    ?frame rdfs:isDefinedBy <http://www.newsreader-project.eu/ontologies/framenet/>
+}

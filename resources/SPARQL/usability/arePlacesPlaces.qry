@@ -1,0 +1,11 @@
+SELECT (AVG(?count) AS ?number)
+WHERE
+{
+    SELECT (COUNT(?link) AS ?count)
+    WHERE
+    {
+        <*e*> sem:hasPlace ?entity .
+        OPTIONAL { ?entity ?link <http://dbpedia.org/ontology/Place> }
+    }
+    GROUP BY ?entity
+}

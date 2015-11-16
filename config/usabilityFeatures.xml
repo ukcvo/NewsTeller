@@ -173,8 +173,224 @@
 		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/areLabelsVerbs.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="areLabelsVerbs" />
+		<property name="bins">
+			<set>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="-Infinity"/>
+					<constructor-arg name="rightBorder" value="0.00001"/>
+					<constructor-arg name="label" value="0"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="0.00001"/>
+					<constructor-arg name="rightBorder" value="0.5"/>
+					<constructor-arg name="label" value="1"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="0.5"/>
+					<constructor-arg name="rightBorder" value="0.8"/>
+					<constructor-arg name="label" value="2"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="0.8"/>
+					<constructor-arg name="rightBorder" value="1"/>
+					<constructor-arg name="label" value="3"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="1"/>
+					<constructor-arg name="rightBorder" value="Infinity"/>
+					<constructor-arg name="label" value="4"/>
+				</bean>
+			</set>
+		</property>
 	</bean>
 
+	<bean id="A2Feature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/A2.qry" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/A2.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="A2" />
+		<property name="possibleValues">
+			<set>
+				<value>0</value>
+				<value>1</value>
+				<value>2</value>
+			</set>
+		</property>
+		<property name="defaultValue" value="2" />
+	</bean>
+
+	<bean id="numberOfLinksFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleAverageFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/numberOfLinks.qry" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/numberOfLinks.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfLinks" />
+		<property name="bins">
+			<set>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="-Infinity"/>
+					<constructor-arg name="rightBorder" value="9"/>
+					<constructor-arg name="label" value="0"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="9"/>
+					<constructor-arg name="rightBorder" value="12"/>
+					<constructor-arg name="label" value="1"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="12"/>
+					<constructor-arg name="rightBorder" value="21"/>
+					<constructor-arg name="label" value="2"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="21"/>
+					<constructor-arg name="rightBorder" value="36"/>
+					<constructor-arg name="label" value="3"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="36"/>
+					<constructor-arg name="rightBorder" value="51"/>
+					<constructor-arg name="label" value="4"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="51"/>
+					<constructor-arg name="rightBorder" value="Infinity"/>
+					<constructor-arg name="label" value="5"/>
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+	<bean id="numberOfFramesFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/numberOfFrames.qry" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/numberOfFrames.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfFrames" />
+		<property name="possibleValues">
+			<set>
+				<value>0</value>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+			</set>
+		</property>
+		<property name="defaultValue" value="3" />
+	</bean>
+
+	<bean id="numberOfEntityLabelsDBPediaFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleAverageFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/numberOfEntityLabelsDBPedia.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfEntityLabelsDBPedia" />
+		<property name="bins">
+			<set>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="-Infinity"/>
+					<constructor-arg name="rightBorder" value="0.5"/>
+					<constructor-arg name="label" value="0"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="0.5"/>
+					<constructor-arg name="rightBorder" value="1.5"/>
+					<constructor-arg name="label" value="1"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="1.5"/>
+					<constructor-arg name="rightBorder" value="2.5"/>
+					<constructor-arg name="label" value="2"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="2.5"/>
+					<constructor-arg name="rightBorder" value="Infinity"/>
+					<constructor-arg name="label" value="3"/>
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+	<bean id="areActorsAgentsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleAverageFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/areActorsAgents.qry" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/areActorsAgents.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="areActorsAgents" />
+		<property name="bins">
+			<set>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="-Infinity"/>
+					<constructor-arg name="rightBorder" value="0.3"/>
+					<constructor-arg name="label" value="0"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="0.3"/>
+					<constructor-arg name="rightBorder" value="0.7"/>
+					<constructor-arg name="label" value="1"/>
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="0.7"/>
+					<constructor-arg name="rightBorder" value="Infinity"/>
+					<constructor-arg name="label" value="2"/>
+				</bean>
+			</set>
+		</property>
+	</bean>
+	
+	<bean id="arePlacesPlacesFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleAverageFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/arePlacesPlaces.qry" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/arePlacesPlaces.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="arePlacesPlaces" />
+		<property name="bins">
+			<set>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="-Infinity"/>
+					<constructor-arg name="rightBorder" value="0.15"/>
+					<constructor-arg name="label" value="0"/>
+				</bean>
+				
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ValueBin">
+					<constructor-arg name="leftBorder" value="0.15"/>
+					<constructor-arg name="rightBorder" value="Infinity"/>
+					<constructor-arg name="label" value="1"/>
+				</bean>
+			</set>
+		</property>
+	</bean>
+	
+	<bean id="hasKeywordAsLabelFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/hasKeywordAsLabel.qry" />
+		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/hasKeywordAsLabel.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="hasKeywordAsLabel" />
+		<property name="possibleValues">
+			<set>
+			<!-- 
+				<value>0</value>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+				 -->
+			</set>
+		</property>
+		<!-- 
+		<property name="defaultValue" value="3" />  -->
+	</bean>
+
+	
+
+	<!-- =================================================================== -->
 
 	<bean id="A0FeatureTest"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SimpleCountFeature">
