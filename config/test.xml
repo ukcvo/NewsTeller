@@ -197,15 +197,15 @@
 		
 		<property name="features">
 			<list>
+				
+				<ref bean="arePlacesPlacesFeature"/>
 				<ref bean="numberOfEntityLabelsDBPediaFeature" />
+				
+				<!-- 
 				<ref bean="A2Feature" />
 				<ref bean="numberOfFramesFeature" />
 				<ref bean="numberOfLinksFeature" />
 				<ref bean="areActorsAgentsFeature"/>
-				<ref bean="arePlacesPlacesFeature"/>
-				
-				<!-- 
-				
 				
 				<ref bean="hasKeywordAsLabelFeature"/>
 				

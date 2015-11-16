@@ -1,4 +1,4 @@
-SELECT (AVG(?count) AS ?number)
+SELECT (MAX(?count) AS ?number)
 WHERE
 {
     SELECT (COUNT(?label) AS ?count)
