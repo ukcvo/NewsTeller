@@ -252,6 +252,29 @@ public class KnowledgeStoreAdapter {
 	}
 	//endregion
 	
+	public List<String> retrieveOriginalTexts(String eventURI) {
+		List<String> originalTexts = new ArrayList<String>();
+		
+		List<String> mentionURIs = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, eventURI), 
+				Util.VARIABLE_MENTION);
+		
+		for (String mentionURI : mentionURIs) {
+			String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
+
+			try {
+				String originalText = session.download(new URIImpl(resourceURI)).exec().writeToString();
+				originalTexts.add(originalText);
+			} catch (Exception e) {
+				if(log.isErrorEnabled())
+					log.error(String.format("Could not retrieve resource, not adding to list. URI: '%s'", resourceURI));
+				if(log.isDebugEnabled())
+					log.debug("Resource download failed", e);
+			}
+		}
+		
+		return originalTexts;
+	}
+	
 	/**
 	 * Given the eventURI, picks the first mention and extracts the surrounding sentence from the original resource.
 	 */
@@ -280,6 +303,7 @@ public class KnowledgeStoreAdapter {
 				log.error(String.format("Could not retrieve resource. Returning empty string. URI: '%s'", resourceURI));
 			if(log.isDebugEnabled())
 				log.debug("Resource download failed", e);
+			return "";
 		}
 		
 		// search for sentence boundaries using a very simple heuristic

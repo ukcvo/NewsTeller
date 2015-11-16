@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
+package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.Set;
 

@@ -9,6 +9,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,13 +37,15 @@ public class Util {
 	public static final String PLACEHOLDER_KEYWORD = "*k*";
 	public static final String PLACEHOLDER_HISTORICAL_EVENT = "*h*";
 	public static final String PLACEHOLDER_MENTION = "*m*";
+	public static final String PLACEHOLDER_ENTITY = "*x*";
 
 	public static final String VARIABLE_EVENT = "event";
 	public static final String VARIABLE_NUMBER = "number";
 	public static final String VARIABLE_MENTION = "mention";
 	public static final String VARIABLE_RESOURCE = "resource";
 	public static final String VARIABLE_LABEL = "label";
-
+	public static final String VARIABLE_ENTITY = "entity";
+	
 	public static final String COLUMN_NAME_URI = "URI";
 	public static final String COLUMN_NAME_USABILITY_RATING = "usabilityRating";
 	public static final String COLUMN_NAME_RELEVANCE_RANK = "relevanceRank";
@@ -439,5 +442,18 @@ public class Util {
 		}
 			
 		return result;
+	}
+	
+	/**
+	 * Calculate the average value of the given collection. Returns NaN for empty collection.
+	 */
+	public static double averageFromCollection(Collection<Double> collection) {
+		if (collection.isEmpty())
+			return Double.NaN;
+		
+		double sum = 0;
+		for (Double d : collection)
+			sum += d;
+		return sum / collection.size();
 	}
 }

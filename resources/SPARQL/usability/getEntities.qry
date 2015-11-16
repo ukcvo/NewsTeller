@@ -1,0 +1,5 @@
+SELECT ?entity
+WHERE
+{
+    <*e*> sem:hasActor|sem:hasPlace ?entity .
+}

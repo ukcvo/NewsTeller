@@ -19,6 +19,8 @@ import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class FilteringBenchmark {

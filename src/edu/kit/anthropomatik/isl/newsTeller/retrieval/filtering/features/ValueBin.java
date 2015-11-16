@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
+package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 /**
  * Represents a bin in which a value can fall. Including left border and excluding right border: [left,right)

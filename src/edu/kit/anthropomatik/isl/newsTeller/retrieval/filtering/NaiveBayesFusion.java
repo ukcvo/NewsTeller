@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
