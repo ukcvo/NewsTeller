@@ -19,8 +19,8 @@ import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.FeatureMapFeature;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class FilteringBenchmark {
@@ -33,8 +33,6 @@ public class FilteringBenchmark {
 	
 	private boolean outputOnlyFalsePositives;
 	
-	private boolean doWordNetAnalysis;
-
 	private boolean doFeatureAnalysis;
 
 	private boolean doCreateFeatureMap;
@@ -57,17 +55,11 @@ public class FilteringBenchmark {
 
 	private KnowledgeStoreAdapter ksAdapter;
 
-	private WordNetVerbCountFeature wordNetFeature;
-
 	private List<UsabilityFeature> features;
 
 	private NaiveBayesFusion bayesFusion;
 	
 	// region setters
-	public void setDoWordNetAnalysis(boolean doWordNetAnalysis) {
-		this.doWordNetAnalysis = doWordNetAnalysis;
-	}
-
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
 		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
@@ -92,10 +84,6 @@ public class FilteringBenchmark {
 		this.outputOnlyFalsePositives = outputOnlyFalsePositives;
 	}
 	
-	public void setWordNetFeature(WordNetVerbCountFeature wordNetFeature) {
-		this.wordNetFeature = wordNetFeature;
-	}
-
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
@@ -163,64 +151,6 @@ public class FilteringBenchmark {
 	// read feature values from file
 	private void readFeatureMap() {
 		this.featureMap = Util.readFeatureMapFromFile(FEATURE_MAP_FILENAME);
-	}
-	// endregion
-
-	// region analyzeVerbNetFeature
-	private void analyzeVerbNetFeature() {
-		if (log.isTraceEnabled())
-			log.trace("analyzeVerbNetFeature()");
-
-		// collect labels
-		Set<String> labels = new HashSet<String>();
-		ksAdapter.openConnection();
-		for (BenchmarkEvent event : this.benchmark.keySet()) {
-			labels.addAll(ksAdapter.runSingleVariableStringQuery(
-					Util.readStringFromFile("resources/SPARQL/usability/areLabelsVerbs.qry").replace("*e*", event.getEventURI()), 
-					Util.VARIABLE_LABEL));
-		}
-		ksAdapter.closeConnection();
-
-		// collect values
-		List<Double> values = new ArrayList<Double>();
-		for (String label : labels) {
-			values.add(wordNetFeature.getLabelVerbFrequency(label));
-		}
-
-		// compute mean
-		double meanSum = 0;
-		for (Double val : values)
-			meanSum += val;
-		double mean = meanSum / values.size();
-
-		// compute variance
-		double varSum = 0;
-		for (Double val : values)
-			varSum += Math.pow((mean - val), 2);
-		double variance = varSum / values.size();
-
-		// compute bins
-		int[] bins = new int[20];
-		for (Double val : values)
-			bins[(int) (Math.min(val, 1.0 - Util.EPSILON) * 20)]++;
-
-		// get counts for 0.0 and 1.0
-		int numberOfZeroes = 0;
-		int numberOfOnes = 0;
-		for (Double val : values) {
-			if ((1.0 - val) < Util.EPSILON)
-				numberOfOnes++;
-			if (val < Util.EPSILON)
-				numberOfZeroes++;
-		}
-
-		// output everything
-		if (log.isInfoEnabled()) {
-			log.info(String.format("mean: %f, variance %f", mean, variance));
-			log.info(String.format("total: %d, zeroes: %d, ones: %d", values.size(), numberOfZeroes, numberOfOnes));
-			for (int i = 0; i < bins.length; i++)
-				log.info(String.format("bin %d (%f - %f): %d", i, (i / 20.0), ((i + 1) / 20.0), bins[i]));
-		}
 	}
 	// endregion
 
@@ -406,11 +336,14 @@ public class FilteringBenchmark {
 	// endregion
 	// endregion
 
-	private void runTest(Set<BenchmarkEvent> events, double[] thresholds) {
+	private PerformanceMeasure runTest(Set<BenchmarkEvent> events, double[] thresholds) {
 
 		int[] tp = new int[thresholds.length];
 		int[] fp = new int[thresholds.length];
 		int[] fn = new int[thresholds.length];
+		double[] precision = new double[thresholds.length];
+		double[] recall = new double[thresholds.length];
+		double[] fscore = new double[thresholds.length];
 		
 		Set<String> falsePositiveURIs = new HashSet<String>();
 		
@@ -436,19 +369,23 @@ public class FilteringBenchmark {
 		}
 		ksAdapter.closeConnection();
 		
-		if (this.outputOnlyFalsePositives && log.isInfoEnabled()) {
-			for (String uri : falsePositiveURIs)
-				log.info(uri);
-		} else {
-			for (int i = 0; i < thresholds.length; i++) {
-				double precision = (1.0 * tp[i]) / (tp[i] + fp[i]);
-				double recall = (1.0 * tp[i]) / (tp[i] + fn[i]);
-				double fscore = 2 * (precision * recall) / (precision + recall);
-				if (log.isInfoEnabled())
-					log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], precision, recall, fscore));
+		for (int i = 0; i < thresholds.length; i++) {
+			precision[i] = (1.0 * tp[i]) / (tp[i] + fp[i]);
+			recall[i] = (1.0 * tp[i]) / (tp[i] + fn[i]);
+			fscore[i] = 2 * (precision[i] * recall[i]) / (precision[i] + recall[i]);
+		}
+		
+		if (log.isInfoEnabled()) {
+			if (this.outputOnlyFalsePositives) {
+				for (String uri : falsePositiveURIs)
+					log.info(uri);
+			} else {
+				for (int i = 0; i < thresholds.length; i++)
+					log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], precision[i], recall[i], fscore[i]));
 			}
 		}
 		
+		return new PerformanceMeasure(tp, fp, fn, precision, recall, fscore);		
 	}
 	
 	// get the probabilities for a certain set of positive and negative events and a certain feature
@@ -473,10 +410,13 @@ public class FilteringBenchmark {
 	
 	// region resubstitutionTest
 	// do a resubstitution test - use the extracted probabilities on overall set w/ different thresholds and see what you get
-	private void resubstitutionTest() {
+	private void resubstitutionTest(boolean isIndividualized) {
 		
 		double[] thresholds = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
-		runTest(allEvents, thresholds);
+		List<PerformanceMeasure> results = new ArrayList<PerformanceMeasure>();
+		
+		if (log.isInfoEnabled())
+			log.info(isIndividualized ? "resubstitution test" : "individualized resubstitution test");
 		
 		for (String fileName : this.benchmarkKeywords.keySet()) {
 			if (log.isInfoEnabled())
@@ -488,43 +428,86 @@ public class FilteringBenchmark {
 					fileEvents.add(e);
 			}
 			
-			runTest(fileEvents, thresholds);
-		}
-		
-	}
-	
-	// do an individualized resubstitution test for each benchmark file
-	private void individualResubstitutionTests() {
-		double[] thresholds = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
-		
-		for (String fileName : this.benchmarkKeywords.keySet()) {
-			if (log.isInfoEnabled())
-				log.info(fileName);
-			
-			Set<BenchmarkEvent> posEvents = new HashSet<BenchmarkEvent>();
-			Set<BenchmarkEvent> negEvents = new HashSet<BenchmarkEvent>();
-			for (BenchmarkEvent e : allEvents) {
-				if (e.getFileName().equals(fileName)) {
+			Set<UsabilityFeature> fileFeatures = new HashSet<UsabilityFeature>();
+			for (UsabilityFeature feature : this.features) {
+				// set dummy features for speedup!
+				UsabilityFeature newFeature = new FeatureMapFeature(this.featureMap, fileName, feature.getName());
+				newFeature.setProbabilityMap(feature.getProbabilityMap());
+				fileFeatures.add(newFeature); 
+			}
+					
+			if (isIndividualized) {
+				// recompute the probabilityMaps!
+				Set<BenchmarkEvent> posEvents = new HashSet<BenchmarkEvent>();
+				Set<BenchmarkEvent> negEvents = new HashSet<BenchmarkEvent>();
+				for (BenchmarkEvent e : fileEvents) {
 					if (positiveEvents.contains(e))
 						posEvents.add(e);
 					else if (negativeEvents.contains(e))
 						negEvents.add(e);
+				}			
+
+				for (UsabilityFeature feature : fileFeatures) {
+					feature.setProbabilityMap(estimateProbabilities(posEvents, negEvents, feature, true));
 				}
-			}
-			Map<String, Double> priors = new HashMap<String, Double>();
-			priors.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, (1.0 * posEvents.size()) / (posEvents.size() + negEvents.size()));
-			priors.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, (1.0 * negEvents.size()) / (posEvents.size() + negEvents.size()));
-			bayesFusion.setPriorProbabilityMap(priors);
-			
-			Set<BenchmarkEvent> fileEvents = new HashSet<BenchmarkEvent>();
-			fileEvents.addAll(posEvents);
-			fileEvents.addAll(negEvents);
-			
-			for (UsabilityFeature feature : features) {
-				feature.setProbabilityMap(estimateProbabilities(posEvents, negEvents, feature, true));
+				
+				// also recompute the priors!
+				Map<String, Double> priors = new HashMap<String, Double>();
+				double posProb = (1.0 * posEvents.size()) / (posEvents.size() + negEvents.size());
+				double negProb = 1 - posProb;
+				priors.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, Math.log(posProb));
+				priors.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, Math.log(negProb));
+				priors.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, 0.0);
+				bayesFusion.setPriorProbabilityMap(priors);
 			}
 			
-			runTest(fileEvents, thresholds);
+			this.bayesFusion.setFeatures(fileFeatures);
+			
+			PerformanceMeasure p = runTest(fileEvents, thresholds);
+			results.add(p);
+		}
+		
+		//region aggregate results
+		int[] overallTp = new int[thresholds.length];
+		int[] overallFp = new int[thresholds.length];
+		int[] overallFn = new int[thresholds.length];
+		double[] averagePrecision = new double[thresholds.length];
+		double[] averageRecall = new double[thresholds.length];
+		double[] averageFscore = new double[thresholds.length];
+		double[] overallPrecision = new double[thresholds.length];
+		double[] overallRecall = new double[thresholds.length];
+		double[] overallFscore = new double[thresholds.length];
+		
+		for (PerformanceMeasure p : results) {
+			for (int i = 0; i < thresholds.length; i++) {
+				overallTp[i] += p.getTp()[i];
+				overallFp[i] += p.getFp()[i];
+				overallFn[i] += p.getFn()[i];
+				
+				averagePrecision[i] += p.getPrecision()[i];
+				averageRecall[i] += p.getRecall()[i];
+				averageFscore[i] += p.getFscore()[i];
+			}
+		}
+		
+		for (int i = 0; i < thresholds.length; i++) {
+			overallPrecision[i] = (1.0 * overallTp[i]) / (overallTp[i] + overallFp[i]);
+			overallRecall[i] = (1.0 * overallTp[i]) / (overallTp[i] + overallFn[i]);
+			overallFscore[i] = 2 * (overallPrecision[i] * overallRecall[i]) / (overallPrecision[i] + overallRecall[i]);
+			
+			averagePrecision[i] /= results.size();
+			averageRecall[i] /= results.size();
+			averageFscore[i] /= results.size();
+		}
+		//endregion
+		
+		if (log.isInfoEnabled()) {
+			log.info("overall evaluation");
+			for (int i = 0; i < thresholds.length; i++)
+				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], overallPrecision[i], overallRecall[i], overallFscore[i]));
+			log.info("average evaluation");
+			for (int i = 0; i < thresholds.length; i++)
+				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], averagePrecision[i], averageRecall[i], averageFscore[i]));
 		}
 	}
 	// endregion
@@ -538,14 +521,12 @@ public class FilteringBenchmark {
 		else
 			readFeatureMap();
 
-		if (this.doWordNetAnalysis)
-			analyzeVerbNetFeature();
 		if (this.doFeatureAnalysis)
 			analyzeFeatures();
 		if (this.doResubstitutionTest)
-			resubstitutionTest();
+			resubstitutionTest(false);
 		if (this.doIndividualResubstitutionTests)
-			individualResubstitutionTests();
+			resubstitutionTest(true);
 	}
 
 	public static void main(String[] args) {
