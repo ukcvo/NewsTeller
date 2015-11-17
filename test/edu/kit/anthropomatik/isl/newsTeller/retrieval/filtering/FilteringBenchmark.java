@@ -340,10 +340,12 @@ public class FilteringBenchmark {
 
 		int[] tp = new int[thresholds.length];
 		int[] fp = new int[thresholds.length];
+		int[] tn = new int[thresholds.length];
 		int[] fn = new int[thresholds.length];
 		double[] precision = new double[thresholds.length];
 		double[] recall = new double[thresholds.length];
 		double[] fscore = new double[thresholds.length];
+		double[] balancedAccuracy = new double[thresholds.length];
 		
 		Set<String> falsePositiveURIs = new HashSet<String>();
 		
@@ -362,8 +364,8 @@ public class FilteringBenchmark {
 					if (probability >= thresholds[i]) {
 						falsePositiveURIs.add(event.getEventURI());
 						fp[i]++;
-					}
-					// ignore tn, as they are not used for precision and recall
+					} else
+						tn[i]++;
 				}
 			}
 		}
@@ -373,6 +375,7 @@ public class FilteringBenchmark {
 			precision[i] = (1.0 * tp[i]) / (tp[i] + fp[i]);
 			recall[i] = (1.0 * tp[i]) / (tp[i] + fn[i]);
 			fscore[i] = 2 * (precision[i] * recall[i]) / (precision[i] + recall[i]);
+			balancedAccuracy[i] = ((0.5 * tp[i]) / (tp[i] + fn[i])) + ((0.5 * tn[i]) / (tn[i] + fp[i]));
 		}
 		
 		if (log.isInfoEnabled()) {
@@ -381,11 +384,11 @@ public class FilteringBenchmark {
 					log.info(uri);
 			} else {
 				for (int i = 0; i < thresholds.length; i++)
-					log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], precision[i], recall[i], fscore[i]));
+					log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f, balancedAccuracy: %f", thresholds[i], precision[i], recall[i], fscore[i], balancedAccuracy[i]));
 			}
 		}
 		
-		return new PerformanceMeasure(tp, fp, fn, precision, recall, fscore);		
+		return new PerformanceMeasure(tp, fp, tn, fn, precision, recall, fscore, balancedAccuracy);		
 	}
 	
 	// get the probabilities for a certain set of positive and negative events and a certain feature
@@ -470,23 +473,28 @@ public class FilteringBenchmark {
 		//region aggregate results
 		int[] overallTp = new int[thresholds.length];
 		int[] overallFp = new int[thresholds.length];
+		int[] overallTn = new int[thresholds.length];
 		int[] overallFn = new int[thresholds.length];
 		double[] averagePrecision = new double[thresholds.length];
 		double[] averageRecall = new double[thresholds.length];
 		double[] averageFscore = new double[thresholds.length];
+		double[] averageBalancedAccuracy = new double[thresholds.length];
 		double[] overallPrecision = new double[thresholds.length];
 		double[] overallRecall = new double[thresholds.length];
 		double[] overallFscore = new double[thresholds.length];
+		double[] overallBalancedAccuracy = new double[thresholds.length];
 		
 		for (PerformanceMeasure p : results) {
 			for (int i = 0; i < thresholds.length; i++) {
-				overallTp[i] += p.getTp()[i];
-				overallFp[i] += p.getFp()[i];
-				overallFn[i] += p.getFn()[i];
+				overallTp[i] += p.getTp(i);
+				overallFp[i] += p.getFp(i);
+				overallTn[i] += p.getTn(i);
+				overallFn[i] += p.getFn(i);
 				
-				averagePrecision[i] += p.getPrecision()[i];
-				averageRecall[i] += p.getRecall()[i];
-				averageFscore[i] += p.getFscore()[i];
+				averagePrecision[i] += p.getPrecision(i);
+				averageRecall[i] += p.getRecall(i);
+				averageFscore[i] += p.getFscore(i);
+				averageBalancedAccuracy[i] += p.getBalacedAccuracy(i);
 			}
 		}
 		
@@ -494,21 +502,23 @@ public class FilteringBenchmark {
 			overallPrecision[i] = (1.0 * overallTp[i]) / (overallTp[i] + overallFp[i]);
 			overallRecall[i] = (1.0 * overallTp[i]) / (overallTp[i] + overallFn[i]);
 			overallFscore[i] = 2 * (overallPrecision[i] * overallRecall[i]) / (overallPrecision[i] + overallRecall[i]);
+			overallBalancedAccuracy[i] = ((0.5 * overallTp[i]) / (overallTp[i] + overallFn[i])) + ((0.5 * overallTn[i]) / (overallTn[i] + overallFp[i]));
 			
 			averagePrecision[i] /= results.size();
 			averageRecall[i] /= results.size();
 			averageFscore[i] /= results.size();
+			averageBalancedAccuracy[i] /= results.size();
 		}
 		//endregion
 		
 		if (log.isInfoEnabled()) {
 			log.info("overall evaluation");
 			for (int i = 0; i < thresholds.length; i++)
-				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], overallPrecision[i], overallRecall[i], overallFscore[i]));
+				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f, balancedAccuracy: %f", thresholds[i], overallPrecision[i], overallRecall[i], overallFscore[i], overallBalancedAccuracy[i]));
 			log.info("average evaluation");
 			for (int i = 0; i < thresholds.length; i++)
-				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f (ref: %f)", thresholds[i], averagePrecision[i], averageRecall[i], averageFscore[i],
-						2 * (averagePrecision[i] * averageRecall[i]) / (averagePrecision[i] + averageRecall[i])));
+				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f (ref: %f), balancedAccuracy: %f", thresholds[i], averagePrecision[i], averageRecall[i], averageFscore[i],
+						2 * (averagePrecision[i] * averageRecall[i]) / (averagePrecision[i] + averageRecall[i]), averageBalancedAccuracy[i]));
 		}
 	}
 	// endregion

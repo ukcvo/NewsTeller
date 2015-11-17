@@ -10,36 +10,46 @@ public class PerformanceMeasure {
 
 	private int[] tp;
 	private int[] fp;
+	private int[] tn;
 	private int[] fn;
 	private double[] precision;
 	private double[] recall;
 	private double[] fscore;
+	private double[] balancedAccuracy;
 	
-	public int[] getTp() {
-		return tp;
+	public int getTp(int i) {
+		return tp[i];
 	}
-	public int[] getFp() {
-		return fp;
+	public int getFp(int i) {
+		return fp[i];
 	}
-	public int[] getFn() {
-		return fn;
+	public int getTn(int i) {
+		return tn[i];
 	}
-	public double[] getPrecision() {
-		return precision;
+	public int getFn(int i) {
+		return fn[i];
 	}
-	public double[] getRecall() {
-		return recall;
+	public double getPrecision(int i) {
+		return precision[i];
 	}
-	public double[] getFscore() {
-		return fscore;
+	public double getRecall(int i) {
+		return recall[i];
+	}
+	public double getFscore(int i) {
+		return fscore[i];
+	}
+	public double getBalacedAccuracy(int i) {
+		return balancedAccuracy[i];
 	}
 	
-	public PerformanceMeasure(int[] tp, int[] fp, int[] fn, double[] precision, double[] recall, double[] fscore) {
+	public PerformanceMeasure(int[] tp, int[] fp, int[] tn, int[] fn, double[] precision, double[] recall, double[] fscore, double[] balancedAccuracy) {
 		this.tp = tp;
 		this.fp = fp;
+		this.tn = tn;
 		this.fn = fn;
 		this.precision = precision;
 		this.recall = recall;
 		this.fscore = fscore;
+		this.balancedAccuracy = balancedAccuracy;
 	}
 }
