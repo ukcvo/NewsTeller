@@ -1,8 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,18 +16,12 @@ import net.sf.extjwnl.dictionary.Dictionary;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class WordNetVerbCountFeature extends UsabilityFeature {
+public class WordNetVerbCountFeature extends BinBasedFeature {
 
 	private static Log log = LogFactory.getLog(WordNetVerbCountFeature.class);
 
-	private Set<ValueBin> bins;
-	
 	private Dictionary dict = null;
 
-	public void setBins(Set<ValueBin> bins) {
-		this.bins = bins;
-	}
-	
 	public WordNetVerbCountFeature(String queryFileName, String probabilityFileName) {
 		super(queryFileName, probabilityFileName);
 		try {
@@ -75,9 +67,10 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 		}
 	}
 
-	// aggregates the verb frequencies across all labels for the given event.
-	private double getRelativeCount(String eventURI) {
-
+	@Override
+	protected double getRawValue(String eventURI) {
+		// compute raw value based on label verb frequencies
+		
 		List<String> labels = this.ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_LABEL);
 
 		if (labels.isEmpty()) {
@@ -92,33 +85,6 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 		}
 
 		return sum / labels.size();
-	}
-
-	@Override
-	public int getValue(String eventURI) {
-		double relativeCount = getRelativeCount(eventURI);
-
-		for (ValueBin bin : bins) {
-			if (bin.contains(relativeCount)) 
-				return bin.getLabel();
-		}
-		
-		if (log.isErrorEnabled())
-			log.error(String.format("relativeCount does not fit any bin: %f '%s'", relativeCount, eventURI));
-		return -1;
-		
-		/*
-		if (relativeCount < Util.EPSILON)
-			return 0; // zero
-		else if (relativeCount < 0.5)
-			return 1; // (0,0.5)
-		else if (relativeCount < 0.8)
-			return 2; // [0.5,0.8)
-		else if (relativeCount < (1.0 - Util.EPSILON))
-			return 3; // [0.8, 1)
-		else
-			return 4; // one
-			*/
 	}
 
 }

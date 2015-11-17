@@ -1,58 +1,222 @@
 filename;URI;appearLabelsInText
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/ESA's_Smart-1_takes_its_first_close-up_images_of_the_Moon#ev9;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Smart-1_probe_ends_mission_with_planned_crash_into_the_Moon#ev19;0
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/European_Space_Agency_seeks_volunteers_for_Mars_simulation#ev12;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Discovery_docks_with_International_Space_Station#ev20;4
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Space_Shuttle_Endeavour_enters_history_books_after_nineteen_years_following_penultimate_landing_of_program#ev29;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/India_and_Europe_team_up_for_moon_mission#ev16;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Smart-1_probe_ends_mission_with_planned_crash_into_the_Moon#ev23;0
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/ISS_Expedition_10_returns_to_Earth#ev24;4
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Rosetta_spacecraft_passes_Lutetia_asteroid#ev20_12;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev8;7
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/NASA_solar_sail_passes_first_major_test#ev14_1;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/India_and_Europe_team_up_for_moon_mission#ev20;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Pope_speaks_with_astronauts_in_orbit_for_first_time#ev15;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Massive_ice_shelf_expected_to_break_away_from_Antarctica#ev7;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Space_Shuttle_Atlantis_launch_delayed_until_2008#ev34;6
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/NASA_says_water_found_on_exoplanet#ev19;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/India_and_Europe_team_up_for_moon_mission#ev9;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Venus_was_once_more_Earth-like_than_previously_thought#ev18;6
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Space_shuttle_Atlantis_set_for_launch_with_Columbus_module#ev17;7
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/British_Skylark_rocket_makes_its_final_flight#ev6;0
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/ESA_launches_Herschel_Space_Observatory_and_Planck_Satellite#ev24;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Huygens_probe_lands_on_Saturn's_moon_Titan,_returns_pictures#ev26;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Huygens_probe_lands_on_Saturn's_moon_Titan,_returns_pictures#ev23_9;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Space_shuttle_Atlantis_set_for_launch_with_Columbus_module#ev21;8
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/India_and_Europe_team_up_for_moon_mission#ev21;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Volcanic_bulge_found_in_Oregon#ev25;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Launch_of_NASA's_Mars_Science_Laboratory_rover_delayed_until_2011#ev55;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/European_Venus_probe_launched_successfully#ev8;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Anniversary_of_Yuri_Gagarin's_spaceflight_marks_fifty_years_of_human_space_travel#ev14_9;4
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Launch_of_NASA's_Mars_Science_Laboratory_rover_delayed_until_2011#ev19;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/European_Space_Agency_seeks_volunteers_for_Mars_simulation#ev14;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/ESA_launches_Herschel_Space_Observatory_and_Planck_Satellite#ev41;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/European_telescope_searches_for_planets#ev24;3
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/India_and_Europe_team_up_for_moon_mission#ev18;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Huygens_probe_lands_on_Saturn's_moon_Titan,_returns_pictures#ev25;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Indian_spacecraft_Chandrayaan-1_enters_moon_orbit#ev41;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Saturn_moon_Enceladus_may_have_salty_ocean#ev48;7
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Mars_studies_find_water#ev13_6;8
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/India_and_Europe_team_up_for_moon_mission#ev10;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/NASA_solar_sail_passes_first_major_test#ev36;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Massive_ice_deposits_found_on_Mars#ev10;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/ESA's_Smart-1_takes_its_first_close-up_images_of_the_Moon#ev15;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/ESA's_Smart-1_takes_its_first_close-up_images_of_the_Moon#ev8;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/India's_flag_lands_on_Moon#ev36;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Venus_was_once_more_Earth-like_than_previously_thought#ev16;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Rokot_launches_three_Gonets_satellites#ev20_6;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Saturn's_rings_are_much_older_than_previously_thought#ev38;6
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/European_Space_Agency_seeks_volunteers_for_Mars_simulation#ev23;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Huygens_moon_probe_to_land_on_Titan#ev44;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Massive_ice_deposits_found_on_Mars#ev9;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/European_telescope_searches_for_planets#ev43;6
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/European_Space_Agency_seeks_volunteers_for_Mars_simulation#ev6;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Arctic_ice_thickness_decreasing,_suggests_satellite_data_study#ev22_9;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/UK_firm_gets_ESA_funding_to_ground_test_new_jet_engine_for_spaceplane#ev9;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Men_isolated_to_mimic_Mars_flight#ev37;6
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/NASA_to_launch_Discovery_despite_crack_in_insulation_foam#ev28;11
-resources/benchmark/queries/European Space Agency.csv;http://en.wikinews.org/wiki/Launch_of_NASA's_Mars_Science_Laboratory_rover_delayed_until_2011#ev60;11
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/New_Michael_Jackson_song_to_be_released#ev31;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Hollywood_legend_Paul_Newman_dies_of_cancer_age_83#ev23;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Australian_health_workers_to_close_intensive_care_units_in_Victoria_next_week#ev33;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Music_duo_The_Bellamy_Brothers_accuse_Britney_Spears_of_plagiarism#ev26;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Britney_Spears_announces_she_is_pregnant_again#ev23;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Russian_Wikipedia_reaches_half_a_million_articles#ev7;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Tarja_Turunen_reveals_working_title_for_new_album#ev21;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/British_musician_Robin_Gibb_dies_at_age_62#ev47;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/2010_BRIT_Awards_highlights#ev85;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Nightwish_announce_details_of_new_album#ev15;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Don_Van_Vliet,_best_known_as_'Captain_Beefheart',_dies_aged_69#ev23;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/New_Michael_Jackson_song_to_be_released#ev30;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Gay_play_about_Jesus_Christ_to_open_in_Brazil#ev32;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Ministry_reveals_the_details_of_their_new_album#ev9;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Billy_Preston_dies_at_59#ev23;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Karlheinz_Stockhausen,_composer,_dies_aged_79#ev47;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Tarja_Turunen_reveals_working_title_for_new_album#ev20;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Calvin_Harris_knocks_Michael_Jackson_off_top_spot_in_UK_Album_Chart#ev9;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Sea_lion_walks_from_beach_into_Pantai_Inn_in_California#ev38;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Manitoba's_flood_creating_hazardous_conditions#ev49;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/The_White_Stripes_to_tour_'Great_White_North'#ev25;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Nightwish_announce_details_of_new_album#ev13;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/112_year_old_joke_fools_political_activists_and_the_Associated_Press#ev64;1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Michael_Jackson_to_make_last_public_concerts#ev19;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Brian_Melo_crowned_winner_of_Canadian_Idol#ev57;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Helpline:_Do_you_know_this_pianist?#ev19_4;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Green_Day_dominates_at_MTV's_2005_Video_Music_Awards#ev38;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Death_of_Michael_Jackson_causes_last_minute_changes_to_films_and_dramas#ev15;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Four_Boy_Scouts_killed_in_Iowa_tornado#ev22;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Don_Van_Vliet,_best_known_as_'Captain_Beefheart',_dies_aged_69#ev26;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Wikimedia,_IWF_respond_to_block_of_Wikipedia_over_child_pornography_allegations#ev55;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/The_White_Stripes_to_tour_'Great_White_North'#ev38;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Billy_Preston_dies_at_59#ev25;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Poll_of_100_million_votes_names_new_Seven_Wonders_of_the_World#ev46;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Brad_Delp,_lead_singer_of_rock_band_Boston:_found_dead_at_55#ev14_7;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Michael_Jackson_to_make_last_public_concerts#ev18;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/IBEX_satellite_releases_first_all_sky_map#ev16;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Lordi_added_to_billing_of_Serbia's_Castle_Festival#ev17;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Blues_musician_Pinetop_Perkins_dies_at_age_97#ev36;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/New_book_Blown_for_Good_reveals_details_inside_Scientology_headquarters#ev55_5;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Charles_Manson_releases_album_under_free_license#ev18;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Colombia%e2%80%99s_Uribe_orders_the_bombing_of_a_Natural_National_Park#ev27;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Dixie_Chicks_show_documentary_at_TIFF#ev23;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/2010_BRIT_Awards_highlights#ev110;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Green_Day_dominates_at_MTV's_2005_Video_Music_Awards#ev37;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Paul_Winchell,_voice_of_Tigger,_Gargamel,_dead_at_82#ev20;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Sandra_Fluke_gives_keynote_speech_at_Nebraska_women's_health_event#ev56_10;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Beatles'_'Hey_Jude'_becomes_their_most_downloaded_song_on_iTunes#ev6;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Guns_N'_Roses'_'Chinese_Democracy'_released_after_15_years#ev7;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Lordi_release_future_Dark_Floors_soundtrack_'Beast_Loose_in_Paradise'_as_single#ev36;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Four_families_left_homeless_after_apartment_fire_in_Buffalo,_New_York#ev20_3;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Top_100_Canadian_albums_named#ev15_1;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Over_400_attend_Scottish_singer-songwriter_Gerry_Rafferty's_funeral#ev97;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Furry_fans_flock_to_Further_Confusion_2007#ev12_2;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Yemen's_first-ever_feature_film_to_be_screened_at_Cannes_Festival#ev26;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Dottie_Rambo_dies_in_tour_bus_crash#ev31;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Green_Day_dominates_at_MTV's_2005_Video_Music_Awards#ev36;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Colombia%e2%80%99s_Uribe_orders_the_bombing_of_a_Natural_National_Park#ev45;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/'Gangnam_Style'_becomes_most_watched_YouTube_video_ever#ev26;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/UK_Police_evacuate_Birmingham_city_centre#ev19;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Turisas_release_cover_of_Boney_M._hit_song_'Rasputin'_as_single#ev31;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/New_Michael_Jackson_song_to_be_released#ev19;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Finland_claims_second_world_record_for_karaoke#ev13;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Manitoba's_flood_creating_hazardous_conditions#ev24_7;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Lordi_release_music_video_for_Finnish_chart-topper_'Bite_It_Like_a_Bulldog'#ev20;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Brad_Delp,_lead_singer_of_rock_band_Boston:_found_dead_at_55#ev23;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Comedian_Richard_Pryor_dies_at_65#ev18;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Top_100_Canadian_albums_named#ev15_2;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/MPAA's_Valenti_signs_Betamax_tapes_for_EFF_protesters_as_Grokster_case_continues_in_US_Supreme_Court#ev18;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Copiap%c3%b3,_Chile_mining_accident:_in_depth#ev33;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Dottie_Rambo_dies_in_tour_bus_crash#ev20;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Scottish_Socialist_Party_to_split_as_Sheridan_launches_new_party#ev59;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Comedian_pushes_talk_show_host_Charlotte_Church_over_the_edge,_on_air#ev28;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/New_Michael_Jackson_song_to_be_released#ev18;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/British_ISPs_restrict_access_to_Wikipedia_amid_child_pornography_allegations#ev108;4
+resources/benchmark/queries/album.csv;"http://en.wikinews.org/wiki/Rick_Astley_releases_deluxe_editions_of_his_first_two_albums;_prepares_2010_tour#ev29";0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Finland_claims_second_world_record_for_karaoke#ev27;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Gay_play_about_Jesus_Christ_to_open_in_Brazil#ev33;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Slipknot_bassist_Paul_Gray_found_dead_in_hotel_room_at_age_38#ev19;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Paul_McCartney_to_be_%22beamed_up%22_in_first_live_concert_to_be_broadcast_in_space#ev17;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Lordi_added_to_billing_of_Serbia's_Castle_Festival#ev14;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Green_Day_dominates_at_MTV's_2005_Video_Music_Awards#ev22;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/X_performs_at_the_TLA_in_Philadelphia#ev39;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/112_year_old_joke_fools_political_activists_and_the_Associated_Press#ev100;1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/'Gangnam_Style'_becomes_most_watched_YouTube_video_ever#ev24;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Apple_launches_iTunes_in_New_Zealand#ev38;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/IWF_reverses_censorship_of_Wikipedia#ev26;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Four_Boy_Scouts_killed_in_Iowa_tornado#ev54;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Jump5_plays_their_last_concert,_disbanding_after_nine_years#ev51;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/New_Michael_Jackson_song_to_be_released#ev17;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Rapper_Proof_(D12)_shot_and_killed_outside_Detroit_nightclub#ev51;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Hilary_Mantel's_%22Wolf_Hall%22_wins_Man_Booker_Prize_2009#ev19;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Winners_of_2006_New_Zealand_Music_Awards_announced#ev43;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Caribou_plays_the_Bowery_Ballroom#ev173;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Beatles_to_release_new_album#ev9;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Canadian_rapper_Bad_News_Brown_murdered_in_Montreal#ev34;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/The_Raveonettes_on_love,_death,_desire_and_war#ev31;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/'Gangnam_Style'_becomes_most_watched_YouTube_video_ever#ev13;1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Yemen's_first-ever_feature_film_to_be_screened_at_Cannes_Festival#ev60;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/'Gangnam_Style'_becomes_most_watched_YouTube_video_ever#ev25;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Lordi_horror_movie_receives_300,000_euros_of_Finnish_government_funding#ev18;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/2010_BRIT_Awards_highlights#ev96;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Canadian_jazz_star_Diana_Krall_gives_birth_to_twin_boys#ev34;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/William_Gibson,_American_playwright,_dies_at_age_94#ev16;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/400_pound_python_seized_by_wildlife_officials_in_Florida#ev20;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Eurovision_'82_winner_Nicole_talks_about_'Ein_bi%c3%9fchen_Frieden',_her_success_and_the_Contest_today#ev47;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Kevin_DuBrow,_lead_singer_of_%22Quiet_Riot%22,_found_dead#ev20;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Fiddle_Legend_Vassar_Clements_dead_at_77#ev46;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Furry_fans_flock_to_Further_Confusion_2007#ev14;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/%22Jezebel_of_Jazz%22_Anita_O'Day_dies_at_age_87#ev78;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Afghanistan:_two_kidnapped_French_journalists_believed_to_be_in_good_health#ev25;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Romanian_investor_kidnapped_in_the_Democratic_Republic_of_the_Congo_is_safe#ev30;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Deadly_illegal_sexual_enhancement_products_appear_on_the_Singaporean_market#ev38;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/RuPaul_speaks_about_society_and_the_state_of_drag_as_performance_art#ev140;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Black_Eyed_Peas_to_release_new_album,_'I_Gotta_Feeling'_reaches_six_million_downloads#ev25;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Pink_Floyd's_Syd_Barrett_dies_at_age_60#ev16;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Death_of_Michael_Jackson_causes_last_minute_changes_to_films_and_dramas#ev21;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/US_singer_Etta_James_dies_aged_73#ev20;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Ter%c3%a4sbetoni's_'Myrskyntuoja'_tops_Finnish_album_chart#ev18;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/MPAA's_Valenti_signs_Betamax_tapes_for_EFF_protesters_as_Grokster_case_continues_in_US_Supreme_Court#ev30;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Tarja_Turunen_to_perform_at_Doro_Pesch's_25th_anniversary_concert_and_record_duets_with_her#ev23;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Slipknot_bassist_Paul_Gray_found_dead_in_hotel_room_at_age_38#ev36;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Tarja_Turunen_commences_first_tour_since_leaving_Nightwish#ev22;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Dottie_Rambo_dies_in_tour_bus_crash#ev36;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Michael_Jackson_to_make_last_public_concerts#ev31;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Bat_for_Lashes_plays_the_Bowery_Ballroom:_an_Interview_with_Natasha_Khan#ev135;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/CBS_Corporation_begins_trading_on_New_York_Stock_Exchange#ev41;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Black_Eyed_Peas_to_release_new_album,_'I_Gotta_Feeling'_reaches_six_million_downloads#ev14;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Pink_Floyd's_Syd_Barrett_dies_at_age_60#ev29;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Pink_Floyd's_Syd_Barrett_dies_at_age_60#ev17;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Sony_faces_class_action_lawsuits_for_DRM#ev52;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Rolling_Stone_prints_story_based_on_Wikipedia_vandalism#ev18;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/MPAA's_Valenti_signs_Betamax_tapes_for_EFF_protesters_as_Grokster_case_continues_in_US_Supreme_Court#ev21;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Clarence_Clemons,_Springsteen%e2%80%99s_E_Street_Band_sax_player,_dies_at_69#ev55;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Beatles'_'Hey_Jude'_becomes_their_most_downloaded_song_on_iTunes#ev13;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Google_Taiwan:_Building_knowledge_sharing_center-stage_with_innovations#ev17;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/New_Michael_Jackson_song_to_be_released#ev37;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Sandra_Fluke_nominated_by_Time_magazine_for_Person_of_the_Year#ev30_13;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/New_Michael_Jackson_song_to_be_released#ev13;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Legendary_bluesman_Long_John_Baldry_dead_at_64#ev47;0
+resources/benchmark/queries/album.csv;"http://en.wikinews.org/wiki/Rick_Astley_releases_deluxe_editions_of_his_first_two_albums;_prepares_2010_tour#ev25";-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/British_rapper_Derek_B_dies_at_age_44#ev23;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Philippine_prisoners_repeat_performance_of_Thriller_in_tribute_to_Michael_Jackson#ev28;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/2010_BRIT_Awards_highlights#ev129;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Sydney_ferry_hits_ship,_bridge#ev30;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/William_Gibson,_American_playwright,_dies_at_age_94#ev11;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/MPAA's_Valenti_signs_Betamax_tapes_for_EFF_protesters_as_Grokster_case_continues_in_US_Supreme_Court#ev20;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Clarence_Clemons,_Springsteen%e2%80%99s_E_Street_Band_sax_player,_dies_at_69#ev54;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Beatles'_'Hey_Jude'_becomes_their_most_downloaded_song_on_iTunes#ev14;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/400_pound_python_seized_by_wildlife_officials_in_Florida#ev31;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Eurovision_'73_winner_Anne_Marie_David_discusses_her_four-decade_career_and_the_Contest,_past_and_present#ev6;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Fans_jumping_for_Juno_tickets#ev31;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Brian_Melo_crowned_winner_of_Canadian_Idol#ev52_3;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Scientists_working_to_save_Chesapeake_Bay_oyster_population#ev42;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Robbie_Williams_rejoins_British_musical_group_Take_That#ev17;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Fall_'08_styles_at_New_York_Fashion_Week:_the_miniskirt_is_back_again#ev30;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Finnish_metal_band_win_51st_Eurovision_Song_Contest#ev51;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Philippine_prisoners_repeat_performance_of_Thriller_in_tribute_to_Michael_Jackson#ev29;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Winners_of_2006_New_Zealand_Music_Awards_announced#ev36;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Musician_John_Martyn_dies_at_age_60#ev31;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/%22Donkey%22_bloggers_facing_jail_sentence_in_Azerbaijan#ev14;1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Czechs_and_Slovaks_celebrate_twenty_years_since_Velvet_Revolution#ev28_3;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Sandra_Fluke_featured_speaker_at_Democratic_National_Convention#ev31;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/MPAA's_Valenti_signs_Betamax_tapes_for_EFF_protesters_as_Grokster_case_continues_in_US_Supreme_Court#ev23;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Nightwish_release_'Dark_Passion_Play',_most_expensive_album_in_Finnish_history#ev27;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Michael_Jackson_to_make_last_public_concerts#ev15_1;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Eva_Avila_crowned_winner_of_Canadian_Idol#ev33;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Greece_wins_2005_Eurovision_song_contest#ev9_1;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Smashing_Pumpkins_may_reunite#ev15;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Armando_museum_goes_up_in_flames#ev8;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Alice_Cooper_says_reality_show_'The_Osbournes'_ruined_Ozzy_Osbourne's_career#ev46;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Two_Azerbaijani_bloggers_jailed#ev48;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Death_of_Michael_Jackson_causes_last_minute_changes_to_films_and_dramas#ev37;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Singer_and_songwriter_Michael_Jackson_dies_at_age_50#ev25;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Winners_of_2006_New_Zealand_Music_Awards_announced#ev37;1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Clarence_Clemons,_Springsteen%e2%80%99s_E_Street_Band_sax_player,_dies_at_69#ev57;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Music_producer_Phil_Spector_convicted_of_murder#ev45;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Four_families_left_homeless_after_apartment_fire_in_Buffalo,_New_York#ev20_2;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Coldplay's_new_album_hits_stores_worldwide_this_week#ev5;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Pink_Floyd's_Syd_Barrett_dies_at_age_60#ev25;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Eurovision_'04_winner_Ruslana_discusses_her_paths_as_singer,_spokesmodel,_stateswoman_and_source_of_inspiration#ev27;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Comedian_George_Carlin_dead_at_age_71#ev13;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Scientists_working_to_save_Chesapeake_Bay_oyster_population#ev56;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/The_White_Stripes_to_tour_'Great_White_North'#ev24_2;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Michael_Jackson_to_make_last_public_concerts#ev23;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Dixie_Chicks,_Blige,_Underwood_big_Grammy_winners#ev9;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Belgian_triathletes_race_at_North_Sea_coast#ev39;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/U2_fan_ordered_to_destroy_CDs#ev26;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Fall_'08_styles_at_New_York_Fashion_Week:_the_miniskirt_is_back_again#ev16;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Antony_&_The_Johnsons_win_Mercury_Music_Prize#ev3;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Antje_Duvekot_on_life_as_a_folk_singer,_her_family_and_her_music#ev130;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Sandra_Fluke_receives_Stand_Up_for_Choice_Award#ev17_1;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/%22Piano_Man%22_is_not_British_actor,_search_down_to_three_leads#ev17;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Eurovision_'04_winner_Ruslana_discusses_her_paths_as_singer,_spokesmodel,_stateswoman_and_source_of_inspiration#ev26;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Copiap%c3%b3,_Chile_mining_accident:_in_depth#ev28;1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Kennedy_Center_names_2007_honors_recipients#ev91;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/MPAA's_Valenti_signs_Betamax_tapes_for_EFF_protesters_as_Grokster_case_continues_in_US_Supreme_Court#ev25;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/South_African_reggae_star_Lucky_Dube_shot_dead_in_attempted_hijacking#ev34;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Lordi_added_to_billing_of_Serbia's_Castle_Festival#ev6;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Rapper_Obie_Trice_shot_on_Detroit_freeway#ev19;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Edward_Woodward,_English_actor,_dies_aged_79#ev42;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Green_Day_dominates_at_MTV's_2005_Video_Music_Awards#ev18;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Russian_Wikipedia_reaches_half_a_million_articles#ev5;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Deadly_illegal_sexual_enhancement_products_appear_on_the_Singaporean_market#ev24;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Michael_Jackson_to_make_last_public_concerts#ev26;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Four_Boy_Scouts_killed_in_Iowa_tornado#ev26;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/US_rapper_Nate_Dogg_dies_at_age_41#ev41;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Two_Azerbaijani_bloggers_jailed#ev47;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Van_Canto's_Stefan_Schmidt_on_a_capella_metal,_Wacken,_Nightwish,_piracy_&_more#ev28;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Van_Halen_singer_impersonated_in_Canadian_medical_scare#ev30;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/400_pound_python_seized_by_wildlife_officials_in_Florida#ev19;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/MPAA's_Valenti_signs_Betamax_tapes_for_EFF_protesters_as_Grokster_case_continues_in_US_Supreme_Court#ev24;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Canadian_musician_Jeff_Healey_dies_of_cancer#ev11;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Ter%c3%a4sbetoni_frontman_J._Ahola_on_representing_Finland_at_Eurovision_2008_&_more#ev36;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Russian_Wikipedia_reaches_half_a_million_articles#ev6;4
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Alex_Necochea_and_Bryn_Bennett:_the_'Guitar_Heroes'_of_Bang_Camaro#ev160_1;3
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Guitarist_Les_Paul_dies_at_94#ev44;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Noel_Gallagher_quits_Oasis#ev44;-1
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Green_Day_dominates_at_MTV's_2005_Video_Music_Awards#ev17;0
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Clarence_Clemons,_Springsteen%e2%80%99s_E_Street_Band_sax_player,_dies_at_69#ev34;2
+resources/benchmark/queries/album.csv;http://en.wikinews.org/wiki/Yahoo!_snaps_up_Flickr#ev37;-1

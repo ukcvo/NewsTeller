@@ -368,63 +368,28 @@
 			<set>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
 					<constructor-arg name="leftBorder" value="-Infinity"/>
-					<constructor-arg name="rightBorder" value="0.00001"/>
+					<constructor-arg name="rightBorder" value="0.2"/>
 					<constructor-arg name="label" value="0"/>
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
-					<constructor-arg name="leftBorder" value="0.00001"/>
-					<constructor-arg name="rightBorder" value="0.1"/>
-					<constructor-arg name="label" value="1"/>
-				</bean>
-				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
-					<constructor-arg name="leftBorder" value="0.1"/>
-					<constructor-arg name="rightBorder" value="0.2"/>
-					<constructor-arg name="label" value="2"/>
-				</bean>
-				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
 					<constructor-arg name="leftBorder" value="0.2"/>
-					<constructor-arg name="rightBorder" value="0.3"/>
-					<constructor-arg name="label" value="3"/>
-				</bean>
-				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
-					<constructor-arg name="leftBorder" value="0.3"/>
-					<constructor-arg name="rightBorder" value="0.4"/>
-					<constructor-arg name="label" value="4"/>
-				</bean>
-				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
-					<constructor-arg name="leftBorder" value="0.4"/>
 					<constructor-arg name="rightBorder" value="0.5"/>
-					<constructor-arg name="label" value="5"/>
+					<constructor-arg name="label" value="1"/>
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
 					<constructor-arg name="leftBorder" value="0.5"/>
 					<constructor-arg name="rightBorder" value="0.6"/>
-					<constructor-arg name="label" value="6"/>
+					<constructor-arg name="label" value="2"/>
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
 					<constructor-arg name="leftBorder" value="0.6"/>
-					<constructor-arg name="rightBorder" value="0.7"/>
-					<constructor-arg name="label" value="7"/>
-				</bean>
-				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
-					<constructor-arg name="leftBorder" value="0.7"/>
-					<constructor-arg name="rightBorder" value="0.8"/>
-					<constructor-arg name="label" value="8"/>
-				</bean>
-				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
-					<constructor-arg name="leftBorder" value="0.8"/>
 					<constructor-arg name="rightBorder" value="0.9"/>
-					<constructor-arg name="label" value="9"/>
+					<constructor-arg name="label" value="3"/>
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
 					<constructor-arg name="leftBorder" value="0.9"/>
-					<constructor-arg name="rightBorder" value="1"/>
-					<constructor-arg name="label" value="10"/>
-				</bean>
-				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ValueBin">
-					<constructor-arg name="leftBorder" value="1"/>
 					<constructor-arg name="rightBorder" value="Infinity"/>
-					<constructor-arg name="label" value="11"/>
+					<constructor-arg name="label" value="4"/>
 				</bean>
 			</set>
 		</property>

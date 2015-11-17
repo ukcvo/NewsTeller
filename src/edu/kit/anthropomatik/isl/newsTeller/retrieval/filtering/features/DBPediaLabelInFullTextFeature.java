@@ -2,11 +2,6 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
@@ -15,17 +10,9 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class DBPediaLabelInFullTextFeature extends UsabilityFeature {
+public class DBPediaLabelInFullTextFeature extends BinBasedFeature {
 
-	private static Log log = LogFactory.getLog(DBPediaLabelInFullTextFeature.class);
-	
 	private String labelQuery;
-	
-	private Set<ValueBin> bins;
-	
-	public void setBins(Set<ValueBin> bins) {
-		this.bins = bins;
-	}
 	
 	public DBPediaLabelInFullTextFeature(String queryFileName, String labelQueryFileName, String probabilityFileName) {
 		super(queryFileName, probabilityFileName);
@@ -81,23 +68,13 @@ public class DBPediaLabelInFullTextFeature extends UsabilityFeature {
 	}
 	
 	@Override
-	public int getValue(String eventURI) {
-		
+	protected double getRawValue(String eventURI) {
 		List<List<String>> entityLabels = getEntityLabels(eventURI);
 		List<String> originalTexts = ksAdapter.retrieveOriginalTexts(eventURI);
 		List<Double> appearances = checkLabels(entityLabels, originalTexts);
 		double averageAppearance = Util.averageFromCollection(appearances);
 		
-		for (ValueBin bin : bins) {
-			if (bin.contains(averageAppearance))
-				return bin.getLabel();
-		}
-		if (Double.isNaN(averageAppearance))
-			return -1;
-		
-		if (log.isErrorEnabled())
-			log.error(String.format("averageAppearance does not fit any bin: %f '%s'", averageAppearance, eventURI));
-		return -2;
+		return averageAppearance;
 	}
 
 }

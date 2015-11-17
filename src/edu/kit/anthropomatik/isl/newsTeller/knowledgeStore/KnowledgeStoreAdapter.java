@@ -2,7 +2,9 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,7 +39,9 @@ public class KnowledgeStoreAdapter {
 	private Session session;
 	
 	private String getMentionFromEventTemplate;
-		
+	
+	private Map<String, String> resourceCache;
+	
 	public void setServerURL(String serverURL) {
 		this.serverURL = serverURL;
 	}
@@ -52,6 +56,7 @@ public class KnowledgeStoreAdapter {
 	
 	public KnowledgeStoreAdapter(String getMentionFromEventFileName) {
 		this.getMentionFromEventTemplate = Util.readStringFromFile(getMentionFromEventFileName);
+		this.resourceCache = new HashMap<String, String>();
 	}
 	
 	/**
@@ -252,6 +257,29 @@ public class KnowledgeStoreAdapter {
 	}
 	//endregion
 	
+	// get the news story text - either from the cache or by looking it up
+	private String getOriginalText(String resourceURI) {
+		String result = "";
+		if (resourceCache.containsKey(resourceURI))
+			result = resourceCache.get(resourceURI);
+		else {
+			try {
+				result = session.download(new URIImpl(resourceURI)).exec().writeToString();
+				resourceCache.put(resourceURI, result);
+			} catch (Exception e) {
+				if(log.isErrorEnabled())
+					log.error(String.format("Could not retrieve resource, returning empty String. URI: '%s'", resourceURI));
+				if(log.isDebugEnabled())
+					log.debug("Resource download failed", e);
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Returns a list of all news stories in which the given event is mentioned.
+	 */
 	public List<String> retrieveOriginalTexts(String eventURI) {
 		List<String> originalTexts = new ArrayList<String>();
 		
@@ -260,16 +288,9 @@ public class KnowledgeStoreAdapter {
 		
 		for (String mentionURI : mentionURIs) {
 			String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
-
-			try {
-				String originalText = session.download(new URIImpl(resourceURI)).exec().writeToString();
+			String originalText = getOriginalText(resourceURI);
+			if (!originalText.isEmpty())
 				originalTexts.add(originalText);
-			} catch (Exception e) {
-				if(log.isErrorEnabled())
-					log.error(String.format("Could not retrieve resource, not adding to list. URI: '%s'", resourceURI));
-				if(log.isDebugEnabled())
-					log.debug("Resource download failed", e);
-			}
 		}
 		
 		return originalTexts;
@@ -295,16 +316,9 @@ public class KnowledgeStoreAdapter {
 		int endIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf(",", mentionURI.indexOf("="))+1));
 		
 		// get original text
-		String originalText = "";
-		try {
-			originalText = session.download(new URIImpl(resourceURI)).exec().writeToString();
-		} catch (Exception e) {
-			if(log.isErrorEnabled())
-				log.error(String.format("Could not retrieve resource. Returning empty string. URI: '%s'", resourceURI));
-			if(log.isDebugEnabled())
-				log.debug("Resource download failed", e);
+		String originalText = getOriginalText(resourceURI);
+		if (originalText.isEmpty())
 			return "";
-		}
 		
 		// search for sentence boundaries using a very simple heuristic
 		List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
