@@ -507,7 +507,8 @@ public class FilteringBenchmark {
 				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], overallPrecision[i], overallRecall[i], overallFscore[i]));
 			log.info("average evaluation");
 			for (int i = 0; i < thresholds.length; i++)
-				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f", thresholds[i], averagePrecision[i], averageRecall[i], averageFscore[i]));
+				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f (ref: %f)", thresholds[i], averagePrecision[i], averageRecall[i], averageFscore[i],
+						2 * (averagePrecision[i] * averageRecall[i]) / (averagePrecision[i] + averageRecall[i])));
 		}
 	}
 	// endregion
