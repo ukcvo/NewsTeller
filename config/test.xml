@@ -181,7 +181,7 @@
 	</bean>
 	
 	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark">
-		<constructor-arg value="resources/benchmark/dummy.csv"/>
+		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="wordNetFeature" ref="wordNetFeature" />
 		<property name="bayesFusion" ref="bayesFusion" />
@@ -193,7 +193,7 @@
 		<property name="doIndividualResubstitutionTests" value="false" />
 		
 		<property name="useLogarithmicProbabilities" value="false" />
-		<property name="outputOnlyFalsePositives" value="true" />
+		<property name="outputOnlyFalsePositives" value="false" />
 		
 		<property name="features">
 			<list>

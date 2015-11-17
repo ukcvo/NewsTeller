@@ -33,17 +33,16 @@ public class NaiveBayesFusion {
 		this.priorProbabilityMap = Util.readPriorProbabilityMapFromFile(fileName);
 	}
 	
-	private double getNominator(Map<UsabilityFeature,Integer> featureValues, String type) {
-		double logNominator = 0;
+	private double getLogAccumulatedProbability(Map<UsabilityFeature,Integer> featureValues, String type) {
+		double logProb = 0;
 		
-		logNominator += priorProbabilityMap.get(type);
+		logProb += priorProbabilityMap.get(type);
 		
 		for (UsabilityFeature feature : features) {
-			logNominator += feature.getLogProbability(featureValues.get(feature), type);
+			logProb += feature.getLogProbability(featureValues.get(feature), type);
 		}
 		
-		double nominator = Math.exp(logNominator);
-		return nominator;
+		return logProb;
 	}
 	
 	/**
@@ -55,10 +54,10 @@ public class NaiveBayesFusion {
 		for (UsabilityFeature f : features)
 			featureValues.put(f, f.getValue(event.getEventURI()));
 			
-		double positiveNominator = getNominator(featureValues, Util.COLUMN_NAME_POSITIVE_PROBABILITY);
-		double negativeNominator = getNominator(featureValues, Util.COLUMN_NAME_NEGATIVE_PROBABILITY);
+		double nominator = getLogAccumulatedProbability(featureValues, Util.COLUMN_NAME_POSITIVE_PROBABILITY);
+		double denominator = getLogAccumulatedProbability(featureValues, Util.COLUMN_NAME_OVERALL_PROBABILITY);
 		
-		double posteriorProbability = positiveNominator / (positiveNominator + negativeNominator);
+		double posteriorProbability = Math.exp(nominator - denominator);
 		
 		return posteriorProbability;
 	}

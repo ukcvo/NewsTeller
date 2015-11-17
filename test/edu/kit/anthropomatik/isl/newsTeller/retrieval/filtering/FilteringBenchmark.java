@@ -281,6 +281,7 @@ public class FilteringBenchmark {
 		Map<String,Double> priorProbabilityMap = new HashMap<String, Double>();
 		priorProbabilityMap.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, overallPositiveProbability);
 		priorProbabilityMap.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, overallNegativeProbability);
+		priorProbabilityMap.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, 1.0);
 		Util.writePriorProbabilityMapToFile(priorProbabilityMap, "csv-out/priors.csv", inLogProbabilities);
 	}
 
