@@ -416,7 +416,7 @@ public class FilteringBenchmark {
 		List<PerformanceMeasure> results = new ArrayList<PerformanceMeasure>();
 		
 		if (log.isInfoEnabled())
-			log.info(isIndividualized ? "resubstitution test" : "individualized resubstitution test");
+			log.info(isIndividualized ? "individualized resubstitution test" : "resubstitution test");
 		
 		for (String fileName : this.benchmarkKeywords.keySet()) {
 			if (log.isInfoEnabled())

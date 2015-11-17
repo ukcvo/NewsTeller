@@ -181,12 +181,12 @@
 	</bean>
 	
 	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark">
-		<constructor-arg value="resources/benchmark/dummy.csv"/>
+		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="bayesFusion" ref="bayesFusion" />
 		
-		<property name="doFeatureAnalysis" value="true" />
-		<property name="doCreateFeatureMap" value="true" />
+		<property name="doFeatureAnalysis" value="false" />
+		<property name="doCreateFeatureMap" value="false" />
 		<property name="doResubstitutionTest" value="true" />
 		<property name="doIndividualResubstitutionTests" value="true" />
 		
@@ -196,8 +196,6 @@
 		<property name="features">
 			<list>
 				<ref bean="A0Feature"/>
-				
-				<!-- 
 				<ref bean="A2Feature" />
 				<ref bean="numberOfFramesFeature" />
 				<ref bean="numberOfLinksFeature" />
@@ -206,10 +204,8 @@
 				<ref bean="numberOfEntityLabelsDBPediaFeature" />
 				<ref bean="appearLabelsInTextFeature" />
 				
-				<ref bean="hasKeywordAsLabelFeature"/>
-				
 				<ref bean="A1Feature"/>
-				<ref bean="eventLabelFeature"/>
+				<ref bean="eventLabelFeature"/> 
 				<ref bean="hasActorFeature"/>
 				<ref bean="hasPlaceFeature"/>
 				<ref bean="hasTimeFeature"/>
@@ -217,6 +213,12 @@
 				<ref bean="isStatementFeature"/>
 				<ref bean="numberOfMentionsFeature"/>
 				<ref bean="wordNetFeature"/>
+				<!-- 
+				
+				
+				<ref bean="hasKeywordAsLabelFeature"/>
+				
+				
 				 -->
 			</list>
 		</property>
