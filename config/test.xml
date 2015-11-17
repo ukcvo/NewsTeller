@@ -224,4 +224,24 @@
 		</property>
 	</bean>
 
+	<bean id="runtimeTester" class="edu.kit.anthropomatik.isl.newsTeller.RuntimeTester">
+		<property name="ksAdapter" ref="ksAdapter"/>
+		<property name="numberOfRepetitions" value="100"/>
+		
+		<property name="keywords">
+			<set>
+				<value>album</value>
+			</set>
+		</property>
+		
+		<property name="sparqlKeywordQueries">
+			<set>
+				<value>resources/SPARQL/finding/findByActor.qry</value>
+			</set>
+		</property>
+		
+		<property name="doKSAccessTests" value="true"/>
+		<property name="doSparqlTests" value="true"/>
+	</bean>
+
 </beans>
