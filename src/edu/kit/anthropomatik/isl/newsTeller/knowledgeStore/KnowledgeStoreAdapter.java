@@ -100,8 +100,9 @@ public class KnowledgeStoreAdapter {
 	/**
 	 * Sends the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds).
 	 * Returns the retrieved results as Strings.
+	 * Don't report empty results as errors if flag is set.
 	 */
-	public List<String> runSingleVariableStringQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
+	public List<String> runSingleVariableStringQuery(String sparqlQuery, String variableName, long timeoutMillisec, boolean isEmptyResultExpected) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("runSingleVariableStringQuery(sparqlQuery = '%s', variableName = '%s', timeoutMillisec = %d)", 
 									sparqlQuery, variableName, timeoutMillisec));
@@ -119,11 +120,13 @@ public class KnowledgeStoreAdapter {
 				}
 				stream.close();
 			} catch (Exception e) {
-				if(log.isErrorEnabled())
-					log.error(String.format("Query execution failed. Query: '%s' Variable: '%s' Timeout: %d", 
-							sparqlQuery, variableName, timeoutMillisec));
-				if(log.isDebugEnabled())
-					log.debug("Query execution exception", e);
+				if (!isEmptyResultExpected) {
+					if(log.isErrorEnabled())
+						log.error(String.format("Query execution failed. Query: '%s' Variable: '%s' Timeout: %d", 
+								sparqlQuery, variableName, timeoutMillisec));
+					if(log.isDebugEnabled())
+						log.debug("Query execution exception", e);
+				}
 			}
 			
 		} else {
@@ -137,17 +140,28 @@ public class KnowledgeStoreAdapter {
 	/**
 	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
 	 * Returns the retrieved results as Strings.
+	 * Don't report empty results as errors if flag is set.
+	 */
+	public List<String> runSingleVariableStringQuery(String sparqlQuery, String variableName, boolean isEmptyResultExpected) {
+		return runSingleVariableStringQuery(sparqlQuery, variableName, 10000, isEmptyResultExpected);
+	}
+	
+	/**
+	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
+	 * Returns the retrieved results as Strings.
+	 * Does not expect empty results.
 	 */
 	public List<String> runSingleVariableStringQuery(String sparqlQuery, String variableName) {
-		return runSingleVariableStringQuery(sparqlQuery, variableName, 10000);
+		return runSingleVariableStringQuery(sparqlQuery, variableName, false);
 	}
 	
 	/**
 	 * Sends the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds).
 	 * Returns the first retrieved result as String.
+	 * Handles empty results by returning empty String.
 	 */
 	public String runSingleVariableStringQuerySingleResult(String sparqlQuery, String variableName, long timeoutMillisec) {
-		List<String> results = runSingleVariableStringQuery(sparqlQuery, variableName, timeoutMillisec);
+		List<String> results = runSingleVariableStringQuery(sparqlQuery, variableName, timeoutMillisec, true);
 		if (results.size() > 0)
 			return results.get(0);
 		else
@@ -167,12 +181,13 @@ public class KnowledgeStoreAdapter {
 	/**
 	 * Sends the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds).
 	 * Returns the retrieved results as NewsEvents.
+	 * Empty results are expected and handed over.
 	 */
 	public List<NewsEvent> runSingleVariableEventQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
 		
 		List<NewsEvent> result = new ArrayList<NewsEvent>();
 		
-		List<String> stringResults = runSingleVariableStringQuery(sparqlQuery, variableName, timeoutMillisec);
+		List<String> stringResults = runSingleVariableStringQuery(sparqlQuery, variableName, timeoutMillisec, true);
 	
 		for (String str : stringResults) {
 			result.add(new NewsEvent(str));
@@ -189,37 +204,19 @@ public class KnowledgeStoreAdapter {
 		return runSingleVariableEventQuery(sparqlQuery, variableName, 10000);
 	}
 	
-	/**
-	 * Sends the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds).
-	 * Returns the first retrieved result as NewsEvent.
-	 */
-	public NewsEvent runSingleVariableEventQuerySingleResult(String sparqlQuery, String variableName, long timeoutMillisec) {
-		List<NewsEvent> results = runSingleVariableEventQuery(sparqlQuery, variableName, timeoutMillisec);
-		if (results.size() > 0)
-			return results.get(0);
-		else
-			return null;
-	}
-	
-	/**
-	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
-	 * Returns the first retrieved result as Double.
-	 */
-	public NewsEvent runSingleVariableEventQuerySingleResult(String sparqlQuery, String variableName) {
-		return runSingleVariableEventQuerySingleResult(sparqlQuery, variableName, 10000);
-	}
 	//endregion
 	
 	//region Double query
 	/**
 	 * Sends the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds).
 	 * Returns the retrieved results as Doubles.
+	 * Empty results are expected and passed on.
 	 */
 	public List<Double> runSingleVariableDoubleQuery(String sparqlQuery, String variableName, long timeoutMillisec) {
 		
 		List<Double> results = new ArrayList<Double>();
 		
-		List<String> stringResults = runSingleVariableStringQuery(sparqlQuery, variableName, timeoutMillisec);
+		List<String> stringResults = runSingleVariableStringQuery(sparqlQuery, variableName, timeoutMillisec, true);
 		
 		for (String str : stringResults) {
 			results.add(Util.parseXMLDouble(str));
@@ -231,6 +228,7 @@ public class KnowledgeStoreAdapter {
 	/**
 	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
 	 * Returns the retrieved results as Doubles.
+	 * Empty results are expected and passed on.
 	 */
 	public List<Double> runSingleVariableDoubleQuery(String sparqlQuery, String variableName) {
 		return runSingleVariableDoubleQuery(sparqlQuery, variableName, 10000);
@@ -239,6 +237,7 @@ public class KnowledgeStoreAdapter {
 	/**
 	 * Sends the given sparqlQuery to the KnowledgeStore instance (using the given timeout in milliseconds).
 	 * Returns the first retrieved result as Double.
+	 * Empty results are expected and dealt with by returning Double.NaN
 	 */
 	public double runSingleVariableDoubleQuerySingleResult(String sparqlQuery, String variableName, long timeoutMillisec) {
 		List<Double> results = runSingleVariableDoubleQuery(sparqlQuery, variableName, timeoutMillisec);
@@ -251,12 +250,14 @@ public class KnowledgeStoreAdapter {
 	/**
 	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
 	 * Returns the first retrieved result as Double.
+	 * Empty results are expected and dealt with by returning Double.NaN
 	 */
 	public double runSingleVariableDoubleQuerySingleResult(String sparqlQuery, String variableName) {
 		return runSingleVariableDoubleQuerySingleResult(sparqlQuery, variableName, 10000);
 	}
 	//endregion
 	
+	//region retrieve text
 	// get the news story text - either from the cache or by looking it up
 	private String getOriginalText(String resourceURI) {
 		String result = "";
@@ -330,4 +331,5 @@ public class KnowledgeStoreAdapter {
 		// pick correct substring
 		return originalText.substring(startIdx, endIdx).trim();
 	}
+	//endregion
 }
