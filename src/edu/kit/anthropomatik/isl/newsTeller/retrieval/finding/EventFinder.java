@@ -39,7 +39,12 @@ public class EventFinder {
 		}
 		
 		public List<NewsEvent> call() throws Exception {
-			return ksAdapter.runSingleVariableEventQuery(query, Util.VARIABLE_EVENT);
+			long t1 = System.currentTimeMillis();
+			List<NewsEvent> result = ksAdapter.runSingleVariableEventQuery(query, Util.VARIABLE_EVENT);
+			long t2 = System.currentTimeMillis();
+			if (log.isInfoEnabled())
+				log.info(t2-t1);
+			return result;
 		}
 		
 	}
@@ -96,10 +101,21 @@ public class EventFinder {
 
 		Set<NewsEvent> events = new HashSet<NewsEvent>();
 
+		long stemmingTime = 0;
+		long setUpTime = 0;
+		long waitTime = 0;
+		long mergeTime = 0;
+		long t1 = 0;
+		long t2 = 0;
+		
+		t1 = System.currentTimeMillis();
 		List<String> stemmedKeywords = new ArrayList<String>();
 		for (Keyword keyword : userQuery)
 			stemmedKeywords.add(stemKeyword(keyword.getWord()));
+		t2 = System.currentTimeMillis();
+		stemmingTime = (t2 - t1);
 		
+		t1 = System.currentTimeMillis();
 		List<Future<List<NewsEvent>>> futures = new ArrayList<Future<List<NewsEvent>>>();
 		for (String sparqlQuery : userQuerySPARQLTemplates) {
 			// TODO: generalize to multiple keywords (Scope 3)
@@ -108,7 +124,24 @@ public class EventFinder {
 			QueryWorker w = new QueryWorker(sparqlQuery.replace("*k*", keywordStem));
 			futures.add(threadPool.submit(w));
 		}
+		t2 = System.currentTimeMillis();
+		setUpTime = (t2 - t1);
 		
+		t1 = System.currentTimeMillis();
+		for (Future<List<NewsEvent>> f : futures) {
+			try {
+				f.get();
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("thread execution somehow failed!");
+				if (log.isDebugEnabled())
+					log.debug("thread execution exception", e);
+			} 
+		}
+		t2 = System.currentTimeMillis();
+		waitTime = (t2 - t1);
+		
+		t1 = System.currentTimeMillis();
 		for (Future<List<NewsEvent>> f : futures) {
 			try {
 				events.addAll(f.get());
@@ -119,6 +152,11 @@ public class EventFinder {
 					log.debug("thread execution exception", e);
 			} 
 		}
+		t2 = System.currentTimeMillis();
+		mergeTime = (t2 - t1);
+		if (log.isInfoEnabled())
+			log.info(String.format("stem: %d, setUp: %d, wait: %d, merge: %d, TOTAL: %d", 
+					stemmingTime, setUpTime, waitTime, mergeTime, stemmingTime + setUpTime + waitTime + mergeTime));
 		
 		return events;
 	}

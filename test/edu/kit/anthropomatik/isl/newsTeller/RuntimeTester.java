@@ -1,10 +1,14 @@
 package edu.kit.anthropomatik.isl.newsTeller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -44,6 +48,8 @@ public class RuntimeTester {
 	
 	private boolean doParallelFinderTest;
 	
+	private boolean doParallelSparqlTest;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	private Map<String, String> sparqlFindingQueries;
@@ -81,6 +87,10 @@ public class RuntimeTester {
 	
 	public void setDoParallelFinderTest(boolean doParallelFinderTest) {
 		this.doParallelFinderTest = doParallelFinderTest;
+	}
+	
+	public void setDoParallelSparqlTest(boolean doParallelSparqlTest) {
+		this.doParallelSparqlTest = doParallelSparqlTest;
 	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
@@ -253,6 +263,61 @@ public class RuntimeTester {
 	}
 	//endregion
 	
+	//region parallelSparqlTest
+	private class ParallelSparqlTestWorker implements Runnable {
+
+		private KnowledgeStore ks;
+		
+		private String query;
+		
+		private String name;
+		
+		public ParallelSparqlTestWorker(KnowledgeStore ks, String query, String name) {
+			this.ks = ks;
+			this.query = query;
+			this.name = name;
+		}
+		
+		public void run() {
+			Session s = ks.newSession();
+			try {
+				long t1 = System.currentTimeMillis();
+				s.sparql(query).timeout(10000L).execTuples();
+				long t2 = System.currentTimeMillis();
+				log.info(String.format("%s - %s: %d", s.toString(), this.name, (t2 - t1)));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			s.close();
+		}
+		
+	}
+	
+	private void parallelSparqlTest() {
+		KnowledgeStore ks = Client.builder("http://knowledgestore2.fbk.eu/nwr/wikinews").compressionEnabled(true).maxConnections(10)
+				.validateServer(false).connectionTimeout(10000).build();
+		ExecutorService threadPool = Executors.newFixedThreadPool(10);
+		List<Future<?>> futures = new ArrayList<Future<?>>();
+		
+		for (Map.Entry<String, String> entry : sparqlFindingQueries.entrySet()) {
+			futures.add(threadPool.submit(new ParallelSparqlTestWorker(ks, entry.getValue().replace(Util.PLACEHOLDER_KEYWORD, "Real Madrid"), entry.getKey())));
+		}
+		for (Future<?> f : futures) {
+			try {
+				f.get();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		threadPool.shutdown();
+		
+		for (Map.Entry<String, String> entry : sparqlFindingQueries.entrySet()) {
+			(new ParallelSparqlTestWorker(ks, entry.getValue().replace(Util.PLACEHOLDER_KEYWORD, "Real Madrid"), entry.getKey() + " seq")).run();
+		}
+		ks.close();
+	}
+	//endregion
+	
 	public void run() {
 		this.ksAdapter.openConnection();
 		
@@ -266,6 +331,8 @@ public class RuntimeTester {
 			evaluateFinder(sequentialFinder, "sequential finder");
 		if (this.doParallelFinderTest)
 			evaluateFinder(parallelFinder, "parallel finder");
+		if (this.doParallelSparqlTest)
+			parallelSparqlTest();
 		
 		sequentialFinder.shutDown();
 		parallelFinder.shutDown();

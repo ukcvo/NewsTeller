@@ -32,6 +32,8 @@ public class KnowledgeStoreAdapter {
 	
 	private int timeoutMsec;
 	
+	private int maxNumberOfConnections;
+	
 	private boolean isConnectionOpen = false;
 	
 	private KnowledgeStore knowledgeStore;
@@ -46,6 +48,10 @@ public class KnowledgeStoreAdapter {
 
 	public void setTimeoutMsec(int timeoutMsec) {
 		this.timeoutMsec = timeoutMsec;
+	}
+	
+	public void setMaxNumberOfConnections(int maxNumberOfConnections) {
+		this.maxNumberOfConnections = maxNumberOfConnections;
 	}
 
 	public boolean isConnectionOpen() {
@@ -69,7 +75,7 @@ public class KnowledgeStoreAdapter {
 			if (log.isWarnEnabled())
 				log.warn("Trying to open a second connection before closing the first one. Request ignored.");
 		} else {
-			this.knowledgeStore = Client.builder(serverURL).compressionEnabled(true).maxConnections(2).validateServer(false)
+			this.knowledgeStore = Client.builder(serverURL).compressionEnabled(true).maxConnections(maxNumberOfConnections).validateServer(false)
 					.connectionTimeout(timeoutMsec).build();
 			this.isConnectionOpen = true;
 		}
