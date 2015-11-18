@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.generation.SummaryCreator;
+import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
@@ -30,6 +31,8 @@ public class NewsTeller {
 	
 	private SummaryCreator generator;
 	
+	private KnowledgeStoreAdapter ksAdapter;
+	
 	//region setters
 	public void setUserModel(UserModel userModel) {
 		this.userModel = userModel;
@@ -44,6 +47,10 @@ public class NewsTeller {
 
 	public void setGenerator(SummaryCreator generator) {
 		this.generator = generator;
+	}
+	
+	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
+		this.ksAdapter = ksAdapter;
 	}
 	//endregion 
 
@@ -65,10 +72,20 @@ public class NewsTeller {
 		if (log.isTraceEnabled())
 			log.trace(String.format("getNews(user query = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
 		
+		if (!this.ksAdapter.isConnectionOpen())
+			ksAdapter.openConnection();
+		
 		NewsEvent selectedEvent = retriever.retrieveEvent(userQuery, userModel);
 		String summary = generator.summarizeEvent(selectedEvent);
 		
 		return summary;
 	}
 	
+	/**
+	 * Takes care of shutting down all threadpools.
+	 */
+	public void shutDown() {
+		this.retriever.shutDown();
+		this.ksAdapter.closeConnection();
+	}
 }

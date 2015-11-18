@@ -106,4 +106,8 @@ public class EventRetriever {
 		//endregion		
 		return event;
 	}
+	
+	public void shutDown() {
+		this.eventFinder.shutDown();
+	}
 }

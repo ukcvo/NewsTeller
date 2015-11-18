@@ -36,9 +36,8 @@ public class SentencePicker extends SummaryCreator {
 		} else {
 			if (log.isTraceEnabled())
 				log.trace(String.format("summarizeEvent(event = %s)", event.toVerboseString()));
-			ksAdapter.openConnection();
+			
 			result = ksAdapter.retrieveSentencefromEvent(event.getEventURI());
-			ksAdapter.closeConnection();
 			if (result.isEmpty())
 				result = EMPTY_EVENT_RESPONSE;
 		}

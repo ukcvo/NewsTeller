@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.LogManager;
@@ -12,9 +13,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import eu.fbk.knowledgestore.KnowledgeStore;
 import eu.fbk.knowledgestore.Session;
@@ -36,15 +40,25 @@ public class RuntimeTester {
 	
 	private boolean doSparqlFeatureTests;
 	
+	private boolean doSequentialFinderTest;
+	
+	private boolean doParallelFinderTest;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	private Map<String, String> sparqlFindingQueries;
 	
 	private Map<String, String> sparqlFeatureQueries;
 	
-	private Set<String> keywords;
+	private Set<String> stemmedKeywords;
 	
 	private Set<String> eventURIs;
+	
+	private EventFinder sequentialFinder;
+	
+	private EventFinder parallelFinder;
+	
+	private Set<List<Keyword>> keywords;
 	
 	private int numberOfRepetitions;
 	
@@ -59,6 +73,14 @@ public class RuntimeTester {
 	
 	public void setDoSparqlFeatureTests(boolean doSparqlFeatureTests) {
 		this.doSparqlFeatureTests = doSparqlFeatureTests;
+	}
+	
+	public void setDoSequentialFinderTest(boolean doSequentialFinderTest) {
+		this.doSequentialFinderTest = doSequentialFinderTest;
+	}
+	
+	public void setDoParallelFinderTest(boolean doParallelFinderTest) {
+		this.doParallelFinderTest = doParallelFinderTest;
 	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
@@ -79,24 +101,39 @@ public class RuntimeTester {
 		}
 	}
 	
-	public void setKeywords(Set<String> keywords) {
-		this.keywords = keywords;
+	public void setStemmedKeywords(Set<String> stemmedKeywords) {
+		this.stemmedKeywords = stemmedKeywords;
 	}
 	
-	public void setEventURIFileName(String fileName) {
-		this.eventURIs = new HashSet<String>();
-		Set<String> fileNames = Util.readBenchmarkConfigFile(fileName).keySet();
-		for (String f : fileNames) {
-			Set<BenchmarkEvent> events = Util.readBenchmarkQueryFromFile(f).keySet();
-			for (BenchmarkEvent e : events)
-				eventURIs.add(e.getEventURI());
-		}
+	public void setSequentialFinder(EventFinder sequentialFinder) {
+		this.sequentialFinder = sequentialFinder;
+	}
+	
+	public void setParallelFinder(EventFinder parallelFinder) {
+		this.parallelFinder = parallelFinder;
 	}
 	
 	public void setNumberOfRepetitions(int numberOfRepetitions) {
 		this.numberOfRepetitions = numberOfRepetitions;
 	}
 	//endregion
+	
+	public RuntimeTester(String configFileName) {
+		
+		Map<String,List<Keyword>> benchmarkConfig = Util.readBenchmarkConfigFile(configFileName);
+		this.keywords = new HashSet<List<Keyword>>();
+		for (List<Keyword> queryKeywords : benchmarkConfig.values()) {
+			this.keywords.add(queryKeywords);
+		}
+		
+		this.eventURIs = new HashSet<String>();
+		Set<String> fileNames = benchmarkConfig.keySet();
+		for (String f : fileNames) {
+			Set<BenchmarkEvent> events = Util.readBenchmarkQueryFromFile(f).keySet();
+			for (BenchmarkEvent e : events)
+				eventURIs.add(e.getEventURI());
+		}
+	}
 	
 	//region ksAccessTests
 	private void ksAccessTests() {
@@ -137,10 +174,10 @@ public class RuntimeTester {
 		ks.close();
 		
 		if (log.isInfoEnabled()) {
-			log.info(String.format("average client opening time: %d", averageClientOpenTime));
-			log.info(String.format("average client closing time: %d", averageClientClosingTime));
-			log.info(String.format("average session opening time: %d", averageSessionOpenTime));
-			log.info(String.format("average session closing time: %d", averageSessionClosingTime));
+			log.info(String.format("average client opening time: %d ms", averageClientOpenTime));
+			log.info(String.format("average client closing time: %d ms", averageClientClosingTime));
+			log.info(String.format("average session opening time: %d ms", averageSessionOpenTime));
+			log.info(String.format("average session closing time: %d ms", averageSessionClosingTime));
 		}
 		
 	}
@@ -149,7 +186,6 @@ public class RuntimeTester {
 	//region sparqlFindingTests
 	private void sparqlFindingTests() {
 		
-		ksAdapter.openConnection();
 		for (Map.Entry<String, String> entry : sparqlFindingQueries.entrySet()) {
 			String fileName = entry.getKey();
 			String query = entry.getValue();
@@ -157,7 +193,7 @@ public class RuntimeTester {
 			for (int i = 0; i < this.numberOfRepetitions; i++) {
 				if (log.isInfoEnabled())
 					log.info(i);
-				for (String keyword : this.keywords) {
+				for (String keyword : this.stemmedKeywords) {
 					String modifiedQuery = query.replace(Util.PLACEHOLDER_KEYWORD, keyword);
 					long t1 = System.currentTimeMillis();
 					ksAdapter.runSingleVariableStringQuery(modifiedQuery, Util.VARIABLE_EVENT);
@@ -166,19 +202,17 @@ public class RuntimeTester {
 				}
 			}
 			averageQueryTime /= this.numberOfRepetitions;
-			averageQueryTime /= this.keywords.size();
+			averageQueryTime /= this.stemmedKeywords.size();
 			
 			if (log.isInfoEnabled())
-				log.info(String.format("%s: %d", fileName, averageQueryTime));
+				log.info(String.format("%s: %d ms", fileName, averageQueryTime));
 		}
 
-		ksAdapter.closeConnection();
 	}
 	//endregion
 	
 	//region sparqlFeatureTests
 	private void sparqlFeatureTests() {
-		ksAdapter.openConnection();
 		
 		for(Map.Entry<String, String> entry : sparqlFeatureQueries.entrySet()) {
 			String fileName = entry.getKey();
@@ -194,20 +228,48 @@ public class RuntimeTester {
 			averageQueryTime /= this.eventURIs.size();
 			
 			if (log.isInfoEnabled())
-				log.info(String.format("%s: %d", fileName, averageQueryTime));
+				log.info(String.format("%s: %d ms", fileName, averageQueryTime));
 		}
 		
-		ksAdapter.closeConnection();
+	}
+	//endregion
+	
+	//region evaluateFinder
+	private void evaluateFinder(EventFinder finder, String finderName) {
+		long averageFindingTime = 0;
+		DummyUserModel um = new DummyUserModel();
+		for (int i = 0; i < this.numberOfRepetitions; i++) {
+			for (List<Keyword> queryKeywords : this.keywords) {
+				long t1 = System.currentTimeMillis();
+				finder.findEvents(queryKeywords, um);
+				long t2 = System.currentTimeMillis();
+				averageFindingTime += (t2 - t1);
+			}
+		}
+		averageFindingTime /= this.numberOfRepetitions;
+		averageFindingTime /= this.keywords.size();
+		if (log.isInfoEnabled())
+			log.info(String.format("%s: %d ms",finderName, averageFindingTime));
 	}
 	//endregion
 	
 	public void run() {
+		this.ksAdapter.openConnection();
+		
 		if (this.doKSAccessTests)
 			ksAccessTests();
 		if (this.doSparqlFindingTests)
 			sparqlFindingTests();
 		if (this.doSparqlFeatureTests)
 			sparqlFeatureTests();
+		if (this.doSequentialFinderTest)
+			evaluateFinder(sequentialFinder, "sequential finder");
+		if (this.doParallelFinderTest)
+			evaluateFinder(parallelFinder, "parallel finder");
+		
+		sequentialFinder.shutDown();
+		parallelFinder.shutDown();
+		this.ksAdapter.closeConnection();
 	}
 	
 	public static void main(String[] args) {

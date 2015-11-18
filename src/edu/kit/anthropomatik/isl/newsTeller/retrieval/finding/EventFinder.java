@@ -1,8 +1,13 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.finding;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,11 +30,27 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class EventFinder {
 
+	private class QueryWorker implements Callable<List<NewsEvent>> {
+
+		private String query;
+		
+		public QueryWorker(String query) {
+			this.query = query;
+		}
+		
+		public List<NewsEvent> call() throws Exception {
+			return ksAdapter.runSingleVariableEventQuery(query, Util.VARIABLE_EVENT);
+		}
+		
+	}
+	
 	private static Log log = LogFactory.getLog(EventFinder.class);
 
 	// access to KnowledgeStore
 	private KnowledgeStoreAdapter ksAdapter;
 
+	private ExecutorService threadPool;
+	
 	private List<String> userQuerySPARQLTemplates; // SPARQL queries based on user query keyword
 
 	@SuppressWarnings("unused")
@@ -42,6 +63,13 @@ public class EventFinder {
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
+	}
+	
+	public void setNThreads(int nThreads) {
+		if (nThreads == 0)
+			this.threadPool = Executors.newCachedThreadPool();
+		else
+			this.threadPool = Executors.newFixedThreadPool(nThreads);
 	}
 
 	public EventFinder(String userQueryConfigFileName, String userInterestConfigFileName, String previousEventConfigFileName) {
@@ -68,12 +96,30 @@ public class EventFinder {
 
 		Set<NewsEvent> events = new HashSet<NewsEvent>();
 
+		List<String> stemmedKeywords = new ArrayList<String>();
+		for (Keyword keyword : userQuery)
+			stemmedKeywords.add(stemKeyword(keyword.getWord()));
+		
+		List<Future<List<NewsEvent>>> futures = new ArrayList<Future<List<NewsEvent>>>();
 		for (String sparqlQuery : userQuerySPARQLTemplates) {
 			// TODO: generalize to multiple keywords (Scope 3)
-			String keywordStem = userQuery.get(0).getWord();
-			keywordStem = stemKeyword(keywordStem);
-			events.addAll(ksAdapter.runSingleVariableEventQuery(sparqlQuery.replace("*k*", keywordStem), "event"));
+			String keywordStem = stemmedKeywords.get(0);
+			
+			QueryWorker w = new QueryWorker(sparqlQuery.replace("*k*", keywordStem));
+			futures.add(threadPool.submit(w));
 		}
+		
+		for (Future<List<NewsEvent>> f : futures) {
+			try {
+				events.addAll(f.get());
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("thread execution somehow failed!");
+				if (log.isDebugEnabled())
+					log.debug("thread execution exception", e);
+			} 
+		}
+		
 		return events;
 	}
 
@@ -101,17 +147,20 @@ public class EventFinder {
 			log.trace(String.format("findEvents(userQuery = <%s>, userModel = %s)", StringUtils.collectionToCommaDelimitedString(userQuery), userModel.toString()));
 
 		Set<NewsEvent> events = new HashSet<NewsEvent>();
-
-		this.ksAdapter.openConnection();
 		
 		if (userQuery != null && !userQuery.isEmpty()) //TODO: temporary fix, remove in Scope 3
 			events.addAll(processUserQuery(userQuery));
 		events.addAll(processUserInterests(userModel.getInterests()));
 		events.addAll(processConversationHistory(userModel.getHistory()));
-
-		this.ksAdapter.closeConnection();
 		
 		return events;
 	}
 
+	/**
+	 * Closes the threadpool.
+	 */
+	public void shutDown() {
+		this.threadPool.shutdown();
+	}
+	
 }

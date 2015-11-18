@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
-import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 
 /**
  * Filters events based on the posterior probability estimated by naive bayes and a threshold.
@@ -22,8 +21,6 @@ public class BayesEventFilter implements IEventFilter {
 	
 	private double threshold;
 	
-	private KnowledgeStoreAdapter ksAdapter;
-	
 	private NaiveBayesFusion bayes;
 	
 	public void setThreshold(double threshold) {
@@ -32,10 +29,6 @@ public class BayesEventFilter implements IEventFilter {
 
 	public void setBayes(NaiveBayesFusion bayes) {
 		this.bayes = bayes;
-	}
-	
-	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
-		this.ksAdapter = ksAdapter;
 	}
 	
 	/**
@@ -47,13 +40,11 @@ public class BayesEventFilter implements IEventFilter {
 			
 		Set<NewsEvent> result = new HashSet<NewsEvent>();
 		
-		ksAdapter.openConnection();
 		for (NewsEvent event : events) {
 			double probability = bayes.getProbabilityOfEvent(event);
 			if (probability >= threshold)
 				result.add(event);
 		}
-		ksAdapter.closeConnection();
 		
 		if(log.isDebugEnabled())
 			log.debug(String.format("keeping %d out of %d events", result.size(), events.size()));

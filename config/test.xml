@@ -21,6 +21,7 @@
 		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope0.txt" />
 		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope0.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="nThreads" value="1"/>
 	</bean>
 
 	<bean id="finder1"
@@ -29,6 +30,16 @@
 		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope1.txt" />
 		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope1.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="nThreads" value="1"/>
+	</bean>
+
+	<bean id="finder2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
+		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/finding_userQuery_Scope1.txt" />
+		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope1.txt" />
+		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope1.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="nThreads" value="0"/>
 	</bean>
 
 	<bean id="filter0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.DummyEventFilter">
@@ -225,25 +236,26 @@
 	</bean>
 
 	<bean id="runtimeTester" class="edu.kit.anthropomatik.isl.newsTeller.RuntimeTester">
+		<constructor-arg name="configFileName" value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter"/>
-		<property name="keywords">
+		<property name="stemmedKeywords">
 			<set>
 				<value>album</value>
 				<value>artifici intellig</value>
 				<value>Berlin</value>
 				<value>champion leagu</value>
 				<value>chancellor</value>
-				<value>chariti</value>
+				<value>charit(i|y)</value>
 				<value>Chernobyl</value>
 				<value>cinema</value>
 				<value>climat</value>
-				<value>comedi</value>
+				<value>comed(i|y)</value>
 				<value>concert</value>
 				<value>contradict</value>
 				<value>danc</value>
 				<value>earthquak</value>
 				<value>Edinburgh</value>
-				<value>Edmund Hillari</value>
+				<value>Edmund Hillar(i|y)</value>
 				<value>erupt</value>
 				<value>European Space Agenc</value>
 				<value>Facebook</value>
@@ -284,7 +296,6 @@
 			</set>
 		</property>
 		
-		<property name="eventURIFileName" value="resources/benchmark/Scope 0.csv"/>
 		<property name="sparqlFeatureQueries">
 			<set>
 				<value>resources/SPARQL/usability/A0.qry</value>
@@ -305,9 +316,14 @@
 			</set>
 		</property>
 		
+		<property name="sequentialFinder" ref="finder1"/>
+		<property name="parallelFinder" ref="finder2"/>
+		
 		<property name="doKSAccessTests" value="false"/>
 		<property name="doSparqlFindingTests" value="false"/>
-		<property name="doSparqlFeatureTests" value="true"/>
+		<property name="doSparqlFeatureTests" value="false"/>
+		<property name="doSequentialFinderTest" value="false"/>
+		<property name="doParallelFinderTest" value="true"/>
 		
 		<property name="numberOfRepetitions" value="5"/>
 		

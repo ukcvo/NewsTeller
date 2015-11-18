@@ -127,7 +127,6 @@ public class FilteringBenchmark {
 
 		this.featureMap = new HashMap<BenchmarkEvent, Map<String, Integer>>();
 
-		this.ksAdapter.openConnection();
 		for (BenchmarkEvent event : this.allEvents) {
 			Map<String, Integer> featureValues = new HashMap<String, Integer>();
 
@@ -137,8 +136,7 @@ public class FilteringBenchmark {
 
 			this.featureMap.put(event, featureValues);
 		}
-		this.ksAdapter.closeConnection();
-
+		
 		List<String> featureNames = new ArrayList<String>();
 		for (UsabilityFeature f : features) {
 			featureNames.add(f.getName());
@@ -349,7 +347,6 @@ public class FilteringBenchmark {
 		
 		Set<String> falsePositiveURIs = new HashSet<String>();
 		
-		ksAdapter.openConnection();
 		for (BenchmarkEvent event : events) {
 			double probability = bayesFusion.getProbabilityOfEvent(new NewsEvent(event.getEventURI()));
 			if (positiveEvents.contains(event)) {
@@ -369,7 +366,6 @@ public class FilteringBenchmark {
 				}
 			}
 		}
-		ksAdapter.closeConnection();
 		
 		for (int i = 0; i < thresholds.length; i++) {
 			precision[i] = (1.0 * tp[i]) / (tp[i] + fp[i]);
@@ -527,6 +523,8 @@ public class FilteringBenchmark {
 	 * Runs the benchmark, depending on the boolean flags being set.
 	 */
 	public void run() {
+		this.ksAdapter.openConnection();
+		
 		if (this.doCreateFeatureMap)
 			createFeatureMap();
 		else
@@ -538,6 +536,8 @@ public class FilteringBenchmark {
 			resubstitutionTest(false);
 		if (this.doIndividualResubstitutionTests)
 			resubstitutionTest(true);
+		
+		this.ksAdapter.closeConnection();
 	}
 
 	public static void main(String[] args) {

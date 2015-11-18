@@ -12,7 +12,7 @@ import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-class DummyUserModel extends UserModel {
+public class DummyUserModel extends UserModel {
 
 	@Override
 	public List<Keyword> getInterests() {

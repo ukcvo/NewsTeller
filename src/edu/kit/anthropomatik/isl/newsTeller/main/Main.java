@@ -53,6 +53,7 @@ public class Main {
 		}
 		
 		in.close();
+		newsTeller.shutDown();
 	}
 	
 	public static void main(String[] args) {

@@ -81,10 +81,8 @@ public abstract class CoefficientDeterminer {
 		if (queryContainsHistoricalEvent)
 			modifiedQuery = modifiedQuery.replace(Util.PLACEHOLDER_HISTORICAL_EVENT, historicalEventURI);
 
-		ksAdapter.openConnection();
 		// TODO: maybe just picking first result is too simple
 		List<String> result = ksAdapter.runSingleVariableStringQuery(modifiedQuery, variableName);
-		ksAdapter.closeConnection();
 
 		return result;
 	}

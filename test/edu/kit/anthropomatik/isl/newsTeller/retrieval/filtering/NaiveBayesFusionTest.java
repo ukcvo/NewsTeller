@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.logging.LogManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,16 +38,20 @@ public class NaiveBayesFusionTest {
 		bayes = (NaiveBayesFusion) context.getBean("bayesFusionTest");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
+		ksAdapter.openConnection();
 	}
 
 	@Test
 	public void shouldReturnCorrectProbability() {
 		NewsEvent e = new NewsEvent("http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev67");
 		double expectedProbability = 0.114924279;
-		ksAdapter.openConnection();
 		double bayesProbability = bayes.getProbabilityOfEvent(e);
-		ksAdapter.closeConnection();
 		assertTrue(Math.abs(bayesProbability-expectedProbability) < Util.EPSILON);
+	}
+	
+	@After
+	public void tearDown() {
+		ksAdapter.closeConnection();
 	}
 
 }

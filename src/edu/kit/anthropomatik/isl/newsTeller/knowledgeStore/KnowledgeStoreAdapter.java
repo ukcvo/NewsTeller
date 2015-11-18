@@ -36,8 +36,6 @@ public class KnowledgeStoreAdapter {
 	
 	private KnowledgeStore knowledgeStore;
 	
-	//private Session session;
-	
 	private String getMentionFromEventTemplate;
 	
 	private Map<String, String> resourceCache;
@@ -73,7 +71,6 @@ public class KnowledgeStoreAdapter {
 		} else {
 			this.knowledgeStore = Client.builder(serverURL).compressionEnabled(true).maxConnections(2).validateServer(false)
 					.connectionTimeout(timeoutMsec).build();
-			//this.session = knowledgeStore.newSession();
 			this.isConnectionOpen = true;
 		}
 	}
@@ -86,7 +83,6 @@ public class KnowledgeStoreAdapter {
 			log.trace("closeConnection()");
 		
 		if (this.isConnectionOpen) {
-			//this.session.close();
 			this.knowledgeStore.close();
 			this.isConnectionOpen = false;
 		} else {

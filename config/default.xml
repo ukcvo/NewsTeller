@@ -21,6 +21,7 @@
 		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope1.txt" />
 		<constructor-arg name="previousEventConfigFileName" value="config/SPARQL/finding_previousEvent_Scope1.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="nThreads" value="3"/>
 	</bean>
 
 	<bean id="bayesFusion" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.NaiveBayesFusion">
