@@ -36,7 +36,7 @@ public class KnowledgeStoreAdapter {
 	
 	private KnowledgeStore knowledgeStore;
 	
-	private Session session;
+	//private Session session;
 	
 	private String getMentionFromEventTemplate;
 	
@@ -73,7 +73,7 @@ public class KnowledgeStoreAdapter {
 		} else {
 			this.knowledgeStore = Client.builder(serverURL).compressionEnabled(true).maxConnections(2).validateServer(false)
 					.connectionTimeout(timeoutMsec).build();
-			this.session = knowledgeStore.newSession();
+			//this.session = knowledgeStore.newSession();
 			this.isConnectionOpen = true;
 		}
 	}
@@ -86,7 +86,7 @@ public class KnowledgeStoreAdapter {
 			log.trace("closeConnection()");
 		
 		if (this.isConnectionOpen) {
-			this.session.close();
+			//this.session.close();
 			this.knowledgeStore.close();
 			this.isConnectionOpen = false;
 		} else {
@@ -113,12 +113,14 @@ public class KnowledgeStoreAdapter {
 		if (isConnectionOpen) {
 			 
 			try {
-				Stream<BindingSet> stream = this.session.sparql(sparqlQuery).timeout(timeoutMillisec).execTuples();
+				Session session = this.knowledgeStore.newSession();
+				Stream<BindingSet> stream = session.sparql(sparqlQuery).timeout(timeoutMillisec).execTuples();
 				List<BindingSet> tuples = stream.toList();
+				stream.close();
+				session.close();
 				for (BindingSet tuple : tuples) {
 					result.add(tuple.getValue(variableName).toString());
 				}
-				stream.close();
 			} catch (Exception e) {
 				if (!isEmptyResultExpected) {
 					if(log.isErrorEnabled())
@@ -128,7 +130,6 @@ public class KnowledgeStoreAdapter {
 						log.debug("Query execution exception", e);
 				}
 			}
-			
 		} else {
 			if (log.isWarnEnabled())
 				log.warn("Trying to access KnowledgeStore without having an open connection. Request ignored, returning empty list."); 
@@ -265,7 +266,9 @@ public class KnowledgeStoreAdapter {
 			result = resourceCache.get(resourceURI);
 		else {
 			try {
+				Session session = this.knowledgeStore.newSession();
 				result = session.download(new URIImpl(resourceURI)).exec().writeToString();
+				session.close();
 				resourceCache.put(resourceURI, result);
 			} catch (Exception e) {
 				if(log.isErrorEnabled())
