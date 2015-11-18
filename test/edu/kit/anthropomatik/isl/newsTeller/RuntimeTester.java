@@ -1,6 +1,8 @@
 package edu.kit.anthropomatik.isl.newsTeller;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.LogManager;
 
@@ -11,6 +13,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import eu.fbk.knowledgestore.KnowledgeStore;
@@ -29,41 +32,50 @@ public class RuntimeTester {
 	
 	private boolean doKSAccessTests;
 	
-	private boolean doSparqlTests;
+	private boolean doSparqlFindingTests;
+	
+	private boolean doSparqlFeatureTests;
 	
 	private KnowledgeStoreAdapter ksAdapter;
 	
-	private Set<String> sparqlKeywordQueries;
+	private Map<String, String> sparqlFindingQueries;
 	
-	private Set<String> sparqlEventQueries;
+	private Map<String, String> sparqlFeatureQueries;
 	
 	private Set<String> keywords;
 	
+	private Set<String> eventURIs;
+	
 	private int numberOfRepetitions;
 	
+	//region setters
 	public void setDoKSAccessTests(boolean doKSAccessTests) {
 		this.doKSAccessTests = doKSAccessTests;
 	}
+		
+	public void setDoSparqlFindingTests(boolean doSparqlFindingTests) {
+		this.doSparqlFindingTests = doSparqlFindingTests;
+	}
 	
-	public void setDoSparqlTests(boolean doSparqlTests) {
-		this.doSparqlTests = doSparqlTests;
+	public void setDoSparqlFeatureTests(boolean doSparqlFeatureTests) {
+		this.doSparqlFeatureTests = doSparqlFeatureTests;
 	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
 	
-	public void setSparqlKeywordQueries(Set<String> fileNames) {
-		this.sparqlKeywordQueries = new HashSet<String>();
+	public void setSparqlFindingQueries(Set<String> fileNames) {
+		this.sparqlFindingQueries = new HashMap<String, String>();
 		for (String s : fileNames) {
-			sparqlKeywordQueries.add(Util.readStringFromFile(s));
+			sparqlFindingQueries.put(s, Util.readStringFromFile(s));
 		}
 	}
 	
-	public void setSparqlEventQueries(Set<String> fileNames) {
-		this.sparqlEventQueries = new HashSet<String>();
+	public void setSparqlFeatureQueries(Set<String> fileNames) {
+		this.sparqlFeatureQueries = new HashMap<String, String>();
 		for (String s : fileNames) {
-			sparqlEventQueries.add(Util.readStringFromFile(s));
+			sparqlFeatureQueries.put(s, Util.readStringFromFile(s));
 		}
 	}
 	
@@ -71,10 +83,22 @@ public class RuntimeTester {
 		this.keywords = keywords;
 	}
 	
+	public void setEventURIFileName(String fileName) {
+		this.eventURIs = new HashSet<String>();
+		Set<String> fileNames = Util.readBenchmarkConfigFile(fileName).keySet();
+		for (String f : fileNames) {
+			Set<BenchmarkEvent> events = Util.readBenchmarkQueryFromFile(f).keySet();
+			for (BenchmarkEvent e : events)
+				eventURIs.add(e.getEventURI());
+		}
+	}
+	
 	public void setNumberOfRepetitions(int numberOfRepetitions) {
 		this.numberOfRepetitions = numberOfRepetitions;
 	}
+	//endregion
 	
+	//region ksAccessTests
 	private void ksAccessTests() {
 		long averageClientOpenTime = 0;
 		long averageClientClosingTime = 0;
@@ -120,13 +144,19 @@ public class RuntimeTester {
 		}
 		
 	}
+	//endregion
 	
-	private void sparqlTests() {
+	//region sparqlFindingTests
+	private void sparqlFindingTests() {
 		
 		ksAdapter.openConnection();
-		for (String query : sparqlKeywordQueries) {
+		for (Map.Entry<String, String> entry : sparqlFindingQueries.entrySet()) {
+			String fileName = entry.getKey();
+			String query = entry.getValue();
 			long averageQueryTime = 0;
 			for (int i = 0; i < this.numberOfRepetitions; i++) {
+				if (log.isInfoEnabled())
+					log.info(i);
 				for (String keyword : this.keywords) {
 					String modifiedQuery = query.replace(Util.PLACEHOLDER_KEYWORD, keyword);
 					long t1 = System.currentTimeMillis();
@@ -139,21 +169,45 @@ public class RuntimeTester {
 			averageQueryTime /= this.keywords.size();
 			
 			if (log.isInfoEnabled())
-				log.info(averageQueryTime);
+				log.info(String.format("%s: %d", fileName, averageQueryTime));
 		}
-		
-		// TODO: same here!
-//		for (String query : sparqlEventQueries) {
-//			
-//		}
+
 		ksAdapter.closeConnection();
 	}
+	//endregion
+	
+	//region sparqlFeatureTests
+	private void sparqlFeatureTests() {
+		ksAdapter.openConnection();
+		
+		for(Map.Entry<String, String> entry : sparqlFeatureQueries.entrySet()) {
+			String fileName = entry.getKey();
+			String query = entry.getValue();
+			long averageQueryTime = 0;
+			for (String eventURI : this.eventURIs) {
+				String modifiedQuery = query.replace(Util.PLACEHOLDER_EVENT, eventURI);
+				long t1 = System.currentTimeMillis();
+				ksAdapter.runSingleVariableStringQuery(modifiedQuery, Util.VARIABLE_NUMBER, true);
+				long t2 = System.currentTimeMillis();
+				averageQueryTime += (t2 - t1);
+			}
+			averageQueryTime /= this.eventURIs.size();
+			
+			if (log.isInfoEnabled())
+				log.info(String.format("%s: %d", fileName, averageQueryTime));
+		}
+		
+		ksAdapter.closeConnection();
+	}
+	//endregion
 	
 	public void run() {
 		if (this.doKSAccessTests)
 			ksAccessTests();
-		if (this.doSparqlTests)
-			sparqlTests();
+		if (this.doSparqlFindingTests)
+			sparqlFindingTests();
+		if (this.doSparqlFeatureTests)
+			sparqlFeatureTests();
 	}
 	
 	public static void main(String[] args) {

@@ -226,22 +226,91 @@
 
 	<bean id="runtimeTester" class="edu.kit.anthropomatik.isl.newsTeller.RuntimeTester">
 		<property name="ksAdapter" ref="ksAdapter"/>
-		<property name="numberOfRepetitions" value="100"/>
-		
 		<property name="keywords">
 			<set>
 				<value>album</value>
+				<value>artifici intellig</value>
+				<value>Berlin</value>
+				<value>champion leagu</value>
+				<value>chancellor</value>
+				<value>chariti</value>
+				<value>Chernobyl</value>
+				<value>cinema</value>
+				<value>climat</value>
+				<value>comedi</value>
+				<value>concert</value>
+				<value>contradict</value>
+				<value>danc</value>
+				<value>earthquak</value>
+				<value>Edinburgh</value>
+				<value>Edmund Hillari</value>
+				<value>erupt</value>
+				<value>European Space Agenc</value>
+				<value>Facebook</value>
+				<value>Fukushima</value>
+				<value>Hawk</value>
+				<value>Himalaya</value>
+				<value>hurrican Katrina</value>
+				<value>IBM</value>
+				<value>Iceland</value>
+				<value>kiss</value>
+				<value>Lehman Brother</value>
+				<value>malipul</value>
+				<value>marathon</value>
+				<value>Medvedev</value>
+				<value>Merkel</value>
+				<value>Michael Jackson</value>
+				<value>Mount Everest</value>
+				<value>museum</value>
+				<value>power station</value>
+				<value>Real Madrid</value>
+				<value>Rhine</value>
+				<value>riot</value>
+				<value>Rome</value>
+				<value>Sahara</value>
+				<value>Star War</value>
+				<value>Tom Cruis</value>
+				<value>upload</value>
+				<value>volcano</value>
+				<value>Watson</value>
 			</set>
 		</property>
 		
-		<property name="sparqlKeywordQueries">
+		<property name="sparqlFindingQueries">
 			<set>
 				<value>resources/SPARQL/finding/findByActor.qry</value>
+				<value>resources/SPARQL/finding/findByPlace.qry</value>
+				<value>resources/SPARQL/finding/findByLabel.qry</value>
 			</set>
 		</property>
 		
-		<property name="doKSAccessTests" value="true"/>
-		<property name="doSparqlTests" value="true"/>
+		<property name="eventURIFileName" value="resources/benchmark/Scope 0.csv"/>
+		<property name="sparqlFeatureQueries">
+			<set>
+				<value>resources/SPARQL/usability/A0.qry</value>
+				<value>resources/SPARQL/usability/A1.qry</value>
+				<value>resources/SPARQL/usability/A2.qry</value>
+				<value>resources/SPARQL/usability/areActorsAgents.qry</value>
+				<value>resources/SPARQL/usability/arePlacesPlaces.qry</value>
+				<value>resources/SPARQL/usability/eventLabel.qry</value>
+				<value>resources/SPARQL/usability/hasActor.qry</value>
+				<value>resources/SPARQL/usability/hasPlace.qry</value>
+				<value>resources/SPARQL/usability/hasTime.qry</value>
+				<value>resources/SPARQL/usability/isSpeechCognitive.qry</value>
+				<value>resources/SPARQL/usability/isStatement.qry</value>
+				<value>resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry</value>
+				<value>resources/SPARQL/usability/numberOfFrames.qry</value>
+				<value>resources/SPARQL/usability/numberOfLinks.qry</value>
+				<value>resources/SPARQL/usability/numberOfMentions.qry</value>
+			</set>
+		</property>
+		
+		<property name="doKSAccessTests" value="false"/>
+		<property name="doSparqlFindingTests" value="false"/>
+		<property name="doSparqlFeatureTests" value="true"/>
+		
+		<property name="numberOfRepetitions" value="5"/>
+		
 	</bean>
 
 </beans>
