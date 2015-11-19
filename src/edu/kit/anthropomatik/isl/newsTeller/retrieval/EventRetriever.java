@@ -63,6 +63,7 @@ public class EventRetriever {
 			log.trace(String.format("retrieveEvents(userQuery = <%s>, userModel = %s)", 
 										StringUtils.collectionToCommaDelimitedString(userQuery) , userModel.toString()));
 		//region time logging
+		long t0 = System.currentTimeMillis();
 		long old = System.currentTimeMillis();
 		//endregion
 		Set<NewsEvent> events = eventFinder.findEvents(userQuery, userModel);
@@ -102,6 +103,7 @@ public class EventRetriever {
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();
 			log.debug(String.format("select event: % d ms", l - old));
+			log.debug(String.format("total: %d", l - t0));
 		}
 		//endregion		
 		return event;

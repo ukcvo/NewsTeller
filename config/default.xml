@@ -13,7 +13,7 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
-		<property name="maxNumberOfConnections" value="200"/>
+		<property name="maxNumberOfConnections" value="100"/>
 	</bean>
 
 	<bean id="finder"
