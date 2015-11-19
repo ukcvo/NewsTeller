@@ -57,7 +57,7 @@
 	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
 		<property name="bayes" ref="bayesFusion" />
 		<property name="threshold" value="0.5" />
-		<property name="nThreads" value="0" />
+		<property name="nThreads" value="100" />
 	</bean>
 
 	<bean id="relevanceScorer"

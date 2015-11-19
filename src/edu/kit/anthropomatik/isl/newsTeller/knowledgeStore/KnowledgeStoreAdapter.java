@@ -53,6 +53,10 @@ public class KnowledgeStoreAdapter {
 	public void setMaxNumberOfConnections(int maxNumberOfConnections) {
 		this.maxNumberOfConnections = maxNumberOfConnections;
 	}
+	
+	public int getMaxNumberOfConnections() {
+		return this.maxNumberOfConnections;
+	}
 
 	public boolean isConnectionOpen() {
 		return isConnectionOpen;

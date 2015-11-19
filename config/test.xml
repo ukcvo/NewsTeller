@@ -13,7 +13,7 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
-		<property name="maxNumberOfConnections" value="200"/>
+		<property name="maxNumberOfConnections" value="100"/>
 	</bean>
 
 	<bean id="finder0"
@@ -201,7 +201,7 @@
 		<property name="bayesFusion" ref="bayesFusion" />
 		
 		<property name="doFeatureAnalysis" value="false" />
-		<property name="doCreateFeatureMap" value="false" />
+		<property name="doCreateFeatureMap" value="true" />
 		<property name="doResubstitutionTest" value="true" />
 		<property name="doIndividualResubstitutionTests" value="true" />
 		
@@ -239,22 +239,10 @@
 		</property>
 	</bean>
 
-	<bean id="filterOneThread" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
+	<bean id="filterParallel" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
 		<property name="bayes" ref="bayesFusion" />
 		<property name="threshold" value="0.5" />
 		<property name="nThreads" value="1" />
-	</bean>
-
-	<bean id="filterTenThreads" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
-		<property name="bayes" ref="bayesFusion" />
-		<property name="threshold" value="0.5" />
-		<property name="nThreads" value="10" />
-	</bean>
-	
-	<bean id="filterAllThreads" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
-		<property name="bayes" ref="bayesFusion" />
-		<property name="threshold" value="0.5" />
-		<property name="nThreads" value="0" />
 	</bean>
 
 	<bean id="runtimeTester" class="edu.kit.anthropomatik.isl.newsTeller.RuntimeTester">
@@ -341,9 +329,22 @@
 		<property name="sequentialFinder" ref="finder1"/>
 		<property name="parallelFinder" ref="finder2"/>
 		<property name="sequentialFilter" ref="filter2" />
-		<property name="oneThreadFilter" ref="filterOneThread" />
-		<property name="tenThreadFilter" ref="filterTenThreads" />
-		<property name="allThreadFilter" ref="filterAllThreads" />		
+		<property name="parallelFilter" ref="filterParallel" />	
+		
+		<property name="threadNumbers">
+			<list>
+				<value>1</value>
+				<value>2</value>
+				<value>5</value>
+				<value>10</value>
+				<value>25</value>
+				<value>50</value>
+				<value>100</value>
+				<value>250</value>
+				<value>500</value>
+				<value>1000</value>
+			</list>
+		</property>
 		
 		<property name="doKSAccessTests" value="false"/>
 		<property name="doSparqlFindingTests" value="false"/>
@@ -351,8 +352,8 @@
 		<property name="doSequentialFinderTest" value="false"/>
 		<property name="doParallelFinderTest" value="false"/>
 		<property name="doParallelSparqlTest" value="false"/>
-		<property name="doSequentialFilterTest" value="true" />
-		<property name="doParallelFilterTest" value="false" />
+		<property name="doSequentialFilterTest" value="false" />
+		<property name="doParallelFilterTest" value="true" />
 		
 		<property name="numberOfRepetitions" value="5"/>
 		

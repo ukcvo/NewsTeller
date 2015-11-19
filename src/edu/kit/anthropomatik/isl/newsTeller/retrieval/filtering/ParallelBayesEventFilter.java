@@ -42,10 +42,7 @@ public class ParallelBayesEventFilter implements IEventFilter {
 	}
 	
 	public void setNThreads(int nThreads) {
-		if (nThreads == 0)
-			this.threadPool = Executors.newCachedThreadPool();
-		else
-			this.threadPool = Executors.newFixedThreadPool(nThreads);
+		this.threadPool = Executors.newFixedThreadPool(nThreads);
 	}
 	
 	private class FilterWorker implements Runnable {

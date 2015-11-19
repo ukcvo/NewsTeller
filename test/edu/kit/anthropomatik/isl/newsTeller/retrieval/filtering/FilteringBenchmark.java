@@ -6,6 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -122,20 +127,57 @@ public class FilteringBenchmark {
 	}
 
 	// region set up feature map
-	// create feature map by querying the knowledge store and storing the result in a csv file
-	private void createFeatureMap() {
+	
+	private class EventWorker implements Runnable {
 
-		this.featureMap = new HashMap<BenchmarkEvent, Map<String, Integer>>();
-
-		for (BenchmarkEvent event : this.allEvents) {
-			Map<String, Integer> featureValues = new HashMap<String, Integer>();
+		private ConcurrentMap<BenchmarkEvent, ConcurrentMap<String, Integer>> targetMap;
+		
+		private BenchmarkEvent event;
+		
+		public EventWorker(BenchmarkEvent event, ConcurrentMap<BenchmarkEvent, ConcurrentMap<String, Integer>> targetMap) {
+			this.event = event;
+			this.targetMap = targetMap;
+		}
+		
+		public void run() {
+			ConcurrentMap<String, Integer> featureValues = new ConcurrentHashMap<String, Integer>();
 
 			for (UsabilityFeature f : features) {
 				featureValues.put(f.getName(), f.getValue(event.getEventURI()));
 			}
 
-			this.featureMap.put(event, featureValues);
+			this.targetMap.putIfAbsent(event, featureValues);
 		}
+		
+	}
+	
+	// create feature map by querying the knowledge store and storing the result in a csv file
+	private void createFeatureMap() {
+
+		ConcurrentMap<BenchmarkEvent, ConcurrentMap<String, Integer>> featureMapBuffer = new ConcurrentHashMap<BenchmarkEvent, ConcurrentMap<String,Integer>>();
+		
+		ExecutorService threadPool = Executors.newFixedThreadPool(ksAdapter.getMaxNumberOfConnections());
+		List<Future<?>> futures = new ArrayList<Future<?>>();
+		
+		for (BenchmarkEvent event: this.allEvents) {
+			EventWorker w = new EventWorker(event, featureMapBuffer);
+			futures.add(threadPool.submit(w));
+		}
+		
+		for (Future<?> f : futures) {
+			try {
+				f.get();
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("thread execution somehow failed!");
+				if (log.isDebugEnabled())
+					log.debug("thread execution exception", e);
+			} 
+		}
+		
+		threadPool.shutdown();
+		
+		this.featureMap = new HashMap<BenchmarkEvent, Map<String,Integer>>(featureMapBuffer);
 		
 		List<String> featureNames = new ArrayList<String>();
 		for (UsabilityFeature f : features) {
