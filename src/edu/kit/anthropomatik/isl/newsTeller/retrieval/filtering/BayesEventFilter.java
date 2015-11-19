@@ -54,4 +54,8 @@ public class BayesEventFilter implements IEventFilter {
 		
 		return result;
 	}
+
+	public void shutDown() {
+		// nothing to do here
+	}
 }

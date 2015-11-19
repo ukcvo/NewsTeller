@@ -13,7 +13,7 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
-		<property name="maxNumberOfConnections" value="10"/>
+		<property name="maxNumberOfConnections" value="200"/>
 	</bean>
 
 	<bean id="finder"
@@ -22,7 +22,7 @@
 		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope1.txt" />
 		<constructor-arg name="previousEventConfigFileName" value="config/SPARQL/finding_previousEvent_Scope1.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="nThreads" value="1"/>
+		<property name="nThreads" value="3"/>
 	</bean>
 
 	<bean id="bayesFusion" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.NaiveBayesFusion">
@@ -54,9 +54,10 @@
 		</property>
 	</bean>
 
-	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.BayesEventFilter">
+	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
 		<property name="bayes" ref="bayesFusion" />
 		<property name="threshold" value="0.5" />
+		<property name="nThreads" value="0" />
 	</bean>
 
 	<bean id="relevanceScorer"

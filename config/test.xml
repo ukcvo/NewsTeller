@@ -13,7 +13,7 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
-		<property name="maxNumberOfConnections" value="10"/>
+		<property name="maxNumberOfConnections" value="200"/>
 	</bean>
 
 	<bean id="finder0"
@@ -144,6 +144,7 @@
 		<property name="userModel" ref="userModel0" />
 		<property name="retriever" ref="retriever0" />
 		<property name="generator" ref="generator0" />
+		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 	
 	<bean id="newsTeller1"
@@ -152,6 +153,7 @@
 		<property name="userModel" ref="userModel0" />
 		<property name="retriever" ref="retriever1" />
 		<property name="generator" ref="generator1" />
+		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
 	<bean id="newsTeller2"
@@ -160,6 +162,7 @@
 		<property name="userModel" ref="userModel0" />
 		<property name="retriever" ref="retriever2" />
 		<property name="generator" ref="generator1" />
+		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
 	<bean id="bayesFusionTest" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.NaiveBayesFusion">
@@ -234,6 +237,24 @@
 				 -->
 			</list>
 		</property>
+	</bean>
+
+	<bean id="filterOneThread" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
+		<property name="bayes" ref="bayesFusion" />
+		<property name="threshold" value="0.5" />
+		<property name="nThreads" value="1" />
+	</bean>
+
+	<bean id="filterTenThreads" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
+		<property name="bayes" ref="bayesFusion" />
+		<property name="threshold" value="0.5" />
+		<property name="nThreads" value="10" />
+	</bean>
+	
+	<bean id="filterAllThreads" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
+		<property name="bayes" ref="bayesFusion" />
+		<property name="threshold" value="0.5" />
+		<property name="nThreads" value="0" />
 	</bean>
 
 	<bean id="runtimeTester" class="edu.kit.anthropomatik.isl.newsTeller.RuntimeTester">
@@ -319,13 +340,19 @@
 		
 		<property name="sequentialFinder" ref="finder1"/>
 		<property name="parallelFinder" ref="finder2"/>
+		<property name="sequentialFilter" ref="filter2" />
+		<property name="oneThreadFilter" ref="filterOneThread" />
+		<property name="tenThreadFilter" ref="filterTenThreads" />
+		<property name="allThreadFilter" ref="filterAllThreads" />		
 		
 		<property name="doKSAccessTests" value="false"/>
 		<property name="doSparqlFindingTests" value="false"/>
 		<property name="doSparqlFeatureTests" value="false"/>
 		<property name="doSequentialFinderTest" value="false"/>
 		<property name="doParallelFinderTest" value="false"/>
-		<property name="doParallelSparqlTest" value="true"/>
+		<property name="doParallelSparqlTest" value="false"/>
+		<property name="doSequentialFilterTest" value="true" />
+		<property name="doParallelFilterTest" value="false" />
 		
 		<property name="numberOfRepetitions" value="5"/>
 		

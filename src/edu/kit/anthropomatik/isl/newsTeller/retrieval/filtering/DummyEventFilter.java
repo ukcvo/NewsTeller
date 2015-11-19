@@ -16,4 +16,7 @@ public class DummyEventFilter implements IEventFilter {
 		return events;
 	}
 
+	public void shutDown() {
+		// nothing to do here
+	}
 }

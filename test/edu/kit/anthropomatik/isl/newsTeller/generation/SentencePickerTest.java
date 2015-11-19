@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.logging.LogManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,10 +13,12 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 
 public class SentencePickerTest {
 
 	private SummaryCreator sentencePicker;
+	private KnowledgeStoreAdapter ksAdapter;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -31,9 +34,16 @@ public class SentencePickerTest {
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
 		sentencePicker = (SummaryCreator) context.getBean("generator1");
+		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
+		ksAdapter.openConnection();
 	}
 
+	@After
+	public void tearDown() {
+		ksAdapter.closeConnection();
+	}
+	
 	@Test
 	public void shouldReturnEmptyEventResponseBecauseOfNullEvent() {
 		String result = sentencePicker.summarizeEvent(null);

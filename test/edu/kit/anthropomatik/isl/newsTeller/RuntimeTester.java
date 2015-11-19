@@ -18,9 +18,11 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -50,6 +52,10 @@ public class RuntimeTester {
 	
 	private boolean doParallelSparqlTest;
 	
+	private boolean doSequentialFilterTest;
+	
+	private boolean doParallelFilterTest;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	private Map<String, String> sparqlFindingQueries;
@@ -60,9 +66,19 @@ public class RuntimeTester {
 	
 	private Set<String> eventURIs;
 	
+	private Set<NewsEvent> events;
+	
 	private EventFinder sequentialFinder;
 	
 	private EventFinder parallelFinder;
+	
+	private IEventFilter sequentialFilter;
+	
+	private IEventFilter oneThreadFilter;
+	
+	private IEventFilter tenThreadFilter;
+	
+	private IEventFilter allThreadFilter;
 	
 	private Set<List<Keyword>> keywords;
 	
@@ -91,6 +107,14 @@ public class RuntimeTester {
 	
 	public void setDoParallelSparqlTest(boolean doParallelSparqlTest) {
 		this.doParallelSparqlTest = doParallelSparqlTest;
+	}
+	
+	public void setDoSequentialFilterTest(boolean doSequentialFilterTest) {
+		this.doSequentialFilterTest = doSequentialFilterTest;
+	}
+	
+	public void setDoParallelFilterTest(boolean doParallelFilterTest) {
+		this.doParallelFilterTest = doParallelFilterTest;
 	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
@@ -123,6 +147,22 @@ public class RuntimeTester {
 		this.parallelFinder = parallelFinder;
 	}
 	
+	public void setSequentialFilter(IEventFilter sequentialFilter) {
+		this.sequentialFilter = sequentialFilter;
+	}
+
+	public void setOneThreadFilter(IEventFilter oneThreadFilter) {
+		this.oneThreadFilter = oneThreadFilter;
+	}
+
+	public void setTenThreadFilter(IEventFilter tenThreadFilter) {
+		this.tenThreadFilter = tenThreadFilter;
+	}
+
+	public void setAllThreadFilter(IEventFilter allThreadFilter) {
+		this.allThreadFilter = allThreadFilter;
+	}
+
 	public void setNumberOfRepetitions(int numberOfRepetitions) {
 		this.numberOfRepetitions = numberOfRepetitions;
 	}
@@ -137,11 +177,15 @@ public class RuntimeTester {
 		}
 		
 		this.eventURIs = new HashSet<String>();
+		this.events = new HashSet<NewsEvent>();
 		Set<String> fileNames = benchmarkConfig.keySet();
 		for (String f : fileNames) {
-			Set<BenchmarkEvent> events = Util.readBenchmarkQueryFromFile(f).keySet();
-			for (BenchmarkEvent e : events)
-				eventURIs.add(e.getEventURI());
+			Set<BenchmarkEvent> fileEvents = Util.readBenchmarkQueryFromFile(f).keySet();
+			for (BenchmarkEvent e : fileEvents) {
+				this.eventURIs.add(e.getEventURI());
+				this.events.add(new NewsEvent(e.getEventURI()));
+			}
+				
 		}
 	}
 	
@@ -318,6 +362,24 @@ public class RuntimeTester {
 	}
 	//endregion
 	
+	//region bayesEventFilterTest
+	private void testFilter(IEventFilter filter, String filterName) {
+		long totalTime = 0;
+		long averageTimePerEvent = 0;
+		
+		long t1 = System.currentTimeMillis();
+		filter.filterEvents(this.events);	
+		long t2 = System.currentTimeMillis();
+		
+		totalTime = t2 - t1;
+		averageTimePerEvent = totalTime / events.size();
+		
+		if (log.isInfoEnabled())
+			log.info(String.format("%s - total: %d ms, per event: %d ms", filterName, totalTime, averageTimePerEvent));
+		
+	}
+	//endregion
+	
 	public void run() {
 		this.ksAdapter.openConnection();
 		
@@ -333,9 +395,22 @@ public class RuntimeTester {
 			evaluateFinder(parallelFinder, "parallel finder");
 		if (this.doParallelSparqlTest)
 			parallelSparqlTest();
+		if (this.doSequentialFilterTest) {
+			testFilter(sequentialFilter, "sequential filter");
+			testFilter(oneThreadFilter, "1 thread filter");
+		}
+		if (this.doParallelFilterTest) {
+			testFilter(tenThreadFilter, "10 thread filter");
+			testFilter(allThreadFilter, "all thread filter");
+		}
+			
 		
 		sequentialFinder.shutDown();
 		parallelFinder.shutDown();
+		sequentialFilter.shutDown();
+		oneThreadFilter.shutDown();
+		tenThreadFilter.shutDown();
+		allThreadFilter.shutDown();
 		this.ksAdapter.closeConnection();
 	}
 	

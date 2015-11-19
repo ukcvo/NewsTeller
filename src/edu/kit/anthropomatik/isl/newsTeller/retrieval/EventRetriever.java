@@ -109,5 +109,6 @@ public class EventRetriever {
 	
 	public void shutDown() {
 		this.eventFinder.shutDown();
+		this.eventFilter.shutDown();
 	}
 }

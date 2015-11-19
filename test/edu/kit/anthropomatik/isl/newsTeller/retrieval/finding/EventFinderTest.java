@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.LogManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
 public class EventFinderTest {
@@ -23,6 +25,7 @@ public class EventFinderTest {
 	private EventFinder finder1;
 	private EventFinder finder2;
 	private UserModel userModel;
+	private KnowledgeStoreAdapter ksAdapter;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -40,7 +43,14 @@ public class EventFinderTest {
 		finder1 = (EventFinder) context.getBean("finder1");
 		finder2 = (EventFinder) context.getBean("finder2");
 		userModel = (UserModel) context.getBean("userModel0");
+		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
+		ksAdapter.openConnection();
+	}
+	
+	@After
+	public void tearDown() {
+		ksAdapter.closeConnection();
 	}
 
 	//region scope 1 (sequential)

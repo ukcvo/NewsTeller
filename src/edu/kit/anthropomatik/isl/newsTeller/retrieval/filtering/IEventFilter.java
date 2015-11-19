@@ -16,4 +16,6 @@ public interface IEventFilter {
 	 * Return the subset of usable events for further processing.
 	 */
 	public Set<NewsEvent> filterEvents(Set<NewsEvent> events);
+	
+	public void shutDown();
 }
