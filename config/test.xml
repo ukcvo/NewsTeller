@@ -359,4 +359,10 @@
 		
 	</bean>
 
+	<bean id="findingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.FindingBenchmark" >
+		<constructor-arg name="configFileName" value="resources/benchmark/Scope 0.csv" />
+		<property name="finder" ref="finder2" />
+		<property name="ksAdapter" ref="ksAdapter" />
+	</bean>
+
 </beans>

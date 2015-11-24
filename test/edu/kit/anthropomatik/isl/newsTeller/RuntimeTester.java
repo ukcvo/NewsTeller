@@ -21,7 +21,6 @@ import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
@@ -422,7 +421,7 @@ public class RuntimeTester {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(FilteringBenchmark.class);
+			log = LogFactory.getLog(RuntimeTester.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
