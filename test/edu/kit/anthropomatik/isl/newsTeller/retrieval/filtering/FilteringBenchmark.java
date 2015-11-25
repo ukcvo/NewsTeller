@@ -22,9 +22,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import edu.kit.anthropomatik.isl.newsTeller.data.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
-import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.FeatureMapFeature;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
@@ -36,16 +34,10 @@ public class FilteringBenchmark {
 
 	private boolean useLogarithmicProbabilities;
 	
-	private boolean outputOnlyFalsePositives;
-	
 	private boolean doFeatureAnalysis;
 
 	private boolean doCreateFeatureMap;
 
-	private boolean doResubstitutionTest;
-	
-	private boolean doIndividualResubstitutionTests;
-	
 	private Map<String, List<Keyword>> benchmarkKeywords;
 
 	private Map<BenchmarkEvent, GroundTruth> benchmark;
@@ -62,8 +54,6 @@ public class FilteringBenchmark {
 
 	private List<UsabilityFeature> features;
 
-	private NaiveBayesFusion bayesFusion;
-	
 	// region setters
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
 		this.doFeatureAnalysis = doFeatureAnalysis;
@@ -73,32 +63,16 @@ public class FilteringBenchmark {
 		this.doCreateFeatureMap = doCreateFeatureMap;
 	}
 	
-	public void setDoResubstitutionTest(boolean doResubstitutionTest) {
-		this.doResubstitutionTest = doResubstitutionTest;
-	}
-	
-	public void setDoIndividualResubstitutionTests(boolean doIndividualResubstitutionTests) {
-		this.doIndividualResubstitutionTests = doIndividualResubstitutionTests;
-	}
-	
 	public void setUseLogarithmicProbabilities(boolean useLogarithmicProbabilities) {
 		this.useLogarithmicProbabilities = useLogarithmicProbabilities;
 	}
 
-	public void setOutputOnlyFalsePositives(boolean outputOnlyFalsePositives) {
-		this.outputOnlyFalsePositives = outputOnlyFalsePositives;
-	}
-	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
 
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
-	}
-	
-	public void setBayesFusion(NaiveBayesFusion bayesFusion) {
-		this.bayesFusion = bayesFusion;
 	}
 	// endregion
 
@@ -376,191 +350,7 @@ public class FilteringBenchmark {
 	// endregion
 	// endregion
 
-	private PerformanceMeasure runTest(Set<BenchmarkEvent> events, double[] thresholds) {
-
-		int[] tp = new int[thresholds.length];
-		int[] fp = new int[thresholds.length];
-		int[] tn = new int[thresholds.length];
-		int[] fn = new int[thresholds.length];
-		double[] precision = new double[thresholds.length];
-		double[] recall = new double[thresholds.length];
-		double[] fscore = new double[thresholds.length];
-		double[] balancedAccuracy = new double[thresholds.length];
-		
-		Set<String> falsePositiveURIs = new HashSet<String>();
-		
-		for (BenchmarkEvent event : events) {
-			double probability = bayesFusion.getProbabilityOfEvent(new NewsEvent(event.getEventURI()));
-			if (positiveEvents.contains(event)) {
-				for (int i = 0; i < thresholds.length; i++) {
-					if (probability >= thresholds[i])
-						tp[i]++;
-					else
-						fn[i]++;
-				}
-			} else if (negativeEvents.contains(event)) {
-				for (int i = 0; i < thresholds.length; i++) {
-					if (probability >= thresholds[i]) {
-						falsePositiveURIs.add(event.getEventURI());
-						fp[i]++;
-					} else
-						tn[i]++;
-				}
-			}
-		}
-		
-		for (int i = 0; i < thresholds.length; i++) {
-			precision[i] = (1.0 * tp[i]) / (tp[i] + fp[i]);
-			recall[i] = (1.0 * tp[i]) / (tp[i] + fn[i]);
-			fscore[i] = 2 * (precision[i] * recall[i]) / (precision[i] + recall[i]);
-			balancedAccuracy[i] = ((0.5 * tp[i]) / (tp[i] + fn[i])) + ((0.5 * tn[i]) / (tn[i] + fp[i]));
-		}
-		
-		if (log.isInfoEnabled()) {
-			if (this.outputOnlyFalsePositives) {
-				for (String uri : falsePositiveURIs)
-					log.info(uri);
-			} else {
-				for (int i = 0; i < thresholds.length; i++)
-					log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f, balancedAccuracy: %f", thresholds[i], precision[i], recall[i], fscore[i], balancedAccuracy[i]));
-			}
-		}
-		
-		return new PerformanceMeasure(tp, fp, tn, fn, precision, recall, fscore, balancedAccuracy);		
-	}
-	
-	// get the probabilities for a certain set of positive and negative events and a certain feature
-	private Map<Integer, Map<String, Double>> estimateProbabilities(Set<BenchmarkEvent> positiveEvents, Set<BenchmarkEvent> negativeEvents, UsabilityFeature feature, boolean useLogProbabilities) {
-	
-		// count #occurences for each feature value - separate for positive and negative training examples
-		Map<Integer, Integer> positiveValueCounts = countValues(feature, positiveEvents);
-		Map<Integer, Integer> negativeValueCounts = countValues(feature, negativeEvents);
 			
-		// collect set of all possible feature values observed in the training set
-		Set<Integer> possibleValues = new HashSet<Integer>();
-		possibleValues.addAll(positiveValueCounts.keySet());
-		possibleValues.addAll(negativeValueCounts.keySet());
-
-		// calculate the probability map based on the counts 
-		// (contains overall probability and conditional probability for positive and negative examples)
-		Map<Integer, Map<String, Double>> probabilityMap = createProbabilityMap(positiveValueCounts, negativeValueCounts, 
-																positiveEvents.size(), negativeEvents.size(), possibleValues, true);
-
-		return probabilityMap;
-	}
-	
-	// region resubstitutionTest
-	// do a resubstitution test - use the extracted probabilities on overall set w/ different thresholds and see what you get
-	private void resubstitutionTest(boolean isIndividualized) {
-		
-		double[] thresholds = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
-		List<PerformanceMeasure> results = new ArrayList<PerformanceMeasure>();
-		
-		if (log.isInfoEnabled())
-			log.info(isIndividualized ? "individualized resubstitution test" : "resubstitution test");
-		
-		for (String fileName : this.benchmarkKeywords.keySet()) {
-			if (log.isInfoEnabled())
-				log.info(fileName);
-			
-			Set<BenchmarkEvent> fileEvents = new HashSet<BenchmarkEvent>();
-			for (BenchmarkEvent e : allEvents) {
-				if (e.getFileName().equals(fileName))
-					fileEvents.add(e);
-			}
-			
-			Set<UsabilityFeature> fileFeatures = new HashSet<UsabilityFeature>();
-			for (UsabilityFeature feature : this.features) {
-				// set dummy features for speedup!
-				UsabilityFeature newFeature = new FeatureMapFeature(this.featureMap, fileName, feature.getName());
-				newFeature.setProbabilityMap(feature.getProbabilityMap());
-				fileFeatures.add(newFeature); 
-			}
-					
-			if (isIndividualized) {
-				// recompute the probabilityMaps!
-				Set<BenchmarkEvent> posEvents = new HashSet<BenchmarkEvent>();
-				Set<BenchmarkEvent> negEvents = new HashSet<BenchmarkEvent>();
-				for (BenchmarkEvent e : fileEvents) {
-					if (positiveEvents.contains(e))
-						posEvents.add(e);
-					else if (negativeEvents.contains(e))
-						negEvents.add(e);
-				}			
-
-				for (UsabilityFeature feature : fileFeatures) {
-					feature.setProbabilityMap(estimateProbabilities(posEvents, negEvents, feature, true));
-				}
-				
-				// also recompute the priors!
-				Map<String, Double> priors = new HashMap<String, Double>();
-				double posProb = (1.0 * posEvents.size()) / (posEvents.size() + negEvents.size());
-				double negProb = 1 - posProb;
-				priors.put(Util.COLUMN_NAME_POSITIVE_PROBABILITY, Math.log(posProb));
-				priors.put(Util.COLUMN_NAME_NEGATIVE_PROBABILITY, Math.log(negProb));
-				priors.put(Util.COLUMN_NAME_OVERALL_PROBABILITY, 0.0);
-				bayesFusion.setPriorProbabilityMap(priors);
-			}
-			
-			this.bayesFusion.setFeatures(fileFeatures);
-			
-			PerformanceMeasure p = runTest(fileEvents, thresholds);
-			results.add(p);
-		}
-		
-		//region aggregate results
-		int[] overallTp = new int[thresholds.length];
-		int[] overallFp = new int[thresholds.length];
-		int[] overallTn = new int[thresholds.length];
-		int[] overallFn = new int[thresholds.length];
-		double[] averagePrecision = new double[thresholds.length];
-		double[] averageRecall = new double[thresholds.length];
-		double[] averageFscore = new double[thresholds.length];
-		double[] averageBalancedAccuracy = new double[thresholds.length];
-		double[] overallPrecision = new double[thresholds.length];
-		double[] overallRecall = new double[thresholds.length];
-		double[] overallFscore = new double[thresholds.length];
-		double[] overallBalancedAccuracy = new double[thresholds.length];
-		
-		for (PerformanceMeasure p : results) {
-			for (int i = 0; i < thresholds.length; i++) {
-				overallTp[i] += p.getTp(i);
-				overallFp[i] += p.getFp(i);
-				overallTn[i] += p.getTn(i);
-				overallFn[i] += p.getFn(i);
-				
-				averagePrecision[i] += p.getPrecision(i);
-				averageRecall[i] += p.getRecall(i);
-				averageFscore[i] += p.getFscore(i);
-				averageBalancedAccuracy[i] += p.getBalacedAccuracy(i);
-			}
-		}
-		
-		for (int i = 0; i < thresholds.length; i++) {
-			overallPrecision[i] = (1.0 * overallTp[i]) / (overallTp[i] + overallFp[i]);
-			overallRecall[i] = (1.0 * overallTp[i]) / (overallTp[i] + overallFn[i]);
-			overallFscore[i] = 2 * (overallPrecision[i] * overallRecall[i]) / (overallPrecision[i] + overallRecall[i]);
-			overallBalancedAccuracy[i] = ((0.5 * overallTp[i]) / (overallTp[i] + overallFn[i])) + ((0.5 * overallTn[i]) / (overallTn[i] + overallFp[i]));
-			
-			averagePrecision[i] /= results.size();
-			averageRecall[i] /= results.size();
-			averageFscore[i] /= results.size();
-			averageBalancedAccuracy[i] /= results.size();
-		}
-		//endregion
-		
-		if (log.isInfoEnabled()) {
-			log.info("overall evaluation");
-			for (int i = 0; i < thresholds.length; i++)
-				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f, balancedAccuracy: %f", thresholds[i], overallPrecision[i], overallRecall[i], overallFscore[i], overallBalancedAccuracy[i]));
-			log.info("average evaluation");
-			for (int i = 0; i < thresholds.length; i++)
-				log.info(String.format("THRESHOLD %f: precision: %f, recall: %f, fscore: %f (ref: %f), balancedAccuracy: %f", thresholds[i], averagePrecision[i], averageRecall[i], averageFscore[i],
-						2 * (averagePrecision[i] * averageRecall[i]) / (averagePrecision[i] + averageRecall[i]), averageBalancedAccuracy[i]));
-		}
-	}
-	// endregion
-	
 	/**
 	 * Runs the benchmark, depending on the boolean flags being set.
 	 */
@@ -574,10 +364,6 @@ public class FilteringBenchmark {
 
 		if (this.doFeatureAnalysis)
 			analyzeFeatures();
-		if (this.doResubstitutionTest)
-			resubstitutionTest(false);
-		if (this.doIndividualResubstitutionTests)
-			resubstitutionTest(true);
 		
 		this.ksAdapter.closeConnection();
 	}

@@ -25,39 +25,7 @@
 		<property name="nThreads" value="3"/>
 	</bean>
 
-	<bean id="bayesFusion" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.NaiveBayesFusion">
-		<constructor-arg name="fileName" value="resources/usabilityProbabilities/priors.csv"/>
-		<property name="features">
-			<set>
-				<ref bean="A2Feature" />
-				<ref bean="numberOfFramesFeature" />
-				<ref bean="numberOfLinksFeature" />
-				<ref bean="areActorsAgentsFeature"/>
-				<ref bean="arePlacesPlacesFeature"/>
-				<ref bean="numberOfEntityLabelsDBPediaFeature" />
-				<ref bean="appearLabelsInTextFeature" />
-				
-				<ref bean="A0Feature"/>
-				<ref bean="A1Feature"/>
-				<ref bean="eventLabelFeature"/> 
-				<ref bean="hasActorFeature"/>
-				<ref bean="hasPlaceFeature"/>
-				<ref bean="hasTimeFeature"/>
-				<ref bean="isSpeechCognitiveFeature"/>
-				<ref bean="isStatementFeature"/>
-				<ref bean="numberOfMentionsFeature"/>
-				<ref bean="wordNetFeature"/>
-				<!-- 
-				
-				 -->
-			</set>
-		</property>
-	</bean>
-
-	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter">
-		<property name="bayes" ref="bayesFusion" />
-		<property name="threshold" value="0.5" />
-		<property name="nThreads" value="100" />
+	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.DummyEventFilter">
 	</bean>
 
 	<bean id="relevanceScorer"

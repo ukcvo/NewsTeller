@@ -22,7 +22,6 @@ import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -74,7 +73,7 @@ public class RuntimeTester {
 	
 	private IEventFilter sequentialFilter;
 	
-	private ParallelBayesEventFilter parallelFilter;
+	//private ParallelBayesEventFilter parallelFilter;
 	
 	private List<Integer> threadNumbers;
 	
@@ -149,9 +148,9 @@ public class RuntimeTester {
 		this.sequentialFilter = sequentialFilter;
 	}
 
-	public void setParallelFilter(ParallelBayesEventFilter parallelFilter) {
-		this.parallelFilter = parallelFilter;
-	}
+//	public void setParallelFilter(ParallelBayesEventFilter parallelFilter) {
+//		this.parallelFilter = parallelFilter;
+//	}
 	
 	public void setThreadNumbers(List<Integer> threadNumbers) {
 		this.threadNumbers = threadNumbers;
@@ -373,18 +372,20 @@ public class RuntimeTester {
 		
 	}
 	
-	private void parallelFilterTest() {
-		
-		for (int nThreads : threadNumbers) {
-			parallelFilter.shutDown();
-			parallelFilter.setNThreads(nThreads);
-			ksAdapter.closeConnection();
-			ksAdapter.setMaxNumberOfConnections(nThreads);
-			ksAdapter.openConnection();
-			testFilter(parallelFilter, String.format("%d thread filter", nThreads));
-		}
-		
-	}
+	//TODO: filter
+	
+//	private void parallelFilterTest() {
+//		
+//		for (int nThreads : threadNumbers) {
+//			parallelFilter.shutDown();
+//			parallelFilter.setNThreads(nThreads);
+//			ksAdapter.closeConnection();
+//			ksAdapter.setMaxNumberOfConnections(nThreads);
+//			ksAdapter.openConnection();
+//			testFilter(parallelFilter, String.format("%d thread filter", nThreads));
+//		}
+//		
+//	}
 	//endregion
 	
 	public void run() {
@@ -405,15 +406,15 @@ public class RuntimeTester {
 		if (this.doSequentialFilterTest) {
 			testFilter(sequentialFilter, "sequential filter");
 		}
-		if (this.doParallelFilterTest) {
-			parallelFilterTest();
-		}
+//		if (this.doParallelFilterTest) {
+//			parallelFilterTest();
+//		}
 			
 		
 		sequentialFinder.shutDown();
 		parallelFinder.shutDown();
 		sequentialFilter.shutDown();
-		parallelFilter.shutDown();
+//		parallelFilter.shutDown();
 		this.ksAdapter.closeConnection();
 	}
 	
