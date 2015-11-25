@@ -1,7 +1,5 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
-import java.util.Map;
-
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
@@ -19,8 +17,6 @@ public abstract class UsabilityFeature {
 	
 	protected KnowledgeStoreAdapter ksAdapter;
 	
-	private Map<Integer, Map<String, Double>> probabilityMap;
-	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -33,22 +29,9 @@ public abstract class UsabilityFeature {
 		this.ksAdapter = ksAdapter;
 	}
 	
-	public void setProbabilityMap(Map<Integer, Map<String, Double>> probabilityMap) {
-		this.probabilityMap = probabilityMap;
-	}
-	
-	public Map<Integer, Map<String, Double>> getProbabilityMap() {
-		return this.probabilityMap;
-	}
-	
-	public UsabilityFeature(String queryFileName, String probabilityFileName) {
+	public UsabilityFeature(String queryFileName) {
 		this.sparqlQuery = Util.readStringFromFile(queryFileName);
-		this.probabilityMap = Util.readProbabilityMapFromFile(probabilityFileName);
 	}
 	
 	public abstract int getValue(String eventURI);
-	
-	public double getLogProbability(int value, String type) {
-		return probabilityMap.get(value).get(type);
-	}
 }

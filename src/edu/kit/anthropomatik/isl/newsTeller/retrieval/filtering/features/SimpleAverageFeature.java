@@ -10,8 +10,8 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class SimpleAverageFeature extends BinBasedFeature {
 
-	public SimpleAverageFeature(String queryFileName, String probabilityFileName) {
-		super(queryFileName, probabilityFileName);
+	public SimpleAverageFeature(String queryFileName) {
+		super(queryFileName);
 	}
 	
 	@Override

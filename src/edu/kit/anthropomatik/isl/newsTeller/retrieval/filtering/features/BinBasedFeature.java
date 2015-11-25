@@ -17,8 +17,8 @@ public abstract class BinBasedFeature extends UsabilityFeature {
 	
 	protected Set<ValueBin> bins;
 
-	public BinBasedFeature(String queryFileName, String probabilityFileName) {
-		super(queryFileName, probabilityFileName);
+	public BinBasedFeature(String queryFileName) {
+		super(queryFileName);
 	}
 
 	public void setBins(Set<ValueBin> bins) {

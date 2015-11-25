@@ -9,7 +9,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasActor.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/hasActor.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasActor" />
 		<property name="possibleValues">
@@ -28,7 +27,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasPlace.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/hasPlace.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasPlace" />
 		<property name="possibleValues">
@@ -46,7 +44,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/A0.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/A0.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="A0" />
 		<property name="possibleValues">
@@ -64,7 +61,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/A1.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/A1.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="A1" />
 		<property name="possibleValues">
@@ -82,7 +78,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/eventLabel.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/eventLabel.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="eventLabel" />
 		<property name="possibleValues">
@@ -101,7 +96,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasTime.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/hasTime.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasTime" />
 		<property name="possibleValues">
@@ -118,7 +112,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/isSpeechCognitive.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/isSpeechCognitive.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="isSpeechCognitive" />
 		<property name="possibleValues">
@@ -134,7 +127,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfMentions.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/numberOfMentions.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="numberOfMentions" />
 		<property name="possibleValues">
@@ -154,7 +146,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/isStatement.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/isStatement.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="isStatement" />
 		<property name="possibleValues">
@@ -170,7 +161,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/areLabelsVerbs.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/areLabelsVerbs.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="areLabelsVerbs" />
 		<property name="bins">
@@ -208,7 +198,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/A2.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/A2.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="A2" />
 		<property name="possibleValues">
@@ -225,7 +214,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleAverageFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfLinks.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/numberOfLinks.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="numberOfLinks" />
 		<property name="bins">
@@ -268,7 +256,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfFrames.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/numberOfFrames.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="numberOfFrames" />
 		<property name="possibleValues">
@@ -286,7 +273,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/numberOfEntityLabelsDBPedia.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="numberOfEntityLabelsDBPedia" />
 		<property name="possibleValues">
@@ -305,7 +291,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleAverageFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/areActorsAgents.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/areActorsAgents.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="areActorsAgents" />
 		<property name="bins">
@@ -333,7 +318,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleAverageFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/arePlacesPlaces.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/arePlacesPlaces.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="arePlacesPlaces" />
 		<property name="bins">
@@ -361,7 +345,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
 		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
 		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getLabels.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/appearLabelsInText.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="appearLabelsInText" />
 		<property name="bins">
@@ -399,7 +382,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasKeywordAsLabel.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/usabilityProbabilities/hasKeywordAsLabel.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasKeywordAsLabel" />
 		<property name="possibleValues">
@@ -424,7 +406,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/A0.qry" />
-		<constructor-arg name="probabilityFileName" value="resources/test/A0Log.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="A0" />
 		<property name="possibleValues">

@@ -16,7 +16,7 @@ public class FeatureMapFeature extends UsabilityFeature {
 	private Map<String, Integer> featureMap;
 	
 	public FeatureMapFeature(Map<BenchmarkEvent, Map<String, Integer>> featureMap, String currentFile, String featureName) {
-		super("", "");
+		super("");
 		this.featureMap = new HashMap<String, Integer>();
 		this.setName(featureName);
 		for (BenchmarkEvent event : featureMap.keySet()) {

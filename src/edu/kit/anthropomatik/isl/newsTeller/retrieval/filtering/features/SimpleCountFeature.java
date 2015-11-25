@@ -24,8 +24,8 @@ public class SimpleCountFeature extends UsabilityFeature {
 		this.defaultValue = defaultValue;
 	}
 	
-	public SimpleCountFeature(String queryFileName, String probabilityFileName) {
-		super(queryFileName, probabilityFileName);
+	public SimpleCountFeature(String queryFileName) {
+		super(queryFileName);
 	}
 
 	@Override

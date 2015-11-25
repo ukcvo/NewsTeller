@@ -14,8 +14,8 @@ public class DBPediaLabelInFullTextFeature extends BinBasedFeature {
 
 	private String labelQuery;
 	
-	public DBPediaLabelInFullTextFeature(String queryFileName, String labelQueryFileName, String probabilityFileName) {
-		super(queryFileName, probabilityFileName);
+	public DBPediaLabelInFullTextFeature(String queryFileName, String labelQueryFileName) {
+		super(queryFileName);
 		this.labelQuery = Util.readStringFromFile(labelQueryFileName);
 	}
 

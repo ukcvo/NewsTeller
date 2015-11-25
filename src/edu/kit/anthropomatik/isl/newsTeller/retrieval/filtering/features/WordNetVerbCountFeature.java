@@ -22,8 +22,8 @@ public class WordNetVerbCountFeature extends BinBasedFeature {
 
 	private Dictionary dict = null;
 
-	public WordNetVerbCountFeature(String queryFileName, String probabilityFileName) {
-		super(queryFileName, probabilityFileName);
+	public WordNetVerbCountFeature(String queryFileName) {
+		super(queryFileName);
 		try {
 			this.dict = Dictionary.getDefaultResourceInstance();
 		} catch (JWNLException e) {
