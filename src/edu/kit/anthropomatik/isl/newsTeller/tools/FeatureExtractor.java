@@ -2,9 +2,14 @@ package edu.kit.anthropomatik.isl.newsTeller.tools;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -66,10 +71,8 @@ public class FeatureExtractor {
 			this.benchmark.putAll(fileContent);
 		}
 	}
-	
-	public void run() {
-		this.ksAdapter.openConnection();
-		
+
+	private Instances createDataSetSkeleton() {
 		FastVector attributes = new FastVector();
 		
 		for (UsabilityFeature feature : this.features) {
@@ -85,25 +88,10 @@ public class FeatureExtractor {
 		
 		int numberOfExpectedExamples = this.benchmark.size();
 		Instances dataSet = new Instances("usabilityTest", attributes, numberOfExpectedExamples);
-		
-		for (Map.Entry<BenchmarkEvent, GroundTruth> entry : this.benchmark.entrySet()) {
-			if (log.isInfoEnabled())
-				log.info(entry.getKey().toString());
-			
-			double[] values = new double[dataSet.numAttributes()];
-			
-			for (int i = 0; i < this.features.size(); i++) {
-				UsabilityFeature f = this.features.get(i);
-				values[i] = f.getValue(entry.getKey().getEventURI());
-			}
-			
-			String label = (entry.getValue().getUsabilityRating() == 1.0) ? "true" : "false";
-			values[values.length-1] = dataSet.attribute("usable").indexOfValue(label);
-			
-			Instance example = new Instance(1.0, values);
-			dataSet.add(example);
-		}
-		
+		return dataSet;
+	}
+	
+	private void writeDataSet(Instances dataSet) {
 		try {
 			XRFFSaver saver = new XRFFSaver();
 			saver.setInstances(dataSet);
@@ -115,6 +103,73 @@ public class FeatureExtractor {
 			if (log.isDebugEnabled())
 				log.debug("I/O exception", e);
 		}
+	}
+	
+	private class EventWorker implements Callable<Instance> {
+
+		private String eventURI;
+		private int usabilityIndex;
+		
+		public EventWorker(String eventURI, int usabilityIndex) {
+			this.eventURI = eventURI;
+			this.usabilityIndex = usabilityIndex;
+		}
+		
+		public Instance call() throws Exception {
+			
+			double[] values = new double[features.size() + 1];
+			
+			for (int i = 0; i < features.size(); i++) {
+				UsabilityFeature f = features.get(i);
+				values[i] = f.getValue(this.eventURI);
+			}
+			
+			values[values.length - 1] = this.usabilityIndex;
+			
+			Instance example = new Instance(1.0, values);
+			
+			return example;
+		}
+
+		
+	}
+	
+	public void run() {
+		this.ksAdapter.openConnection();
+		
+		Instances dataSet = createDataSetSkeleton();
+		
+		ExecutorService threadPool = Executors.newFixedThreadPool(ksAdapter.getMaxNumberOfConnections());
+		List<Future<Instance>> futures = new ArrayList<Future<Instance>>();
+		
+		for (Map.Entry<BenchmarkEvent, GroundTruth> entry : this.benchmark.entrySet()) {
+			String eventURI = entry.getKey().getEventURI();
+			String label = (entry.getValue().getUsabilityRating() == 1.0) ? "true" : "false";
+			int usabilityIndex = dataSet.attribute("usable").indexOfValue(label);
+			EventWorker w = new EventWorker(eventURI, usabilityIndex);
+			
+			futures.add(threadPool.submit(w));
+		}
+		if (log.isInfoEnabled())
+			log.info("submitted all events");
+		
+		for (Future<Instance> f : futures) {
+			try {
+				dataSet.add(f.get());
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("thread execution somehow failed!");
+				if (log.isDebugEnabled())
+					log.debug("thread execution exception", e);
+			}
+		}
+		
+		threadPool.shutdown();
+		
+		if (log.isInfoEnabled())
+			log.info("collected all results");
+		
+		writeDataSet(dataSet);
 				
 		this.ksAdapter.closeConnection();
 	}
