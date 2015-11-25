@@ -128,12 +128,28 @@
 	</bean>
 
 	<bean id="featureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.FeatureExtractor">
-		<constructor-arg value="resources/benchmark/dummy.csv"/>
+		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter"/>
 		<property name="outputFileName" value="resources/benchmark/dataSet.xrff"/>
 		<property name="features">
 			<list>
 				<ref bean="A2Feature" />
+				<ref bean="numberOfFramesFeature" />
+				<ref bean="numberOfLinksFeature" />
+				<ref bean="areActorsAgentsFeature"/>
+				<ref bean="arePlacesPlacesFeature"/>
+				<ref bean="numberOfEntityLabelsDBPediaFeature" />
+				<ref bean="appearLabelsInTextFeature" />
+				<ref bean="A0Feature"/>
+				<ref bean="A1Feature"/>
+				<ref bean="eventLabelFeature"/> 
+				<ref bean="hasActorFeature"/>
+				<ref bean="hasPlaceFeature"/>
+				<ref bean="hasTimeFeature"/>
+				<ref bean="isSpeechCognitiveFeature"/>
+				<ref bean="isStatementFeature"/>
+				<ref bean="numberOfMentionsFeature"/>
+				<ref bean="wordNetFeature"/>
 			</list>
 		</property>
 	</bean>

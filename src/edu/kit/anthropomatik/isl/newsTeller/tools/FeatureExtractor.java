@@ -86,6 +86,8 @@ public class FeatureExtractor {
 		classLabels.addElement("false");
 		attributes.addElement(new Attribute("usable", classLabels));
 		
+		attributes.addElement(new Attribute("eventURI", (FastVector) null));
+		
 		int numberOfExpectedExamples = this.benchmark.size();
 		Instances dataSet = new Instances("usabilityTest", attributes, numberOfExpectedExamples);
 		return dataSet;
@@ -109,22 +111,25 @@ public class FeatureExtractor {
 
 		private String eventURI;
 		private int usabilityIndex;
+		private int stringIndex;
 		
-		public EventWorker(String eventURI, int usabilityIndex) {
+		public EventWorker(String eventURI, int usabilityIndex, int stringIndex) {
 			this.eventURI = eventURI;
 			this.usabilityIndex = usabilityIndex;
+			this.stringIndex = stringIndex;
 		}
 		
 		public Instance call() throws Exception {
 			
-			double[] values = new double[features.size() + 1];
+			double[] values = new double[features.size() + 2];
 			
 			for (int i = 0; i < features.size(); i++) {
 				UsabilityFeature f = features.get(i);
 				values[i] = f.getValue(this.eventURI);
 			}
 			
-			values[values.length - 1] = this.usabilityIndex;
+			values[values.length - 2] = this.usabilityIndex;
+			values[values.length - 1] = this.stringIndex;
 			
 			Instance example = new Instance(1.0, values);
 			
@@ -146,7 +151,8 @@ public class FeatureExtractor {
 			String eventURI = entry.getKey().getEventURI();
 			String label = (entry.getValue().getUsabilityRating() == 1.0) ? "true" : "false";
 			int usabilityIndex = dataSet.attribute("usable").indexOfValue(label);
-			EventWorker w = new EventWorker(eventURI, usabilityIndex);
+			int stringIndex = dataSet.attribute("eventURI").addStringValue(eventURI);
+			EventWorker w = new EventWorker(eventURI, usabilityIndex, stringIndex);
 			
 			futures.add(threadPool.submit(w));
 		}
