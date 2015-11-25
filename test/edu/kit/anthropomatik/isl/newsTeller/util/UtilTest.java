@@ -125,23 +125,5 @@ public class UtilTest {
 		
 		assertTrue(map.get("resources/benchmark/queries/album.csv").get(0).getWord().equals("album"));
 	}
-	
-	@Test
-	public void shouldReturnCorrectFeatureValue() {
-		Map<BenchmarkEvent, Map<String,Integer>> map = Util.readFeatureMapFromFile("resources/test/featureMap.csv");
-		BenchmarkEvent e = new BenchmarkEvent("resources/benchmark/queries/riot.csv", 
-				"http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev67");
-		int value = map.get(e).get("hasTime");
-		assertTrue(value == 3);
-	}
-	
-	@Test
-	public void shouldReturnCorrectProbability() {
-		Map<Integer, Map<String,Double>> map = Util.readProbabilityMapFromFile("resources/test/A0.csv");
-		double expected = 0.4075907590759076;
-		double probability = map.get(0).get(Util.COLUMN_NAME_POSITIVE_PROBABILITY);
-		assertTrue(Math.abs(expected - probability) < Util.EPSILON);
-	}
-	
 	//endregion
 }

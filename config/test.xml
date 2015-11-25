@@ -160,46 +160,6 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
-	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FilteringBenchmark">
-		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
-		<property name="ksAdapter" ref="ksAdapter" />
-		
-		<property name="doFeatureAnalysis" value="false" />
-		<property name="doCreateFeatureMap" value="true" />
-		
-		<property name="useLogarithmicProbabilities" value="true" />
-		
-		<property name="features">
-			<list>
-				<ref bean="A0Feature"/>
-				<ref bean="A2Feature" />
-				<ref bean="numberOfFramesFeature" />
-				<ref bean="numberOfLinksFeature" />
-				<ref bean="areActorsAgentsFeature"/>
-				<ref bean="arePlacesPlacesFeature"/>
-				<ref bean="numberOfEntityLabelsDBPediaFeature" />
-				<ref bean="appearLabelsInTextFeature" />
-				
-				<ref bean="A1Feature"/>
-				<ref bean="eventLabelFeature"/> 
-				<ref bean="hasActorFeature"/>
-				<ref bean="hasPlaceFeature"/>
-				<ref bean="hasTimeFeature"/>
-				<ref bean="isSpeechCognitiveFeature"/>
-				<ref bean="isStatementFeature"/>
-				<ref bean="numberOfMentionsFeature"/>
-				<ref bean="wordNetFeature"/>
-				<!-- 
-				
-				
-				<ref bean="hasKeywordAsLabelFeature"/>
-				
-				
-				 -->
-			</list>
-		</property>
-	</bean>
-
 	<bean id="runtimeTester" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RuntimeTester">
 		<constructor-arg name="configFileName" value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter"/>
