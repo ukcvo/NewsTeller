@@ -10,7 +10,7 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class DBPediaLabelInFullTextFeature extends BinBasedFeature {
+public class DBPediaLabelInFullTextFeature extends UsabilityFeature {
 
 	private String labelQuery;
 	
@@ -68,7 +68,7 @@ public class DBPediaLabelInFullTextFeature extends BinBasedFeature {
 	}
 	
 	@Override
-	protected double getRawValue(String eventURI) {
+	public double getValue(String eventURI) {
 		List<List<String>> entityLabels = getEntityLabels(eventURI);
 		List<String> originalTexts = ksAdapter.retrieveOriginalTexts(eventURI);
 		List<Double> appearances = checkLabels(entityLabels, originalTexts);

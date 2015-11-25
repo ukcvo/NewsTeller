@@ -33,5 +33,5 @@ public abstract class UsabilityFeature {
 		this.sparqlQuery = Util.readStringFromFile(queryFileName);
 	}
 	
-	public abstract int getValue(String eventURI);
+	public abstract double getValue(String eventURI);
 }

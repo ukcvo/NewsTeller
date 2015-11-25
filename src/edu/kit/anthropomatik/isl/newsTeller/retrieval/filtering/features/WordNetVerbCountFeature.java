@@ -16,7 +16,7 @@ import net.sf.extjwnl.dictionary.Dictionary;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class WordNetVerbCountFeature extends BinBasedFeature {
+public class WordNetVerbCountFeature extends UsabilityFeature {
 
 	private static Log log = LogFactory.getLog(WordNetVerbCountFeature.class);
 
@@ -68,9 +68,7 @@ public class WordNetVerbCountFeature extends BinBasedFeature {
 	}
 
 	@Override
-	protected double getRawValue(String eventURI) {
-		// compute raw value based on label verb frequencies
-		
+	public double getValue(String eventURI) {
 		List<String> labels = this.ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_LABEL);
 
 		if (labels.isEmpty()) {
