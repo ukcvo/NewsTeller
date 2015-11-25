@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller;
+package edu.kit.anthropomatik.isl.newsTeller.benchmark;
 
 import java.util.ArrayList;
 import java.util.HashMap;

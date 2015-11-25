@@ -160,7 +160,7 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
-	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.FilteringBenchmark">
+	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FilteringBenchmark">
 		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter" />
 		
@@ -200,7 +200,7 @@
 		</property>
 	</bean>
 
-	<bean id="runtimeTester" class="edu.kit.anthropomatik.isl.newsTeller.RuntimeTester">
+	<bean id="runtimeTester" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RuntimeTester">
 		<constructor-arg name="configFileName" value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter"/>
 		<property name="stemmedKeywords">
@@ -313,7 +313,7 @@
 		
 	</bean>
 
-	<bean id="findingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.FindingBenchmark" >
+	<bean id="findingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FindingBenchmark" >
 		<constructor-arg name="configFileName" value="resources/benchmark/Scope 0.csv" />
 		<property name="finder" ref="finder2" />
 		<property name="ksAdapter" ref="ksAdapter" />

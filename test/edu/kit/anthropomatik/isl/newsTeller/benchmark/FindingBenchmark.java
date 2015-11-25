@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval.finding;
+package edu.kit.anthropomatik.isl.newsTeller.benchmark;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +19,7 @@ import edu.kit.anthropomatik.isl.newsTeller.data.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
