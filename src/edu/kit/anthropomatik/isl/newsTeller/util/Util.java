@@ -19,9 +19,9 @@ import org.apache.commons.logging.LogFactory;
 import org.jumpmind.symmetric.csv.CsvReader;
 import org.jumpmind.symmetric.csv.CsvWriter;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.BenchmarkEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
 
 /**
  * Provides some static utility functions.

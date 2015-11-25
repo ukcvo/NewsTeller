@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval;
+package edu.kit.anthropomatik.isl.newsTeller.data;
 
 /**
  * Represents one line of a benchmark query file (i.e. one event and its ground truth annotations).

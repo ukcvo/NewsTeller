@@ -14,11 +14,11 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.util.StringUtils;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.BenchmarkEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 

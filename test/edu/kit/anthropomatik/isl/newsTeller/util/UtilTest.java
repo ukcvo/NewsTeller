@@ -9,9 +9,9 @@ import java.util.logging.LogManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.BenchmarkEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.GroundTruth;
 
 public class UtilTest {
 	

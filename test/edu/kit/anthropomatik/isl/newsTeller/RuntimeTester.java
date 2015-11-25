@@ -17,10 +17,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelBayesEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;

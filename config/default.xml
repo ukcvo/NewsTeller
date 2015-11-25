@@ -127,4 +127,15 @@
 		<property name="newsTeller" ref="newsTeller" />
 	</bean>
 
+	<bean id="featureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.FeatureExtractor">
+		<constructor-arg value="resources/benchmark/dummy.csv"/>
+		<property name="ksAdapter" ref="ksAdapter"/>
+		<property name="outputFileName" value="resources/benchmark/dataSet.xrff"/>
+		<property name="features">
+			<list>
+				<ref bean="A2Feature" />
+			</list>
+		</property>
+	</bean>
+
 </beans>

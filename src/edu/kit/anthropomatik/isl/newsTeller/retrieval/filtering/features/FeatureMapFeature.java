@@ -3,7 +3,7 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.BenchmarkEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.BenchmarkEvent;
 
 /**
  * Dummy implementation: looks up feature values from given feature map. Used for benchmark testing purposes only (to speed up computation).
