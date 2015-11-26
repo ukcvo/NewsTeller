@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.benchmark;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -10,7 +11,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.rules.ZeroR;
+import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.XRFFLoader;
@@ -19,19 +22,41 @@ public class FilteringBenchmark {
 
 	private static Log log = LogFactory.getLog(FilteringBenchmark.class);
 	
-	private Instances dataSet;
+	private Instances originalDataSet;
 	
+	private Instances cleanedDataSet;	// w/o String attributes
+		
 	private String classifierFileName;
+	
+	private List<AttributeSelection> configurations;
+	
+	private boolean doCreateBaselineClassifier;
+	
+	private boolean doFeatureAnalysis;
 	
 	public void setClassifierFileName(String classifierFileName) {
 		this.classifierFileName = classifierFileName;
+	}
+	
+	public void setConfigurations(List<AttributeSelection> configurations) {
+		this.configurations = configurations;
+	}
+	
+	public void setDoCreateBaselineClassifier(boolean doCreateBaselineClassifier) {
+		this.doCreateBaselineClassifier = doCreateBaselineClassifier;
+	}
+	
+	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
+		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
 	
 	public FilteringBenchmark(String instancesFileName) {
 		try {
 			XRFFLoader loader = new XRFFLoader();
 			loader.setSource(new File(instancesFileName));
-			this.dataSet = loader.getDataSet();
+			this.originalDataSet = loader.getDataSet();
+			this.cleanedDataSet = new Instances(this.originalDataSet);
+			this.cleanedDataSet.deleteAttributeType(Attribute.STRING);
 		} catch (IOException e) {
 			if (log.isErrorEnabled())
 				log.error("Can't read data set");
@@ -40,18 +65,41 @@ public class FilteringBenchmark {
 		}
 	}
 	
-	public void run() {
+	private void createBaselineClassifier() {
 		try {
 			ZeroR classifier = new ZeroR();
-			classifier.buildClassifier(dataSet);
-			Instances header = new Instances(dataSet,0);
+			classifier.buildClassifier(cleanedDataSet);
+			Instances header = new Instances(cleanedDataSet,0);
 			SerializationHelper.writeAll(classifierFileName, new Object[]{classifier,header});
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
-				log.error("Exception during run()");
+				log.error("Can't create baseline classifier");
 			if (log.isDebugEnabled())
 				log.debug("Exception", e);
 		}
+	}
+	
+	private void featureAnalysis() {
+		for (AttributeSelection config : configurations) {
+			try {
+				config.SelectAttributes(cleanedDataSet);
+				if (log.isInfoEnabled())
+					log.info(config.toResultsString());
+							
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("Can't select attributes");
+				if (log.isDebugEnabled())
+					log.debug("Exception", e);
+			}
+		}
+	}
+	
+	public void run() {
+		if (this.doCreateBaselineClassifier)
+			createBaselineClassifier();
+		if (this.doFeatureAnalysis)
+			featureAnalysis();
 	}
 	
 	public static void main(String[] args) {

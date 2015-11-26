@@ -294,6 +294,22 @@
 	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FilteringBenchmark">
 		<constructor-arg name="instancesFileName" value="resources/benchmark/dataSet.xrff"/>
 		<property name="classifierFileName" value="resources/baseline.model"/>
+		
+		<property name="configurations">
+			<list>
+				<bean id="relief-f" class="weka.attributeSelection.AttributeSelection">
+					<property name="evaluator">
+						<bean class="weka.attributeSelection.ReliefFAttributeEval"/>
+					</property>
+					<property name="search">
+						<bean class="weka.attributeSelection.Ranker"/>
+					</property>
+				</bean>
+			</list>
+		</property>
+		
+		<property name="doCreateBaselineClassifier" value="false"/>
+		<property name="doFeatureAnalysis" value="true"/>
 	</bean>
 
 </beans>
