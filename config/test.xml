@@ -295,6 +295,10 @@
 		<constructor-arg name="instancesFileName" value="resources/benchmark/dataSet.xrff"/>
 		<property name="classifierFileName" value="resources/baseline.model"/>
 		
+		<property name="filter">
+			<bean class="weka.filters.supervised.attribute.Discretize"/>
+		</property>
+		
 		<property name="configurations">
 			<list>
 				<bean id="relief-f" class="weka.attributeSelection.AttributeSelection">

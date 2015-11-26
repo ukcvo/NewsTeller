@@ -17,39 +17,46 @@ import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.XRFFLoader;
+import weka.filters.Filter;
 
 public class FilteringBenchmark {
 
 	private static Log log = LogFactory.getLog(FilteringBenchmark.class);
-	
+
 	private Instances originalDataSet;
-	
-	private Instances cleanedDataSet;	// w/o String attributes
-		
+
+	private Instances cleanedDataSet; // w/o String attributes
+
 	private String classifierFileName;
-	
+
+	private Filter filter;
+
 	private List<AttributeSelection> configurations;
-	
+
 	private boolean doCreateBaselineClassifier;
-	
+
 	private boolean doFeatureAnalysis;
-	
+
 	public void setClassifierFileName(String classifierFileName) {
 		this.classifierFileName = classifierFileName;
 	}
-	
+
+	public void setFilter(Filter filter) {
+		this.filter = filter;
+	}
+
 	public void setConfigurations(List<AttributeSelection> configurations) {
 		this.configurations = configurations;
 	}
-	
+
 	public void setDoCreateBaselineClassifier(boolean doCreateBaselineClassifier) {
 		this.doCreateBaselineClassifier = doCreateBaselineClassifier;
 	}
-	
+
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
 		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
-	
+
 	public FilteringBenchmark(String instancesFileName) {
 		try {
 			XRFFLoader loader = new XRFFLoader();
@@ -64,13 +71,13 @@ public class FilteringBenchmark {
 				log.debug("Can't read data set", e);
 		}
 	}
-	
+
 	private void createBaselineClassifier() {
 		try {
 			ZeroR classifier = new ZeroR();
 			classifier.buildClassifier(cleanedDataSet);
-			Instances header = new Instances(cleanedDataSet,0);
-			SerializationHelper.writeAll(classifierFileName, new Object[]{classifier,header});
+			Instances header = new Instances(cleanedDataSet, 0);
+			SerializationHelper.writeAll(classifierFileName, new Object[] { classifier, header });
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
 				log.error("Can't create baseline classifier");
@@ -78,14 +85,18 @@ public class FilteringBenchmark {
 				log.debug("Exception", e);
 		}
 	}
-	
+
 	private void featureAnalysis() {
+
+		if (log.isInfoEnabled())
+			log.info("unfiltered attributes");
+
 		for (AttributeSelection config : configurations) {
 			try {
 				config.SelectAttributes(cleanedDataSet);
 				if (log.isInfoEnabled())
 					log.info(config.toResultsString());
-							
+
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
 					log.error("Can't select attributes");
@@ -93,15 +104,34 @@ public class FilteringBenchmark {
 					log.debug("Exception", e);
 			}
 		}
+
+		if (log.isInfoEnabled())
+			log.info("filtered attributes");
+		try {
+			this.filter.setInputFormat(cleanedDataSet);
+			Instances filtered = Filter.useFilter(cleanedDataSet, filter);
+
+			for (AttributeSelection config : configurations) {
+				config.SelectAttributes(filtered);
+				if (log.isInfoEnabled())
+					log.info(config.toResultsString());
+			}
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't select filtered attributes");
+			if (log.isDebugEnabled())
+				log.debug("Exception", e);
+		}
+
 	}
-	
+
 	public void run() {
 		if (this.doCreateBaselineClassifier)
 			createBaselineClassifier();
 		if (this.doFeatureAnalysis)
 			featureAnalysis();
 	}
-	
+
 	public static void main(String[] args) {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
@@ -114,7 +144,7 @@ public class FilteringBenchmark {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
 		FilteringBenchmark test = (FilteringBenchmark) context.getBean("filteringBenchmark");
 		((AbstractApplicationContext) context).close();
-		
+
 		test.run();
 	}
 }
