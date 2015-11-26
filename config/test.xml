@@ -309,6 +309,48 @@
 						<bean class="weka.attributeSelection.Ranker"/>
 					</property>
 				</bean>
+				<bean id="oneR" class="weka.attributeSelection.AttributeSelection">
+					<property name="evaluator">
+						<bean class="weka.attributeSelection.OneRAttributeEval" />
+					</property>
+					<property name="search">
+						<bean class="weka.attributeSelection.Ranker"/>
+					</property>
+				</bean>
+				<bean id="cfs" class="weka.attributeSelection.AttributeSelection">
+					<property name="evaluator">
+						<bean class="weka.attributeSelection.CfsSubsetEval">
+							<property name="missingSeparate" value="true"/>
+						</bean>
+					</property>
+					<property name="search">
+						<bean class="weka.attributeSelection.ExhaustiveSearch"/>
+					</property>
+				</bean>
+				<bean id="wrapperDT" class="weka.attributeSelection.AttributeSelection">
+					<property name="evaluator">
+						<bean class="weka.attributeSelection.WrapperSubsetEval">
+							<property name="classifier">
+								<bean class="weka.classifiers.trees.J48"/>
+							</property>
+						</bean>
+					</property>
+					<property name="search">
+						<bean class="weka.attributeSelection.ExhaustiveSearch"/>
+					</property>
+				</bean>
+				<bean id="wrapperNB" class="weka.attributeSelection.AttributeSelection">
+					<property name="evaluator">
+						<bean class="weka.attributeSelection.WrapperSubsetEval">
+							<property name="classifier">
+								<bean class="weka.classifiers.bayes.NaiveBayes"/>
+							</property>
+						</bean>
+					</property>
+					<property name="search">
+						<bean class="weka.attributeSelection.ExhaustiveSearch"/>
+					</property>
+				</bean>
 			</list>
 		</property>
 		
