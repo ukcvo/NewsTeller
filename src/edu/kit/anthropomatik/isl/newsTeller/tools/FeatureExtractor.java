@@ -90,6 +90,7 @@ public class FeatureExtractor {
 		
 		int numberOfExpectedExamples = this.benchmark.size();
 		Instances dataSet = new Instances("usabilityTest", attributes, numberOfExpectedExamples);
+		dataSet.setClass(dataSet.attribute("usable"));
 		return dataSet;
 	}
 	

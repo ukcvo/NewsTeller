@@ -279,4 +279,9 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
+	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FilteringBenchmark">
+		<constructor-arg name="instancesFileName" value="resources/benchmark/dataSet.xrff"/>
+		<property name="classifierFileName" value="resources/baseline.model"/>
+	</bean>
+
 </beans>
