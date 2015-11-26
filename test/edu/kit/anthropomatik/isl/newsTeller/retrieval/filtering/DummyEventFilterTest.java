@@ -14,7 +14,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 
-public class EventFilterTest {
+public class DummyEventFilterTest {
 
 	private DummyEventFilter dummyFilter;
 	

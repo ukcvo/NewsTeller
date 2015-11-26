@@ -44,7 +44,8 @@ public class FilteringBenchmark {
 		try {
 			ZeroR classifier = new ZeroR();
 			classifier.buildClassifier(dataSet);
-			SerializationHelper.write(classifierFileName, classifier);
+			Instances header = new Instances(dataSet,0);
+			SerializationHelper.writeAll(classifierFileName, new Object[]{classifier,header});
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
 				log.error("Exception during run()");
