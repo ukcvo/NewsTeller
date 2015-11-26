@@ -51,6 +51,12 @@
 		<property name="features" ref="activeFeatureList"/>
 	</bean>
 
+	<bean id="filter2b" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
+		<constructor-arg name="classifierFileName" value="resources/baseline.model"/>
+		<property name="features" ref="activeFeatureList"/>
+		<property name="nThreads" value="100"/>
+	</bean>
+
 	<bean id="relevanceScorer0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.RelevanceScorer">
 		<property name="eventHeuristics">
@@ -248,7 +254,8 @@
 		
 		<property name="sequentialFinder" ref="finder1"/>
 		<property name="parallelFinder" ref="finder2"/>
-		<property name="sequentialFilter" ref="filter0" />
+		<property name="sequentialFilter" ref="filter2a" />
+		<property name="parallelFilter" ref="filter2b" />
 		
 		<property name="threadNumbers">
 			<list>
