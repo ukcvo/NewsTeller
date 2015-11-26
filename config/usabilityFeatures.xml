@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<util:list id="activeFeatureList"
+		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
+		<ref bean="A2Feature" />
+		<ref bean="numberOfFramesFeature" />
+		<ref bean="numberOfLinksFeature" />
+		<ref bean="areActorsAgentsFeature" />
+		<ref bean="arePlacesPlacesFeature" />
+		<ref bean="numberOfEntityLabelsDBPediaFeature" />
+		<ref bean="appearLabelsInTextFeature" />
+		<ref bean="A0Feature" />
+		<ref bean="A1Feature" />
+		<ref bean="eventLabelFeature" />
+		<ref bean="hasActorFeature" />
+		<ref bean="hasPlaceFeature" />
+		<ref bean="hasTimeFeature" />
+		<ref bean="isSpeechCognitiveFeature" />
+		<ref bean="isStatementFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="wordNetFeature" />
+	</util:list>
 
 	<bean id="hasActorFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
@@ -142,5 +165,5 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="appearLabelsInText" />
 	</bean>
-	
+
 </beans>
