@@ -3,6 +3,7 @@ package edu.kit.anthropomatik.isl.newsTeller.benchmark;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -12,6 +13,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import weka.attributeSelection.AttributeSelection;
+import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
 import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.XRFFLoader;
@@ -29,8 +32,13 @@ public class FilteringBenchmark {
 
 	private List<AttributeSelection> configurations;
 
+	private List<Classifier> classifiers;
+	
 	private boolean doFeatureAnalysis;
+	
+	private boolean doCrossValidation;
 
+	
 	public void setFilter(Filter filter) {
 		this.filter = filter;
 	}
@@ -39,10 +47,18 @@ public class FilteringBenchmark {
 		this.configurations = configurations;
 	}
 
+	public void setClassifiers(List<Classifier> classifiers) {
+		this.classifiers = classifiers;
+	}
+	
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
 		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
 
+	public void setDoCrossValidation(boolean doCrossValidation) {
+		this.doCrossValidation = doCrossValidation;
+	}
+	
 	public FilteringBenchmark(String instancesFileName) {
 		try {
 			XRFFLoader loader = new XRFFLoader();
@@ -58,6 +74,7 @@ public class FilteringBenchmark {
 		}
 	}
 
+	//region featureAnalysis
 	private void featureAnalysis() {
 
 		if (log.isInfoEnabled())
@@ -96,10 +113,36 @@ public class FilteringBenchmark {
 		}
 
 	}
-
+	//endregion
+	
+	// do a crossvalidation for all classifiers and output the results
+	private void crossValidation() {
+		
+		for (Classifier classifier : this.classifiers) {
+			try {
+				Evaluation eval = new Evaluation(cleanedDataSet);
+				eval.crossValidateModel(classifier, cleanedDataSet, 10, new Random(1337));
+				if (log.isInfoEnabled()) {
+					log.info(classifier.getClass().getName());
+					log.info(eval.toSummaryString());
+					log.info(eval.toClassDetailsString());
+					log.info(eval.toMatrixString());
+				}
+				
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("Can't cross-validate classifier");
+				if (log.isDebugEnabled())
+					log.debug("Can't cross-validate classifier", e);
+			}
+		}
+	}
+	
 	public void run() {
 		if (this.doFeatureAnalysis)
 			featureAnalysis();
+		if (this.doCrossValidation)
+			crossValidation();
 	}
 
 	public static void main(String[] args) {
