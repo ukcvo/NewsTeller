@@ -90,14 +90,16 @@ public class FeatureExtractor {
 		FastVector classLabels = new FastVector();
 		classLabels.addElement(Util.CLASS_LABEL_POSITIVE);
 		classLabels.addElement(Util.CLASS_LABEL_NEGATIVE);
-		attributes.addElement(new Attribute(Util.ATTRIBUTE_NAME_USABLE, classLabels));
+		attributes.addElement(new Attribute(Util.ATTRIBUTE_USABLE, classLabels));
 		
-		if (this.doAddEventInformation)
-			attributes.addElement(new Attribute(Util.ATTRIBUTE_NAME_URI, (FastVector) null));
+		if (this.doAddEventInformation) {
+			attributes.addElement(new Attribute(Util.ATTRIBUTE_URI, (FastVector) null));
+			attributes.addElement(new Attribute(Util.ATTRIBUTE_FILE, (FastVector) null));
+		}
 		
 		int numberOfExpectedExamples = this.benchmark.size();
 		Instances dataSet = new Instances("usabilityTest", attributes, numberOfExpectedExamples);
-		dataSet.setClass(dataSet.attribute(Util.ATTRIBUTE_NAME_USABLE));
+		dataSet.setClass(dataSet.attribute(Util.ATTRIBUTE_USABLE));
 		return dataSet;
 	}
 	
@@ -120,17 +122,19 @@ public class FeatureExtractor {
 
 		private String eventURI;
 		private int usabilityIndex;
-		private int stringIndex;
+		private int uriIndex;
+		private int fileIndex;
 		
-		public EventWorker(String eventURI, int usabilityIndex, int stringIndex) {
+		public EventWorker(String eventURI, int usabilityIndex, int uriIndex, int fileIndex) {
 			this.eventURI = eventURI;
 			this.usabilityIndex = usabilityIndex;
-			this.stringIndex = stringIndex;
+			this.uriIndex = uriIndex;
+			this.fileIndex = fileIndex;
 		}
 		
 		public Instance call() throws Exception {
 			
-			int numberOfAttributes = doAddEventInformation ? features.size() + 2 : features.size();
+			int numberOfAttributes = doAddEventInformation ? (features.size() + 3) : features.size();
 			
 			double[] values = new double[numberOfAttributes];
 			
@@ -141,8 +145,10 @@ public class FeatureExtractor {
 			
 			values[features.size()] = this.usabilityIndex;
 			
-			if (doAddEventInformation)
-				values[features.size() + 1] = this.stringIndex;
+			if (doAddEventInformation) {
+				values[features.size() + 1] = this.uriIndex;
+				values[features.size() + 2] = this.fileIndex;
+			}
 			
 			Instance example = new Instance(1.0, values);
 			
@@ -162,10 +168,12 @@ public class FeatureExtractor {
 		
 		for (Map.Entry<BenchmarkEvent, GroundTruth> entry : this.benchmark.entrySet()) {
 			String eventURI = entry.getKey().getEventURI();
+			String fileName = entry.getKey().getFileName();
 			String label = (entry.getValue().getUsabilityRating() == 1.0) ? Util.CLASS_LABEL_POSITIVE : Util.CLASS_LABEL_NEGATIVE;
-			int usabilityIndex = dataSet.attribute(Util.ATTRIBUTE_NAME_USABLE).indexOfValue(label);
-			int stringIndex = dataSet.attribute(Util.ATTRIBUTE_NAME_URI).addStringValue(eventURI);
-			EventWorker w = new EventWorker(eventURI, usabilityIndex, stringIndex);
+			int usabilityIndex = dataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(label);
+			int uriIndex = dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI);
+			int fileIndex = dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName);
+			EventWorker w = new EventWorker(eventURI, usabilityIndex, uriIndex, fileIndex);
 			
 			futures.add(threadPool.submit(w));
 		}

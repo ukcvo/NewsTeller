@@ -51,9 +51,9 @@ public class Util {
 	public static final String CLASS_LABEL_NEGATIVE = "false";
 	public static final String CLASS_LABEL_POSITIVE = "true";
 
-	public static final String ATTRIBUTE_NAME_URI = "eventURI";
-	public static final String ATTRIBUTE_NAME_USABLE = "usable";
-
+	public static final String ATTRIBUTE_USABLE = "usable";
+	public static final String ATTRIBUTE_URI = "eventURI";
+	public static final String ATTRIBUTE_FILE = "fileName";
 
 	public static final double EPSILON = 0.00001;
 

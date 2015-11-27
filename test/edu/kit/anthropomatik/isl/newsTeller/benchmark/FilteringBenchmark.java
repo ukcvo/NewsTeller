@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.benchmark;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.LogManager;
@@ -12,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
@@ -19,6 +21,8 @@ import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.StringToNominal;
+import weka.filters.unsupervised.instance.RemoveWithValues;
 
 public class FilteringBenchmark {
 
@@ -33,12 +37,13 @@ public class FilteringBenchmark {
 	private List<AttributeSelection> configurations;
 
 	private List<Classifier> classifiers;
-	
+
 	private boolean doFeatureAnalysis;
-	
+
 	private boolean doCrossValidation;
 
-	
+	private boolean doLeaveOneOut;
+
 	public void setFilter(Filter filter) {
 		this.filter = filter;
 	}
@@ -50,7 +55,7 @@ public class FilteringBenchmark {
 	public void setClassifiers(List<Classifier> classifiers) {
 		this.classifiers = classifiers;
 	}
-	
+
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
 		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
@@ -58,7 +63,11 @@ public class FilteringBenchmark {
 	public void setDoCrossValidation(boolean doCrossValidation) {
 		this.doCrossValidation = doCrossValidation;
 	}
-	
+
+	public void setDoLeaveOneOut(boolean doLeaveOneOut) {
+		this.doLeaveOneOut = doLeaveOneOut;
+	}
+
 	public FilteringBenchmark(String instancesFileName) {
 		try {
 			XRFFLoader loader = new XRFFLoader();
@@ -74,7 +83,7 @@ public class FilteringBenchmark {
 		}
 	}
 
-	//region featureAnalysis
+	// region featureAnalysis
 	private void featureAnalysis() {
 
 		if (log.isInfoEnabled())
@@ -113,11 +122,12 @@ public class FilteringBenchmark {
 		}
 
 	}
-	//endregion
-	
+	// endregion
+
+	// region crossvalidation
 	// do a crossvalidation for all classifiers and output the results
 	private void crossValidation() {
-		
+
 		for (Classifier classifier : this.classifiers) {
 			try {
 				Evaluation eval = new Evaluation(cleanedDataSet);
@@ -128,7 +138,7 @@ public class FilteringBenchmark {
 					log.info(eval.toClassDetailsString());
 					log.info(eval.toMatrixString());
 				}
-				
+
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
 					log.error("Can't cross-validate classifier");
@@ -137,15 +147,74 @@ public class FilteringBenchmark {
 			}
 		}
 	}
-	
-	public void run() {
+	// endregion
+
+	// region leaveOneOut
+	// do leave one out evaluation, but based on files/keywords
+	private void leaveOneOut() throws Exception {
+
+		StringToNominal filter = new StringToNominal();
+		filter.setAttributeRange("last");
+		filter.setInputFormat(originalDataSet);
+		Instances modifedDataSet = Filter.useFilter(originalDataSet, filter);
+
+		for (Classifier classifier : classifiers) {
+			if (log.isInfoEnabled())
+				log.info(classifier.getClass().getName() + "(leaveOneOut)");
+			
+			Evaluation eval = new Evaluation(modifedDataSet);
+			@SuppressWarnings("unchecked")
+			Enumeration<String> enumeration = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
+			while (enumeration.hasMoreElements()) {
+				Evaluation evalLocal = new Evaluation(modifedDataSet);
+				
+				String fileName = (String) enumeration.nextElement();
+				Integer idx = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
+
+				RemoveWithValues trainFilter = new RemoveWithValues();
+				trainFilter.setAttributeIndex("last");
+				trainFilter.setNominalIndices(idx.toString());
+				trainFilter.setInputFormat(modifedDataSet);
+				Instances train = Filter.useFilter(modifedDataSet, trainFilter);
+				train.deleteAttributeAt(train.numAttributes() - 1);
+				train.deleteAttributeAt(train.numAttributes() - 1);
+
+				RemoveWithValues testFilter = new RemoveWithValues();
+				testFilter.setAttributeIndex("last");
+				testFilter.setNominalIndices(idx.toString());
+				testFilter.setInvertSelection(true);
+				testFilter.setInputFormat(modifedDataSet);
+				Instances test = Filter.useFilter(modifedDataSet, testFilter);
+				test.deleteAttributeAt(test.numAttributes() - 1);
+				test.deleteAttributeAt(test.numAttributes() - 1);
+
+				Classifier c = Classifier.makeCopy(classifier);
+				c.buildClassifier(train);
+				eval.evaluateModel(c, test);
+				evalLocal.evaluateModel(c, test);
+				if (log.isInfoEnabled())
+					log.info(evalLocal.toMatrixString(fileName));
+			}
+
+			if (log.isInfoEnabled()) {
+				log.info(eval.toSummaryString());
+				log.info(eval.toClassDetailsString());
+				log.info(eval.toMatrixString());
+			}
+		}
+	}
+	// endregion
+
+	public void run() throws Exception {
 		if (this.doFeatureAnalysis)
 			featureAnalysis();
 		if (this.doCrossValidation)
 			crossValidation();
+		if (this.doLeaveOneOut)
+			leaveOneOut();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();

@@ -66,7 +66,7 @@ public class SequentialEventFilter implements IEventFilter {
 			boolean isUsable;
 			try {
 				double label = classifier.classifyInstance(example);
-				isUsable = (label == header.attribute(Util.ATTRIBUTE_NAME_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE));
+				isUsable = (label == header.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE));
 			} catch (Exception e) {
 				if (log.isWarnEnabled())
 					log.warn(String.format("Could not classify event, setting classification to false: %s", event.toVerboseString()));

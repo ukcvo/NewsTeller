@@ -382,7 +382,8 @@
 		</property>
 		
 		<property name="doFeatureAnalysis" value="false"/>
-		<property name="doCrossValidation" value="true"/>
+		<property name="doCrossValidation" value="false"/>
+		<property name="doLeaveOneOut" value="true"/>
 	</bean>
 
 </beans>
