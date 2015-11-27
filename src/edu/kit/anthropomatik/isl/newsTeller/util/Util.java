@@ -11,9 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jumpmind.symmetric.csv.CsvReader;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
@@ -233,6 +239,77 @@ public class Util {
 	}
 	// endregion
 
+	// region reading XML files
+	/**
+	 * Parses a single propBank file and returns the minimum set of arguments necessary. Returns empty set on failure.
+	 */
+	public static List<String> parsePropBankFrame(String fileName) {
+		try {
+			List<String> result = new ArrayList<String>();
+			
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(fileName);
+			doc.getDocumentElement().normalize();
+			
+			NodeList rolesets = doc.getElementsByTagName("roleset");
+			
+			// iterate over "rolesets", i.e. meanings of the word
+			for (int i = 0; i < rolesets.getLength(); i++) {
+				List<String> roleSetHypothesis = new ArrayList<String>();
+				Element roleset = (Element) rolesets.item(i);
+				
+				// collect arguments from definition (baseline in case there are no examples)
+				NodeList roles = roleset.getElementsByTagName("role");
+				for (int j = 0; j < roles.getLength(); j++) {
+					Element role = (Element) roles.item(j);
+					int n = Integer.parseInt(role.getAttribute("n"));
+					roleSetHypothesis.add(String.format("A%d", n));
+				}
+				
+				// iterate over all examples
+				NodeList examples = roleset.getElementsByTagName("example");
+				for (int j = 0; j < examples.getLength(); j++) {
+					List<String> exampleHypothesis = new ArrayList<String>();
+					Element example = (Element) examples.item(j);
+					
+					// look for arguments used in example
+					NodeList args = example.getElementsByTagName("arg");
+					for (int k = 0; k < args.getLength(); k++) {
+						Element arg = (Element) args.item(k);
+						String nString = arg.getAttribute("n");
+						boolean isInt = true;
+						int n = -1;
+						try { n = Integer.parseInt(nString); } catch (NumberFormatException e) { isInt = false;}
+						if (isInt)
+							exampleHypothesis.add(String.format("A%d", n));
+					}
+					
+					// if example omits an argument, it's not necessary --> use smaller argument set
+					if (roleSetHypothesis.containsAll(exampleHypothesis) && (exampleHypothesis.size() < roleSetHypothesis.size()))
+						roleSetHypothesis = exampleHypothesis;
+				}
+				
+				// take minimum over all rolesets/meanings
+				if (result.isEmpty() || (result.containsAll(roleSetHypothesis) && (roleSetHypothesis.size() < result.size())))
+					result = roleSetHypothesis;
+			}
+			
+			return result;
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error(String.format("can't process XML file '%s'", fileName));
+			if (log.isDebugEnabled())
+				log.debug("XML error", e);
+			
+			return new ArrayList<String>();
+		}
+		
+	}
+	// endregion
+	
+	// region other stuff
 	/**
 	 * Parses an XML-style double like ""2"^^<http://www.w3.org/2001/XMLSchema#short>".
 	 */
@@ -260,4 +337,5 @@ public class Util {
 			sum += d;
 		return sum / collection.size();
 	}
+	// endregion
 }

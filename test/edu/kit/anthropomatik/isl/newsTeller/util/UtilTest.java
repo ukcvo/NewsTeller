@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.util;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.LogManager;
@@ -25,7 +26,7 @@ public class UtilTest {
 		}
 	}
 
-	// region reading strings
+	//region reading strings
 	@Test
 	public void shouldReturnEmptyString() {
 		String query = Util.readStringFromFile("");
@@ -125,5 +126,25 @@ public class UtilTest {
 		
 		assertTrue(map.get("resources/benchmark/queries/album.csv").get(0).getWord().equals("album"));
 	}
+	//endregion
+
+	//region regarding XML
+	@Test
+	public void shouldReturnOnlyA0() {
+		List<String> result = Util.parsePropBankFrame("resources/propbank-frames/race-v.xml");
+		List<String> expected = new ArrayList<String>();
+		expected.add("A0");
+		assertTrue(result.equals(expected));
+	}
+	
+	@Test
+	public void shouldReturnA0AndA1() {
+		List<String> result = Util.parsePropBankFrame("resources/propbank-frames/contradict-v.xml");
+		List<String> expected = new ArrayList<String>();
+		expected.add("A0");
+		expected.add("A1");
+		assertTrue(result.equals(expected));
+	}
+	
 	//endregion
 }
