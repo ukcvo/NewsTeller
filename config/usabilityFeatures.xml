@@ -26,6 +26,7 @@
 		<ref bean="isStatementFeature" />
 		<ref bean="numberOfMentionsFeature" />
 		<ref bean="wordNetFeature" />
+		<ref bean="propBankFeature" />
 	</util:list>
 
 	<bean id="hasActorFeature"

@@ -37,7 +37,7 @@ public class PropBankFeature extends UsabilityFeature {
 			}
 			fulfilledness /= expectedArguments.size();
 			
-			result = Math.max(result, fulfilledness);
+			result = Math.max(result, fulfilledness); // take the max: if one label has everything it needs, we're happy
 		}
 		
 		return result;
