@@ -3,8 +3,10 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -125,7 +127,10 @@ public class KnowledgeStoreAdapter {
 				stream.close();
 				session.close();
 				for (BindingSet tuple : tuples) {
-					result.add(tuple.getValue(variableName).toString());
+					String value = tuple.getValue(variableName).toString();
+					if (value.startsWith("\""))
+						value = value.substring(1, value.lastIndexOf('"'));
+					result.add(value);
 				}
 			} catch (Exception e) {
 				if (!isEmptyResultExpected) {
@@ -290,8 +295,8 @@ public class KnowledgeStoreAdapter {
 	/**
 	 * Returns a list of all news stories in which the given event is mentioned.
 	 */
-	public List<String> retrieveOriginalTexts(String eventURI) {
-		List<String> originalTexts = new ArrayList<String>();
+	public Set<String> retrieveOriginalTexts(String eventURI) {
+		Set<String> originalTexts = new HashSet<String>();
 		
 		List<String> mentionURIs = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, eventURI), 
 				Util.VARIABLE_MENTION);

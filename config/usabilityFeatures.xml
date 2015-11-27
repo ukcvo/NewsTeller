@@ -166,4 +166,12 @@
 		<property name="name" value="appearLabelsInText" />
 	</bean>
 
+	<bean id="propBankFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropBankFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/areLabelsVerbs.qry"/>
+		<constructor-arg name="countQueryFileName" value="resources/SPARQL/usability/propBankFeature.qry"/>
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames"/>
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="propBankFeature"/>
+	</bean>
+
 </beans>

@@ -40,6 +40,7 @@ public class Util {
 	public static final String PLACEHOLDER_HISTORICAL_EVENT = "*h*";
 	public static final String PLACEHOLDER_MENTION = "*m*";
 	public static final String PLACEHOLDER_ENTITY = "*x*";
+	public static final String PLACEHOLDER_LINK = "*l*";
 
 	public static final String VARIABLE_EVENT = "event";
 	public static final String VARIABLE_NUMBER = "number";
@@ -366,7 +367,11 @@ public class Util {
 	 * Parses an XML-style double like ""2"^^<http://www.w3.org/2001/XMLSchema#short>".
 	 */
 	public static double parseXMLDouble(String str) {
-		String substring = str.substring(0, str.indexOf("^")).replace("\"", "");
+		String substring;
+		if (str.contains("^"))
+			substring = str.substring(0, str.indexOf("^")).replace("\"", "");
+		else
+			substring = str;
 		double result = Double.parseDouble(substring);
 		if (Double.isNaN(result)) {
 			if (log.isWarnEnabled())

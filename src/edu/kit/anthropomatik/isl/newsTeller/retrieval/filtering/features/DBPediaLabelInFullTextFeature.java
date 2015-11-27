@@ -2,6 +2,8 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
@@ -27,30 +29,23 @@ public class DBPediaLabelInFullTextFeature extends UsabilityFeature {
 		
 		for (String entity : entities) {
 			List<String> labels = ksAdapter.runSingleVariableStringQuery(labelQuery.replace(Util.PLACEHOLDER_ENTITY, entity), Util.VARIABLE_LABEL);
-			List<String> modifiedLabels = new ArrayList<String>();
-			for (String label : labels) {
-				if (label.contains("\""))
-					modifiedLabels.add(label.substring(1,label.indexOf('"',1)));
-				else
-					modifiedLabels.add(label);
-			}
-			result.add(modifiedLabels);
+			result.add(labels);
 		}
 		
 		return result;
 	}
 	
 	// check if the given label appears in one of the texts
-	private double checkLabel(String label, List<String> originalTexts) {
+	private double checkLabel(String label, Set<String> originalTexts) {
 		for (String text : originalTexts) {
-			if (text.contains(label))
+			if (text.toLowerCase().contains(label.toLowerCase())) //ignoring case
 				return 1.0;
 		}
 		return 0.0;
 	}
 	
 	// check all entities and figure out whether one of their labels appears or not
-	private List<Double> checkLabels(List<List<String>> entityLabels, List<String> originalTexts) {
+	private List<Double> checkLabels(List<List<String>> entityLabels, Set<String> originalTexts) {
 		List<Double> result = new ArrayList<Double>();
 		
 		for (List<String> labels : entityLabels) {
@@ -70,7 +65,7 @@ public class DBPediaLabelInFullTextFeature extends UsabilityFeature {
 	@Override
 	public double getValue(String eventURI) {
 		List<List<String>> entityLabels = getEntityLabels(eventURI);
-		List<String> originalTexts = ksAdapter.retrieveOriginalTexts(eventURI);
+		Set<String> originalTexts = ksAdapter.retrieveOriginalTexts(eventURI);
 		List<Double> appearances = checkLabels(entityLabels, originalTexts);
 		double averageAppearance = Util.averageFromCollection(appearances);
 		
