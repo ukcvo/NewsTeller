@@ -100,6 +100,7 @@
 		<property name="ksAdapter" ref="ksAdapter"/>
 		<property name="outputFileName" value="resources/benchmark/dataSet.xrff"/>
 		<property name="features" ref="activeFeatureList"/>
+		<property name="doAddEventInformation" value="true"/>
 	</bean>
 
 </beans>

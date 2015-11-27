@@ -47,16 +47,19 @@ public class Util {
 	public static final String COLUMN_NAME_FILENAME = "filename";
 	public static final String COLUMN_NAME_KEYWORD = "keyword_";
 	public static final String COLUMN_NAME_VALUE = "value";
-	public static final String COLUMN_NAME_POSITIVE_PROBABILITY = "posProb";
-	public static final String COLUMN_NAME_NEGATIVE_PROBABILITY = "negProb";
-	public static final String COLUMN_NAME_OVERALL_PROBABILITY = "overallProb";
-	public static final String COLUMN_NAME_PRIOR_PROBABILITY = "priorProb";
-	
+
+	public static final String CLASS_LABEL_NEGATIVE = "false";
+	public static final String CLASS_LABEL_POSITIVE = "true";
+
+	public static final String ATTRIBUTE_NAME_URI = "eventURI";
+	public static final String ATTRIBUTE_NAME_USABLE = "usable";
+
 
 	public static final double EPSILON = 0.00001;
 
 	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 5;
 
+	
 	// private constructor to prevent instantiation
 	private Util() {
 	}

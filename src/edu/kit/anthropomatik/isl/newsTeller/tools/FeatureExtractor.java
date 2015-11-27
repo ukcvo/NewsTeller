@@ -50,6 +50,8 @@ public class FeatureExtractor {
 	
 	private KnowledgeStoreAdapter ksAdapter;
 	
+	private boolean doAddEventInformation;
+	
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
 	}
@@ -60,6 +62,10 @@ public class FeatureExtractor {
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
+	}
+	
+	public void setDoAddEventInformation(boolean doAddEventInformation) {
+		this.doAddEventInformation = doAddEventInformation;
 	}
 	
 	public FeatureExtractor(String configFileName) {
@@ -82,15 +88,16 @@ public class FeatureExtractor {
 		}
 		
 		FastVector classLabels = new FastVector();
-		classLabels.addElement("true");
-		classLabels.addElement("false");
-		attributes.addElement(new Attribute("usable", classLabels));
+		classLabels.addElement(Util.CLASS_LABEL_POSITIVE);
+		classLabels.addElement(Util.CLASS_LABEL_NEGATIVE);
+		attributes.addElement(new Attribute(Util.ATTRIBUTE_NAME_USABLE, classLabels));
 		
-		attributes.addElement(new Attribute("eventURI", (FastVector) null));
+		if (this.doAddEventInformation)
+			attributes.addElement(new Attribute(Util.ATTRIBUTE_NAME_URI, (FastVector) null));
 		
 		int numberOfExpectedExamples = this.benchmark.size();
 		Instances dataSet = new Instances("usabilityTest", attributes, numberOfExpectedExamples);
-		dataSet.setClass(dataSet.attribute("usable"));
+		dataSet.setClass(dataSet.attribute(Util.ATTRIBUTE_NAME_USABLE));
 		return dataSet;
 	}
 	
@@ -108,6 +115,7 @@ public class FeatureExtractor {
 		}
 	}
 	
+	// takes care of extracting all features for one given event
 	private class EventWorker implements Callable<Instance> {
 
 		private String eventURI;
@@ -122,15 +130,19 @@ public class FeatureExtractor {
 		
 		public Instance call() throws Exception {
 			
-			double[] values = new double[features.size() + 2];
+			int numberOfAttributes = doAddEventInformation ? features.size() + 2 : features.size();
+			
+			double[] values = new double[numberOfAttributes];
 			
 			for (int i = 0; i < features.size(); i++) {
 				UsabilityFeature f = features.get(i);
 				values[i] = f.getValue(this.eventURI);
 			}
 			
-			values[values.length - 2] = this.usabilityIndex;
-			values[values.length - 1] = this.stringIndex;
+			values[features.size()] = this.usabilityIndex;
+			
+			if (doAddEventInformation)
+				values[features.size() + 1] = this.stringIndex;
 			
 			Instance example = new Instance(1.0, values);
 			
@@ -150,9 +162,9 @@ public class FeatureExtractor {
 		
 		for (Map.Entry<BenchmarkEvent, GroundTruth> entry : this.benchmark.entrySet()) {
 			String eventURI = entry.getKey().getEventURI();
-			String label = (entry.getValue().getUsabilityRating() == 1.0) ? "true" : "false";
-			int usabilityIndex = dataSet.attribute("usable").indexOfValue(label);
-			int stringIndex = dataSet.attribute("eventURI").addStringValue(eventURI);
+			String label = (entry.getValue().getUsabilityRating() == 1.0) ? Util.CLASS_LABEL_POSITIVE : Util.CLASS_LABEL_NEGATIVE;
+			int usabilityIndex = dataSet.attribute(Util.ATTRIBUTE_NAME_USABLE).indexOfValue(label);
+			int stringIndex = dataSet.attribute(Util.ATTRIBUTE_NAME_URI).addStringValue(eventURI);
 			EventWorker w = new EventWorker(eventURI, usabilityIndex, stringIndex);
 			
 			futures.add(threadPool.submit(w));

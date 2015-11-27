@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -108,7 +109,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 			boolean isUsable;
 			try {
 				double label = classifier.classifyInstance(resultMap.get(event));
-				isUsable = (label == header.attribute("usable").indexOfValue("true"));
+				isUsable = (label == header.attribute(Util.ATTRIBUTE_NAME_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE));
 			} catch (Exception e) {
 				if (log.isWarnEnabled())
 					log.warn(String.format("Could not classify event, setting classification to false: %s", event.toVerboseString()));
