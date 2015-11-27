@@ -134,9 +134,7 @@ public class FilteringBenchmark {
 				eval.crossValidateModel(classifier, cleanedDataSet, 10, new Random(1337));
 				if (log.isInfoEnabled()) {
 					log.info(classifier.getClass().getName());
-					log.info(eval.toSummaryString());
-					log.info(eval.toClassDetailsString());
-					log.info(eval.toMatrixString());
+					logEvalResults(eval);
 				}
 
 			} catch (Exception e) {
@@ -171,22 +169,8 @@ public class FilteringBenchmark {
 				String fileName = (String) enumeration.nextElement();
 				Integer idx = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
 
-				RemoveWithValues trainFilter = new RemoveWithValues();
-				trainFilter.setAttributeIndex("last");
-				trainFilter.setNominalIndices(idx.toString());
-				trainFilter.setInputFormat(modifedDataSet);
-				Instances train = Filter.useFilter(modifedDataSet, trainFilter);
-				train.deleteAttributeAt(train.numAttributes() - 1);
-				train.deleteAttributeAt(train.numAttributes() - 1);
-
-				RemoveWithValues testFilter = new RemoveWithValues();
-				testFilter.setAttributeIndex("last");
-				testFilter.setNominalIndices(idx.toString());
-				testFilter.setInvertSelection(true);
-				testFilter.setInputFormat(modifedDataSet);
-				Instances test = Filter.useFilter(modifedDataSet, testFilter);
-				test.deleteAttributeAt(test.numAttributes() - 1);
-				test.deleteAttributeAt(test.numAttributes() - 1);
+				Instances train = filterByFileName(modifedDataSet, idx, false);
+				Instances test = filterByFileName(modifedDataSet, idx, true);
 
 				Classifier c = Classifier.makeCopy(classifier);
 				c.buildClassifier(train);
@@ -197,14 +181,45 @@ public class FilteringBenchmark {
 			}
 
 			if (log.isInfoEnabled()) {
-				log.info(eval.toSummaryString());
-				log.info(eval.toClassDetailsString());
-				log.info(eval.toMatrixString());
+				logEvalResults(eval);
 			}
 		}
 	}
+
+	private Instances filterByFileName(Instances dataSet, Integer fileNameIdx, boolean isTest) throws Exception {
+		
+		RemoveWithValues filter = new RemoveWithValues();
+		filter.setAttributeIndex("last");
+		filter.setNominalIndices(fileNameIdx.toString());
+		filter.setInvertSelection(isTest);
+		filter.setInputFormat(dataSet);
+		
+		Instances result = Filter.useFilter(dataSet, filter);
+		result.deleteAttributeAt(result.numAttributes() - 1);
+		result.deleteAttributeAt(result.numAttributes() - 1);
+		
+		return result;
+	}
+	
 	// endregion
 
+	private void logEvalResults(Evaluation eval) throws Exception {
+		// compute balanced accuracy
+		int positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE);
+		double tp = eval.numTruePositives(positiveClassIdx);
+		double tn = eval.numTrueNegatives(positiveClassIdx);
+		double fp = eval.numFalsePositives(positiveClassIdx);
+		double fn = eval.numFalseNegatives(positiveClassIdx);
+		
+		double balancedAcc = ((0.5 * tp) / (tp + fn)) + ((0.5 * tn) / (tn + fp));
+		
+		// output
+		log.info(eval.toSummaryString());
+		log.info(String.format("balanced accuracy: %f", balancedAcc));
+		log.info(eval.toClassDetailsString());
+		log.info(eval.toMatrixString());
+	}
+	
 	public void run() throws Exception {
 		if (this.doFeatureAnalysis)
 			featureAnalysis();
