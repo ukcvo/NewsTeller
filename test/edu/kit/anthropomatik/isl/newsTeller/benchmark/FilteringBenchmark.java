@@ -18,6 +18,7 @@ import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Attribute;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
@@ -227,6 +228,12 @@ public class FilteringBenchmark {
 			crossValidation();
 		if (this.doLeaveOneOut)
 			leaveOneOut();
+		
+		for (int i = 0; i < originalDataSet.numInstances(); i++) {
+			Instance inst = originalDataSet.instance(i);
+			if ((inst.value(originalDataSet.attribute("propBankFeature")) < 0.2) && (inst.value(inst.classAttribute()) == originalDataSet.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE)))
+				System.out.println(inst.stringValue(originalDataSet.attribute(Util.ATTRIBUTE_URI)));
+		}
 	}
 
 	public static void main(String[] args) throws Exception {

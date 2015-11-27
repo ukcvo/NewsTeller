@@ -3,9 +3,10 @@ package edu.kit.anthropomatik.isl.newsTeller.util;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.LogManager;
 
 import org.junit.BeforeClass;
@@ -132,30 +133,36 @@ public class UtilTest {
 	//region regarding XML
 	@Test
 	public void shouldReturnOnlyA0() {
-		List<String> result = Util.parsePropBankFrame(new File("resources/propbank-frames/race-v.xml"));
-		List<String> expected = new ArrayList<String>();
-		expected.add("A0");
+		Set<Set<String>> result = Util.parsePropBankFrame(new File("resources/propbank-frames/race-v.xml"));
+		Set<Set<String>> expected = new HashSet<Set<String>>();
+		Set<String> helper = new HashSet<String>();
+		helper.add("A0");
+		expected.add(helper);
 		assertTrue(result.equals(expected));
 	}
 	
 	@Test
 	public void shouldReturnA0AndA1() {
-		List<String> result = Util.parsePropBankFrame(new File("resources/propbank-frames/contradict-v.xml"));
-		List<String> expected = new ArrayList<String>();
-		expected.add("A0");
-		expected.add("A1");
+		Set<Set<String>> result = Util.parsePropBankFrame(new File("resources/propbank-frames/contradict-v.xml"));
+		Set<Set<String>> expected = new HashSet<Set<String>>();
+		Set<String> helper = new HashSet<String>();
+		helper.add("A0");
+		helper.add("A1");
+		expected.add(helper);
 		assertTrue(result.equals(expected));
 	}
 	
+	// TODO: find example w/ multiple solutions
+	
 	@Test
 	public void shouldParseAllFiles() {
-		Map<String, List<String>> result = Util.parseAllPropBankFrames("resources/propbank-frames", true);
+		Map<String, Set<Set<String>>> result = Util.parseAllPropBankFrames("resources/propbank-frames", true);
 		assertTrue(result.size() == 9702);
 	}
 	
 	@Test
 	public void shouldReadMap() {
-		Map<String, List<String>> result = Util.parseAllPropBankFrames("resources/propbank-frames", false);
+		Map<String, Set<Set<String>>> result = Util.parseAllPropBankFrames("resources/propbank-frames", false);
 		assertTrue(result.size() == 9702);
 	}
 	//endregion

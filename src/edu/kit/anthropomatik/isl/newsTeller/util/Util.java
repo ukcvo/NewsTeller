@@ -8,8 +8,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -245,9 +247,9 @@ public class Util {
 	/**
 	 * Parses a single propBank file and returns the minimum set of arguments necessary. Returns empty set on failure.
 	 */
-	public static List<String> parsePropBankFrame(File file) {
+	public static Set<Set<String>> parsePropBankFrame(File file) {
 		try {
-			List<String> result = new ArrayList<String>();
+			Set<Set<String>> result = new HashSet<Set<String>>();
 			
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -256,9 +258,11 @@ public class Util {
 			
 			NodeList rolesets = doc.getElementsByTagName("roleset");
 			
+			Set<Set<String>> hypothesisList = new HashSet<Set<String>>();
+			
 			// iterate over "rolesets", i.e. meanings of the word
 			for (int i = 0; i < rolesets.getLength(); i++) {
-				List<String> roleSetHypothesis = new ArrayList<String>();
+				Set<String> roleSetHypothesis = new HashSet<String>();
 				Element roleset = (Element) rolesets.item(i);
 				
 				// collect arguments from definition (baseline in case there are no examples)
@@ -272,11 +276,12 @@ public class Util {
 					if (isInt)
 						roleSetHypothesis.add(String.format("A%d", n));
 				}
+				hypothesisList.add(roleSetHypothesis);
 				
 				// iterate over all examples
 				NodeList examples = roleset.getElementsByTagName("example");
 				for (int j = 0; j < examples.getLength(); j++) {
-					List<String> exampleHypothesis = new ArrayList<String>();
+					Set<String> exampleHypothesis = new HashSet<String>();
 					Element example = (Element) examples.item(j);
 					
 					// look for arguments used in example
@@ -290,15 +295,19 @@ public class Util {
 						if (isInt)
 							exampleHypothesis.add(String.format("A%d", n));
 					}
+					hypothesisList.add(exampleHypothesis);
 					
-					// if example omits an argument, it's not necessary --> use smaller argument set
-					if (roleSetHypothesis.containsAll(exampleHypothesis) && (exampleHypothesis.size() < roleSetHypothesis.size()))
-						roleSetHypothesis = exampleHypothesis;
 				}
-				
-				// take minimum over all rolesets/meanings
-				if (result.isEmpty() || (result.containsAll(roleSetHypothesis) && (roleSetHypothesis.size() < result.size())))
-					result = roleSetHypothesis;
+			}
+			
+			for (Set<String> hypothesis : hypothesisList) {
+				boolean shouldBeKept = true;
+				for (Set<String> otherHypothesis : hypothesisList) {
+					if ((otherHypothesis.size() < hypothesis.size())  && (hypothesis.containsAll(otherHypothesis)))
+						shouldBeKept = false;
+				}
+				if (shouldBeKept)
+					result.add(hypothesis);
 			}
 			
 			return result;
@@ -309,21 +318,21 @@ public class Util {
 			if (log.isDebugEnabled())
 				log.debug("XML error", e);
 			
-			return new ArrayList<String>();
+			return new HashSet<Set<String>>();
 		}
 		
 	}
 	
 	@SuppressWarnings("unchecked")
 	// either collect them manually, or just read map from file
-	public static Map<String, List<String>> parseAllPropBankFrames(String folderName, boolean forceConstruction) {
+	public static Map<String, Set<Set<String>>> parseAllPropBankFrames(String folderName, boolean forceConstruction) {
 		
-		Map<String, List<String>> result = new HashMap<String, List<String>>();
+		Map<String, Set<Set<String>>> result = new HashMap<String, Set<Set<String>>>();
 		
 		File map = new File(folderName + ".map");
 		if (!forceConstruction && map.exists()) {
 			try {
-				result = (Map<String, List<String>>) SerializationHelper.read(map.getAbsolutePath());
+				result = (Map<String, Set<Set<String>>>) SerializationHelper.read(map.getAbsolutePath());
 				return result;
 			} catch (Exception e) {
 				if (log.isWarnEnabled())
@@ -342,10 +351,27 @@ public class Util {
 		 {
 			String fileName = file.getName();
 			String word = fileName.substring(0, fileName.indexOf('-')); // "contradict-v.xml" --> "contradict"
-			List<String> fileResult = parsePropBankFrame(file);
+			Set<Set<String>> fileResult = parsePropBankFrame(file);
 			
-			if (!result.containsKey(word) || (result.get(word).size() > fileResult.size()))
+			if (!result.containsKey(word))
 				result.put(word, fileResult);
+			else {
+				Set<Set<String>> allWordResults = result.get(word);
+				allWordResults.addAll(fileResult);
+				
+				Set<Set<String>> mergedWordResults = new HashSet<Set<String>>();
+				for (Set<String> hypothesis : allWordResults) {
+					boolean shouldBeKept = true;
+					for (Set<String> otherHypothesis : allWordResults) {
+						if ((otherHypothesis.size() < hypothesis.size())  && (hypothesis.containsAll(otherHypothesis)))
+							shouldBeKept = false;
+					}
+					if (shouldBeKept)
+						mergedWordResults.add(hypothesis);
+				}
+				
+				result.put(word, mergedWordResults);
+			}
 		}
 		
 		try {
