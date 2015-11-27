@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.util;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -131,7 +132,7 @@ public class UtilTest {
 	//region regarding XML
 	@Test
 	public void shouldReturnOnlyA0() {
-		List<String> result = Util.parsePropBankFrame("resources/propbank-frames/race-v.xml");
+		List<String> result = Util.parsePropBankFrame(new File("resources/propbank-frames/race-v.xml"));
 		List<String> expected = new ArrayList<String>();
 		expected.add("A0");
 		assertTrue(result.equals(expected));
@@ -139,12 +140,23 @@ public class UtilTest {
 	
 	@Test
 	public void shouldReturnA0AndA1() {
-		List<String> result = Util.parsePropBankFrame("resources/propbank-frames/contradict-v.xml");
+		List<String> result = Util.parsePropBankFrame(new File("resources/propbank-frames/contradict-v.xml"));
 		List<String> expected = new ArrayList<String>();
 		expected.add("A0");
 		expected.add("A1");
 		assertTrue(result.equals(expected));
 	}
 	
+	@Test
+	public void shouldParseAllFiles() {
+		Map<String, List<String>> result = Util.parseAllPropBankFrames("resources/propbank-frames", true);
+		assertTrue(result.size() == 9702);
+	}
+	
+	@Test
+	public void shouldReadMap() {
+		Map<String, List<String>> result = Util.parseAllPropBankFrames("resources/propbank-frames", false);
+		assertTrue(result.size() == 9702);
+	}
 	//endregion
 }

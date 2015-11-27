@@ -23,6 +23,7 @@ import org.w3c.dom.NodeList;
 import edu.kit.anthropomatik.isl.newsTeller.data.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import weka.core.SerializationHelper;
 
 /**
  * Provides some static utility functions.
@@ -243,13 +244,13 @@ public class Util {
 	/**
 	 * Parses a single propBank file and returns the minimum set of arguments necessary. Returns empty set on failure.
 	 */
-	public static List<String> parsePropBankFrame(String fileName) {
+	public static List<String> parsePropBankFrame(File file) {
 		try {
 			List<String> result = new ArrayList<String>();
 			
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(fileName);
+			Document doc = db.parse(file);
 			doc.getDocumentElement().normalize();
 			
 			NodeList rolesets = doc.getElementsByTagName("roleset");
@@ -263,8 +264,12 @@ public class Util {
 				NodeList roles = roleset.getElementsByTagName("role");
 				for (int j = 0; j < roles.getLength(); j++) {
 					Element role = (Element) roles.item(j);
-					int n = Integer.parseInt(role.getAttribute("n"));
-					roleSetHypothesis.add(String.format("A%d", n));
+					String nString = role.getAttribute("n");
+					boolean isInt = true;
+					int n = -1;
+					try { n = Integer.parseInt(nString); } catch (NumberFormatException e) { isInt = false;}
+					if (isInt)
+						roleSetHypothesis.add(String.format("A%d", n));
 				}
 				
 				// iterate over all examples
@@ -299,7 +304,7 @@ public class Util {
 			
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
-				log.error(String.format("can't process XML file '%s'", fileName));
+				log.error(String.format("can't process XML file '%s'", file.getName()));
 			if (log.isDebugEnabled())
 				log.debug("XML error", e);
 			
@@ -307,6 +312,53 @@ public class Util {
 		}
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	// either collect them manually, or just read map from file
+	public static Map<String, List<String>> parseAllPropBankFrames(String folderName, boolean forceConstruction) {
+		
+		Map<String, List<String>> result = new HashMap<String, List<String>>();
+		
+		File map = new File(folderName + ".map");
+		if (!forceConstruction && map.exists()) {
+			try {
+				result = (Map<String, List<String>>) SerializationHelper.read(map.getAbsolutePath());
+				return result;
+			} catch (Exception e) {
+				if (log.isWarnEnabled())
+					log.warn("wanted to load map file, but failed... constructing it manually"); 
+				if (log.isDebugEnabled())
+					log.debug("failure to read map", e);
+			}
+		}
+		
+		File folder = new File(folderName);
+		
+		for (File file : folder.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".xml");
+			} }))
+		 {
+			String fileName = file.getName();
+			String word = fileName.substring(0, fileName.indexOf('-')); // "contradict-v.xml" --> "contradict"
+			List<String> fileResult = parsePropBankFrame(file);
+			
+			if (!result.containsKey(word) || (result.get(word).size() > fileResult.size()))
+				result.put(word, fileResult);
+		}
+		
+		try {
+			SerializationHelper.write(folderName + ".map", result);
+		} catch (Exception e) {
+			if (log.isWarnEnabled())
+				log.warn("unable to write map file... proceeding w/o storing it");
+			if (log.isDebugEnabled())
+				log.debug("failure to write map", e);
+		}
+		
+		return result;
+	}
+	
 	// endregion
 	
 	// region other stuff
