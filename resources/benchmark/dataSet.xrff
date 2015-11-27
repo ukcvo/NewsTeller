@@ -704,7 +704,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.6</value>
-            <value>0.333333</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Man_claims_84_percent_ownership_of_Facebook#ev24_3</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -1003,7 +1003,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.388889</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Lordi_added_to_billing_of_Serbia&apos;s_Castle_Festival#ev17</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -1026,7 +1026,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.846154</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev28_8</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -1118,7 +1118,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Peter_Jackson_banned_from_working_with_New_Line#ev70</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -1279,7 +1279,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Crisis_at_stricken_Japan_nuclear_plant_escalates_to_level_of_Chernobyl;_six_killed_in_aftershock#ev42_1</value>
             <value>resources/benchmark/queries/Chernobyl.csv</value>
@@ -1394,7 +1394,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Climate_conference_in_Bali_begins_on_Monday#ev18_1</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -1854,7 +1854,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.071429</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Pandermalis_announces_2007_Acropolis_Museum_opening#ev26</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -2084,7 +2084,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/2007_Twenty20_World_Championship:_Pakistan_vs_Scotland#ev32</value>
             <value>resources/benchmark/queries/Watson.csv</value>
@@ -2107,7 +2107,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/2007_Twenty20_World_Championship:_Pakistan_vs_Scotland#ev31</value>
             <value>resources/benchmark/queries/Watson.csv</value>
@@ -2314,7 +2314,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.5</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Iceland_and_United_Kingdom_in_diplomatic_dispute_over_financial_crisis#ev27</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -2337,7 +2337,7 @@
             <value>0</value>
             <value>3</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Second_round_of_Bonn_UN_Climate_Change_negotiations_continue#ev28</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -2521,7 +2521,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.285714</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Keisha_Castle-Hughes_playing_Virgin_Mary#ev12</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -2636,7 +2636,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Pandermalis_announces_2007_Acropolis_Museum_opening#ev28</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -2820,7 +2820,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.977778</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Duke_of_Edinburgh_leaves_UK_hospital_following_exploratory_surgery#ev23_2</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -3050,7 +3050,7 @@
             <value>0</value>
             <value>4</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Volcano_eruption_in_Philippines_prompts_evacuations#ev17</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -3280,7 +3280,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/TV_host_Conan_O&apos;Brien_accepts_US$45_million_settlement_with_NBC#ev23</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -3349,7 +3349,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.5</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/FOX_to_produce_new_&apos;Futurama&apos;_episodes#ev11</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -3556,7 +3556,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.125</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Continuing_controversy_surrounds_German_mission_to_Middle_East#ev21</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -3602,7 +3602,7 @@
             <value>0</value>
             <value>6</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Scottish_singer_Jai_McDowall_wins_fifth_Britain&apos;s_Got_Talent_series#ev72_7</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -3625,7 +3625,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.333333</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Russia_cuts_off_gas_supplies_to_Ukraine#ev73</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -3717,7 +3717,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.444444</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Countries_around_the_world_send_aid,_help_to_Haiti#ev92</value>
             <value>resources/benchmark/queries/earthquake.csv</value>
@@ -3809,7 +3809,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.571429</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/TV_host_Conan_O&apos;Brien_accepts_US$45_million_settlement_with_NBC#ev22</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -4085,7 +4085,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IBM_Releases_500_patents_to_open_source_community#ev39</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -4177,7 +4177,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.504464</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/UK_government_stops_compulsory_testing_of_fourteen-year-olds#ev28</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -4476,7 +4476,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.523099</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Photoessay:_The_Idiotarod:_When_Good_Shopping_Carts_Go_Bad#ev21</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -4706,7 +4706,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.870968</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Peter_Jackson_banned_from_working_with_New_Line#ev24_5</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -5189,7 +5189,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Tom_Cruise_orders_%e2%82%ac14,500_takeaway_meal#ev3</value>
             <value>resources/benchmark/queries/Tom Cruise.csv</value>
@@ -5373,7 +5373,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.363636</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Football:_Manchester_United_defeat_AC_Milan_in_Champions_League#ev45</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -5442,7 +5442,7 @@
             <value>0</value>
             <value>7</value>
             <value>0.303846</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Facebook_Places_launches_in_UK#ev29</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -5695,7 +5695,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.527778</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Windows_Vista_faces_possible_trademark_challenges#ev25</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -6615,7 +6615,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.977778</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/&apos;Davos_man&apos;_versus_&apos;Camp_Igloo&apos;;_42nd_World_Economic_Forum_convenes_in_Swiss_alps#ev25_1</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -6983,7 +6983,7 @@
             <value>0</value>
             <value>8</value>
             <value>0.74058</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Northrop_Grumman_and_Airbus_parent_EADS_defeat_Boeing_for_$40_billion_US_airtanker_contract#ev53_22</value>
             <value>resources/benchmark/queries/erupt.csv</value>
@@ -7121,7 +7121,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.482955</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/French_broadcasters_barred_from_saying_%22Facebook%22_or_%22Twitter%22_on_air#ev30</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -7236,7 +7236,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.225</value>
-            <value>0.333333</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_TV_host_Conan_O&apos;Brien_leads_in_late_night_ratings#ev25</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -7259,7 +7259,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.615385</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/British_oceanliner_QE2_makes_final_journey_home#ev29</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -7282,7 +7282,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.595238</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/American_actress_Estelle_Getty_dead_at_age_84#ev25_7</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -7558,7 +7558,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Michael_Jackson_film_%22This_Is_It%22_to_be_premiered_in_at_least_15_world_cities_simultaneously#ev24_1</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -7811,7 +7811,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Peter_Jackson_banned_from_working_with_New_Line#ev27_5</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -7995,7 +7995,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.071429</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/UEFA_Champions_League_2007/08:_Group_Stage_Draw#ev27</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -8294,7 +8294,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.673077</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Greek_soccer_champions_celebrate_title_win_with_Maradona#ev10_8</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -8317,7 +8317,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Cyclone_Ingrid_crosses_Far_North_Queensland_Coast#ev8</value>
             <value>resources/benchmark/queries/Rome.csv</value>
@@ -8455,7 +8455,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.461538</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Australian_Senate_Committee_recommends_formation_of_Charities_Commission#ev38_7</value>
             <value>resources/benchmark/queries/charity.csv</value>
@@ -8639,7 +8639,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.785714</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IPCC_claims_about_Himalayan_glaciers_were_not_based_on_science#ev40</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -8800,7 +8800,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Developing_nations_bring_technology_transfer_on_agenda_against_resistance_of_Canada,_Japan_and_US#ev30_1</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -8892,7 +8892,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.383523</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Facebook_and_UK_government_clash_over_tributes_to_killer#ev32</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -8938,7 +8938,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.730769</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/New_Delhi:_Video_shows_witnesses_in_the_Jessica_Lall_murder_case_being_bribed#ev11</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -9030,7 +9030,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.625</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Firing_of_Michael_Jackson_spokeswoman_disputed#ev33</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -9145,7 +9145,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.684211</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Magnitude_5.8_earthquake_in_Virginia_felt_up_and_down_U.S._east_coast,_Pentagon_evacuated#ev11_2</value>
             <value>resources/benchmark/queries/power station.csv</value>
@@ -9191,7 +9191,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.673077</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/NHL:_Penguins_defeat_Thrashers,_catch_Devils#ev12_10</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -9306,7 +9306,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.505608</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Nuclear_leaks_after_Japan_quake_are_worse_than_first_reported#ev3</value>
             <value>resources/benchmark/queries/power station.csv</value>
@@ -9467,7 +9467,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.823529</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Football:_Ke%c5%beman_goes_to_Fenerbah%c3%a7e#ev19_5</value>
             <value>resources/benchmark/queries/Real Madrid.csv</value>
@@ -9605,7 +9605,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.841463</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/ITV_postpones_broadcast_of_2007_British_Comedy_Awards#ev15</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -10042,7 +10042,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.466667</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Fake_Jackson_suicide_email_hides_virus#ev11</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -10180,7 +10180,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Magnitude_5.8_earthquake_in_Virginia_felt_up_and_down_U.S._east_coast,_Pentagon_evacuated#ev28</value>
             <value>resources/benchmark/queries/power station.csv</value>
@@ -10318,7 +10318,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Brian_Melo_crowned_winner_of_Canadian_Idol#ev52_3</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -10341,7 +10341,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0.25</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Idaho_meterologist_promotes_Hurricane_Katrina_conspiracy_theory#ev8</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -10387,7 +10387,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.454545</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Vietnam_denies_blocking_social_networking_site_Facebook#ev23</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -10847,7 +10847,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.579365</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IBM_partners_with_Google_to_produce_a_corporate_desktop_search_program#ev12</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -10916,7 +10916,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Possible_eruption_at_Ruapehu_Volcano_in_New_Zealand#ev42</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -10962,7 +10962,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.730769</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Idaho_meterologist_promotes_Hurricane_Katrina_conspiracy_theory#ev7</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -11215,7 +11215,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.6</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Space_Shuttle_Discovery_successfully_lifts_off_on_mission_STS-128#ev12</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -11330,7 +11330,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.680769</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Half_of_life_could_go_extinct_by_century&apos;s_end,_warn_eminent_biologists#ev57</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -11514,7 +11514,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.297619</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/USC_defeats_Penn_State_in_95th_Rose_Bowl_Game#ev29</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -11997,7 +11997,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.719298</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Canadian_trio_claim_South_Pole_record_for_trans-Antarctic_trip#ev39_5</value>
             <value>resources/benchmark/queries/Sahara.csv</value>
@@ -12043,7 +12043,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.794118</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Firing_of_Michael_Jackson_spokeswoman_disputed#ev30</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -12618,7 +12618,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/American_actress_Estelle_Getty_dead_at_age_84#ev27</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -13124,7 +13124,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.538462</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/DNA_in_underwear_matches_Philippines_rape_victim#ev45_4</value>
             <value>resources/benchmark/queries/Watson.csv</value>
@@ -13331,7 +13331,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Third_Canadian_found_dead_in_Mexico#ev26</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -13515,7 +13515,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.722222</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Study_shows_that_aspirin_might_do_more_harm_than_good#ev21_4</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -13883,7 +13883,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.333333</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Chris_Langham_found_guilty_of_downloading_child_pornography#ev74</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -13998,7 +13998,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.372253</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Getafe_CF_coach_Schuster_criticises_preliminary_Spanish_World_Cup_pick#ev22</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -14481,7 +14481,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.647059</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Award_winning_singer_George_Michael_cautioned_after_caught_with_drugs_in_London_public_toilet#ev20</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -14780,7 +14780,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.714286</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Tom_Cruise_Scientology_promotional_video_leaked_to_the_Internet#ev44_16</value>
             <value>resources/benchmark/queries/Tom Cruise.csv</value>
@@ -14872,7 +14872,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.618182</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Tropical_Storm_Ernesto_nears_the_US_Coast#ev39</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -14987,7 +14987,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.454545</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Report_indicates_continued_severe_weather_problems_still_looming#ev10</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -15631,7 +15631,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.916667</value>
-            <value>0</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Murdoch_empire_in_crisis_after_newspaper_closes:_BSkyB_bid_halted,_former_editor_arrested,_anger_at_chief_executive#ev97</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -15792,7 +15792,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Angela_Merkel_elected_new_German_chancellor#ev30_3</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -16022,7 +16022,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.5</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IBM_Releases_500_patents_to_open_source_community#ev28</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -16045,7 +16045,7 @@
             <value>0</value>
             <value>7</value>
             <value>0.626068</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/JK_Rowling_announces_seventh_Harry_Potter_title#ev14</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -16114,7 +16114,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.88</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/People_limited_to_150_friends,_despite_Facebook,_says_academic#ev18_2</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -16712,7 +16712,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.35</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/UEFA_Champions_League_2007%e2%80%9308:_Werder_Bremen_vs._Lazio#ev7_2</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -17425,7 +17425,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.816209</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Death_of_Michael_Jackson_causes_last_minute_changes_to_films_and_dramas#ev13</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -17655,7 +17655,7 @@
             <value>0</value>
             <value>7</value>
             <value>0.631525</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/2006_Oscars_handed_out_at_Kodak_Theatre#ev36</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -18207,7 +18207,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Protesters_arrested_at_climate_change_rally#ev11_3</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -18552,7 +18552,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.91988</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Collyer_brothers_to_bid_for_Everton_F.C.?#ev16</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -18598,7 +18598,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.071429</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Lahar_at_New_Zealand&apos;s_Mount_Ruapehu#ev15</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -19035,7 +19035,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.333333</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Iowa_falls_to_Texas_in_Alamo_Bowl#ev44</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -19288,7 +19288,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Simon&apos;s_Rock_College_tests_Alan_Turing_theories_with_&apos;Imitation_Game&apos;_experiment#ev25_4</value>
             <value>resources/benchmark/queries/artificial intelligence.csv</value>
@@ -19426,7 +19426,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Comedians_lampoon_Bush_at_White_House_Correspondents&apos;_Dinner#ev18_2</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -19449,7 +19449,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.5</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/UEFA_Champions_League_2007/08:_Fear_can_drive_Celtic_-_Strachan#ev21</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -19771,7 +19771,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Comedians_lampoon_Bush_at_White_House_Correspondents&apos;_Dinner#ev18_7</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -19840,7 +19840,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Stephen_Colbert_denied_South_Carolina_ballot#ev27</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -20093,7 +20093,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.615385</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Comedians_lampoon_Bush_at_White_House_Correspondents&apos;_Dinner#ev18_8</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -20852,7 +20852,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/NASA_solar_sail_passes_first_major_test#ev36</value>
             <value>resources/benchmark/queries/European Space Agency.csv</value>
@@ -20944,7 +20944,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.461538</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Simon&apos;s_Rock_College_tests_Alan_Turing_theories_with_&apos;Imitation_Game&apos;_experiment#ev25_8</value>
             <value>resources/benchmark/queries/artificial intelligence.csv</value>
@@ -21312,7 +21312,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.88</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Colbert_officially_withdraws_Presidential_bid;_Obama_supporters_pressured_South_Carolina#ev27_1</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -21358,7 +21358,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.222222</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev72</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -21634,7 +21634,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Suspended_letterbox_for_sale_on_New_Zealand_auction_site#ev37</value>
             <value>resources/benchmark/queries/erupt.csv</value>
@@ -21703,7 +21703,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.75</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/London_police_question_captured_bombing_suspects#ev8</value>
             <value>resources/benchmark/queries/Rome.csv</value>
@@ -21726,7 +21726,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.764493</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_trade_deficit_hits_new_record#ev4</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -21841,7 +21841,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/No_debt_yet:_Iceland&apos;s_President_vetoes_repayment_of_Icesave_losses#ev27</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -21887,7 +21887,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/711chan.org_administrator_calls_for_an_end_to_attacks_on_Scientology#ev52_8</value>
             <value>resources/benchmark/queries/Tom Cruise.csv</value>
@@ -21910,7 +21910,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.684211</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/German_polar_bear_Knut_turns_one_year_old#ev12_1</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -22232,7 +22232,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Pressure_mounts_against_Florida_church_plans_to_burn_Qur&apos;an#ev39_8</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -22554,7 +22554,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.486111</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Fans_of_OS/2_want_IBM_to_release_it_as_open-source_software#ev5</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -22623,7 +22623,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.521739</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/%22Donkey%22_bloggers_facing_jail_sentence_in_Azerbaijan#ev14</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -22738,7 +22738,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.470238</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Facebook_blocked_in_Bangladesh#ev18</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -22830,7 +22830,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.94</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Paula_Radcliffe_makes_comeback_and_wins_New_York_City_marathon#ev32</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -23520,7 +23520,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.823529</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Blair_is_first_public_official_to_apologize_for_Hurricane_Katrina_response#ev24</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -23888,7 +23888,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Delhi_University_to_honour_actor_Amitabh_Bachchan,_four_others_on_4_November#ev17</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -24049,7 +24049,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.451613</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Rosetta_spacecraft_passes_Lutetia_asteroid#ev20_12</value>
             <value>resources/benchmark/queries/European Space Agency.csv</value>
@@ -24302,7 +24302,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Fire_damages_building_housing_Berlin_Philharmonic_Orchestra#ev12_2</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -24394,7 +24394,7 @@
             <value>0</value>
             <value>2</value>
             <value>0</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Controversy_over_effects_of_new_bankruptcy_law_on_victims_of_Katrina#ev42</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -24578,7 +24578,7 @@
             <value>0</value>
             <value>2</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_swimmer_Phelps_suspended_over_&apos;pot_pipe&apos;#ev25</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -25452,7 +25452,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.451613</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Icelandic_centre-left_coalition_secures_majority_in_parliamentary_elections#ev22</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -25636,7 +25636,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.730769</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Idaho_meterologist_promotes_Hurricane_Katrina_conspiracy_theory#ev7</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -25843,7 +25843,7 @@
             <value>0</value>
             <value>9</value>
             <value>0.65</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Russia_follows_Georgia_in_signing_peace_plan#ev21</value>
             <value>resources/benchmark/queries/Medvedev.csv</value>
@@ -26326,7 +26326,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.350806</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Titanic_actress_Gloria_Stuart_dies_at_age_100#ev28</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -26740,7 +26740,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.3125</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Icelandic_Internet_bank_suspends_UK_accounts#ev47</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -26878,7 +26878,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.166667</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Comedians_lampoon_Bush_at_White_House_Correspondents&apos;_Dinner#ev40</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -27039,7 +27039,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Angela_Merkel_elected_new_German_chancellor#ev30_3</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -27292,7 +27292,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.571429</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_Library_of_Congress_plans_archive_of_Twitter#ev12_1</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -27637,7 +27637,7 @@
             <value>0</value>
             <value>2</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Tom_Cruise_Scientology_promotional_video_leaked_to_the_Internet#ev63</value>
             <value>resources/benchmark/queries/Tom Cruise.csv</value>
@@ -27775,7 +27775,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.227273</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Haitian_earthquake:_in_pictures#ev9</value>
             <value>resources/benchmark/queries/earthquake.csv</value>
@@ -28074,7 +28074,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.730769</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Documentary_suggests_nuns_were_excommunicated_for_exposing_paedophilic_priest#ev33</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -28143,7 +28143,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.714286</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/European_Space_Agency_seeks_volunteers_for_Mars_simulation#ev12</value>
             <value>resources/benchmark/queries/European Space Agency.csv</value>
@@ -28212,7 +28212,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.6</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Hooters_Chairman_dead_at_69#ev18</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -28373,7 +28373,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Distributed_computing_climate_change_model_gives_bleak_results#ev9</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -28672,7 +28672,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.688889</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Iowa_falls_to_Texas_in_Alamo_Bowl#ev22_10</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -28718,7 +28718,7 @@
             <value>1</value>
             <value>3</value>
             <value>0.983333</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IPCC_chief_refuses_to_apologize_for_glacier_error#ev12</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -28833,7 +28833,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.357143</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Icelandic_Internet_bank_suspends_UK_accounts#ev41</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -28856,7 +28856,7 @@
             <value>0</value>
             <value>6</value>
             <value>0.730769</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Controversy_raised_about_2009_Nobel_Prize_in_Physics#ev34</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -29477,7 +29477,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.695652</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Controversy_over_whether_New_Orleans_Mayor_failed_to_follow_hurricane_plan#ev38_2</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -30305,7 +30305,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.6</value>
-            <value>0.333333</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/English_Football:_Manchester_United_News_for_August_6,_2008#ev46</value>
             <value>resources/benchmark/queries/Real Madrid.csv</value>
@@ -30466,7 +30466,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.972973</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Lehman_Brothers_files_for_bankruptcy#ev22_5</value>
             <value>resources/benchmark/queries/Lehman Brothers.csv</value>
@@ -30489,7 +30489,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.918221</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/British_Airways_flight_makes_emergency_landing_in_Iceland,_terrorism_ruled_out#ev11</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -30650,7 +30650,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.4</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Obama_signs_$787_billion_stimulus_package#ev23_1</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -30742,7 +30742,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/FEMA_head_relieved_of_duties#ev32</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -31041,7 +31041,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Quick_goal_sees_Bayern_advance_over_Real_Madrid#ev32_3</value>
             <value>resources/benchmark/queries/Real Madrid.csv</value>
@@ -31524,7 +31524,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.955392</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Students_find_fossilised_giant_penguin#ev23</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -32030,7 +32030,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.745238</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Sandy_Allen,_world&apos;s_tallest_woman_dies_at_age_53#ev18</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -32145,7 +32145,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.673077</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Quick_goal_sees_Bayern_advance_over_Real_Madrid#ev32_2</value>
             <value>resources/benchmark/queries/Real Madrid.csv</value>
@@ -32536,7 +32536,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.977778</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Burundi_radio_station_ban_lifted_as_media_council_chair_resigns#ev23_2</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -32651,7 +32651,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.25</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Bush_authorizes_oil_release_from_Strategic_Petroleum_Reserve#ev5</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -32881,7 +32881,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.375</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Edinburgh_Fringe_festival_begins#ev32</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -32927,7 +32927,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.75</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Tom_Cruise_Scientology_promotional_video_leaked_to_the_Internet#ev47_1</value>
             <value>resources/benchmark/queries/Tom Cruise.csv</value>
@@ -33134,7 +33134,7 @@
             <value>0</value>
             <value>7</value>
             <value>0.517208</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Europeans_sweep_top_actor_honors_at_80th_Academy_Awards#ev7</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -33203,7 +33203,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.714286</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Quick_goal_sees_Bayern_advance_over_Real_Madrid#ev32_5</value>
             <value>resources/benchmark/queries/Real Madrid.csv</value>
@@ -33249,7 +33249,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.376068</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/U.S._Rep._Conyers_raises_Bush_censure_issue#ev21</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -33318,7 +33318,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.685417</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/UK_judge_clears_policeman_of_fraud_during_London_bomb_probe#ev23</value>
             <value>resources/benchmark/queries/Watson.csv</value>
@@ -33801,7 +33801,7 @@
             <value>0</value>
             <value>9</value>
             <value>0.574763</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Woman_strikes_lucky_betting_on_Champions_League_football#ev12</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -33962,7 +33962,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.4</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/MPAA&apos;s_Valenti_signs_Betamax_tapes_for_EFF_protesters_as_Grokster_case_continues_in_US_Supreme_Court#ev23</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -34077,7 +34077,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.3125</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_nuclear_security_director_asked_to_resign#ev9</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -34330,7 +34330,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.786667</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Star_Wars_Episode_III_debut_breaks_four_box_office_records#ev27</value>
             <value>resources/benchmark/queries/Star Wars.csv</value>
@@ -34905,7 +34905,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Kara_Tointon_and_Artem_Chigvintsev_win_UK_Strictly_Come_Dancing#ev50</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -35112,7 +35112,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.305556</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Man_accused_of_Holocaust_Museum_shooting_dies#ev25</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -35227,7 +35227,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Temperature_in_east_Iceland_reaches_25_degrees_Celsius_(77%c2%b0F)#ev6</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -35802,7 +35802,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/BBC_support_song_making_chart_impact#ev21</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -36515,7 +36515,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.469697</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_trade_deficit_hits_new_record#ev11</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -36561,7 +36561,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.63345</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Fu%c3%9fball-Bundesliga_2008%e2%80%9309:_Goalkeeper_Butt_signs_with_Bayern_Munich#ev9</value>
             <value>resources/benchmark/queries/Real Madrid.csv</value>
@@ -36929,7 +36929,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Nepali_goddess_retires_at_age_11#ev32_4</value>
             <value>resources/benchmark/queries/Mount Everest.csv</value>
@@ -37044,7 +37044,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.6875</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Research_articles_predict_next_earthquake#ev45</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -37159,7 +37159,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/NASA_celebrates_30th_anniversary_of_first_shuttle_launch;_announces_new_homes_for_retired_shuttles#ev47_3</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -37228,7 +37228,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Iceland_voters_reject_deal_to_repay_billions_to_UK,_Dutch#ev26_6</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -37596,7 +37596,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.7</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Battle_for_Trafalgar_Square,_London_as_violence_breaks_out_between_demonstrators_and_riot_police#ev40</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -38125,7 +38125,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.5</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Iceland_voters_reject_deal_to_repay_billions_to_UK,_Dutch#ev28</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -38194,7 +38194,7 @@
             <value>0</value>
             <value>2</value>
             <value>1</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Scandal_Appeals_see_Lazio_and_Fiorentine_reinstated_back_into_Serie_A#ev28</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -38493,7 +38493,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.125</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Continuing_controversy_surrounds_German_mission_to_Middle_East#ev21</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -38700,7 +38700,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.444444</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Female_boxer_shot_before_fight_by_stepfather_in_Berlin#ev20</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -38723,7 +38723,7 @@
             <value>0</value>
             <value>9</value>
             <value>0.870968</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Mountaineers_&apos;Climb_Up&apos;_for_AIDS_funding#ev36_1</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -39436,7 +39436,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.5</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Rokot_launches_three_Gonets_satellites#ev20_6</value>
             <value>resources/benchmark/queries/European Space Agency.csv</value>
@@ -39666,7 +39666,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.285714</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/New_romantic_comedy_film_to_star_Drew_Barrymore,_Justin_Long#ev15</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -39781,7 +39781,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.545455</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/U.K._National_Portrait_Gallery_threatens_U.S._citizen_with_legal_action_over_Wikimedia_images#ev22_3</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -40310,7 +40310,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.935606</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/How_tall_is_tallest?_Chinese_researchers_measure_tallest_mountain#ev13</value>
             <value>resources/benchmark/queries/Mount Everest.csv</value>
@@ -40563,7 +40563,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.571429</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/India_to_get_$6_billion_out_of_the_Big_Blue#ev12_7</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -40747,7 +40747,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.65625</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IPCC_chief_refuses_to_apologize_for_glacier_error#ev24</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -40839,7 +40839,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.727273</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Search_for_climbers_on_US_mountain_ends;_two_presumed_dead#ev13</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -41828,7 +41828,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Judge_threatened_Michael_Jackson_with_jail#ev28_4</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -42495,7 +42495,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.166667</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Virgin_Rail_train_collides_with_car_near_Copmanthorpe,_killing_driver#ev18</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -42610,7 +42610,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Wikinews_interview_with_America&apos;s_Got_Talent_finalists_Celtic_Spring#ev4</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -42633,7 +42633,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.25</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Rock_music_church_in_Pennsylvania_allowed_concerts_under_court_settlement#ev49</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -42679,7 +42679,7 @@
             <value>0</value>
             <value>2</value>
             <value>1</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/New_Internet_addresses_tested_on_World_IPv6_Day#ev23</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -42817,7 +42817,7 @@
             <value>0</value>
             <value>6</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Beckham_woos_US_as_Disney_Prince#ev25_1</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -43461,7 +43461,7 @@
             <value>0</value>
             <value>6</value>
             <value>0.870178</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Bomb_hoax_at_Royal_Ontario_Museum#ev29</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -43737,7 +43737,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.452381</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/EU_adopts_renewable_energy_measures#ev49</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -44059,7 +44059,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Facebook_to_share_the_technology_&apos;behind_its_servers&apos;#ev18_2</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -44312,7 +44312,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.6875</value>
-            <value>0</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/American_bandleader_Kevin_Eubanks_to_leave_&apos;Tonight_Show&apos;#ev29</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -44496,7 +44496,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.607619</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Irish_dancing_record_broken_in_Cork#ev6</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -44565,7 +44565,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.333333</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Iceland_nationalises_Kaupthing_Bank#ev33</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -44634,7 +44634,7 @@
             <value>0</value>
             <value>6</value>
             <value>1</value>
-            <value>0.5</value>
+            <value>0.666667</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Stanford_physicists_print_smallest-ever_letters_&apos;SU&apos;_at_subatomic_level_of_1.5_nanometres_tall#ev75_38</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -44657,7 +44657,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.8</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Euro_2008_Qualification:_Germany_vs._Czech_Republic#ev9</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -44887,7 +44887,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IBM_to_construct_supercomputer_capable_of_running_entire_Internet#ev21_1</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -45209,7 +45209,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.305556</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Star_Wars_Episode_III_debut_breaks_four_box_office_records#ev11</value>
             <value>resources/benchmark/queries/Star Wars.csv</value>
@@ -45324,7 +45324,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.625</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Oil_prices_fall_as_reserves_are_released#ev14</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -45370,7 +45370,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0.25</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/BBC_support_song_making_chart_impact#ev16_8</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -45439,7 +45439,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.25</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Clarence_Clemons,_Springsteen%e2%80%99s_E_Street_Band_sax_player,_dies_at_69#ev55</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -46014,7 +46014,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Halema%60uma%60u_crater_erupts_in_Hawaii,_USA#ev22</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -46612,7 +46612,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.454545</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Huygens_probe_lands_on_Saturn&apos;s_moon_Titan,_returns_pictures#ev23_9</value>
             <value>resources/benchmark/queries/European Space Agency.csv</value>
@@ -46727,7 +46727,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.729396</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Actor_Peter_Boyle_dies_at_age_71#ev10</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -47279,7 +47279,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.361111</value>
-            <value>0.333333</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Free_Software_Foundation_releases_first_draft_of_GPLv3#ev34</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -47371,7 +47371,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.489448</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Amnesty_Report_2006:_disadvantaged_pay_price_of_war_on_terror#ev13</value>
             <value>resources/benchmark/queries/artificial intelligence.csv</value>
@@ -47831,7 +47831,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.615385</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Mountaineers_&apos;Climb_Up&apos;_for_AIDS_funding#ev80</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -47854,7 +47854,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Schr%c3%b6der_gives_up_German_chancellorship_ambitions,_makes_way_for_Merkel#ev14_2</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -47900,7 +47900,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.730769</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/At_least_200_New_Orleans_police_officers_quit_force#ev12</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -48038,7 +48038,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Suspended_letterbox_for_sale_on_New_Zealand_auction_site#ev37</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -48245,7 +48245,7 @@
             <value>0</value>
             <value>6</value>
             <value>0.975</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Africa-Europe_summit_concludes_with_mixed_results#ev37</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -48889,7 +48889,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.25</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Space_Shuttle_Discovery_lands_for_final_time#ev41</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -48912,7 +48912,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.88</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Post-Kyoto_agreement_is_subject_of_G8_debate#ev46_2</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -49280,7 +49280,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Icelandic_Landsbanki_%c3%8dslands_earnings_on_the_increase#ev10</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -49740,7 +49740,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.730769</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Berlusconi_in_trouble_over_use_of_bad_word#ev10</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -49786,7 +49786,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Andrew_Sayers_resigns_National_Museum_of_Australia_directorship#ev13_5</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -50292,7 +50292,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.6</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Comedian_Colin_Mochrie_to_host_Canadian_%225th_Grader%22_game_show#ev8</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -50384,7 +50384,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Magnitude_7.0_earthquake_hits_New_Britain,_Papua_New_Guinea#ev4</value>
             <value>resources/benchmark/queries/earthquake.csv</value>
@@ -50522,7 +50522,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.794118</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Andrew_Sayers_resigns_National_Museum_of_Australia_directorship#ev13_3</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -50775,7 +50775,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Skull_study_supports_theory_of_human_origin_in_Africa#ev30</value>
             <value>resources/benchmark/queries/Sahara.csv</value>
@@ -50890,7 +50890,7 @@
             <value>0</value>
             <value>2</value>
             <value>1</value>
-            <value>0.25</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Norwegian_whaling_season_starts_with_highest_quota_in_a_decade#ev23</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -51350,7 +51350,7 @@
             <value>0</value>
             <value>2</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Former_Scientology_executives_say_leader_David_Miscavige_abused_staff#ev78</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -51465,7 +51465,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.454545</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Crisis_at_stricken_Japan_nuclear_plant_escalates_to_level_of_Chernobyl;_six_killed_in_aftershock#ev55</value>
             <value>resources/benchmark/queries/Chernobyl.csv</value>
@@ -52270,7 +52270,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Animal_rights_protestor_found_guilty_of_Oxford_arson_plot#ev18_2</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -52431,7 +52431,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Liberal_Democrats_hold_onto_Eastleigh_in_by-election_as_UKIP_vote_soars#ev59</value>
             <value>resources/benchmark/queries/earthquake.csv</value>
@@ -52983,7 +52983,7 @@
             <value>0</value>
             <value>6</value>
             <value>0.975</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Africa-Europe_summit_concludes_with_mixed_results#ev37</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -53075,7 +53075,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_presidential_candidate_Obama_speaks_in_Berlin,_Germany#ev44</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -53305,7 +53305,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.682927</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/&apos;Star_Wars&apos;_headed_to_TV_as_weekly_series#ev10</value>
             <value>resources/benchmark/queries/Star Wars.csv</value>
@@ -53420,7 +53420,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.6875</value>
-            <value>0</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Phones_without_Internet_access_join_the_Facebook_revolution#ev35</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -54409,7 +54409,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.682927</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/German_director_Christoph_Schlingensief_dies_at_age_49#ev30</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -54478,7 +54478,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Andrew_Sayers_resigns_National_Museum_of_Australia_directorship#ev26</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -54616,7 +54616,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.715556</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Niece_of_Scientology&apos;s_leader_goes_public_with_criticism#ev69</value>
             <value>resources/benchmark/queries/Tom Cruise.csv</value>
@@ -54731,7 +54731,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.5</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Trustpower_plans_to_build_new_windfarm_in_New_Zealand#ev31</value>
             <value>resources/benchmark/queries/power station.csv</value>
@@ -54938,7 +54938,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Danish_PM_pushes_for_new_referendum_on_euro#ev65</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -54961,7 +54961,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.75</value>
-            <value>0.333333</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/IWC_passes_pro-whaling_resolution_after_close_vote#ev36</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -55352,7 +55352,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.588235</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/TV_late_night_show_host_David_Letterman_marries_girlfriend_of_23_years#ev27_6</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -55421,7 +55421,7 @@
             <value>0</value>
             <value>7</value>
             <value>0.559621</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Hawaii_legislature_reaches_agreement_to_suspend_gasoline_price_cap#ev24</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -55904,7 +55904,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.75</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Searching_for_asteroids,_extraterrestrial_life_a_little_more_rocky:_Budget_cuts_threaten_to_close_Arecibo,_world&apos;s_largest_radio_telescope#ev137</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -55996,7 +55996,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.88</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Finland_win_first_ever_Eurovision_Dance_Contest_2007_held_in_London#ev9_4</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -56111,7 +56111,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Australian_House_of_Representatives_has_%22no_rules%22:_Gillard#ev46_2</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -56364,7 +56364,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Real_Madrid_defeats_Celta_Vigo_4-0_in_Copa_del_Rey_octofinals#ev17</value>
             <value>resources/benchmark/queries/Real Madrid.csv</value>
@@ -56502,7 +56502,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.880952</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Japanese_nuclear_plant_operators_ordered_to_compensate_affected_families_amid_calls_for_prime_minister_to_resign#ev67</value>
             <value>resources/benchmark/queries/Chernobyl.csv</value>
@@ -57192,7 +57192,7 @@
             <value>0</value>
             <value>2</value>
             <value>1</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Real_Madrid_defeats_Celta_Vigo_4-0_in_Copa_del_Rey_octofinals#ev16</value>
             <value>resources/benchmark/queries/Real Madrid.csv</value>
@@ -57261,7 +57261,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.461538</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Microsoft_to_buy_antivirus_firm_Sybari_Software#ev19</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -57468,7 +57468,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.333333</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Russia_cuts_off_gas_supplies_to_Ukraine#ev73</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -57721,7 +57721,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.88</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Post-Kyoto_agreement_is_subject_of_G8_debate#ev46_2</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -57790,7 +57790,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.5</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Swedish_men_suspected_of_nuclear_plant_sabotage_released#ev16</value>
             <value>resources/benchmark/queries/power station.csv</value>
@@ -58204,7 +58204,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.867697</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Hurricane_Katrina_strikes_Florida,_kills_seven#ev17</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -58273,7 +58273,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/WWE_SmackDown_Results_from_Nashville,_TN_for_September_19,_2008#ev31_17</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -58319,7 +58319,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.823529</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Tropical_Storm_Ernesto_nears_the_US_Coast#ev17_4</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -58986,7 +58986,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Lebanon_goodbye_to_Syrian_forces#ev12</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -59331,7 +59331,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.803783</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_Library_of_Congress_plans_archive_of_Twitter#ev13</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -59377,7 +59377,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.62963</value>
-            <value>0</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Ash_and_steam_reported_over_Mount_St._Helens#ev13</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -59492,7 +59492,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.617857</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Lahar_at_New_Zealand&apos;s_Mount_Ruapehu#ev9</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -60044,7 +60044,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.684252</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Black_spot_on_Jupiter_is_impact_site,_says_NASA#ev18</value>
             <value>resources/benchmark/queries/Watson.csv</value>
@@ -60113,7 +60113,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.673077</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_energy_department_reveals_world&apos;s_fastest_computer#ev8_4</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -60297,7 +60297,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.25</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Relics_of_39_saints_found_by_British_Museum#ev11</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -60389,7 +60389,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.333333</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Clint_Brown,_TV3_presenter,_gives_%22unsatisfactory%22_letter_of_apology#ev34</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -60481,7 +60481,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.794118</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/British_Climatic_Research_Unit&apos;s_emails_hacked#ev22_9</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -60734,7 +60734,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/2008_Taiwan_Tourism_Exposition_to_encourage_tourism_industry_after_Sichuan_earthquake#ev32</value>
             <value>resources/benchmark/queries/earthquake.csv</value>
@@ -60987,7 +60987,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.739893</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Medvedev_asks_for_resignations_from_Russian_Olympic_officials_after_performance_in_Vancouver#ev22</value>
             <value>resources/benchmark/queries/Medvedev.csv</value>
@@ -61033,7 +61033,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.615385</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Transrapid_collision_in_Germany_kills_23#ev29</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -61079,7 +61079,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Schr%c3%b6der_gives_up_German_chancellorship_ambitions,_makes_way_for_Merkel#ev14_2</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -61194,7 +61194,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.454545</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/400_pound_python_seized_by_wildlife_officials_in_Florida#ev31</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -61631,7 +61631,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.571429</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Participant_claims_drug_trial_gave_him_cancer#ev22_5</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -62045,7 +62045,7 @@
             <value>0</value>
             <value>3</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Reactions_to_review_of_economic_implications_of_climate_change#ev22</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -62091,7 +62091,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.981944</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Icelandic_Hekla_volcano_shows_signs_of_activity#ev17</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -62137,7 +62137,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.521739</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Mass_panic_as_Zimbabwean_officials_fake_air_crash#ev25_5</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -62390,7 +62390,7 @@
             <value>1</value>
             <value>2</value>
             <value>0.5</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/UK_Parliament_to_vote_on_tuition_fee_rise_on_Thursday#ev61_13</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -62505,7 +62505,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.75</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Deadly_illegal_sexual_enhancement_products_appear_on_the_Singaporean_market#ev24</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -62597,7 +62597,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IBM_Releases_500_patents_to_open_source_community#ev14_2</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -62712,7 +62712,7 @@
             <value>0</value>
             <value>6</value>
             <value>0.949198</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Scientists_discover_soft_tissue_in_dinosaur_bones#ev15</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -62758,7 +62758,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.5</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Tom_Cruise_Scientology_promotional_video_leaked_to_the_Internet#ev76_4</value>
             <value>resources/benchmark/queries/Tom Cruise.csv</value>
@@ -62873,7 +62873,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.307692</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Comedians_lampoon_Bush_at_White_House_Correspondents&apos;_Dinner#ev55</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -63103,7 +63103,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.695652</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/New_Michael_Jackson_song_to_be_released#ev31</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -63218,7 +63218,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.977778</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/&apos;Davos_man&apos;_versus_&apos;Camp_Igloo&apos;;_42nd_World_Economic_Forum_convenes_in_Swiss_alps#ev25_1</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -63586,7 +63586,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Quick_goal_sees_Bayern_advance_over_Real_Madrid#ev31_3</value>
             <value>resources/benchmark/queries/Real Madrid.csv</value>
@@ -64023,7 +64023,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.5</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Mountaineers_&apos;Climb_Up&apos;_for_AIDS_funding#ev49_7</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -64276,7 +64276,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.608696</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Stars_pose_for_ITV_ice-skating_show_(UK)#ev10</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -64529,7 +64529,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.305556</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/German_court_upholds_surveillance_of_Scientology#ev68</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -64552,7 +64552,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.461538</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Rapper_Kanye_West_denounces_Bush_response,_American_media_at_hurricane_relief_telethon#ev32</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -64920,7 +64920,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.444444</value>
-            <value>0.333333</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/British_adventurer_flies_powered_paraglider_over_Everest#ev34</value>
             <value>resources/benchmark/queries/Mount Everest.csv</value>
@@ -65058,7 +65058,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.579365</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/WWE_SmackDown_Results_from_Nashville,_TN_for_September_19,_2008#ev38</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -65518,7 +65518,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.452381</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/EU_adopts_renewable_energy_measures#ev49</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -65541,7 +65541,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.336538</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/2012_Report_on_Gender_Equality_and_Development_credits_Icelandic_parental_policy_with_&apos;hopeful&apos;_changes#ev21</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -65978,7 +65978,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.963889</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Work_on_Lehman_Brothers%e2%80%99_rescue_to_continue_over_weekend#ev41</value>
             <value>resources/benchmark/queries/Lehman Brothers.csv</value>
@@ -66323,7 +66323,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/German_opposition_launches_election_campaign#ev22</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -66737,7 +66737,7 @@
             <value>0</value>
             <value>3</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Australian_government_commits_AU$60_million_to_cut_greenhouse_emissions#ev15</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -67496,7 +67496,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.956522</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Past_Jackson_abuse_claims_to_be_used_in_court#ev20_5</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -67519,7 +67519,7 @@
             <value>1</value>
             <value>2</value>
             <value>1</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Deepwater_Horizon_oil_well_finally_dead,_authorities_say#ev78</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -67542,7 +67542,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/World_leaders_respond_to_London_blasts#ev45_1</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -68301,7 +68301,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.88</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Scotland&apos;s_oldest_detainee_facing_attempted_murder_charges#ev17_11</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -68485,7 +68485,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.903153</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Toronto_International_Film_Festival_starts_tonight#ev12</value>
             <value>resources/benchmark/queries/cinema.csv</value>
@@ -68600,7 +68600,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.4</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/UK_firm_gets_ESA_funding_to_ground_test_new_jet_engine_for_spaceplane#ev9</value>
             <value>resources/benchmark/queries/European Space Agency.csv</value>
@@ -68623,7 +68623,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/UEFA_Champions_League:_quarter-final_first_leg_roundup#ev9</value>
             <value>resources/benchmark/queries/Rome.csv</value>
@@ -68853,7 +68853,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.666667</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Southern_Ocean_whale_slaughter_to_resume#ev99</value>
             <value>resources/benchmark/queries/Watson.csv</value>
@@ -69152,7 +69152,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.680769</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/RAF_Hawk_jet_crashes_in_the_United_Kingdom#ev26</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -69244,7 +69244,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.480769</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Swiss_mountaineer_Erhard_Loretan_dies_in_climbing_accident#ev35</value>
             <value>resources/benchmark/queries/Mount Everest.csv</value>
@@ -69359,7 +69359,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.975</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Bobby_Fischer_sues_US_Government_from_new_Icelandic_home#ev50</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -69727,7 +69727,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.695652</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Were_New_Orleanians_caught_in_political_crossfire?#ev40_8</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -69819,7 +69819,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.692308</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Earthquakes_hit_Dominican_Republic,_Ryukyu_Islands_and_Tonga#ev20</value>
             <value>resources/benchmark/queries/earthquake.csv</value>
@@ -69888,7 +69888,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.730769</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Google_removes_German_BMW_from_search_results#ev14</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -69911,7 +69911,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Riots_in_Tonga#ev33</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -69957,7 +69957,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.595238</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Katrina_survivor_searchers_prepare_for_the_worst#ev18_15</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -70394,7 +70394,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.673077</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Furry_fans_flock_to_Further_Confusion_2007#ev12_2</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -70440,7 +70440,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.916667</value>
-            <value>0</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Colombia%e2%80%99s_Uribe_orders_the_bombing_of_a_Natural_National_Park#ev45</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -70463,7 +70463,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.230769</value>
-            <value>0.333333</value>
+            <value>0.5</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/US_Senate_approves_$10.5_billon_in_aid_for_Hurricane_Katrina_victims#ev11</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -70578,7 +70578,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Maher_says_&apos;Free_speech&apos;_segment_on_CBS_News&apos;_not_so_Free#ev24</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -70670,7 +70670,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.761905</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Sun_donates_Solaris_operating_system,_1,600_patents_to_community#ev23_7</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -71153,7 +71153,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.5</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Teen_broadcasts_suicide_online#ev39</value>
             <value>resources/benchmark/queries/Star Wars.csv</value>
@@ -71337,7 +71337,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Rush_Limbaugh_and_Pat_Robertson_under_fire_for_remarks_about_earthquake_in_Haiti#ev53</value>
             <value>resources/benchmark/queries/earthquake.csv</value>
@@ -71521,7 +71521,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.623736</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Disco_diva_Donna_Summer_dies_at_63#ev24</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -72188,7 +72188,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Beatles&apos;_&apos;Hey_Jude&apos;_becomes_their_most_downloaded_song_on_iTunes#ev13</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -72303,7 +72303,7 @@
             <value>1</value>
             <value>1</value>
             <value>0.545455</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/India_seeks_web_crackdown_after_failed_talks_with_industry#ev37</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -72717,7 +72717,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.719298</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Facebook_to_share_the_technology_&apos;behind_its_servers&apos;#ev23</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -72740,7 +72740,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.4</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/2009%e2%80%9310_UEFA_Champions_League:_Round_of_16_field_set#ev10</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -73361,7 +73361,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.530159</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Alaskan_Mount_Redoubt_volcano_erupts#ev13</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -73499,7 +73499,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.983333</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Four_Boy_Scouts_killed_in_Iowa_tornado#ev26</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -73982,7 +73982,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/U.K._National_Portrait_Gallery_threatens_U.S._citizen_with_legal_action_over_Wikimedia_images#ev41</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -74120,7 +74120,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.675325</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Firing_of_Michael_Jackson_spokeswoman_disputed#ev16</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -74304,7 +74304,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Thousands_march_to_demonstrate_opposition_to_U.S.-led_wars#ev18</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -74396,7 +74396,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.841463</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Michael_Jackson_tribute_concert_postponed_until_2010#ev19</value>
             <value>resources/benchmark/queries/Michael Jackson.csv</value>
@@ -74465,7 +74465,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.625</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Lineup_coming_together_for_Manchester_United_charity_match#ev7_4</value>
             <value>resources/benchmark/queries/Rome.csv</value>
@@ -74534,7 +74534,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Glasgow&apos;s_Common_Weal_launch;_&apos;Not_me_first._All_of_us_first&apos;#ev54</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -74557,7 +74557,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/200_candles:_Chileans_celebrate_country&apos;s_Bicentennial#ev17</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -74649,7 +74649,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.933333</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Bollywood_star_unveiled_at_Madame_Tussauds#ev27</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -74856,7 +74856,7 @@
             <value>1</value>
             <value>4</value>
             <value>0.413889</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Protests_over_housing_costs_sweep_across_Israel#ev24</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -75063,7 +75063,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/American_comedian_Bernie_Mac_has_pneumonia#ev13</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -75270,7 +75270,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/&apos;Gangnam_Style&apos;_YouTube_view_count_passes_one_billion#ev59</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -75454,7 +75454,7 @@
             <value>0</value>
             <value>6</value>
             <value>0.4</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Obama,_Medvedev_sign_treaty_cutting_nuclear_stockpiles#ev47_1</value>
             <value>resources/benchmark/queries/Medvedev.csv</value>
@@ -76213,7 +76213,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Ghana&apos;s_first_female_Chief_Justice_receives_award#ev41</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -76259,7 +76259,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.684211</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/India_and_Europe_team_up_for_moon_mission#ev16</value>
             <value>resources/benchmark/queries/European Space Agency.csv</value>
@@ -76374,7 +76374,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.820513</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Flexible_displays_soon_to_be_in_production#ev10</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -76811,7 +76811,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.814815</value>
-            <value>0</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Pink_Floyd&apos;s_Syd_Barrett_dies_at_age_60#ev29</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -76903,7 +76903,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.777706</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/New_Nazi_victims&apos;_monument_opens_in_Berlin#ev10</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -77271,7 +77271,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Microsoft_to_pay_IBM_US_$775_million_in_Antitrust_settlement#ev19</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -77639,7 +77639,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.633523</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Berlin_court_repeals_preliminary_injunction_against_Wikimedia_Germany#ev19</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -77938,7 +77938,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/American_mystery_writer_Phyllis_A._Whitney_dies_at_age_104#ev9</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -78007,7 +78007,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Edinburgh_Fringe_festival_begins#ev13_6</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -78950,7 +78950,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.454545</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Moscow_Metro_attack_suspects_killed_by_police#ev21</value>
             <value>resources/benchmark/queries/Medvedev.csv</value>
@@ -79433,7 +79433,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.428571</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev30</value>
             <value>resources/benchmark/queries/dance.csv</value>
@@ -79456,7 +79456,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Green_Day_dominates_at_MTV&apos;s_2005_Video_Music_Awards#ev38</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -79571,7 +79571,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Africa_makes_first_draft_version_of_UNCCC_treaty,_with_harder_goals#ev20_1</value>
             <value>resources/benchmark/queries/climate.csv</value>
@@ -79663,7 +79663,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.609649</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Filmcrew_working_for_Channel_4_arrested_for_soaking_Tom_Cruise_in_London#ev16</value>
             <value>resources/benchmark/queries/Tom Cruise.csv</value>
@@ -80077,7 +80077,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/German_opposition_launches_election_campaign#ev22</value>
             <value>resources/benchmark/queries/Merkel.csv</value>
@@ -80307,7 +80307,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.4375</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Volcano_near_Anchorage,_Alaska_erupts,_airport_closed#ev28</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -80330,7 +80330,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.678571</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/New_Michael_Jackson_song_to_be_released#ev19</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -80376,7 +80376,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.968182</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Space_Shuttle_Discovery_successfully_lifts_off_on_mission_STS-128#ev8</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -80652,7 +80652,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_TV_host_Conan_O&apos;Brien_leads_in_late_night_ratings#ev24_7</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -80698,7 +80698,7 @@
             <value>0</value>
             <value>6</value>
             <value>0.788515</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Vietnam_denies_blocking_social_networking_site_Facebook#ev13</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -81296,7 +81296,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/New_&apos;Star_Wars&apos;_film_to_be_released_in_August#ev11</value>
             <value>resources/benchmark/queries/Star Wars.csv</value>
@@ -81319,7 +81319,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.916667</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Former_adult_film_actress_forced_to_leave_teaching_job_again#ev27_6</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -81434,7 +81434,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.454545</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Susan_G._Komen_Foundation_reneges_on_Planned_Parenthood_funding_cuts#ev47</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -81549,7 +81549,7 @@
             <value>1</value>
             <value>2</value>
             <value>0</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/UK&apos;s_Conservatives_promise_an_end_to_deficit_by_2020,_Human_Rights_Act_repeal#ev41</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -81664,7 +81664,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.305556</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Algerian_driver_released_by_hostage_takers_in_Niger#ev25</value>
             <value>resources/benchmark/queries/Sahara.csv</value>
@@ -81825,7 +81825,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.807692</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/US_nationals_arrested_for_alleged_abduction_of_Haitian_children#ev60</value>
             <value>resources/benchmark/queries/earthquake.csv</value>
@@ -82262,7 +82262,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Russian_cellist_Rostropovitch_dies_at_80#ev44</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -82423,7 +82423,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.935606</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/India_to_get_$6_billion_out_of_the_Big_Blue#ev25</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -82745,7 +82745,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.730769</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Wikipedia_founder_Jimmy_Wales_to_start_wiki-based_search_engine#ev17</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -82929,7 +82929,7 @@
             <value>0</value>
             <value>7</value>
             <value>0.72686</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Iceland_makes_application_for_membership_of_the_European_Union#ev17</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -82975,7 +82975,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/German_Minister_for_Foreign_Affairs_gives_evidence_about_visa_practice#ev32</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -83458,7 +83458,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.666667</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Drug_addicts_used_in_police_training#ev26</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -83734,7 +83734,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.5</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IBM_releases_freeware_for_visualizing_document_histories#ev12</value>
             <value>resources/benchmark/queries/Watson.csv</value>
@@ -84102,7 +84102,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.714286</value>
-            <value>0</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/&apos;Tom_Cruise:_An_Unauthorized_Biography&apos;_released,_$100_million_lawsuit_in_planning_stages#ev51_10</value>
             <value>resources/benchmark/queries/Tom Cruise.csv</value>
@@ -84378,7 +84378,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.470588</value>
-            <value>0</value>
+            <value>0.333333</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/NASA_study:_warming_and_snow_melt_chokes_sea_life_1000_miles_distant#ev20</value>
             <value>resources/benchmark/queries/Himalaya.csv</value>
@@ -84424,7 +84424,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.716374</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Volcano_eruption_in_Ecuador_kills_six_and_destroys_several_small_villages#ev12</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -84746,7 +84746,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.451613</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Iowa_falls_to_Texas_in_Alamo_Bowl#ev23</value>
             <value>resources/benchmark/queries/Hawking.csv</value>
@@ -85068,7 +85068,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Mars_studies_find_water#ev13_6</value>
             <value>resources/benchmark/queries/European Space Agency.csv</value>
@@ -85252,7 +85252,7 @@
             <value>0</value>
             <value>1</value>
             <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Truck_carrying_explosives_crashes,_explodes_in_Utah#ev37</value>
             <value>resources/benchmark/queries/comedy.csv</value>
@@ -85275,7 +85275,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.615385</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Transrapid_collision_in_Germany_kills_23#ev29</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -85298,7 +85298,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.461538</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/The_Yes_Men_troll_Wharton_Business_School_with_slavery_proposal#ev13_1</value>
             <value>resources/benchmark/queries/chancellor.csv</value>
@@ -85873,7 +85873,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.25</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Iceland_voters_reject_deal_to_repay_billions_to_UK,_Dutch#ev73</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -86172,7 +86172,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.794118</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Rare_photograph_of_Florence_Nightingale_on_display#ev4</value>
             <value>resources/benchmark/queries/museum.csv</value>
@@ -86195,7 +86195,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/IBM_and_Cisco_in_attempt_to_create_a_universal_platform_for_communications_software_development#ev13_4</value>
             <value>resources/benchmark/queries/IBM.csv</value>
@@ -87046,7 +87046,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.444444</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Volcano_near_Anchorage,_Alaska_erupts,_airport_closed#ev24</value>
             <value>resources/benchmark/queries/volcano.csv</value>
@@ -87138,7 +87138,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.975</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/2012_Report_on_Gender_Equality_and_Development_credits_Icelandic_parental_policy_with_&apos;hopeful&apos;_changes#ev43</value>
             <value>resources/benchmark/queries/Iceland.csv</value>
@@ -87161,7 +87161,7 @@
             <value>0</value>
             <value>4</value>
             <value>0.695513</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/France_secures_site_for_10_billion_euro_nuclear_fusion_research_project#ev50</value>
             <value>resources/benchmark/queries/manipulate.csv</value>
@@ -87299,7 +87299,7 @@
             <value>0</value>
             <value>3</value>
             <value>0.823529</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Pink_Floyd&apos;s_Syd_Barrett_dies_at_age_60#ev17</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -87414,7 +87414,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.833333</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Fu%c3%9fball-Bundesliga_2008%e2%80%9309:_Wolfsburg_win_first_season_title#ev40</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -87897,7 +87897,7 @@
             <value>0</value>
             <value>5</value>
             <value>0.95</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Sir_Alex_Ferguson:_%22poor,_poor_performance%22_by_match_officials_after_Chelsea_defeats_Manchester_United#ev33_6</value>
             <value>resources/benchmark/queries/champions league.csv</value>
@@ -88058,7 +88058,7 @@
             <value>0</value>
             <value>2</value>
             <value>0.071429</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/France_beat_Portugal_1-0_and_reach_FIFA_World_Cup_final#ev20</value>
             <value>resources/benchmark/queries/Berlin.csv</value>
@@ -88334,7 +88334,7 @@
             <value>0</value>
             <value>2</value>
             <value>0</value>
-            <value>0.5</value>
+            <value>1</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/Alice_Cooper_says_reality_show_&apos;The_Osbournes&apos;_ruined_Ozzy_Osbourne&apos;s_career#ev46</value>
             <value>resources/benchmark/queries/album.csv</value>
@@ -88426,7 +88426,7 @@
             <value>0</value>
             <value>2</value>
             <value>0</value>
-            <value>0</value>
+            <value>0.5</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Countries_around_the_world_send_aid,_help_to_Haiti#ev59</value>
             <value>resources/benchmark/queries/earthquake.csv</value>
@@ -88771,7 +88771,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Renewed_concern_over_nuclear_response_following_atomic_bomb_anniversary#ev32_2</value>
             <value>resources/benchmark/queries/Fukushima.csv</value>
@@ -89231,7 +89231,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.954545</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Three_children_die_in_Edinburgh_house_fire#ev49_1</value>
             <value>resources/benchmark/queries/Edinburgh.csv</value>
@@ -89323,7 +89323,7 @@
             <value>0</value>
             <value>1</value>
             <value>0.960784</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Total_evacuation_of_New_Orleans_planned#ev15_1</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
