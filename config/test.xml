@@ -293,7 +293,6 @@
 
 	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FilteringBenchmark">
 		<constructor-arg name="instancesFileName" value="resources/benchmark/dataSet.xrff"/>
-		<property name="classifierFileName" value="resources/baseline.model"/>
 		
 		<property name="filter">
 			<bean class="weka.filters.supervised.attribute.Discretize"/>
@@ -336,7 +335,9 @@
 						</bean>
 					</property>
 					<property name="search">
-						<bean class="weka.attributeSelection.ExhaustiveSearch"/>
+						<bean class="weka.attributeSelection.GreedyStepwise">
+							<property name="generateRanking" value="true"/>
+						</bean>
 					</property>
 				</bean>
 				<bean id="wrapperNB" class="weka.attributeSelection.AttributeSelection">
@@ -348,13 +349,14 @@
 						</bean>
 					</property>
 					<property name="search">
-						<bean class="weka.attributeSelection.ExhaustiveSearch"/>
+						<bean class="weka.attributeSelection.GreedyStepwise">
+							<property name="generateRanking" value="true"/>
+						</bean>
 					</property>
 				</bean>
 			</list>
 		</property>
 		
-		<property name="doCreateBaselineClassifier" value="false"/>
 		<property name="doFeatureAnalysis" value="true"/>
 	</bean>
 

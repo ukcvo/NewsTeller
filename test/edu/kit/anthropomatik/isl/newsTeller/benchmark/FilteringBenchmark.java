@@ -12,10 +12,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import weka.attributeSelection.AttributeSelection;
-import weka.classifiers.rules.ZeroR;
 import weka.core.Attribute;
 import weka.core.Instances;
-import weka.core.SerializationHelper;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
 
@@ -27,19 +25,11 @@ public class FilteringBenchmark {
 
 	private Instances cleanedDataSet; // w/o String attributes
 
-	private String classifierFileName;
-
 	private Filter filter;
 
 	private List<AttributeSelection> configurations;
 
-	private boolean doCreateBaselineClassifier;
-
 	private boolean doFeatureAnalysis;
-
-	public void setClassifierFileName(String classifierFileName) {
-		this.classifierFileName = classifierFileName;
-	}
 
 	public void setFilter(Filter filter) {
 		this.filter = filter;
@@ -47,10 +37,6 @@ public class FilteringBenchmark {
 
 	public void setConfigurations(List<AttributeSelection> configurations) {
 		this.configurations = configurations;
-	}
-
-	public void setDoCreateBaselineClassifier(boolean doCreateBaselineClassifier) {
-		this.doCreateBaselineClassifier = doCreateBaselineClassifier;
 	}
 
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
@@ -69,20 +55,6 @@ public class FilteringBenchmark {
 				log.error("Can't read data set");
 			if (log.isDebugEnabled())
 				log.debug("Can't read data set", e);
-		}
-	}
-
-	private void createBaselineClassifier() {
-		try {
-			ZeroR classifier = new ZeroR();
-			classifier.buildClassifier(cleanedDataSet);
-			Instances header = new Instances(cleanedDataSet, 0);
-			SerializationHelper.writeAll(classifierFileName, new Object[] { classifier, header });
-		} catch (Exception e) {
-			if (log.isErrorEnabled())
-				log.error("Can't create baseline classifier");
-			if (log.isDebugEnabled())
-				log.debug("Exception", e);
 		}
 	}
 
@@ -126,8 +98,6 @@ public class FilteringBenchmark {
 	}
 
 	public void run() {
-		if (this.doCreateBaselineClassifier)
-			createBaselineClassifier();
 		if (this.doFeatureAnalysis)
 			featureAnalysis();
 	}

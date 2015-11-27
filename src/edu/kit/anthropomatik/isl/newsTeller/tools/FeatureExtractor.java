@@ -203,10 +203,10 @@ public class FeatureExtractor {
 		}
 
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/default.xml");
-		FeatureExtractor test = (FeatureExtractor) context.getBean("featureExtractor");
+		FeatureExtractor extractor = (FeatureExtractor) context.getBean("featureExtractor");
 		((AbstractApplicationContext) context).close();
 		
-		test.run();
+		extractor.run();
 	}
 
 }

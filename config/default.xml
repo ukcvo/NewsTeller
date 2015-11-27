@@ -103,4 +103,18 @@
 		<property name="doAddEventInformation" value="true"/>
 	</bean>
 
+	<bean id="classifierTrainer" class="edu.kit.anthropomatik.isl.newsTeller.tools.ClassifierTrainer">
+		<constructor-arg value="resources/benchmark/dataSet.xrff"/>
+		<property name="classifiers">
+			<list>
+				<bean class="weka.classifiers.rules.ZeroR"/>
+			</list>
+		</property>
+		<property name="fileNames">
+			<list>
+				<value>resources/baseline.model</value>
+			</list>
+		</property>
+	</bean>
+
 </beans>
