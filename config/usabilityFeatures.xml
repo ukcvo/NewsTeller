@@ -32,6 +32,7 @@
 		<ref bean="keywordInTextFeature" />
 		<ref bean="keywordStemInTextFeature" />
 		<ref bean="keywordOrStemInTextFeature" />
+		<ref bean="appearKeywordLabelsInTextFeature" />
 	</util:list>
 
 	<bean id="hasActorFeature"
@@ -227,5 +228,15 @@
 		
 		<property name="useOriginalString" value="true" />
 		<property name="useStem" value="true" />
+	</bean>
+	
+	<bean id="appearKeywordLabelsInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntitiesByKeyword.qry" />
+		<constructor-arg name="labelQueryFileName"
+			value="resources/SPARQL/usability/getLabels.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="appearKeywordLabelsInText" />
 	</bean>
 </beans>
