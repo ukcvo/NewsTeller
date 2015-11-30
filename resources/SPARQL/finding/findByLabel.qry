@@ -3,7 +3,7 @@ WHERE
 {
     ?event rdf:type sem:Event .
     ?event rdfs:label ?label .
-    FILTER(REGEX(STR(?label),"(-| |^|\\()*k*(\\w)*(-| |$|\\))", "i")) #case-insensitive matching
+    FILTER(REGEX(STR(?label),"*k*", "i")) #case-insensitive matching
 }
 GROUP BY ?event
 ORDER BY ?event

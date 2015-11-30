@@ -14,11 +14,6 @@ public class NewsEvent implements Comparable<NewsEvent>{
 	// URI of the event - identifies the event unambiguously
 	private String eventURI;
 
-	// scorings with respect to usability of the event (i.e. well-formedness)
-	List<Scoring> usabilityScorings;
-	
-	double totalUsabilityScore;
-	
 	// scorings with respect to relevance of the event
 	List<Scoring> relevanceScorings;
 	
@@ -29,22 +24,6 @@ public class NewsEvent implements Comparable<NewsEvent>{
 		return eventURI;
 	}
 
-	public List<Scoring> getUsabilityScorings() {
-		return usabilityScorings;
-	}
-
-	public void addUsabilityScoring(Scoring usabilityScoring) {
-		usabilityScorings.add(usabilityScoring);
-	}
-	
-	public double getTotalUsabilityScore() {
-		return totalUsabilityScore;
-	}
-
-	public void setTotalUsabilityScore(double totalUsabilityScore) {
-		this.totalUsabilityScore = totalUsabilityScore;
-	}
-	
 	public List<Scoring> getRelevanceScorings() {
 		return relevanceScorings;
 	}
@@ -65,7 +44,6 @@ public class NewsEvent implements Comparable<NewsEvent>{
 	public NewsEvent(String eventURI, List<Scoring> relevanceScorings) {
 		this.eventURI = eventURI;
 		this.relevanceScorings = relevanceScorings;
-		this.usabilityScorings = new ArrayList<Scoring>();
 		this.totalRelevanceScore = Double.NaN; // encodes that there is no total score, yet
 	}
 	
@@ -77,7 +55,7 @@ public class NewsEvent implements Comparable<NewsEvent>{
 	}
 	
 	public String toVerboseString() {
-		return String.format("[%s|%f|%f]", eventURI, totalUsabilityScore, totalRelevanceScore);
+		return String.format("[%s|%f]", eventURI, totalRelevanceScore);
 	}
 	
 	@Override

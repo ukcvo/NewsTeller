@@ -80,14 +80,28 @@ public class EventFinder {
 		this.stemmer = new englishStemmer();
 	}
 
-	// stem the keyword before applying the query
-	private String stemKeyword(String keyword) {
-		stemmer.setCurrent(keyword);
+	// create stemmed regex for matching and attach to Keyword
+	private void stemKeyword(Keyword keyword) {
+		
+		stemmer.setCurrent(keyword.getWord());
 		stemmer.stem();
-		String result = stemmer.getCurrent();
-		if (result.endsWith("i"))
-			result = result.substring(0, result.length()-1) + "(i|y)";
-		return result;
+		String stemmedKeyword = stemmer.getCurrent();
+		
+		String[] tokens = stemmedKeyword.split(" ");
+		StringBuilder builder = new StringBuilder();
+		builder.append("(-| |^|\\\\()");
+		for (int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+			if (token.endsWith("i"))
+				token = token.substring(0, token.length()-1) + "(i|y)";
+			builder.append(token);
+			builder.append("(\\\\w)*");
+			if (i < tokens.length - 1)
+				builder.append(" ");
+		}
+		builder.append("(-| |$|\\\\))");
+		String stemmedRegex = builder.toString();
+		keyword.setStemmedRegex(stemmedRegex);
 	}
 	
 	// use keywords from user query to find events
@@ -97,16 +111,15 @@ public class EventFinder {
 
 		Set<NewsEvent> events = new HashSet<NewsEvent>();
 
-		List<String> stemmedKeywords = new ArrayList<String>();
 		for (Keyword keyword : userQuery)
-			stemmedKeywords.add(stemKeyword(keyword.getWord()));
+			stemKeyword(keyword);
 		
 		List<Future<List<NewsEvent>>> futures = new ArrayList<Future<List<NewsEvent>>>();
 		for (String sparqlQuery : userQuerySPARQLTemplates) {
 			// TODO: generalize to multiple keywords (Scope 3)
-			String keywordStem = stemmedKeywords.get(0);
+			String keywordRegex = userQuery.get(0).getStemmedRegex();
 			
-			QueryWorker w = new QueryWorker(sparqlQuery.replace("*k*", keywordStem));
+			QueryWorker w = new QueryWorker(sparqlQuery.replace("*k*", keywordRegex));
 			futures.add(threadPool.submit(w));
 		}
 		
