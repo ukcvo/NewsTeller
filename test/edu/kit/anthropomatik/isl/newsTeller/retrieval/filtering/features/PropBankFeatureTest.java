@@ -68,6 +68,13 @@ public class PropBankFeatureTest {
 	}
 	
 	@Test
+	public void shouldReturnZeroPointFiveForLaunch() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev8");
+		assertTrue(value == 0.5);
+	}
+	
+	
+	@Test
 	public void shouldReturnZero() {
 		double value = feature.getValue("http://en.wikinews.org/wiki/Several_hundred_buried_in_mass_graves_in_Nigeria_following_clashes#ev27");
 		assertTrue(value == 0.0);

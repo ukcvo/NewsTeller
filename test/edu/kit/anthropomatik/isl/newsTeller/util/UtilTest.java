@@ -132,12 +132,21 @@ public class UtilTest {
 
 	//region regarding XML
 	@Test
-	public void shouldReturnOnlyA0() {
+	public void shouldReturnA0A1A2AndSubsets() {
 		Set<Set<String>> result = Util.parsePropBankFrame(new File("resources/propbank-frames/race-v.xml"));
 		Set<Set<String>> expected = new HashSet<Set<String>>();
 		Set<String> helper = new HashSet<String>();
 		helper.add("A0");
 		expected.add(helper);
+		Set<String> helper2 = new HashSet<String>();
+		helper2.add("A0");
+		helper2.add("A1");
+		expected.add(helper2);
+		Set<String> helper3 = new HashSet<String>();
+		helper3.add("A0");
+		helper3.add("A1");
+		helper3.add("A2");
+		expected.add(helper3);
 		assertTrue(result.equals(expected));
 	}
 	
@@ -151,8 +160,6 @@ public class UtilTest {
 		expected.add(helper);
 		assertTrue(result.equals(expected));
 	}
-	
-	// TODO: find example w/ multiple solutions
 	
 	@Test
 	public void shouldParseAllFiles() {

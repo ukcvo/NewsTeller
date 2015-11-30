@@ -249,7 +249,7 @@ public class Util {
 	 */
 	public static Set<Set<String>> parsePropBankFrame(File file) {
 		try {
-			Set<Set<String>> result = new HashSet<Set<String>>();
+//			Set<Set<String>> result = new HashSet<Set<String>>();
 			
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -300,17 +300,18 @@ public class Util {
 				}
 			}
 			
-			for (Set<String> hypothesis : hypothesisList) {
-				boolean shouldBeKept = true;
-				for (Set<String> otherHypothesis : hypothesisList) {
-					if ((otherHypothesis.size() < hypothesis.size())  && (hypothesis.containsAll(otherHypothesis)))
-						shouldBeKept = false;
-				}
-				if (shouldBeKept)
-					result.add(hypothesis);
-			}
-			
-			return result;
+//			for (Set<String> hypothesis : hypothesisList) {
+//				boolean shouldBeKept = true;
+//				for (Set<String> otherHypothesis : hypothesisList) {
+//					if ((otherHypothesis.size() < hypothesis.size())  && (hypothesis.containsAll(otherHypothesis)))
+//						shouldBeKept = false;
+//				}
+//				if (shouldBeKept)
+//					result.add(hypothesis);
+//			}
+//			
+//			return result;
+			return hypothesisList;
 			
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
@@ -359,18 +360,19 @@ public class Util {
 				Set<Set<String>> allWordResults = result.get(word);
 				allWordResults.addAll(fileResult);
 				
-				Set<Set<String>> mergedWordResults = new HashSet<Set<String>>();
-				for (Set<String> hypothesis : allWordResults) {
-					boolean shouldBeKept = true;
-					for (Set<String> otherHypothesis : allWordResults) {
-						if ((otherHypothesis.size() < hypothesis.size())  && (hypothesis.containsAll(otherHypothesis)))
-							shouldBeKept = false;
-					}
-					if (shouldBeKept)
-						mergedWordResults.add(hypothesis);
-				}
-				
-				result.put(word, mergedWordResults);
+//				Set<Set<String>> mergedWordResults = new HashSet<Set<String>>();
+//				for (Set<String> hypothesis : allWordResults) {
+//					boolean shouldBeKept = true;
+//					for (Set<String> otherHypothesis : allWordResults) {
+//						if ((otherHypothesis.size() < hypothesis.size())  && (hypothesis.containsAll(otherHypothesis)))
+//							shouldBeKept = false;
+//					}
+//					if (shouldBeKept)
+//						mergedWordResults.add(hypothesis);
+//				}
+//				
+//				result.put(word, mergedWordResults);
+				result.put(word, allWordResults);
 			}
 		}
 		
