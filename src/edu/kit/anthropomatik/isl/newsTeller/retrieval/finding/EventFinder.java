@@ -12,9 +12,6 @@ import java.util.concurrent.Future;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
-import org.tartarus.snowball.SnowballStemmer;
-import org.tartarus.snowball.ext.englishStemmer;
-
 import edu.kit.anthropomatik.isl.newsTeller.data.ConversationCycle;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
@@ -60,8 +57,6 @@ public class EventFinder {
 	@SuppressWarnings("unused")
 	private List<String> previousEventSPARQLTemplates; // SPARQL queries based on conversation history event
 
-	private SnowballStemmer stemmer;
-	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
@@ -77,33 +72,8 @@ public class EventFinder {
 		this.userQuerySPARQLTemplates = Util.readQueriesFromConfigFile(userQueryConfigFileName);
 		this.userInterestSPARQLTemplates = Util.readQueriesFromConfigFile(userInterestConfigFileName);
 		this.previousEventSPARQLTemplates = Util.readQueriesFromConfigFile(previousEventConfigFileName);
-		this.stemmer = new englishStemmer();
 	}
 
-	// create stemmed regex for matching and attach to Keyword
-	private void stemKeyword(Keyword keyword) {
-		
-		stemmer.setCurrent(keyword.getWord());
-		stemmer.stem();
-		String stemmedKeyword = stemmer.getCurrent();
-		
-		String[] tokens = stemmedKeyword.split(" ");
-		StringBuilder builder = new StringBuilder();
-		builder.append("(-| |^|\\\\()");
-		for (int i = 0; i < tokens.length; i++) {
-			String token = tokens[i];
-			if (token.endsWith("i"))
-				token = token.substring(0, token.length()-1) + "(i|y)";
-			builder.append(token);
-			builder.append("(\\\\w)*");
-			if (i < tokens.length - 1)
-				builder.append(" ");
-		}
-		builder.append("(-| |$|\\\\))");
-		String stemmedRegex = builder.toString();
-		keyword.setStemmedRegex(stemmedRegex);
-	}
-	
 	// use keywords from user query to find events
 	private Set<NewsEvent> processUserQuery(List<Keyword> userQuery) {
 		if (log.isTraceEnabled())
@@ -112,7 +82,7 @@ public class EventFinder {
 		Set<NewsEvent> events = new HashSet<NewsEvent>();
 
 		for (Keyword keyword : userQuery)
-			stemKeyword(keyword);
+			Util.stemKeyword(keyword);
 		
 		List<Future<List<NewsEvent>>> futures = new ArrayList<Future<List<NewsEvent>>>();
 		for (String sparqlQuery : userQuerySPARQLTemplates) {

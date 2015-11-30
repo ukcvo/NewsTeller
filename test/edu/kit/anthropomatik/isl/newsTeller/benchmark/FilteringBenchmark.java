@@ -231,7 +231,7 @@ public class FilteringBenchmark {
 		
 		for (int i = 0; i < originalDataSet.numInstances(); i++) {
 			Instance inst = originalDataSet.instance(i);
-			if ((inst.value(originalDataSet.attribute("hasKeywordAsLabel")) < 0.5) && (inst.value(inst.classAttribute()) == originalDataSet.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE)))
+			if ((inst.value(originalDataSet.attribute("keywordInText")) < 0.5) && (inst.value(inst.classAttribute()) == originalDataSet.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE)))
 				System.out.println(inst.stringValue(originalDataSet.attribute(Util.ATTRIBUTE_URI)));
 		}
 	}

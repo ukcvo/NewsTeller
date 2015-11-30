@@ -18,6 +18,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jumpmind.symmetric.csv.CsvReader;
+import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.ext.englishStemmer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -37,6 +39,14 @@ public class Util {
 
 	private static Log log = LogFactory.getLog(Util.class);
 
+	private static SnowballStemmer stemmer = null;
+	
+	private static SnowballStemmer getStemmer() {
+		if (stemmer == null)
+			stemmer = new englishStemmer();
+		return stemmer;
+	}
+	
 	public static final String PLACEHOLDER_EVENT = "*e*";
 	public static final String PLACEHOLDER_KEYWORD = "*k*";
 	public static final String PLACEHOLDER_HISTORICAL_EVENT = "*h*";
@@ -223,8 +233,11 @@ public class Util {
 				List<Keyword> queryKeywords = new ArrayList<Keyword>(Util.MAX_NUMBER_OF_BENCHMARK_KEYWORDS);
 				for (int i = 1; i <= Util.MAX_NUMBER_OF_BENCHMARK_KEYWORDS; i++) {
 					String s = in.get(Util.COLUMN_NAME_KEYWORD + i);
-					if (s != null && !s.isEmpty())
-						queryKeywords.add(new Keyword(s));
+					if (s != null && !s.isEmpty()) {
+						Keyword k = new Keyword(s);
+						stemKeyword(k);
+						queryKeywords.add(k);
+					}
 				}
 				result.put(queryFileName, queryKeywords);
 			}
@@ -421,6 +434,30 @@ public class Util {
 		for (Double d : collection)
 			sum += d;
 		return sum / collection.size();
+	}
+	
+	public static void stemKeyword(Keyword keyword) {
+		SnowballStemmer stemmer = getStemmer();
+		stemmer.setCurrent(keyword.getWord());
+		stemmer.stem();
+		String stemmedKeyword = stemmer.getCurrent();
+		keyword.setStem(stemmedKeyword);
+		
+		String[] tokens = stemmedKeyword.split(" ");
+		StringBuilder builder = new StringBuilder();
+		builder.append("(-| |^|\\\\()");
+		for (int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+			if (token.endsWith("i"))
+				token = token.substring(0, token.length()-1) + "(i|y)";
+			builder.append(token);
+			builder.append("(\\\\w)*");
+			if (i < tokens.length - 1)
+				builder.append(" ");
+		}
+		builder.append("(-| |$|\\\\))");
+		String stemmedRegex = builder.toString();
+		keyword.setStemmedRegex(stemmedRegex);
 	}
 	// endregion
 }

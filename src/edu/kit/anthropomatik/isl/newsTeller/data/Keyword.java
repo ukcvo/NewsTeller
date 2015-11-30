@@ -10,6 +10,8 @@ public class Keyword {
 
 	private String word;
 	
+	private String stem;
+	
 	private String stemmedRegex;
 	
 	private double weight;
@@ -28,6 +30,14 @@ public class Keyword {
 
 	public void setStemmedRegex(String stemmedRegex) {
 		this.stemmedRegex = stemmedRegex;
+	}
+
+	public String getStem() {
+		return stem;
+	}
+
+	public void setStem(String stem) {
+		this.stem = stem;
 	}
 
 	public Keyword() {
