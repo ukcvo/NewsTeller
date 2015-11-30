@@ -27,6 +27,7 @@
 		<ref bean="numberOfMentionsFeature" />
 		<ref bean="wordNetFeature" />
 		<ref bean="propBankFeature" />
+		<ref bean="hasActorOrPlaceFeature" />
 	</util:list>
 
 	<bean id="hasActorFeature"
@@ -173,6 +174,14 @@
 		<constructor-arg name="propBankFolderName" value="resources/propbank-frames"/>
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="propBankFeature"/>
+	</bean>
+
+	<bean id="hasActorOrPlaceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/hasActorOrPlace.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="hasActorOrPlace" />
 	</bean>
 
 </beans>
