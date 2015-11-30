@@ -12,6 +12,18 @@ import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
  */
 public class KeywordInFullTextFeature extends FullTextFeature {
 
+	private boolean useOriginalString;
+	
+	private boolean useStem;
+	
+	public void setUseOriginalString(boolean useOriginalString) {
+		this.useOriginalString = useOriginalString;
+	}
+
+	public void setUseStem(boolean useStem) {
+		this.useStem = useStem;
+	}
+
 	public KeywordInFullTextFeature(String queryFileName) {
 		super(queryFileName);
 	}
@@ -22,7 +34,10 @@ public class KeywordInFullTextFeature extends FullTextFeature {
 		
 		for (Keyword keyword : keywords) {
 			List<String> list = new ArrayList<String>();
-			list.add(keyword.getWord());
+			if (this.useOriginalString)
+				list.add(keyword.getWord());
+			if (this.useStem)
+				list.add(keyword.getStem());
 			result.add(list);
 		}
 		

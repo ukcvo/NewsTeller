@@ -31,6 +31,7 @@
 		<ref bean="hasKeywordAsLabelFeature" />
 		<ref bean="keywordInTextFeature" />
 		<ref bean="keywordStemInTextFeature" />
+		<ref bean="keywordOrStemInTextFeature" />
 	</util:list>
 
 	<bean id="hasActorFeature"
@@ -201,13 +202,30 @@
 			value="" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="keywordInText" />
+		
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="false" />
 	</bean>
 	
 	<bean id="keywordStemInTextFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordStemInFullTextFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
 		<constructor-arg name="queryFileName"
 			value="" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="keywordStemInText" />
+		
+		<property name="useOriginalString" value="false" />
+		<property name="useStem" value="true" />
+	</bean>
+	
+	<bean id="keywordOrStemInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordOrStemInText" />
+		
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="true" />
 	</bean>
 </beans>
