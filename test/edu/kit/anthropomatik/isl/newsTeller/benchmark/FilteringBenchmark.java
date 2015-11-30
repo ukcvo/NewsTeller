@@ -74,8 +74,6 @@ public class FilteringBenchmark {
 			XRFFLoader loader = new XRFFLoader();
 			loader.setSource(new File(instancesFileName));
 			this.originalDataSet = loader.getDataSet();
-			this.cleanedDataSet = new Instances(this.originalDataSet);
-			this.cleanedDataSet.deleteAttributeType(Attribute.STRING);
 		} catch (IOException e) {
 			if (log.isErrorEnabled())
 				log.error("Can't read data set");
@@ -84,11 +82,20 @@ public class FilteringBenchmark {
 		}
 	}
 
+	private void filterDataSet() {
+		try {
+			this.filter.setInputFormat(originalDataSet);
+			this.cleanedDataSet = Filter.useFilter(this.originalDataSet, this.filter);
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't apply filter");
+			if (log.isDebugEnabled())
+				log.debug("Can't apply filter", e);
+		}
+	}
+	
 	// region featureAnalysis
 	private void featureAnalysis() {
-
-		if (log.isInfoEnabled())
-			log.info("unfiltered attributes");
 
 		for (AttributeSelection config : configurations) {
 			try {
@@ -102,24 +109,6 @@ public class FilteringBenchmark {
 				if (log.isDebugEnabled())
 					log.debug("Exception", e);
 			}
-		}
-
-		if (log.isInfoEnabled())
-			log.info("filtered attributes");
-		try {
-			this.filter.setInputFormat(cleanedDataSet);
-			Instances filtered = Filter.useFilter(cleanedDataSet, filter);
-
-			for (AttributeSelection config : configurations) {
-				config.SelectAttributes(filtered);
-				if (log.isInfoEnabled())
-					log.info(config.toResultsString());
-			}
-		} catch (Exception e) {
-			if (log.isErrorEnabled())
-				log.error("Can't select filtered attributes");
-			if (log.isDebugEnabled())
-				log.debug("Exception", e);
 		}
 
 	}
@@ -222,6 +211,9 @@ public class FilteringBenchmark {
 	}
 	
 	public void run() throws Exception {
+		
+		filterDataSet();
+		
 		if (this.doFeatureAnalysis)
 			featureAnalysis();
 		if (this.doCrossValidation)
@@ -229,11 +221,11 @@ public class FilteringBenchmark {
 		if (this.doLeaveOneOut)
 			leaveOneOut();
 		
-		for (int i = 0; i < originalDataSet.numInstances(); i++) {
-			Instance inst = originalDataSet.instance(i);
-			if ((inst.value(originalDataSet.attribute("keywordStemInText")) < 0.5) && (inst.value(inst.classAttribute()) == originalDataSet.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE)))
-				System.out.println(inst.stringValue(originalDataSet.attribute(Util.ATTRIBUTE_URI)));
-		}
+//		for (int i = 0; i < originalDataSet.numInstances(); i++) {
+//			Instance inst = originalDataSet.instance(i);
+//			if ((inst.value(originalDataSet.attribute("keywordStemInText")) < 0.5) && (inst.value(inst.classAttribute()) == originalDataSet.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE)))
+//				System.out.println(inst.stringValue(originalDataSet.attribute(Util.ATTRIBUTE_URI)));
+//		}
 	}
 
 	public static void main(String[] args) throws Exception {

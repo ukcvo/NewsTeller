@@ -295,7 +295,26 @@
 		<constructor-arg name="instancesFileName" value="resources/benchmark/dataSet.xrff"/>
 		
 		<property name="filter">
-			<bean class="weka.filters.supervised.attribute.Discretize"/>
+			<bean class="weka.filters.MultiFilter">
+				<property name="filters">
+					<array>
+						<bean class="weka.filters.unsupervised.attribute.RemoveType">
+							<property name="options">
+								<array>
+									<value>-T</value>
+									<value>string</value>
+								</array>
+							</property>
+						</bean>
+						<bean class="weka.filters.unsupervised.attribute.Copy">
+							<property name="attributeIndices" value="first-24"/>
+						</bean>
+						<bean class="weka.filters.supervised.attribute.Discretize">
+							<property name="attributeIndices" value="first-24"/>
+						</bean>
+					</array>
+				</property>
+			</bean>
 		</property>
 		
 		<property name="configurations">
@@ -305,7 +324,9 @@
 						<bean class="weka.attributeSelection.ReliefFAttributeEval"/>
 					</property>
 					<property name="search">
-						<bean class="weka.attributeSelection.Ranker"/>
+						<bean class="weka.attributeSelection.Ranker">
+							<property name="numToSelect" value="7"/>
+						</bean>
 					</property>
 				</bean>
 				<bean id="oneR" class="weka.attributeSelection.AttributeSelection">
@@ -313,7 +334,9 @@
 						<bean class="weka.attributeSelection.OneRAttributeEval" />
 					</property>
 					<property name="search">
-						<bean class="weka.attributeSelection.Ranker"/>
+						<bean class="weka.attributeSelection.Ranker">
+							<property name="numToSelect" value="7"/>
+						</bean>
 					</property>
 				</bean>
 				<bean id="cfs" class="weka.attributeSelection.AttributeSelection">
@@ -323,7 +346,10 @@
 						</bean>
 					</property>
 					<property name="search">
-						<bean class="weka.attributeSelection.ExhaustiveSearch"/>
+						<bean class="weka.attributeSelection.GreedyStepwise">
+							<property name="generateRanking" value="true"/>
+							<property name="numToSelect" value="7"/>
+						</bean>
 					</property>
 				</bean>
 				<bean id="wrapperDT" class="weka.attributeSelection.AttributeSelection">
@@ -337,6 +363,7 @@
 					<property name="search">
 						<bean class="weka.attributeSelection.GreedyStepwise">
 							<property name="generateRanking" value="true"/>
+							<property name="numToSelect" value="7"/>
 						</bean>
 					</property>
 				</bean>
@@ -351,6 +378,7 @@
 					<property name="search">
 						<bean class="weka.attributeSelection.GreedyStepwise">
 							<property name="generateRanking" value="true"/>
+							<property name="numToSelect" value="7"/>
 						</bean>
 					</property>
 				</bean>
@@ -381,7 +409,7 @@
 			</list>
 		</property>
 		
-		<property name="doFeatureAnalysis" value="false"/>
+		<property name="doFeatureAnalysis" value="true"/>
 		<property name="doCrossValidation" value="false"/>
 		<property name="doLeaveOneOut" value="false"/>
 	</bean>
