@@ -28,6 +28,7 @@
 		<ref bean="wordNetFeature" />
 		<ref bean="propBankFeature" />
 		<ref bean="hasActorOrPlaceFeature" />
+		<ref bean="hasKeywordAsLabelFeature" />
 	</util:list>
 
 	<bean id="hasActorFeature"
@@ -184,4 +185,11 @@
 		<property name="name" value="hasActorOrPlace" />
 	</bean>
 
+	<bean id="hasKeywordAsLabelFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordSparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/hasKeywordAsLabel.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="hasKeywordAsLabel" />
+	</bean>
 </beans>

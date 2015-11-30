@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.LogManager;
@@ -13,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 
 public class ParallelEventFilterTest {
@@ -44,7 +46,7 @@ public class ParallelEventFilterTest {
 
 	@Test
 	public void shouldReturnEmptyResult() {
-		Set<NewsEvent> result = filter.filterEvents(events, null);
+		Set<NewsEvent> result = filter.filterEvents(events, new ArrayList<Keyword>());
 		assertTrue(result.isEmpty());
 	}
 
