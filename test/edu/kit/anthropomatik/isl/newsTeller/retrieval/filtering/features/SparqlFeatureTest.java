@@ -17,11 +17,11 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 
-public class KeywordSparqlFeatureTest {
+public class SparqlFeatureTest {
 
 	private KnowledgeStoreAdapter ksAdapter;
 	
-	private KeywordSparqlFeature feature;
+	private SparqlFeature feature;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -36,7 +36,7 @@ public class KeywordSparqlFeatureTest {
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		feature = (KeywordSparqlFeature) context.getBean("hasKeywordAsLabelFeature");
+		feature = (SparqlFeature) context.getBean("hasKeywordAsLabelFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.openConnection();

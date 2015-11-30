@@ -35,7 +35,7 @@
 	</util:list>
 
 	<bean id="hasActorFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasActor.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -43,7 +43,7 @@
 	</bean>
 
 	<bean id="hasPlaceFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasPlace.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -51,7 +51,7 @@
 	</bean>
 
 	<bean id="A0Feature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/A0.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -59,7 +59,7 @@
 	</bean>
 
 	<bean id="A1Feature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/A1.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -67,7 +67,7 @@
 	</bean>
 
 	<bean id="eventLabelFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/eventLabel.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -75,7 +75,7 @@
 	</bean>
 
 	<bean id="hasTimeFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasTime.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -83,7 +83,7 @@
 	</bean>
 
 	<bean id="isSpeechCognitiveFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/isSpeechCognitive.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -91,7 +91,7 @@
 	</bean>
 
 	<bean id="numberOfMentionsFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfMentions.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -99,7 +99,7 @@
 	</bean>
 
 	<bean id="isStatementFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/isStatement.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -115,7 +115,7 @@
 	</bean>
 
 	<bean id="A2Feature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/A2.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -123,7 +123,7 @@
 	</bean>
 
 	<bean id="numberOfLinksFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfLinks.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -131,7 +131,7 @@
 	</bean>
 
 	<bean id="numberOfFramesFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfFrames.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -139,7 +139,7 @@
 	</bean>
 
 	<bean id="numberOfEntityLabelsDBPediaFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -147,7 +147,7 @@
 	</bean>
 
 	<bean id="areActorsAgentsFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/areActorsAgents.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -155,7 +155,7 @@
 	</bean>
 
 	<bean id="arePlacesPlacesFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/arePlacesPlaces.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -181,7 +181,7 @@
 	</bean>
 
 	<bean id="hasActorOrPlaceFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SimpleSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasActorOrPlace.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -189,7 +189,7 @@
 	</bean>
 
 	<bean id="hasKeywordAsLabelFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordSparqlFeature">
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasKeywordAsLabel.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
