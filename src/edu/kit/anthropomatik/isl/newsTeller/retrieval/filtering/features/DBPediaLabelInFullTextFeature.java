@@ -2,8 +2,6 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
@@ -13,7 +11,7 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class DBPediaLabelInFullTextFeature extends UsabilityFeature {
+public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 
 	private String labelQuery;
 	
@@ -21,9 +19,9 @@ public class DBPediaLabelInFullTextFeature extends UsabilityFeature {
 		super(queryFileName);
 		this.labelQuery = Util.readStringFromFile(labelQueryFileName);
 	}
-
-	// get all the labels of all the entities
-	private List<List<String>> getEntityLabels(String eventURI) {
+	
+	@Override
+	protected List<List<String>> getLabels(String eventURI, List<Keyword> keywords) {
 		List<List<String>> result = new ArrayList<List<String>>();
 		
 		List<String> entities = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_ENTITY);
@@ -34,43 +32,6 @@ public class DBPediaLabelInFullTextFeature extends UsabilityFeature {
 		}
 		
 		return result;
-	}
-	
-	// check if the given label appears in one of the texts
-	private double checkLabel(String label, Set<String> originalTexts) {
-		for (String text : originalTexts) {
-			if (text.toLowerCase().contains(label.toLowerCase())) //ignoring case
-				return 1.0;
-		}
-		return 0.0;
-	}
-	
-	// check all entities and figure out whether one of their labels appears or not
-	private List<Double> checkLabels(List<List<String>> entityLabels, Set<String> originalTexts) {
-		List<Double> result = new ArrayList<Double>();
-		
-		for (List<String> labels : entityLabels) {
-			
-			double appeared = 0;
-			for (String label : labels) {
-				appeared = checkLabel(label, originalTexts);
-				if (appeared > 0)
-					break;
-			}
-			result.add(appeared);
-		}
-		
-		return result;
-	}
-	
-	@Override
-	public double getValue(String eventURI, List<Keyword> keywords) {
-		List<List<String>> entityLabels = getEntityLabels(eventURI);
-		Set<String> originalTexts = ksAdapter.retrieveOriginalTexts(eventURI);
-		List<Double> appearances = checkLabels(entityLabels, originalTexts);
-		double averageAppearance = Util.averageFromCollection(appearances);
-		
-		return averageAppearance;
 	}
 
 }

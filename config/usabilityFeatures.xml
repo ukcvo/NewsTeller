@@ -29,6 +29,7 @@
 		<ref bean="propBankFeature" />
 		<ref bean="hasActorOrPlaceFeature" />
 		<ref bean="hasKeywordAsLabelFeature" />
+		<ref bean="keywordInTextFeature" />
 	</util:list>
 
 	<bean id="hasActorFeature"
@@ -192,4 +193,13 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasKeywordAsLabel" />
 	</bean>
+	
+	<bean id="keywordInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInText" />
+	</bean>
+	
 </beans>
