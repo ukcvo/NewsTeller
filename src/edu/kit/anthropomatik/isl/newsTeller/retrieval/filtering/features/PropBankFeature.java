@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class PropBankFeature extends UsabilityFeature {
@@ -19,7 +20,7 @@ public class PropBankFeature extends UsabilityFeature {
 	}
 
 	@Override
-	public double getValue(String eventURI) {
+	public double getValue(String eventURI, List<Keyword> keywords) {
 		List<String> labels = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_LABEL);
 		
 		double result = 0;

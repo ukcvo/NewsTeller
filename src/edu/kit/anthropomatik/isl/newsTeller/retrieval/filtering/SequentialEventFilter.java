@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -48,7 +49,7 @@ public class SequentialEventFilter implements IEventFilter {
 		}
 	}
 	
-	public Set<NewsEvent> filterEvents(Set<NewsEvent> events) {
+	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery) {
 		
 		Set<NewsEvent> result = new HashSet<NewsEvent>();
 		
@@ -57,7 +58,7 @@ public class SequentialEventFilter implements IEventFilter {
 			
 			for (int i = 0; i < features.size(); i++) {
 				UsabilityFeature f = features.get(i);
-				values[i] = f.getValue(event.getEventURI());
+				values[i] = f.getValue(event.getEventURI(), userQuery);
 			}
 			
 			Instance example = new Instance(1.0, values);

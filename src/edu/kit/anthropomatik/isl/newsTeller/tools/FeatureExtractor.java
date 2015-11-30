@@ -121,12 +121,14 @@ public class FeatureExtractor {
 	private class EventWorker implements Callable<Instance> {
 
 		private String eventURI;
+		private List<Keyword> keywords;
 		private int usabilityIndex;
 		private int uriIndex;
 		private int fileIndex;
 		
-		public EventWorker(String eventURI, int usabilityIndex, int uriIndex, int fileIndex) {
+		public EventWorker(String eventURI, List<Keyword> keywords, int usabilityIndex, int uriIndex, int fileIndex) {
 			this.eventURI = eventURI;
+			this.keywords = keywords;
 			this.usabilityIndex = usabilityIndex;
 			this.uriIndex = uriIndex;
 			this.fileIndex = fileIndex;
@@ -140,7 +142,7 @@ public class FeatureExtractor {
 			
 			for (int i = 0; i < features.size(); i++) {
 				UsabilityFeature f = features.get(i);
-				values[i] = f.getValue(this.eventURI);
+				values[i] = f.getValue(this.eventURI, this.keywords);
 			}
 			
 			values[features.size()] = this.usabilityIndex;
@@ -168,12 +170,13 @@ public class FeatureExtractor {
 		
 		for (Map.Entry<BenchmarkEvent, GroundTruth> entry : this.benchmark.entrySet()) {
 			String eventURI = entry.getKey().getEventURI();
+			List<Keyword> keywords = this.benchmarkKeywords.get(entry.getKey().getFileName());
 			String fileName = entry.getKey().getFileName();
 			String label = (entry.getValue().getUsabilityRating() == 1.0) ? Util.CLASS_LABEL_POSITIVE : Util.CLASS_LABEL_NEGATIVE;
 			int usabilityIndex = dataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(label);
 			int uriIndex = dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI);
 			int fileIndex = dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName);
-			EventWorker w = new EventWorker(eventURI, usabilityIndex, uriIndex, fileIndex);
+			EventWorker w = new EventWorker(eventURI, keywords, usabilityIndex, uriIndex, fileIndex);
 			
 			futures.add(threadPool.submit(w));
 		}

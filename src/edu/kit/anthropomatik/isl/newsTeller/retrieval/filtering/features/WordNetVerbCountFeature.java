@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import net.sf.extjwnl.JWNLException;
 import net.sf.extjwnl.data.IndexWordSet;
@@ -68,7 +69,7 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 	}
 
 	@Override
-	public double getValue(String eventURI) {
+	public double getValue(String eventURI, List<Keyword> keywords) {
 		List<String> labels = this.ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_LABEL);
 
 		if (labels.isEmpty()) {

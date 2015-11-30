@@ -45,13 +45,13 @@ public class DBPediaLabelInFullTextFeatureTest {
 
 	@Test
 	public void ShouldReturnZero() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Autopsy_reveals_that_Terri_Schiavo_was_in_a_persistent_vegetative_state#ev17");
+		double value = feature.getValue("http://en.wikinews.org/wiki/Autopsy_reveals_that_Terri_Schiavo_was_in_a_persistent_vegetative_state#ev17", null);
 		assertTrue(value == 0.0);
 	}
 	
 	@Test
 	public void ShouldReturnOne() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Walter_Frederick_Morrison,_inventor_of_frisbee,_dies_at_age_90#ev18_3");
+		double value = feature.getValue("http://en.wikinews.org/wiki/Walter_Frederick_Morrison,_inventor_of_frisbee,_dies_at_age_90#ev18_3", null);
 		assertTrue(value == 1.0);
 	}
 

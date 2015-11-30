@@ -74,7 +74,7 @@ public class EventRetriever {
 			old = l;
 		}
 		//endregion
-		Set<NewsEvent> filteredEvents = eventFilter.filterEvents(events);
+		Set<NewsEvent> filteredEvents = eventFilter.filterEvents(events, userQuery);
 		//region time logging
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();

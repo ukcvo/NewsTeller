@@ -13,6 +13,7 @@ import java.util.concurrent.Future;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -58,10 +59,13 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 
 		private NewsEvent event;
 		
+		private List<Keyword> userQuery;
+		
 		private ConcurrentMap<NewsEvent, Instance> map;
 		
-		public EventWorker(NewsEvent event, ConcurrentMap<NewsEvent, Instance> map) {
+		public EventWorker(NewsEvent event, List<Keyword> userQuery, ConcurrentMap<NewsEvent, Instance> map) {
 			this.event = event;
+			this.userQuery = userQuery;
 			this.map = map;
 		}
 		
@@ -70,7 +74,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 			
 			for (int i = 0; i < features.size(); i++) {
 				UsabilityFeature f = features.get(i);
-				values[i] = f.getValue(event.getEventURI());
+				values[i] = f.getValue(event.getEventURI(), userQuery);
 			}
 			
 			Instance example = new Instance(1.0, values);
@@ -80,7 +84,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 		
 	}
 	
-	public Set<NewsEvent> filterEvents(Set<NewsEvent> events) {
+	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery) {
 		
 		Set<NewsEvent> result = new HashSet<NewsEvent>();
 		
@@ -89,7 +93,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 		
 		// parallel feature extraction
 		for (NewsEvent e : events) {
-			EventWorker w = new EventWorker(e, resultMap);
+			EventWorker w = new EventWorker(e, userQuery, resultMap);
 			futures.add(threadPool.submit(w));
 		}
 		

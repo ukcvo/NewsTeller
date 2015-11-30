@@ -44,7 +44,7 @@ public class ParallelEventFilterTest {
 
 	@Test
 	public void shouldReturnEmptyResult() {
-		Set<NewsEvent> result = filter.filterEvents(events);
+		Set<NewsEvent> result = filter.filterEvents(events, null);
 		assertTrue(result.isEmpty());
 	}
 

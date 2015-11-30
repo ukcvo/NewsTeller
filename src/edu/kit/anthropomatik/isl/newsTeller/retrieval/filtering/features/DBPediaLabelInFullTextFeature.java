@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
@@ -63,7 +64,7 @@ public class DBPediaLabelInFullTextFeature extends UsabilityFeature {
 	}
 	
 	@Override
-	public double getValue(String eventURI) {
+	public double getValue(String eventURI, List<Keyword> keywords) {
 		List<List<String>> entityLabels = getEntityLabels(eventURI);
 		Set<String> originalTexts = ksAdapter.retrieveOriginalTexts(eventURI);
 		List<Double> appearances = checkLabels(entityLabels, originalTexts);

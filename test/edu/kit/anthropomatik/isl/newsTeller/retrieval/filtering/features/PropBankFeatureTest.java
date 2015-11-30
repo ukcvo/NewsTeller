@@ -45,38 +45,38 @@ public class PropBankFeatureTest {
 	
 	@Test
 	public void shouldReturnZeroPointFive() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Pakistani_scientist_says_government_knew_about_nuclear_shipment_to_North_Korea#ev49");
+		double value = feature.getValue("http://en.wikinews.org/wiki/Pakistani_scientist_says_government_knew_about_nuclear_shipment_to_North_Korea#ev49", null);
 		assertTrue(value == 0.5);
 	}
 	
 	@Test
 	public void shouldReturnOne() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/UN:_Ethiopian_GDP_grew_only_1.7%25_in_2009,_may_not_reach_anti-poverty_goals#ev24");
+		double value = feature.getValue("http://en.wikinews.org/wiki/UN:_Ethiopian_GDP_grew_only_1.7%25_in_2009,_may_not_reach_anti-poverty_goals#ev24", null);
 		assertTrue(value == 1.0);
 	}
 	
 	@Test
 	public void shouldReturnOneMultipleLables() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/NSW_appeal_court_acquits_Jeffrey_Gilham_of_parents'_murders#ev49");
+		double value = feature.getValue("http://en.wikinews.org/wiki/NSW_appeal_court_acquits_Jeffrey_Gilham_of_parents'_murders#ev49", null);
 		assertTrue(value == 1.0);
 	}
 	
 	@Test
 	public void shouldReturnOneForDance() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev30");
+		double value = feature.getValue("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev30", null);
 		assertTrue(value == 1.0);
 	}
 	
 	@Test
 	public void shouldReturnZeroPointFiveForLaunch() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev8");
+		double value = feature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev8", null);
 		assertTrue(value == 0.5);
 	}
 	
 	
 	@Test
 	public void shouldReturnZero() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Several_hundred_buried_in_mass_graves_in_Nigeria_following_clashes#ev27");
+		double value = feature.getValue("http://en.wikinews.org/wiki/Several_hundred_buried_in_mass_graves_in_Nigeria_following_clashes#ev27", null);
 		assertTrue(value == 0.0);
 	}
 }

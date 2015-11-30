@@ -44,7 +44,7 @@ public class DummyEventFilterTest {
 
 	@Test
 	public void shouldReturnFullSet() {
-		Set<NewsEvent> filteredEvents = this.dummyFilter.filterEvents(events);
+		Set<NewsEvent> filteredEvents = this.dummyFilter.filterEvents(events, null);
 		assertTrue(filteredEvents.equals(events));
 	}
 

@@ -67,7 +67,7 @@ public class RuntimeTester {
 	
 	private Set<String> eventURIs;
 	
-	private Set<NewsEvent> events;
+	private Map<List<Keyword>, Set<NewsEvent>> keywordsToEventsMap;
 	
 	private EventFinder sequentialFinder;
 	
@@ -172,15 +172,16 @@ public class RuntimeTester {
 		}
 		
 		this.eventURIs = new HashSet<String>();
-		this.events = new HashSet<NewsEvent>();
+		this.keywordsToEventsMap = new HashMap<List<Keyword>, Set<NewsEvent>>();
 		Set<String> fileNames = benchmarkConfig.keySet();
 		for (String f : fileNames) {
 			Set<BenchmarkEvent> fileEvents = Util.readBenchmarkQueryFromFile(f).keySet();
+			Set<NewsEvent> events = new HashSet<NewsEvent>();
 			for (BenchmarkEvent e : fileEvents) {
 				this.eventURIs.add(e.getEventURI());
-				this.events.add(new NewsEvent(e.getEventURI()));
+				events.add(new NewsEvent(e.getEventURI()));
 			}
-				
+			this.keywordsToEventsMap.put(benchmarkConfig.get(f), events);	
 		}
 	}
 	
@@ -363,11 +364,14 @@ public class RuntimeTester {
 		long averageTimePerEvent = 0;
 		
 		long t1 = System.currentTimeMillis();
-		filter.filterEvents(this.events);	
+		for (Map.Entry<List<Keyword>, Set<NewsEvent>> entry : this.keywordsToEventsMap.entrySet()) {
+			filter.filterEvents(entry.getValue(), entry.getKey());	
+		}
 		long t2 = System.currentTimeMillis();
 		
 		totalTime = t2 - t1;
-		averageTimePerEvent = totalTime / events.size();
+		
+		averageTimePerEvent = totalTime / this.eventURIs.size();
 		
 		if (log.isInfoEnabled())
 			log.info(String.format("%s - total: %d ms, per event: %d ms", filterName, totalTime, averageTimePerEvent));
