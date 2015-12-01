@@ -222,7 +222,16 @@
 				</bean>
 				<bean id="oneR" class="weka.attributeSelection.AttributeSelection">
 					<property name="evaluator">
-						<bean class="weka.attributeSelection.OneRAttributeEval" />
+						<bean class="weka.attributeSelection.FilteredAttributeEval">
+							<property name="filter">
+								<bean class="weka.filters.supervised.instance.SpreadSubsample">
+									<property name="distributionSpread" value="1" />
+								</bean>
+							</property>
+							<property name="attributeEvaluator">
+								<bean class="weka.attributeSelection.OneRAttributeEval" />
+							</property>
+						</bean>
 					</property>
 					<property name="search">
 						<bean class="weka.attributeSelection.Ranker">
@@ -247,7 +256,16 @@
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.WrapperSubsetEval">
 							<property name="classifier">
-								<bean class="weka.classifiers.trees.J48" />
+								<bean class="weka.classifiers.meta.FilteredClassifier">
+									<property name="filter">
+										<bean class="weka.filters.supervised.instance.SpreadSubsample">
+											<property name="distributionSpread" value="1" />
+										</bean>
+									</property>
+									<property name="classifier">
+										<bean class="weka.classifiers.trees.J48" />
+									</property>
+								</bean>
 							</property>
 						</bean>
 					</property>
@@ -262,7 +280,16 @@
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.WrapperSubsetEval">
 							<property name="classifier">
-								<bean class="weka.classifiers.bayes.NaiveBayes" />
+								<bean class="weka.classifiers.meta.FilteredClassifier">
+									<property name="filter">
+										<bean class="weka.filters.supervised.instance.SpreadSubsample">
+											<property name="distributionSpread" value="1" />
+										</bean>
+									</property>
+									<property name="classifier">
+										<bean class="weka.classifiers.bayes.NaiveBayes" />
+									</property>
+								</bean>
 							</property>
 						</bean>
 					</property>
@@ -375,10 +402,10 @@
 			</list>
 		</property>
 
-		<property name="outputMisclassified" value="true" />
+		<property name="outputMisclassified" value="false" />
 
-		<property name="doFeatureAnalysis" value="true" />
-		<property name="doCrossValidation" value="false" />
+		<property name="doFeatureAnalysis" value="false" />
+		<property name="doCrossValidation" value="true" />
 		<property name="doLeaveOneOut" value="false" />
 	</bean>
 
