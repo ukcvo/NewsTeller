@@ -13,48 +13,60 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="serverURL" value="http://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
-		<property name="maxNumberOfConnections" value="100"/>
+		<property name="maxNumberOfConnections" value="100" />
 	</bean>
 
 	<bean id="finder0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
-		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/finding_userQuery_Scope0.txt" />
-		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope0.txt" />
-		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope0.txt" />
+		<constructor-arg name="userQueryConfigFileName"
+			value="config/SPARQL/finding_userQuery_Scope0.txt" />
+		<constructor-arg name="userInterestConfigFileName"
+			value="config/SPARQL/finding_userInterest_Scope0.txt" />
+		<constructor-arg name="previousEventConfigFileName"
+			value="config/SPARQL/finding_previousEvent_Scope0.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="nThreads" value="1"/>
+		<property name="nThreads" value="1" />
 	</bean>
 
 	<bean id="finder1"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
-		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/finding_userQuery_Scope1.txt" />
-		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope1.txt" />
-		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope1.txt" />
+		<constructor-arg name="userQueryConfigFileName"
+			value="config/SPARQL/finding_userQuery_Scope1.txt" />
+		<constructor-arg name="userInterestConfigFileName"
+			value="config/SPARQL/finding_userInterest_Scope1.txt" />
+		<constructor-arg name="previousEventConfigFileName"
+			value="config/SPARQL/finding_previousEvent_Scope1.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="nThreads" value="1"/>
+		<property name="nThreads" value="1" />
 	</bean>
 
 	<bean id="finder2"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
-		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/finding_userQuery_Scope1.txt" />
-		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope1.txt" />
-		<constructor-arg name="previousEventConfigFileName"	value="config/SPARQL/finding_previousEvent_Scope1.txt" />
+		<constructor-arg name="userQueryConfigFileName"
+			value="config/SPARQL/finding_userQuery_Scope1.txt" />
+		<constructor-arg name="userInterestConfigFileName"
+			value="config/SPARQL/finding_userInterest_Scope1.txt" />
+		<constructor-arg name="previousEventConfigFileName"
+			value="config/SPARQL/finding_previousEvent_Scope1.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="nThreads" value="0"/>
+		<property name="nThreads" value="0" />
 	</bean>
 
-	<bean id="filter0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.DummyEventFilter">
+	<bean id="filter0"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.DummyEventFilter">
 	</bean>
 
-	<bean id="filter2a" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter">
-		<constructor-arg name="classifierFileName" value="resources/baseline.model"/>
-		<property name="features" ref="activeFeatureList"/>
+	<bean id="filter2a"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter">
+		<constructor-arg name="classifierFileName" value="resources/baseline.model" />
+		<property name="features" ref="activeFeatureList" />
 	</bean>
 
-	<bean id="filter2b" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
-		<constructor-arg name="classifierFileName" value="resources/baseline.model"/>
-		<property name="features" ref="activeFeatureList"/>
-		<property name="nThreads" value="100"/>
+	<bean id="filter2b"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
+		<constructor-arg name="classifierFileName" value="resources/baseline.model" />
+		<property name="features" ref="activeFeatureList" />
+		<property name="nThreads" value="100" />
 	</bean>
 
 	<bean id="relevanceScorer0"
@@ -95,7 +107,8 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.aggregating.SimpleAverageAggregator">
 	</bean>
 
-	<bean id="ranker0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.EventRanker">
+	<bean id="ranker0"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.EventRanker">
 		<property name="scoreAggregator" ref="relevanceAggregator" />
 	</bean>
 
@@ -107,7 +120,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
 		<property name="eventFinder" ref="finder0" />
 		<property name="eventFilter" ref="filter0" />
-		<property name="relevanceScorer" ref="relevanceScorer0"/>
+		<property name="relevanceScorer" ref="relevanceScorer0" />
 		<property name="eventRanker" ref="ranker0" />
 		<property name="eventSelector" ref="selector0" />
 	</bean>
@@ -116,7 +129,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
 		<property name="eventFinder" ref="finder1" />
 		<property name="eventFilter" ref="filter0" />
-		<property name="relevanceScorer" ref="relevanceScorer0"/>
+		<property name="relevanceScorer" ref="relevanceScorer0" />
 		<property name="eventRanker" ref="ranker0" />
 		<property name="eventSelector" ref="selector0" />
 	</bean>
@@ -125,7 +138,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
 		<property name="eventFinder" ref="finder1" />
 		<property name="eventFilter" ref="filter0" />
-		<property name="relevanceScorer" ref="relevanceScorer2"/>
+		<property name="relevanceScorer" ref="relevanceScorer2" />
 		<property name="eventRanker" ref="ranker0" />
 		<property name="eventSelector" ref="selector0" />
 	</bean>
@@ -152,7 +165,7 @@
 		<property name="generator" ref="generator0" />
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
-	
+
 	<bean id="newsTeller1"
 		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
 		<constructor-arg value="./config/logging-test.properties" />
@@ -171,13 +184,16 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
-	<bean id="runtimeTester" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RuntimeTester">
-		<constructor-arg name="configFileName" value="resources/benchmark/Scope 0.csv"/>
-		<property name="ksAdapter" ref="ksAdapter"/>
+	<bean id="runtimeTester"
+		class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RuntimeTester">
+		<constructor-arg name="configFileName"
+			value="resources/benchmark/Scope 0.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="stemmedKeywords">
 			<set>
 				<value>(-| |^|\\))album(\\w)*(-| |$|\\))</value>
-				<value>(-| |^|\\))artific(i|y)(\\w)* intellig(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))artific(i|y)(\\w)* intellig(\\w)*(-| |$|\\))
+				</value>
 				<value>(-| |^|\\))Berlin(\\w)*(-| |$|\\))</value>
 				<value>(-| |^|\\))champion(\\w)* leagu(\\w)*(-| |$|\\))</value>
 				<value>(-| |^|\\))chancellor(\\w)*(-| |$|\\))</value>
@@ -193,7 +209,8 @@
 				<value>(-| |^|\\))Edinburgh(\\w)*(-| |$|\\))</value>
 				<value>(-| |^|\\))Edmund(\\w)* Hillar(i|y)(\\w)*(-| |$|\\))</value>
 				<value>(-| |^|\\))erupt(\\w)*(-| |$|\\))</value>
-				<value>(-| |^|\\))European(\\w)* Space(\\w)* Agenc(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))European(\\w)* Space(\\w)* Agenc(\\w)*(-| |$|\\))
+				</value>
 				<value>(-| |^|\\))Facebook(\\w)*(-| |$|\\))</value>
 				<value>(-| |^|\\))Fukushima(\\w)*(-| |$|\\))</value>
 				<value>(-| |^|\\))Hawk(\\w)*(-| |$|\\))</value>
@@ -223,7 +240,7 @@
 				<value>(-| |^|\\))Watson(\\w)*(-| |$|\\))</value>
 			</set>
 		</property>
-		
+
 		<property name="sparqlFindingQueries">
 			<set>
 				<value>resources/SPARQL/finding/findByActor.qry</value>
@@ -231,7 +248,7 @@
 				<value>resources/SPARQL/finding/findByLabel.qry</value>
 			</set>
 		</property>
-		
+
 		<property name="sparqlFeatureQueries">
 			<set>
 				<value>resources/SPARQL/usability/A0.qry</value>
@@ -245,18 +262,19 @@
 				<value>resources/SPARQL/usability/hasTime.qry</value>
 				<value>resources/SPARQL/usability/isSpeechCognitive.qry</value>
 				<value>resources/SPARQL/usability/isStatement.qry</value>
-				<value>resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry</value>
+				<value>resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry
+				</value>
 				<value>resources/SPARQL/usability/numberOfFrames.qry</value>
 				<value>resources/SPARQL/usability/numberOfLinks.qry</value>
 				<value>resources/SPARQL/usability/numberOfMentions.qry</value>
 			</set>
 		</property>
-		
-		<property name="sequentialFinder" ref="finder1"/>
-		<property name="parallelFinder" ref="finder2"/>
+
+		<property name="sequentialFinder" ref="finder1" />
+		<property name="parallelFinder" ref="finder2" />
 		<property name="sequentialFilter" ref="filter2a" />
 		<property name="parallelFilter" ref="filter2b" />
-		
+
 		<property name="threadNumbers">
 			<list>
 				<value>1</value>
@@ -271,29 +289,33 @@
 				<value>1000</value>
 			</list>
 		</property>
-		
-		<property name="doKSAccessTests" value="false"/>
-		<property name="doSparqlFindingTests" value="false"/>
-		<property name="doSparqlFeatureTests" value="false"/>
-		<property name="doSequentialFinderTest" value="false"/>
-		<property name="doParallelFinderTest" value="false"/>
-		<property name="doParallelSparqlTest" value="false"/>
+
+		<property name="doKSAccessTests" value="false" />
+		<property name="doSparqlFindingTests" value="false" />
+		<property name="doSparqlFeatureTests" value="false" />
+		<property name="doSequentialFinderTest" value="false" />
+		<property name="doParallelFinderTest" value="false" />
+		<property name="doParallelSparqlTest" value="false" />
 		<property name="doSequentialFilterTest" value="false" />
 		<property name="doParallelFilterTest" value="true" />
-		
-		<property name="numberOfRepetitions" value="5"/>
-		
+
+		<property name="numberOfRepetitions" value="5" />
+
 	</bean>
 
-	<bean id="findingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FindingBenchmark" >
-		<constructor-arg name="configFileName" value="resources/benchmark/Scope 0.csv" />
+	<bean id="findingBenchmark"
+		class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FindingBenchmark">
+		<constructor-arg name="configFileName"
+			value="resources/benchmark/Scope 0.csv" />
 		<property name="finder" ref="finder2" />
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
-	<bean id="filteringBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FilteringBenchmark">
-		<constructor-arg name="instancesFileName" value="resources/benchmark/dataSet.xrff"/>
-		
+	<bean id="filteringBenchmark"
+		class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FilteringBenchmark">
+		<constructor-arg name="instancesFileName"
+			value="resources/benchmark/dataSet.xrff" />
+
 		<property name="filter">
 			<bean class="weka.filters.MultiFilter">
 				<property name="filters">
@@ -307,25 +329,25 @@
 							</property>
 						</bean>
 						<bean class="weka.filters.unsupervised.attribute.Copy">
-							<property name="attributeIndices" value="first-24"/>
+							<property name="attributeIndices" value="first-24" />
 						</bean>
 						<bean class="weka.filters.supervised.attribute.Discretize">
-							<property name="attributeIndices" value="first-24"/>
+							<property name="attributeIndices" value="first-24" />
 						</bean>
 					</array>
 				</property>
 			</bean>
 		</property>
-		
+
 		<property name="configurations">
 			<list>
 				<bean id="relief-f" class="weka.attributeSelection.AttributeSelection">
 					<property name="evaluator">
-						<bean class="weka.attributeSelection.ReliefFAttributeEval"/>
+						<bean class="weka.attributeSelection.ReliefFAttributeEval" />
 					</property>
 					<property name="search">
 						<bean class="weka.attributeSelection.Ranker">
-							<property name="numToSelect" value="7"/>
+							<property name="numToSelect" value="7" />
 						</bean>
 					</property>
 				</bean>
@@ -335,20 +357,20 @@
 					</property>
 					<property name="search">
 						<bean class="weka.attributeSelection.Ranker">
-							<property name="numToSelect" value="7"/>
+							<property name="numToSelect" value="7" />
 						</bean>
 					</property>
 				</bean>
 				<bean id="cfs" class="weka.attributeSelection.AttributeSelection">
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.CfsSubsetEval">
-							<property name="missingSeparate" value="true"/>
+							<property name="missingSeparate" value="true" />
 						</bean>
 					</property>
 					<property name="search">
 						<bean class="weka.attributeSelection.GreedyStepwise">
-							<property name="generateRanking" value="true"/>
-							<property name="numToSelect" value="7"/>
+							<property name="generateRanking" value="true" />
+							<property name="numToSelect" value="7" />
 						</bean>
 					</property>
 				</bean>
@@ -356,14 +378,14 @@
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.WrapperSubsetEval">
 							<property name="classifier">
-								<bean class="weka.classifiers.trees.J48"/>
+								<bean class="weka.classifiers.trees.J48" />
 							</property>
 						</bean>
 					</property>
 					<property name="search">
 						<bean class="weka.attributeSelection.GreedyStepwise">
-							<property name="generateRanking" value="true"/>
-							<property name="numToSelect" value="7"/>
+							<property name="generateRanking" value="true" />
+							<property name="numToSelect" value="7" />
 						</bean>
 					</property>
 				</bean>
@@ -371,47 +393,124 @@
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.WrapperSubsetEval">
 							<property name="classifier">
-								<bean class="weka.classifiers.bayes.NaiveBayes"/>
+								<bean class="weka.classifiers.bayes.NaiveBayes" />
 							</property>
 						</bean>
 					</property>
 					<property name="search">
 						<bean class="weka.attributeSelection.GreedyStepwise">
-							<property name="generateRanking" value="true"/>
-							<property name="numToSelect" value="7"/>
+							<property name="generateRanking" value="true" />
+							<property name="numToSelect" value="7" />
 						</bean>
 					</property>
 				</bean>
 			</list>
 		</property>
-		
+
 		<property name="classifiers">
 			<list>
-				<bean class="weka.classifiers.bayes.NaiveBayes"/>
-				<bean class="weka.classifiers.functions.Logistic"/>
-				<bean class="weka.classifiers.functions.MultilayerPerceptron">
-					<!-- TODO: try different hyperparameters? -->
-				</bean>
 				<bean class="weka.classifiers.meta.FilteredClassifier">
 					<property name="filter">
-						<bean class="weka.filters.unsupervised.attribute.Normalize"/>
+						<bean class="weka.filters.unsupervised.attribute.RemoveType">
+							<property name="options">
+								<array>
+									<value>-T</value>
+									<value>string</value>
+								</array>
+							</property>
+						</bean>
+					</property>
+					<property name="classifier">
+						<bean class="weka.classifiers.bayes.NaiveBayes" />
+					</property>
+				</bean>
+
+				<bean class="weka.classifiers.meta.FilteredClassifier">
+					<property name="filter">
+						<bean class="weka.filters.unsupervised.attribute.RemoveType">
+							<property name="options">
+								<array>
+									<value>-T</value>
+									<value>string</value>
+								</array>
+							</property>
+						</bean>
+					</property>
+					<property name="classifier">
+						<bean class="weka.classifiers.functions.Logistic" />
+					</property>
+				</bean>
+
+				<bean class="weka.classifiers.meta.FilteredClassifier">
+					<property name="filter">
+						<bean class="weka.filters.unsupervised.attribute.RemoveType">
+							<property name="options">
+								<array>
+									<value>-T</value>
+									<value>string</value>
+								</array>
+							</property>
+						</bean>
+					</property>
+					<property name="classifier">
+						<bean class="weka.classifiers.functions.MultilayerPerceptron">
+							<!-- TODO: try different hyperparameters? -->
+						</bean>
+					</property>
+				</bean>
+
+				<bean class="weka.classifiers.meta.FilteredClassifier">
+					<property name="filter">
+						<bean class="weka.filters.MultiFilter">
+							<property name="filters">
+								<array>
+									<bean class="weka.filters.unsupervised.attribute.RemoveType">
+										<property name="options">
+											<array>
+												<value>-T</value>
+												<value>string</value>
+											</array>
+										</property>
+									</bean>
+									<bean class="weka.filters.unsupervised.attribute.Normalize" />
+								</array>
+							</property>
+						</bean>
 					</property>
 					<property name="classifier">
 						<bean class="weka.classifiers.lazy.IBk">
-							<property name="crossValidate" value="true"/>
+							<property name="crossValidate" value="true" />
 							<!-- TODO: distance weighting? -->
 						</bean>
 					</property>
 				</bean>
-				<bean class="weka.classifiers.trees.J48">
-					<!-- TODO: try different hyperparameters? -->
+
+				<bean class="weka.classifiers.meta.FilteredClassifier">
+					<property name="filter">
+						<bean class="weka.filters.unsupervised.attribute.RemoveType">
+							<property name="options">
+								<array>
+									<value>-T</value>
+									<value>string</value>
+								</array>
+							</property>
+						</bean>
+					</property>
+					<property name="classifier">
+						<bean class="weka.classifiers.trees.J48">
+							<!-- TODO: try different hyperparameters? -->
+						</bean>
+					</property>
 				</bean>
+
 			</list>
 		</property>
-		
-		<property name="doFeatureAnalysis" value="true"/>
-		<property name="doCrossValidation" value="false"/>
-		<property name="doLeaveOneOut" value="false"/>
+
+		<property name="outputMisclassified" value="true" />
+
+		<property name="doFeatureAnalysis" value="false" />
+		<property name="doCrossValidation" value="true" />
+		<property name="doLeaveOneOut" value="false" />
 	</bean>
 
 </beans>

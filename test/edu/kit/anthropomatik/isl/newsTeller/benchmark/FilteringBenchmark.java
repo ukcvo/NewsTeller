@@ -17,7 +17,6 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.XRFFLoader;
@@ -45,6 +44,8 @@ public class FilteringBenchmark {
 
 	private boolean doLeaveOneOut;
 
+	private boolean outputMisclassified;
+	
 	public void setFilter(Filter filter) {
 		this.filter = filter;
 	}
@@ -69,6 +70,10 @@ public class FilteringBenchmark {
 		this.doLeaveOneOut = doLeaveOneOut;
 	}
 
+	public void setOutputMisclassified(boolean outputMisclassified) {
+		this.outputMisclassified = outputMisclassified;
+	}
+	
 	public FilteringBenchmark(String instancesFileName) {
 		try {
 			XRFFLoader loader = new XRFFLoader();
@@ -118,15 +123,37 @@ public class FilteringBenchmark {
 	// do a crossvalidation for all classifiers and output the results
 	private void crossValidation() {
 
+		int seed = 1337;
+		int numFolds = 10;
+		
 		for (Classifier classifier : this.classifiers) {
 			try {
 				Evaluation eval = new Evaluation(cleanedDataSet);
-				eval.crossValidateModel(classifier, cleanedDataSet, 10, new Random(1337));
+				// do crossvalidation manually in order to output misclassified examples
+				Random rand = new Random(seed);
+				Instances randData = new Instances(originalDataSet);
+				randData.randomize(rand);
+				randData.stratify(numFolds);
+				
+				for (int i = 0; i < numFolds; i++) {
+					Instances train = randData.trainCV(numFolds, i);
+					Instances test = randData.testCV(numFolds, i);
+					
+					Classifier c = Classifier.makeCopy(classifier);
+					c.buildClassifier(train);
+					eval.evaluateModel(c, test);
+					
+					if (outputMisclassified && log.isInfoEnabled()) {
+						outputMisclassifiedInstances(test, c);
+					}
+					
+				}
+								
 				if (log.isInfoEnabled()) {
 					log.info(classifier.getClass().getName());
 					logEvalResults(eval);
 				}
-
+				
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
 					log.error("Can't cross-validate classifier");
@@ -168,10 +195,27 @@ public class FilteringBenchmark {
 				evalLocal.evaluateModel(c, test);
 				if (log.isInfoEnabled())
 					log.info(evalLocal.toMatrixString(fileName));
+				
+				if (outputMisclassified && log.isInfoEnabled()) {
+					outputMisclassifiedInstances(test, c);
+				}
 			}
 
 			if (log.isInfoEnabled()) {
 				logEvalResults(eval);
+			}
+		}
+	}
+
+	private void outputMisclassifiedInstances(Instances test, Classifier c) throws Exception {
+		for (int i = 0; i < test.numInstances(); i++) {
+			Instance inst = test.instance(i);
+			double prediction = c.classifyInstance(inst);
+			if (inst.classValue() != prediction) {
+				if (inst.classValue() == inst.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE))
+					log.info(String.format("False Negative: %s", inst.toString())); 
+				else
+					log.info(String.format("False Positive: %s", inst.toString()));
 			}
 		}
 	}
@@ -185,8 +229,8 @@ public class FilteringBenchmark {
 		filter.setInputFormat(dataSet);
 		
 		Instances result = Filter.useFilter(dataSet, filter);
-		result.deleteAttributeAt(result.numAttributes() - 1);
-		result.deleteAttributeAt(result.numAttributes() - 1);
+		//result.deleteAttributeAt(result.numAttributes() - 1);
+		//result.deleteAttributeAt(result.numAttributes() - 1);
 		
 		return result;
 	}
@@ -220,16 +264,11 @@ public class FilteringBenchmark {
 			crossValidation();
 		if (this.doLeaveOneOut)
 			leaveOneOut();
-		
-//		for (int i = 0; i < originalDataSet.numInstances(); i++) {
-//			Instance inst = originalDataSet.instance(i);
-//			if ((inst.value(originalDataSet.attribute("keywordStemInText")) < 0.5) && (inst.value(inst.classAttribute()) == originalDataSet.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE)))
-//				System.out.println(inst.stringValue(originalDataSet.attribute(Util.ATTRIBUTE_URI)));
-//		}
+
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
+		System.setProperty("java.util.logging.config.file", "./config/logging-benchmark.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
 			log = LogFactory.getLog(FilteringBenchmark.class);

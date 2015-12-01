@@ -98,7 +98,7 @@ public class FindingBenchmark {
 	}
 	
 	public static void main(String[] args) {
-		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
+		System.setProperty("java.util.logging.config.file", "./config/logging-benchmark.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
 			log = LogFactory.getLog(FindingBenchmark.class);

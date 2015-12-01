@@ -3,3 +3,5 @@
 /log-test.txt
 /target/
 /log.txt.1
+/log-benchmark.txt
+/log-test.txt.lck
