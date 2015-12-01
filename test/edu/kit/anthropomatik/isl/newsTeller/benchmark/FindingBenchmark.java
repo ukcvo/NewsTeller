@@ -106,7 +106,7 @@ public class FindingBenchmark {
 			e.printStackTrace();
 		}
 
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/benchmark.xml");
 		FindingBenchmark test = (FindingBenchmark) context.getBean("findingBenchmark");
 		((AbstractApplicationContext) context).close();
 		

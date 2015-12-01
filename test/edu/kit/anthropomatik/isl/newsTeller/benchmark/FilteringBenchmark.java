@@ -276,7 +276,7 @@ public class FilteringBenchmark {
 			e.printStackTrace();
 		}
 
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/benchmark.xml");
 		FilteringBenchmark test = (FilteringBenchmark) context.getBean("filteringBenchmark");
 		((AbstractApplicationContext) context).close();
 

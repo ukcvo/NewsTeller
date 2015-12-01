@@ -431,7 +431,7 @@ public class RuntimeTester {
 			e.printStackTrace();
 		}
 
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/benchmark.xml");
 		RuntimeTester test = (RuntimeTester) context.getBean("runtimeTester");
 		((AbstractApplicationContext) context).close();
 		
