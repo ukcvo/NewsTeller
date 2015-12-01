@@ -131,8 +131,7 @@
 				<value>resources/SPARQL/usability/hasTime.qry</value>
 				<value>resources/SPARQL/usability/isSpeechCognitive.qry</value>
 				<value>resources/SPARQL/usability/isStatement.qry</value>
-				<value>resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry
-				</value>
+				<value>resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry</value>
 				<value>resources/SPARQL/usability/numberOfFrames.qry</value>
 				<value>resources/SPARQL/usability/numberOfLinks.qry</value>
 				<value>resources/SPARQL/usability/numberOfMentions.qry</value>
@@ -210,6 +209,7 @@
 
 		<property name="configurations">
 			<list>
+
 				<bean id="relief-f" class="weka.attributeSelection.AttributeSelection">
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.ReliefFAttributeEval" />
@@ -220,6 +220,7 @@
 						</bean>
 					</property>
 				</bean>
+
 				<bean id="oneR" class="weka.attributeSelection.AttributeSelection">
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.FilteredAttributeEval">
@@ -239,6 +240,28 @@
 						</bean>
 					</property>
 				</bean>
+
+				<bean id="gainRatio" class="weka.attributeSelection.AttributeSelection">
+					<property name="evaluator">
+						<bean class="weka.attributeSelection.GainRatioAttributeEval">
+
+							<property name="missingMerge" value="false" />
+						</bean>
+					</property>
+					<property name="search">
+						<bean class="weka.attributeSelection.Ranker">
+							<property name="numToSelect" value="10" />
+						</bean>
+					</property>
+				</bean>
+
+				<!-- <bean id="svm" class="weka.attributeSelection.AttributeSelection"> 
+					<property name="evaluator"> <bean class="weka.attributeSelection.FilteredAttributeEval"> 
+					<property name="filter"> <bean class="weka.filters.unsupervised.attribute.Remove"> 
+					<property name="attributeIndices" value="first-24" /> </bean> </property> 
+					<property name="attributeEvaluator"> <bean class="weka.attributeSelection.SVMAttributeEval" 
+					/> </property> </bean> </property> <property name="search"> <bean class="weka.attributeSelection.Ranker"> 
+					<property name="numToSelect" value="10" /> </bean> </property> </bean> -->
 				<bean id="cfs" class="weka.attributeSelection.AttributeSelection">
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.CfsSubsetEval">
@@ -252,6 +275,7 @@
 						</bean>
 					</property>
 				</bean>
+
 				<bean id="wrapperDT" class="weka.attributeSelection.AttributeSelection">
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.WrapperSubsetEval">
@@ -276,6 +300,7 @@
 						</bean>
 					</property>
 				</bean>
+
 				<bean id="wrapperNB" class="weka.attributeSelection.AttributeSelection">
 					<property name="evaluator">
 						<bean class="weka.attributeSelection.WrapperSubsetEval">
@@ -300,6 +325,7 @@
 						</bean>
 					</property>
 				</bean>
+
 			</list>
 		</property>
 
@@ -404,8 +430,8 @@
 
 		<property name="outputMisclassified" value="false" />
 
-		<property name="doFeatureAnalysis" value="false" />
-		<property name="doCrossValidation" value="true" />
+		<property name="doFeatureAnalysis" value="true" />
+		<property name="doCrossValidation" value="false" />
 		<property name="doLeaveOneOut" value="false" />
 	</bean>
 
