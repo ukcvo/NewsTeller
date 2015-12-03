@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+	<!-- filters -->	
+
+	<bean id="removeStringFilter" class="weka.filters.unsupervised.attribute.RemoveType">
+		<property name="options">
+			<array>
+				<value>-T</value>
+				<value>string</value>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="spreadFilter" class="weka.filters.supervised.instance.SpreadSubsample">
+		<property name="distributionSpread" value="1" />
+	</bean>
+
+	<bean id="analysisFilter" class="weka.filters.MultiFilter">
+		<property name="filters">
+			<array>
+				<ref bean="removeStringFilter" />
+				<bean class="weka.filters.unsupervised.attribute.Copy">
+					<property name="attributeIndices" value="first-24" />
+				</bean>
+				<bean class="weka.filters.supervised.attribute.Discretize">
+					<property name="attributeIndices" value="first-24" />
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="classifierFilter" class="weka.filters.MultiFilter">
+		<property name="filters">
+			<array>
+				<bean class="weka.filters.supervised.attribute.Discretize">
+					<property name="attributeIndices" value="9,7,11,19,12,3,18" />
+				</bean>
+				<bean class="weka.filters.unsupervised.attribute.Remove">
+					<property name="attributeIndices" value="9,7,5,11,19,12,3,18,25,26,27" />
+					<property name="invertSelection" value="true" />
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="handPickedFilter" class="weka.filters.MultiFilter">
+		<property name="filters">
+			<array>
+				<bean class="weka.filters.supervised.attribute.Discretize">
+					<property name="attributeIndices" value="3,15,17,18,19,21,24" />
+				</bean>
+				<bean class="weka.filters.unsupervised.attribute.Remove">
+					<property name="attributeIndices" value="3,10,15,17,18,19,21,24,25,26,27" />
+					<property name="invertSelection" value="true" />
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- feature selection -->
+
+	<bean id="relief-f" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.ReliefFAttributeEval" />
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.Ranker">
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="oneR" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.FilteredAttributeEval">
+				<property name="filter" ref="spreadFilter" />
+				<property name="attributeEvaluator">
+					<bean class="weka.attributeSelection.OneRAttributeEval" />
+				</property>
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.Ranker">
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="gainRatio" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.GainRatioAttributeEval">
+
+				<property name="missingMerge" value="false" />
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.Ranker">
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- <bean id="svm" class="weka.attributeSelection.AttributeSelection"> 
+		<property name="evaluator"> <bean class="weka.attributeSelection.FilteredAttributeEval"> 
+		<property name="filter"> <bean class="weka.filters.unsupervised.attribute.Remove"> 
+		<property name="attributeIndices" value="first-24" /> </bean> </property> 
+		<property name="attributeEvaluator"> <bean class="weka.attributeSelection.SVMAttributeEval" 
+		/> </property> </bean> </property> <property name="search"> <bean class="weka.attributeSelection.Ranker"> 
+		<property name="numToSelect" value="10" /> </bean> </property> </bean> -->
+
+	<bean id="cfs" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.CfsSubsetEval">
+				<property name="missingSeparate" value="true" />
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.GreedyStepwise">
+				<property name="generateRanking" value="false" />
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="wrapperDT" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="classifier">
+					<bean class="weka.classifiers.meta.FilteredClassifier">
+						<property name="filter" ref="spreadFilter" />
+						<property name="classifier">
+							<bean class="weka.classifiers.trees.J48" />
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.GreedyStepwise">
+				<property name="generateRanking" value="false" />
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="wrapperNB" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="classifier">
+					<bean class="weka.classifiers.meta.FilteredClassifier">
+						<property name="filter" ref="spreadFilter" />
+						<property name="classifier">
+							<bean class="weka.classifiers.bayes.NaiveBayes" />
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.GreedyStepwise">
+				<property name="generateRanking" value="false" />
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- classifiers -->
+
+	<bean id="naiveBayes" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.bayes.NaiveBayes" />
+		</property>
+	</bean>
+
+	<bean id="logistic" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.Logistic" />
+		</property>
+	</bean>
+
+	<bean id="MLP" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<!-- TODO: try different hyperparameters? -->
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="kNN" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.MultiFilter">
+				<property name="filters">
+					<array>
+						<ref bean="removeStringFilter" />
+						<bean class="weka.filters.unsupervised.attribute.Normalize" />
+					</array>
+				</property>
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.lazy.IBk">
+				<property name="crossValidate" value="true" />
+				<!-- TODO: distance weighting? -->
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="decisionTree" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.J48">
+				<!-- TODO: try different hyperparameters? -->
+			</bean>
+		</property>
+	</bean>
+
+</beans>

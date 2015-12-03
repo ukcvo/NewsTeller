@@ -17,6 +17,7 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.meta.FilteredClassifier;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.XRFFLoader;
@@ -30,12 +31,16 @@ public class FilteringBenchmark {
 
 	private Instances originalDataSet;
 
-	private Instances cleanedDataSet; // w/o String attributes
+	private Instances analysisDataSet; // w/o String attributes
 
-	private Filter filter;
+	private Instances classificationDataSet; // only w/ relevant attributes
+	
+	private Filter analysisFilter;
 
 	private List<AttributeSelection> configurations;
 
+	private Filter classifierFilter;
+	
 	private List<Classifier> classifiers;
 
 	private boolean doFeatureAnalysis;
@@ -46,14 +51,18 @@ public class FilteringBenchmark {
 
 	private boolean outputMisclassified;
 	
-	public void setFilter(Filter filter) {
-		this.filter = filter;
+	public void setAnalysisFilter(Filter analysisFilter) {
+		this.analysisFilter = analysisFilter;
 	}
 
 	public void setConfigurations(List<AttributeSelection> configurations) {
 		this.configurations = configurations;
 	}
 
+	public void setClassifierFilter(Filter classifierFilter) {
+		this.classifierFilter = classifierFilter;
+	}
+	
 	public void setClassifiers(List<Classifier> classifiers) {
 		this.classifiers = classifiers;
 	}
@@ -87,24 +96,12 @@ public class FilteringBenchmark {
 		}
 	}
 
-	private void filterDataSet() {
-		try {
-			this.filter.setInputFormat(originalDataSet);
-			this.cleanedDataSet = Filter.useFilter(this.originalDataSet, this.filter);
-		} catch (Exception e) {
-			if (log.isErrorEnabled())
-				log.error("Can't apply filter");
-			if (log.isDebugEnabled())
-				log.debug("Can't apply filter", e);
-		}
-	}
-	
 	// region featureAnalysis
 	private void featureAnalysis() {
 
 		for (AttributeSelection config : configurations) {
 			try {
-				config.SelectAttributes(cleanedDataSet);
+				config.SelectAttributes(analysisDataSet);
 				if (log.isInfoEnabled())
 					log.info(config.toResultsString());
 
@@ -128,10 +125,10 @@ public class FilteringBenchmark {
 		
 		for (Classifier classifier : this.classifiers) {
 			try {
-				Evaluation eval = new Evaluation(cleanedDataSet);
+				Evaluation eval = new Evaluation(classificationDataSet);
 				// do crossvalidation manually in order to output misclassified examples
 				Random rand = new Random(seed);
-				Instances randData = new Instances(originalDataSet);
+				Instances randData = new Instances(classificationDataSet);
 				randData.randomize(rand);
 				randData.stratify(numFolds);
 				
@@ -150,7 +147,7 @@ public class FilteringBenchmark {
 				}
 								
 				if (log.isInfoEnabled()) {
-					log.info(classifier.getClass().getName());
+					logClassifierName(classifier, "(cross-validation)");
 					logEvalResults(eval);
 				}
 				
@@ -170,12 +167,12 @@ public class FilteringBenchmark {
 
 		StringToNominal filter = new StringToNominal();
 		filter.setAttributeRange("last");
-		filter.setInputFormat(originalDataSet);
-		Instances modifedDataSet = Filter.useFilter(originalDataSet, filter);
+		filter.setInputFormat(classificationDataSet);
+		Instances modifedDataSet = Filter.useFilter(classificationDataSet, filter);
 
 		for (Classifier classifier : classifiers) {
 			if (log.isInfoEnabled())
-				log.info(classifier.getClass().getName() + "(leaveOneOut)");
+				logClassifierName(classifier, "(leaveOneOut)");
 			
 			Evaluation eval = new Evaluation(modifedDataSet);
 			@SuppressWarnings("unchecked")
@@ -206,37 +203,9 @@ public class FilteringBenchmark {
 			}
 		}
 	}
-
-	private void outputMisclassifiedInstances(Instances test, Classifier c) throws Exception {
-		for (int i = 0; i < test.numInstances(); i++) {
-			Instance inst = test.instance(i);
-			double prediction = c.classifyInstance(inst);
-			if (inst.classValue() != prediction) {
-				if (inst.classValue() == inst.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE))
-					log.info(String.format("False Negative: %s", inst.toString())); 
-				else
-					log.info(String.format("False Positive: %s", inst.toString()));
-			}
-		}
-	}
-
-	private Instances filterByFileName(Instances dataSet, Integer fileNameIdx, boolean isTest) throws Exception {
-		
-		RemoveWithValues filter = new RemoveWithValues();
-		filter.setAttributeIndex("last");
-		filter.setNominalIndices(fileNameIdx.toString());
-		filter.setInvertSelection(isTest);
-		filter.setInputFormat(dataSet);
-		
-		Instances result = Filter.useFilter(dataSet, filter);
-		//result.deleteAttributeAt(result.numAttributes() - 1);
-		//result.deleteAttributeAt(result.numAttributes() - 1);
-		
-		return result;
-	}
-	
 	// endregion
 
+	// region helper methods
 	private void logEvalResults(Evaluation eval) throws Exception {
 		// compute balanced accuracy
 		int positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE);
@@ -250,9 +219,60 @@ public class FilteringBenchmark {
 		// output
 		log.info(eval.toSummaryString());
 		log.info(String.format("balanced accuracy: %f", balancedAcc));
+		log.info(String.format("Cohen's kappa: %f", eval.kappa()));
+		log.info(String.format("AUC for usable: %f", eval.areaUnderROC(positiveClassIdx)));
 		log.info(eval.toClassDetailsString());
 		log.info(eval.toMatrixString());
 	}
+	
+	private void logClassifierName(Classifier classifier, String additionalMsg) {
+		Class<? extends Classifier> classifierClass = classifier.getClass();
+		if (classifierClass.equals(FilteredClassifier.class))
+			classifierClass = ((FilteredClassifier) classifier).getClassifier().getClass();
+		log.info(classifierClass.getName() + additionalMsg);
+	}
+	
+	private void outputMisclassifiedInstances(Instances test, Classifier c) throws Exception {
+		for (int i = 0; i < test.numInstances(); i++) {
+			Instance inst = test.instance(i);
+			double prediction = c.classifyInstance(inst);
+			if (inst.classValue() != prediction) {
+				if (inst.classValue() == inst.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE))
+					log.info(String.format("False Negative: %s", inst.toString())); 
+				else
+					log.info(String.format("False Positive: %s", inst.toString()));
+			}
+		}
+	}
+	
+	private Instances filterByFileName(Instances dataSet, Integer fileNameIdx, boolean isTest) throws Exception {
+		
+		RemoveWithValues filter = new RemoveWithValues();
+		filter.setAttributeIndex("last");
+		filter.setNominalIndices(fileNameIdx.toString());
+		filter.setInvertSelection(isTest);
+		filter.setInputFormat(dataSet);
+		
+		Instances result = Filter.useFilter(dataSet, filter);
+		
+		return result;
+	}
+	
+	private void filterDataSet() {
+		try {
+			this.analysisFilter.setInputFormat(originalDataSet);
+			this.analysisDataSet = Filter.useFilter(this.originalDataSet, this.analysisFilter);
+			
+			this.classifierFilter.setInputFormat(originalDataSet);
+			this.classificationDataSet = Filter.useFilter(this.originalDataSet, this.classifierFilter);
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't apply filter");
+			if (log.isDebugEnabled())
+				log.debug("Can't apply filter", e);
+		}
+	}
+	//endregion
 	
 	public void run() throws Exception {
 		
