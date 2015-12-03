@@ -179,6 +179,15 @@
 		</property>
 	</bean>
 
+	<bean id="naiveBayes2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.bayes.NaiveBayes">
+				<property name="useKernelEstimator" value="true"/>
+			</bean>
+		</property>
+	</bean>
+
 	<bean id="logistic" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
@@ -189,8 +198,25 @@
 	<bean id="MLP" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron" />
+		</property>
+	</bean>
+
+	<bean id="MLP2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
 			<bean class="weka.classifiers.functions.MultilayerPerceptron">
-				<!-- TODO: try different hyperparameters? -->
+				<property name="validationSetSize" value="10"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="MLP3" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10"/>
+				<property name="decay" value="true"/>
 			</bean>
 		</property>
 	</bean>
@@ -208,8 +234,38 @@
 		</property>
 		<property name="classifier">
 			<bean class="weka.classifiers.lazy.IBk">
-				<property name="crossValidate" value="true" />
-				<!-- TODO: distance weighting? -->
+				<property name="options">
+					<array>
+						<value>-K</value>
+						<value>10</value>	<!-- max k = 10 -->
+						<value>-X</value>	<!-- find optimal k doing cross-validation -->
+					</array>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="kNN2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.MultiFilter">
+				<property name="filters">
+					<array>
+						<ref bean="removeStringFilter" />
+						<bean class="weka.filters.unsupervised.attribute.Normalize" />
+					</array>
+				</property>
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.lazy.IBk">
+				<property name="options">
+					<array>
+						<value>-K</value>
+						<value>10</value>	<!-- max k = 10 -->
+						<value>-X</value>	<!-- find optimal k doing cross-validation -->
+						<value>-I</value>	<!-- inverse exponential distance weighting -->
+					</array>
+				</property>
 			</bean>
 		</property>
 	</bean>
@@ -217,10 +273,149 @@
 	<bean id="decisionTree" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
+			<bean class="weka.classifiers.trees.J48" />
+		</property>
+	</bean>
+	
+	<bean id="decisionTree2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
 			<bean class="weka.classifiers.trees.J48">
-				<!-- TODO: try different hyperparameters? -->
+				<property name="reducedErrorPruning" value="true" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="decisionTree3" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.J48">
+				<property name="unpruned" value="true" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="decisionTable" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.rules.DecisionTable">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>auc</value>	<!-- use area under curve as evaluation measure -->
+					</array>
+				</property>
 			</bean>
 		</property>
 	</bean>
 
+	<bean id="decisionTable2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.rules.DecisionTable">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>auc</value>	<!-- use area under curve as evaluation measure -->
+						<value>-I</value>	<!-- use kNN instead of majority class -->
+					</array>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="ripper" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.rules.JRip" />
+		</property>
+	</bean>
+
+	<bean id="ripper2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.rules.JRip">
+				<property name="usePruning" value="false" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="svm" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.SMO" />
+		</property>
+	</bean>
+
+	<bean id="svm2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.SMO">
+				<property name="buildLogisticModels" value="true" />
+				<property name="numFolds" value="5" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="svm3" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.SMO">
+				<property name="c" value="2.0"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="bayesNet" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.bayes.BayesNet" />
+		</property>
+	</bean>
+
+	<bean id="bayesNet2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.bayes.BayesNet">
+				<property name="estimator">
+					<bean class="weka.classifiers.bayes.net.estimate.BayesNetEstimator" />
+				</property>
+				<property name="searchAlgorithm">
+					<bean class="weka.classifiers.bayes.net.search.local.SimulatedAnnealing" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="cart" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.SimpleCart" />
+		</property>
+	</bean>
+	
+	<bean id="cart2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.SimpleCart">
+				<property name="useOneSE" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="randomForest" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest" />
+		</property>
+	</bean>
+	
+	<bean id="randomForest2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numTrees" value="20" />
+			</bean>
+		</property>
+	</bean>
 </beans>
