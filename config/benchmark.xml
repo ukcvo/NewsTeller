@@ -198,15 +198,34 @@
 			</list>
 		</property>
 
-		<property name="classifierFilter" ref="classifierFilter"/>
+		<property name="classifierFilter" ref="analysisFilter"/>
 		
 		<property name="classifiers">
 			<list>
 				<ref bean="naiveBayes"/>
+				<ref bean="naiveBayes2"/>
+				<ref bean="bayesNet"/>
+				<ref bean="bayesNet2"/>
 				<ref bean="logistic"/>
 				<ref bean="MLP"/>
+				<ref bean="MLP2"/>
+				<ref bean="MLP3"/>
+				<ref bean="svm"/>
+				<ref bean="svm2"/>
+				<ref bean="svm3"/>
 				<ref bean="kNN"/>
+				<ref bean="kNN2"/>
+				<ref bean="decisionTable"/>
+				<ref bean="decisionTable2"/>
+				<ref bean="ripper"/>
+				<ref bean="ripper2"/>
 				<ref bean="decisionTree"/>
+				<ref bean="decisionTree2"/>
+				<ref bean="decisionTree3"/>
+				<ref bean="cart"/>
+				<ref bean="cart2"/>
+				<ref bean="randomForest"/>
+				<ref bean="randomForest2"/>
 			</list>
 		</property>
 

@@ -106,14 +106,6 @@
 		</property>
 	</bean>
 
-	<!-- <bean id="svm" class="weka.attributeSelection.AttributeSelection"> 
-		<property name="evaluator"> <bean class="weka.attributeSelection.FilteredAttributeEval"> 
-		<property name="filter"> <bean class="weka.filters.unsupervised.attribute.Remove"> 
-		<property name="attributeIndices" value="first-24" /> </bean> </property> 
-		<property name="attributeEvaluator"> <bean class="weka.attributeSelection.SVMAttributeEval" 
-		/> </property> </bean> </property> <property name="search"> <bean class="weka.attributeSelection.Ranker"> 
-		<property name="numToSelect" value="10" /> </bean> </property> </bean> -->
-
 	<bean id="cfs" class="weka.attributeSelection.AttributeSelection">
 		<property name="evaluator">
 			<bean class="weka.attributeSelection.CfsSubsetEval">
@@ -188,6 +180,27 @@
 		</property>
 	</bean>
 
+	<bean id="bayesNet" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.bayes.BayesNet" />
+		</property>
+	</bean>
+
+	<bean id="bayesNet2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.bayes.BayesNet">
+				<property name="estimator">
+					<bean class="weka.classifiers.bayes.net.estimate.BayesNetEstimator" />
+				</property>
+				<property name="searchAlgorithm">
+					<bean class="weka.classifiers.bayes.net.search.local.SimulatedAnnealing" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
 	<bean id="logistic" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
@@ -217,6 +230,32 @@
 			<bean class="weka.classifiers.functions.MultilayerPerceptron">
 				<property name="validationSetSize" value="10"/>
 				<property name="decay" value="true"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="svm" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.SMO" />
+		</property>
+	</bean>
+
+	<bean id="svm2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.SMO">
+				<property name="buildLogisticModels" value="true" />
+				<property name="numFolds" value="5" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="svm3" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.SMO">
+				<property name="c" value="2.0"/>
 			</bean>
 		</property>
 	</bean>
@@ -270,31 +309,6 @@
 		</property>
 	</bean>
 
-	<bean id="decisionTree" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.trees.J48" />
-		</property>
-	</bean>
-	
-	<bean id="decisionTree2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.trees.J48">
-				<property name="reducedErrorPruning" value="true" />
-			</bean>
-		</property>
-	</bean>
-	
-	<bean id="decisionTree3" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.trees.J48">
-				<property name="unpruned" value="true" />
-			</bean>
-		</property>
-	</bean>
-	
 	<bean id="decisionTable" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
@@ -340,53 +354,31 @@
 		</property>
 	</bean>
 
-	<bean id="svm" class="weka.classifiers.meta.FilteredClassifier">
+	<bean id="decisionTree" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
-			<bean class="weka.classifiers.functions.SMO" />
+			<bean class="weka.classifiers.trees.J48" />
 		</property>
 	</bean>
-
-	<bean id="svm2" class="weka.classifiers.meta.FilteredClassifier">
+	
+	<bean id="decisionTree2" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
-			<bean class="weka.classifiers.functions.SMO">
-				<property name="buildLogisticModels" value="true" />
-				<property name="numFolds" value="5" />
+			<bean class="weka.classifiers.trees.J48">
+				<property name="reducedErrorPruning" value="true" />
 			</bean>
 		</property>
 	</bean>
-
-	<bean id="svm3" class="weka.classifiers.meta.FilteredClassifier">
+	
+	<bean id="decisionTree3" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
-			<bean class="weka.classifiers.functions.SMO">
-				<property name="c" value="2.0"/>
+			<bean class="weka.classifiers.trees.J48">
+				<property name="unpruned" value="true" />
 			</bean>
 		</property>
 	</bean>
-
-	<bean id="bayesNet" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.bayes.BayesNet" />
-		</property>
-	</bean>
-
-	<bean id="bayesNet2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.bayes.BayesNet">
-				<property name="estimator">
-					<bean class="weka.classifiers.bayes.net.estimate.BayesNetEstimator" />
-				</property>
-				<property name="searchAlgorithm">
-					<bean class="weka.classifiers.bayes.net.search.local.SimulatedAnnealing" />
-				</property>
-			</bean>
-		</property>
-	</bean>
-
+	
 	<bean id="cart" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
