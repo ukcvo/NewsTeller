@@ -201,32 +201,32 @@
 		<property name="classifierFilter" ref="analysisFilter"/>
 		
 		<property name="classifiers">
-			<list>
-				<ref bean="naiveBayes"/>
-				<ref bean="naiveBayes2"/>
-				<ref bean="bayesNet"/>
-				<ref bean="bayesNet2"/>
-				<ref bean="logistic"/>
-				<ref bean="MLP"/>
-				<ref bean="MLP2"/>
-				<ref bean="MLP3"/>
-				<ref bean="svm"/>
-				<ref bean="svm2"/>
-				<ref bean="svm3"/>
-				<ref bean="kNN"/>
-				<ref bean="kNN2"/>
-				<ref bean="decisionTable"/>
-				<ref bean="decisionTable2"/>
-				<ref bean="ripper"/>
-				<ref bean="ripper2"/>
-				<ref bean="decisionTree"/>
-				<ref bean="decisionTree2"/>
-				<ref bean="decisionTree3"/>
-				<ref bean="cart"/>
-				<ref bean="cart2"/>
-				<ref bean="randomForest"/>
-				<ref bean="randomForest2"/>
-			</list>
+			<map>
+				<entry key="naiveBayes" value-ref="naiveBayes" />
+				<entry key="naiveBayesKernel" value-ref="naiveBayes2"/>
+				<entry key="bayesNet" value-ref="bayesNet"/>
+				<entry key="bayesNetAnnealing" value-ref="bayesNet2"/>
+				<entry key="logistic" value-ref="logistic"/>
+				<entry key="MLP" value-ref="MLP"/>
+				<entry key="MLPValidationSet" value-ref="MLP2"/>
+				<entry key="MLPValidationSetDecay" value-ref="MLP3"/>
+				<entry key="svm" value-ref="svm"/>
+				<entry key="svmLogistic" value-ref="svm2"/>
+				<entry key="svmComplexity2" value-ref="svm3"/>
+				<entry key="kNN" value-ref="kNN"/>
+				<entry key="kNNDistanceWeighting" value-ref="kNN2"/>
+				<entry key="decisionTable" value-ref="decisionTable"/>
+				<entry key="decisionTableKNN" value-ref="decisionTable2"/>
+				<entry key="ripper" value-ref="ripper"/>
+				<entry key="ripperUnpruned" value-ref="ripper2"/>
+				<entry key="decisionTree" value-ref="decisionTree"/>
+				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2"/>
+				<entry key="decisionTreeUnpruned" value-ref="decisionTree3"/>
+				<entry key="cart" value-ref="cart"/>
+				<entry key="cartOneSE" value-ref="cart2"/>
+				<entry key="randomForest100" value-ref="randomForest"/>
+				<entry key="randomForest20" value-ref="randomForest2"/>
+			</map>
 		</property>
 
 		<property name="outputMisclassified" value="false" />
@@ -234,6 +234,8 @@
 		<property name="doFeatureAnalysis" value="false" />
 		<property name="doCrossValidation" value="true" />
 		<property name="doLeaveOneOut" value="false" />
+		
+		<property name="outputFileName" value="evaluation.csv" />
 	</bean>
 
 </beans>

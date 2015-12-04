@@ -3,6 +3,7 @@ package edu.kit.anthropomatik.isl.newsTeller.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jumpmind.symmetric.csv.CsvReader;
+import org.jumpmind.symmetric.csv.CsvWriter;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 import org.w3c.dom.Document;
@@ -40,13 +42,13 @@ public class Util {
 	private static Log log = LogFactory.getLog(Util.class);
 
 	private static SnowballStemmer stemmer = null;
-	
+
 	private static SnowballStemmer getStemmer() {
 		if (stemmer == null)
 			stemmer = new englishStemmer();
 		return stemmer;
 	}
-	
+
 	public static final String PLACEHOLDER_EVENT = "*e*";
 	public static final String PLACEHOLDER_KEYWORD = "*k*";
 	public static final String PLACEHOLDER_HISTORICAL_EVENT = "*h*";
@@ -60,13 +62,19 @@ public class Util {
 	public static final String VARIABLE_RESOURCE = "resource";
 	public static final String VARIABLE_LABEL = "label";
 	public static final String VARIABLE_ENTITY = "entity";
-	
+
 	public static final String COLUMN_NAME_URI = "URI";
 	public static final String COLUMN_NAME_USABILITY_RATING = "usabilityRating";
 	public static final String COLUMN_NAME_RELEVANCE_RANK = "relevanceRank";
 	public static final String COLUMN_NAME_FILENAME = "filename";
 	public static final String COLUMN_NAME_KEYWORD = "keyword_";
 	public static final String COLUMN_NAME_VALUE = "value";
+	public static final String COLUMN_NAME_CLASSIFIER_NAME = "classifier";
+	public static final String COLUMN_NAME_BALANCED_ACCURACY = "BA";
+	public static final String COLUMN_NAME_KAPPA = "kappa";
+	public static final String COLUMN_NAME_AUC = "AUC";
+	public static final String COLUMN_NAME_FSCORE = "F";
+	
 
 	public static final String CLASS_LABEL_NEGATIVE = "false";
 	public static final String CLASS_LABEL_POSITIVE = "true";
@@ -79,7 +87,6 @@ public class Util {
 
 	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 5;
 
-	
 	// private constructor to prevent instantiation
 	private Util() {
 	}
@@ -112,8 +119,7 @@ public class Util {
 			in.close();
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
-				log.error(
-						String.format("could not read file, returning empty string: '%s'", file.toString()));
+				log.error(String.format("could not read file, returning empty string: '%s'", file.toString()));
 			if (log.isDebugEnabled())
 				log.debug("cannnot read file", e);
 		}
@@ -151,7 +157,8 @@ public class Util {
 	}
 
 	/**
-	 * Reads the given config file, interprets each line as file name and reads all these files.
+	 * Reads the given config file, interprets each line as file name and reads
+	 * all these files.
 	 */
 	public static List<String> readQueriesFromConfigFile(String configFileName) {
 		if (log.isTraceEnabled())
@@ -173,7 +180,7 @@ public class Util {
 	}
 	// endregion
 
-	// region reading csv files
+	// region reading/writing csv files
 	/**
 	 * Reads a benchmark query csv file and returns a mapping from URI to
 	 * Double.
@@ -246,57 +253,97 @@ public class Util {
 
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
-				log.error(String.format("could not read benchmark config file, returning empty result: '%s'",
-						fileName.toString()));
+				log.error(String.format("could not read benchmark config file, returning empty result: '%s'", fileName));
 			if (log.isDebugEnabled())
 				log.debug("cannnot read file", e);
 		}
 
 		return result;
 	}
+
+	/**
+	 * Writes the given evaluation results to a csv file, using the specified column names.
+	 */
+	public static void writeEvaluationToCsv(String fileName, List<String> columnNames, Map<String, Map<String, Double>> evaluationResults) {
+
+		try {
+			CsvWriter out = new CsvWriter(new FileWriter(fileName,false), ';');
+
+			out.write(Util.COLUMN_NAME_CLASSIFIER_NAME);
+			for (String header : columnNames)
+				out.write(header);
+			out.endRecord();
+			
+			for (Map.Entry<String, Map<String, Double>> entry : evaluationResults.entrySet()) {
+				String classifierName = entry.getKey();
+				Map<String, Double> map = entry.getValue();
+				
+				out.write(classifierName);
+				for (String header : columnNames)
+					out.write(map.get(header).toString());
+				
+				out.endRecord();
+			}
+			
+			out.close();
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error(String.format("could not write evaluation file: '%s'", fileName));
+			if (log.isDebugEnabled())
+				log.debug("cannnot write file", e);
+		}
+
+	}
 	// endregion
 
 	// region reading XML files
 	/**
-	 * Parses a single propBank file and returns the minimum set of arguments necessary. Returns empty set on failure.
+	 * Parses a single propBank file and returns the minimum set of arguments
+	 * necessary. Returns empty set on failure.
 	 */
 	public static Set<Set<String>> parsePropBankFrame(File file) {
 		try {
-//			Set<Set<String>> result = new HashSet<Set<String>>();
-			
+			// Set<Set<String>> result = new HashSet<Set<String>>();
+
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse(file);
 			doc.getDocumentElement().normalize();
-			
+
 			NodeList rolesets = doc.getElementsByTagName("roleset");
-			
+
 			Set<Set<String>> hypothesisList = new HashSet<Set<String>>();
-			
+
 			// iterate over "rolesets", i.e. meanings of the word
 			for (int i = 0; i < rolesets.getLength(); i++) {
 				Set<String> roleSetHypothesis = new HashSet<String>();
 				Element roleset = (Element) rolesets.item(i);
-				
-				// collect arguments from definition (baseline in case there are no examples)
+
+				// collect arguments from definition (baseline in case there are
+				// no examples)
 				NodeList roles = roleset.getElementsByTagName("role");
 				for (int j = 0; j < roles.getLength(); j++) {
 					Element role = (Element) roles.item(j);
 					String nString = role.getAttribute("n");
 					boolean isInt = true;
 					int n = -1;
-					try { n = Integer.parseInt(nString); } catch (NumberFormatException e) { isInt = false;}
+					try {
+						n = Integer.parseInt(nString);
+					} catch (NumberFormatException e) {
+						isInt = false;
+					}
 					if (isInt)
 						roleSetHypothesis.add(String.format("A%d", n));
 				}
 				hypothesisList.add(roleSetHypothesis);
-				
+
 				// iterate over all examples
 				NodeList examples = roleset.getElementsByTagName("example");
 				for (int j = 0; j < examples.getLength(); j++) {
 					Set<String> exampleHypothesis = new HashSet<String>();
 					Element example = (Element) examples.item(j);
-					
+
 					// look for arguments used in example
 					NodeList args = example.getElementsByTagName("arg");
 					for (int k = 0; k < args.getLength(); k++) {
@@ -304,45 +351,50 @@ public class Util {
 						String nString = arg.getAttribute("n");
 						boolean isInt = true;
 						int n = -1;
-						try { n = Integer.parseInt(nString); } catch (NumberFormatException e) { isInt = false;}
+						try {
+							n = Integer.parseInt(nString);
+						} catch (NumberFormatException e) {
+							isInt = false;
+						}
 						if (isInt)
 							exampleHypothesis.add(String.format("A%d", n));
 					}
 					hypothesisList.add(exampleHypothesis);
-					
+
 				}
 			}
-			
-//			for (Set<String> hypothesis : hypothesisList) {
-//				boolean shouldBeKept = true;
-//				for (Set<String> otherHypothesis : hypothesisList) {
-//					if ((otherHypothesis.size() < hypothesis.size())  && (hypothesis.containsAll(otherHypothesis)))
-//						shouldBeKept = false;
-//				}
-//				if (shouldBeKept)
-//					result.add(hypothesis);
-//			}
-//			
-//			return result;
+
+			// for (Set<String> hypothesis : hypothesisList) {
+			// boolean shouldBeKept = true;
+			// for (Set<String> otherHypothesis : hypothesisList) {
+			// if ((otherHypothesis.size() < hypothesis.size()) &&
+			// (hypothesis.containsAll(otherHypothesis)))
+			// shouldBeKept = false;
+			// }
+			// if (shouldBeKept)
+			// result.add(hypothesis);
+			// }
+			//
+			// return result;
 			return hypothesisList;
-			
+
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
 				log.error(String.format("can't process XML file '%s'", file.getName()));
 			if (log.isDebugEnabled())
 				log.debug("XML error", e);
-			
+
 			return new HashSet<Set<String>>();
 		}
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	// either collect them manually, or just read map from file
 	public static Map<String, Set<Set<String>>> parseAllPropBankFrames(String folderName, boolean forceConstruction) {
-		
+
 		Map<String, Set<Set<String>>> result = new HashMap<String, Set<Set<String>>>();
-		
+
 		File map = new File(folderName + ".map");
 		if (!forceConstruction && map.exists()) {
 			try {
@@ -350,45 +402,49 @@ public class Util {
 				return result;
 			} catch (Exception e) {
 				if (log.isWarnEnabled())
-					log.warn("wanted to load map file, but failed... constructing it manually"); 
+					log.warn("wanted to load map file, but failed... constructing it manually");
 				if (log.isDebugEnabled())
 					log.debug("failure to read map", e);
 			}
 		}
-		
+
 		File folder = new File(folderName);
-		
+
 		for (File file : folder.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".xml");
-			} }))
-		 {
+			}
+		})) {
 			String fileName = file.getName();
-			String word = fileName.substring(0, fileName.indexOf('-')); // "contradict-v.xml" --> "contradict"
+			String word = fileName.substring(0, fileName.indexOf('-')); // "contradict-v.xml"
+																		// -->
+																		// "contradict"
 			Set<Set<String>> fileResult = parsePropBankFrame(file);
-			
+
 			if (!result.containsKey(word))
 				result.put(word, fileResult);
 			else {
 				Set<Set<String>> allWordResults = result.get(word);
 				allWordResults.addAll(fileResult);
-				
-//				Set<Set<String>> mergedWordResults = new HashSet<Set<String>>();
-//				for (Set<String> hypothesis : allWordResults) {
-//					boolean shouldBeKept = true;
-//					for (Set<String> otherHypothesis : allWordResults) {
-//						if ((otherHypothesis.size() < hypothesis.size())  && (hypothesis.containsAll(otherHypothesis)))
-//							shouldBeKept = false;
-//					}
-//					if (shouldBeKept)
-//						mergedWordResults.add(hypothesis);
-//				}
-//				
-//				result.put(word, mergedWordResults);
+
+				// Set<Set<String>> mergedWordResults = new
+				// HashSet<Set<String>>();
+				// for (Set<String> hypothesis : allWordResults) {
+				// boolean shouldBeKept = true;
+				// for (Set<String> otherHypothesis : allWordResults) {
+				// if ((otherHypothesis.size() < hypothesis.size()) &&
+				// (hypothesis.containsAll(otherHypothesis)))
+				// shouldBeKept = false;
+				// }
+				// if (shouldBeKept)
+				// mergedWordResults.add(hypothesis);
+				// }
+				//
+				// result.put(word, mergedWordResults);
 				result.put(word, allWordResults);
 			}
 		}
-		
+
 		try {
 			SerializationHelper.write(folderName + ".map", result);
 		} catch (Exception e) {
@@ -397,15 +453,16 @@ public class Util {
 			if (log.isDebugEnabled())
 				log.debug("failure to write map", e);
 		}
-		
+
 		return result;
 	}
-	
+
 	// endregion
-	
+
 	// region other stuff
 	/**
-	 * Parses an XML-style double like ""2"^^<http://www.w3.org/2001/XMLSchema#short>".
+	 * Parses an XML-style double like ""2
+	 * "^^<http://www.w3.org/2001/XMLSchema#short>".
 	 */
 	public static double parseXMLDouble(String str) {
 		String substring;
@@ -419,37 +476,38 @@ public class Util {
 				log.warn(String.format("error parsing double: '%s'", str));
 			result = 0;
 		}
-			
+
 		return result;
 	}
-	
+
 	/**
-	 * Calculate the average value of the given collection. Returns NaN for empty collection.
+	 * Calculate the average value of the given collection. Returns NaN for
+	 * empty collection.
 	 */
 	public static double averageFromCollection(Collection<Double> collection) {
 		if (collection.isEmpty())
 			return Double.NaN;
-		
+
 		double sum = 0;
 		for (Double d : collection)
 			sum += d;
 		return sum / collection.size();
 	}
-	
+
 	public static void stemKeyword(Keyword keyword) {
 		SnowballStemmer stemmer = getStemmer();
 		stemmer.setCurrent(keyword.getWord());
 		stemmer.stem();
 		String stemmedKeyword = stemmer.getCurrent();
 		keyword.setStem(stemmedKeyword);
-		
+
 		String[] tokens = stemmedKeyword.split(" ");
 		StringBuilder builder = new StringBuilder();
 		builder.append("(-| |^|\\\\()");
 		for (int i = 0; i < tokens.length; i++) {
 			String token = tokens[i];
 			if (token.endsWith("i"))
-				token = token.substring(0, token.length()-1) + "(i|y)";
+				token = token.substring(0, token.length() - 1) + "(i|y)";
 			builder.append(token);
 			builder.append("(\\\\w)*");
 			if (i < tokens.length - 1)

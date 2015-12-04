@@ -2,8 +2,11 @@ package edu.kit.anthropomatik.isl.newsTeller.benchmark;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.LogManager;
 
@@ -17,7 +20,6 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.meta.FilteredClassifier;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.XRFFLoader;
@@ -41,7 +43,7 @@ public class FilteringBenchmark {
 
 	private Filter classifierFilter;
 	
-	private List<Classifier> classifiers;
+	private Map<String, Classifier> classifiers;
 
 	private boolean doFeatureAnalysis;
 
@@ -50,6 +52,8 @@ public class FilteringBenchmark {
 	private boolean doLeaveOneOut;
 
 	private boolean outputMisclassified;
+	
+	private String outputFileName;
 	
 	public void setAnalysisFilter(Filter analysisFilter) {
 		this.analysisFilter = analysisFilter;
@@ -63,7 +67,7 @@ public class FilteringBenchmark {
 		this.classifierFilter = classifierFilter;
 	}
 	
-	public void setClassifiers(List<Classifier> classifiers) {
+	public void setClassifiers(Map<String, Classifier> classifiers) {
 		this.classifiers = classifiers;
 	}
 
@@ -81,6 +85,10 @@ public class FilteringBenchmark {
 
 	public void setOutputMisclassified(boolean outputMisclassified) {
 		this.outputMisclassified = outputMisclassified;
+	}
+	
+	public void setOutputFileName(String outputFileName) {
+		this.outputFileName = outputFileName;
 	}
 	
 	public FilteringBenchmark(String instancesFileName) {
@@ -123,8 +131,18 @@ public class FilteringBenchmark {
 		int seed = 1337;
 		int numFolds = 10;
 		
-		for (Classifier classifier : this.classifiers) {
+		List<String> columnNames = new ArrayList<String>();
+		columnNames.add(Util.COLUMN_NAME_BALANCED_ACCURACY);
+		columnNames.add(Util.COLUMN_NAME_KAPPA);
+		columnNames.add(Util.COLUMN_NAME_AUC);
+		columnNames.add(Util.COLUMN_NAME_FSCORE);
+		
+		Map<String, Map<String, Double>> overallResultMap = new HashMap<String, Map<String,Double>>();
+		
+		for (Map.Entry<String, Classifier> entry : this.classifiers.entrySet()) {
 			try {
+				String classifierName = entry.getKey();
+				Classifier classifier = entry.getValue();
 				Evaluation eval = new Evaluation(classificationDataSet);
 				// do crossvalidation manually in order to output misclassified examples
 				Random rand = new Random(seed);
@@ -147,9 +165,18 @@ public class FilteringBenchmark {
 				}
 								
 				if (log.isInfoEnabled()) {
-					logClassifierName(classifier, "(cross-validation)");
+					log.info(String.format("%s (cross-validation)", classifierName));
 					logEvalResults(eval);
 				}
+				
+				int positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE);
+				Map<String, Double> classifierMap = new HashMap<String, Double>();
+				classifierMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, getBalancedAcc(eval, positiveClassIdx));
+				classifierMap.put(Util.COLUMN_NAME_KAPPA, eval.kappa());
+				classifierMap.put(Util.COLUMN_NAME_AUC, eval.areaUnderROC(positiveClassIdx));
+				classifierMap.put(Util.COLUMN_NAME_FSCORE, eval.fMeasure(positiveClassIdx));
+				
+				overallResultMap.put(classifierName, classifierMap);
 				
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
@@ -158,6 +185,8 @@ public class FilteringBenchmark {
 					log.debug("Can't cross-validate classifier", e);
 			}
 		}
+		
+		Util.writeEvaluationToCsv(this.outputFileName, columnNames, overallResultMap);
 	}
 	// endregion
 
@@ -170,9 +199,13 @@ public class FilteringBenchmark {
 		filter.setInputFormat(classificationDataSet);
 		Instances modifedDataSet = Filter.useFilter(classificationDataSet, filter);
 
-		for (Classifier classifier : classifiers) {
+		for (Map.Entry<String, Classifier> entry : this.classifiers.entrySet()) {
+			
+			String classifierName = entry.getKey();
+			Classifier classifier = entry.getValue();
+			
 			if (log.isInfoEnabled())
-				logClassifierName(classifier, "(leaveOneOut)");
+				log.info(String.format("%d (leave one out)", classifierName));
 			
 			Evaluation eval = new Evaluation(modifedDataSet);
 			@SuppressWarnings("unchecked")
@@ -209,12 +242,7 @@ public class FilteringBenchmark {
 	private void logEvalResults(Evaluation eval) throws Exception {
 		// compute balanced accuracy
 		int positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE);
-		double tp = eval.numTruePositives(positiveClassIdx);
-		double tn = eval.numTrueNegatives(positiveClassIdx);
-		double fp = eval.numFalsePositives(positiveClassIdx);
-		double fn = eval.numFalseNegatives(positiveClassIdx);
-		
-		double balancedAcc = ((0.5 * tp) / (tp + fn)) + ((0.5 * tn) / (tn + fp));
+		double balancedAcc = getBalancedAcc(eval, positiveClassIdx);
 		
 		// output
 		log.info(eval.toSummaryString());
@@ -224,12 +252,16 @@ public class FilteringBenchmark {
 		log.info(eval.toClassDetailsString());
 		log.info(eval.toMatrixString());
 	}
-	
-	private void logClassifierName(Classifier classifier, String additionalMsg) {
-		Class<? extends Classifier> classifierClass = classifier.getClass();
-		if (classifierClass.equals(FilteredClassifier.class))
-			classifierClass = ((FilteredClassifier) classifier).getClassifier().getClass();
-		log.info(classifierClass.getName() + additionalMsg);
+
+	private double getBalancedAcc(Evaluation eval, int positiveClassIdx) {
+		
+		double tp = eval.numTruePositives(positiveClassIdx);
+		double tn = eval.numTrueNegatives(positiveClassIdx);
+		double fp = eval.numFalsePositives(positiveClassIdx);
+		double fn = eval.numFalseNegatives(positiveClassIdx);
+		
+		double balancedAcc = ((0.5 * tp) / (tp + fn)) + ((0.5 * tn) / (tn + fp));
+		return balancedAcc;
 	}
 	
 	private void outputMisclassifiedInstances(Instances test, Classifier c) throws Exception {

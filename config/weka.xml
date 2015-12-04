@@ -8,6 +8,27 @@
 
 	<!-- filters -->	
 
+	<bean id="balancingFilter" class="weka.filters.MultiFilter">
+		<property name="filters">
+			<array>
+				<ref bean="removeStringFilter"/>
+				<ref bean="balancingSpreadFilter"/>
+				<!-- 
+				
+				
+				 -->
+			</array>
+		</property>
+	</bean>
+
+	<bean id="balancingSMOTEFilter" class="weka.filters.supervised.instance.SMOTE">
+		<property name="percentage" value="100" />
+	</bean>
+
+	<bean id="balancingSpreadFilter" class="weka.filters.supervised.instance.SpreadSubsample">
+		<property name="distributionSpread" value="2" />
+	</bean>
+
 	<bean id="removeStringFilter" class="weka.filters.unsupervised.attribute.RemoveType">
 		<property name="options">
 			<array>
@@ -165,7 +186,7 @@
 	<!-- classifiers -->
 
 	<bean id="naiveBayes" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.bayes.NaiveBayes" />
 		</property>
@@ -181,19 +202,16 @@
 	</bean>
 
 	<bean id="bayesNet" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.bayes.BayesNet" />
 		</property>
 	</bean>
 
 	<bean id="bayesNet2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.bayes.BayesNet">
-				<property name="estimator">
-					<bean class="weka.classifiers.bayes.net.estimate.BayesNetEstimator" />
-				</property>
 				<property name="searchAlgorithm">
 					<bean class="weka.classifiers.bayes.net.search.local.SimulatedAnnealing" />
 				</property>
@@ -202,21 +220,21 @@
 	</bean>
 
 	<bean id="logistic" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.Logistic" />
 		</property>
 	</bean>
 
 	<bean id="MLP" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.MultilayerPerceptron" />
 		</property>
 	</bean>
 
 	<bean id="MLP2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.MultilayerPerceptron">
 				<property name="validationSetSize" value="10"/>
@@ -225,7 +243,7 @@
 	</bean>
 
 	<bean id="MLP3" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.MultilayerPerceptron">
 				<property name="validationSetSize" value="10"/>
@@ -235,14 +253,14 @@
 	</bean>
 
 	<bean id="svm" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.SMO" />
 		</property>
 	</bean>
 
 	<bean id="svm2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.SMO">
 				<property name="buildLogisticModels" value="true" />
@@ -252,7 +270,7 @@
 	</bean>
 
 	<bean id="svm3" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.SMO">
 				<property name="c" value="2.0"/>
@@ -265,7 +283,7 @@
 			<bean class="weka.filters.MultiFilter">
 				<property name="filters">
 					<array>
-						<ref bean="removeStringFilter" />
+						<ref bean="balancingFilter" />
 						<bean class="weka.filters.unsupervised.attribute.Normalize" />
 					</array>
 				</property>
@@ -289,7 +307,7 @@
 			<bean class="weka.filters.MultiFilter">
 				<property name="filters">
 					<array>
-						<ref bean="removeStringFilter" />
+						<ref bean="balancingFilter" />
 						<bean class="weka.filters.unsupervised.attribute.Normalize" />
 					</array>
 				</property>
@@ -310,7 +328,7 @@
 	</bean>
 
 	<bean id="decisionTable" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.rules.DecisionTable">
 				<property name="options">
@@ -324,7 +342,7 @@
 	</bean>
 
 	<bean id="decisionTable2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.rules.DecisionTable">
 				<property name="options">
@@ -339,14 +357,14 @@
 	</bean>
 
 	<bean id="ripper" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.rules.JRip" />
 		</property>
 	</bean>
 
 	<bean id="ripper2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.rules.JRip">
 				<property name="usePruning" value="false" />
@@ -355,14 +373,14 @@
 	</bean>
 
 	<bean id="decisionTree" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.J48" />
 		</property>
 	</bean>
 	
 	<bean id="decisionTree2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.J48">
 				<property name="reducedErrorPruning" value="true" />
@@ -371,7 +389,7 @@
 	</bean>
 	
 	<bean id="decisionTree3" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.J48">
 				<property name="unpruned" value="true" />
@@ -380,14 +398,14 @@
 	</bean>
 	
 	<bean id="cart" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.SimpleCart" />
 		</property>
 	</bean>
 	
 	<bean id="cart2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.SimpleCart">
 				<property name="useOneSE" value="true" />
@@ -396,14 +414,14 @@
 	</bean>
 
 	<bean id="randomForest" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest" />
 		</property>
 	</bean>
 	
 	<bean id="randomForest2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="removeStringFilter" />
+		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
 				<property name="numTrees" value="20" />
