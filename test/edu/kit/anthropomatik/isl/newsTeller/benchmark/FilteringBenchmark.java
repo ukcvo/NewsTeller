@@ -20,6 +20,7 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.meta.MetaCost;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.XRFFLoader;
@@ -45,6 +46,8 @@ public class FilteringBenchmark {
 	
 	private Map<String, Classifier> classifiers;
 
+	private Classifier costSensitiveWrapper;
+	
 	private boolean doFeatureAnalysis;
 
 	private boolean doCrossValidation;
@@ -53,8 +56,11 @@ public class FilteringBenchmark {
 
 	private boolean outputMisclassified;
 	
+	private boolean useCostSensitiveWrapper;
+	
 	private String outputFileName;
 	
+	// region setters
 	public void setAnalysisFilter(Filter analysisFilter) {
 		this.analysisFilter = analysisFilter;
 	}
@@ -71,6 +77,10 @@ public class FilteringBenchmark {
 		this.classifiers = classifiers;
 	}
 
+	public void setCostSensitiveWrapper(Classifier costSensitiveWrapper) {
+		this.costSensitiveWrapper = costSensitiveWrapper;
+	}
+	
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
 		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
@@ -87,9 +97,14 @@ public class FilteringBenchmark {
 		this.outputMisclassified = outputMisclassified;
 	}
 	
+	public void setUseCostSensitiveWrapper(boolean useCostSensitiveWrapper) {
+		this.useCostSensitiveWrapper = useCostSensitiveWrapper;
+	}
+	
 	public void setOutputFileName(String outputFileName) {
 		this.outputFileName = outputFileName;
 	}
+	//endregion
 	
 	public FilteringBenchmark(String instancesFileName) {
 		try {
@@ -154,7 +169,15 @@ public class FilteringBenchmark {
 					Instances train = randData.trainCV(numFolds, i);
 					Instances test = randData.testCV(numFolds, i);
 					
-					Classifier c = Classifier.makeCopy(classifier);
+					Classifier c;
+					if (this.useCostSensitiveWrapper) {
+						MetaCost outer = (MetaCost) Classifier.makeCopy(this.costSensitiveWrapper);
+						Classifier inner = Classifier.makeCopy(classifier);
+						outer.setClassifier(inner);
+						c = outer;
+					} else {
+						c = Classifier.makeCopy(classifier);
+					}
 					c.buildClassifier(train);
 					eval.evaluateModel(c, test);
 					
@@ -219,7 +242,15 @@ public class FilteringBenchmark {
 				Instances train = filterByFileName(modifedDataSet, idx, false);
 				Instances test = filterByFileName(modifedDataSet, idx, true);
 
-				Classifier c = Classifier.makeCopy(classifier);
+				Classifier c;
+				if (this.useCostSensitiveWrapper) {
+					MetaCost outer = (MetaCost) Classifier.makeCopy(this.costSensitiveWrapper);
+					Classifier inner = Classifier.makeCopy(classifier);
+					outer.setClassifier(inner);
+					c = outer;
+				} else {
+					c = Classifier.makeCopy(classifier);
+				}
 				c.buildClassifier(train);
 				eval.evaluateModel(c, test);
 				evalLocal.evaluateModel(c, test);

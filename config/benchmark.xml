@@ -205,11 +205,17 @@
 				<entry key="naiveBayes" value-ref="naiveBayes" />
 				<entry key="naiveBayesKernel" value-ref="naiveBayes2"/>
 				<entry key="bayesNet" value-ref="bayesNet"/>
+				<!-- 
 				<entry key="bayesNetAnnealing" value-ref="bayesNet2"/>
+				 -->
 				<entry key="logistic" value-ref="logistic"/>
+				<!-- 
 				<entry key="MLP" value-ref="MLP"/>
+				-->
 				<entry key="MLPValidationSet" value-ref="MLP2"/>
+				<!-- 
 				<entry key="MLPValidationSetDecay" value-ref="MLP3"/>
+				 -->
 				<entry key="svm" value-ref="svm"/>
 				<entry key="svmLogistic" value-ref="svm2"/>
 				<entry key="svmComplexity2" value-ref="svm3"/>
@@ -229,7 +235,10 @@
 			</map>
 		</property>
 
+		<property name="costSensitiveWrapper" ref="costSensitiveWrapper" />
+
 		<property name="outputMisclassified" value="false" />
+		<property name="useCostSensitiveWrapper" value="true" />
 
 		<property name="doFeatureAnalysis" value="false" />
 		<property name="doCrossValidation" value="true" />

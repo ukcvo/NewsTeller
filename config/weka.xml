@@ -12,21 +12,20 @@
 		<property name="filters">
 			<array>
 				<ref bean="removeStringFilter"/>
-				<ref bean="balancingSpreadFilter"/>
 				<!-- 
-				
-				
+				<ref bean="balancingSMOTEFilter"/>
+				<ref bean="balancingSpreadFilter"/>
 				 -->
 			</array>
 		</property>
 	</bean>
 
 	<bean id="balancingSMOTEFilter" class="weka.filters.supervised.instance.SMOTE">
-		<property name="percentage" value="100" />
+		<property name="percentage" value="550" />
 	</bean>
 
 	<bean id="balancingSpreadFilter" class="weka.filters.supervised.instance.SpreadSubsample">
-		<property name="distributionSpread" value="2" />
+		<property name="distributionSpread" value="1" />
 	</bean>
 
 	<bean id="removeStringFilter" class="weka.filters.unsupervised.attribute.RemoveType">
@@ -80,6 +79,16 @@
 					<property name="attributeIndices" value="3,10,15,17,18,19,21,24,25,26,27" />
 					<property name="invertSelection" value="true" />
 				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- cost sensitivity wrapper -->
+	<bean id="costSensitiveWrapper" class="weka.classifiers.meta.MetaCost">
+		<property name="options">
+			<array>
+				<value>-cost-matrix</value>
+				<value>"[0.0 1.0; 2.0 0.0]"</value>	<!-- the cost matrix (row-wise) -->
 			</array>
 		</property>
 	</bean>
