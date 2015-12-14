@@ -18,6 +18,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.attributeSelection.AttributeSelection;
+import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.meta.MetaCost;
@@ -171,12 +172,12 @@ public class FilteringBenchmark {
 					
 					Classifier c;
 					if (this.useCostSensitiveWrapper) {
-						MetaCost outer = (MetaCost) Classifier.makeCopy(this.costSensitiveWrapper);
-						Classifier inner = Classifier.makeCopy(classifier);
+						MetaCost outer = (MetaCost) AbstractClassifier.makeCopy(this.costSensitiveWrapper);
+						Classifier inner = AbstractClassifier.makeCopy(classifier);
 						outer.setClassifier(inner);
 						c = outer;
 					} else {
-						c = Classifier.makeCopy(classifier);
+						c = AbstractClassifier.makeCopy(classifier);
 					}
 					c.buildClassifier(train);
 					eval.evaluateModel(c, test);
@@ -231,8 +232,7 @@ public class FilteringBenchmark {
 				log.info(String.format("%d (leave one out)", classifierName));
 			
 			Evaluation eval = new Evaluation(modifedDataSet);
-			@SuppressWarnings("unchecked")
-			Enumeration<String> enumeration = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
+			Enumeration<Object> enumeration = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
 			while (enumeration.hasMoreElements()) {
 				Evaluation evalLocal = new Evaluation(modifedDataSet);
 				
@@ -244,12 +244,12 @@ public class FilteringBenchmark {
 
 				Classifier c;
 				if (this.useCostSensitiveWrapper) {
-					MetaCost outer = (MetaCost) Classifier.makeCopy(this.costSensitiveWrapper);
-					Classifier inner = Classifier.makeCopy(classifier);
+					MetaCost outer = (MetaCost) AbstractClassifier.makeCopy(this.costSensitiveWrapper);
+					Classifier inner = AbstractClassifier.makeCopy(classifier);
 					outer.setClassifier(inner);
 					c = outer;
 				} else {
-					c = Classifier.makeCopy(classifier);
+					c = AbstractClassifier.makeCopy(classifier);
 				}
 				c.buildClassifier(train);
 				eval.evaluateModel(c, test);

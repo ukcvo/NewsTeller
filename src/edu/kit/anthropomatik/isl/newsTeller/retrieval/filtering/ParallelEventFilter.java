@@ -18,6 +18,7 @@ import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.classifiers.Classifier;
+import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
@@ -77,7 +78,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 				values[i] = f.getValue(event.getEventURI(), userQuery);
 			}
 			
-			Instance example = new Instance(1.0, values);
+			Instance example = new DenseInstance(1.0, values);
 			
 			map.putIfAbsent(event, example);
 		}

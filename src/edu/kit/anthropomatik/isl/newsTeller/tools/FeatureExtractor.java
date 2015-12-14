@@ -25,7 +25,7 @@ import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.core.Attribute;
-import weka.core.FastVector;
+import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.XRFFSaver;
@@ -79,22 +79,22 @@ public class FeatureExtractor {
 	}
 
 	private Instances createDataSetSkeleton() {
-		FastVector attributes = new FastVector();
+		ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 		
 		for (UsabilityFeature feature : this.features) {
 			// TODO: check for numeric vs. nominal & deal w/ it (FastVector labels = new FastVector(); Attribute attr= new Attribute(name,labels);)
 			Attribute attr = new Attribute(feature.getName());
-			attributes.addElement(attr);
+			attributes.add(attr);
 		}
 		
-		FastVector classLabels = new FastVector();
-		classLabels.addElement(Util.CLASS_LABEL_POSITIVE);
-		classLabels.addElement(Util.CLASS_LABEL_NEGATIVE);
-		attributes.addElement(new Attribute(Util.ATTRIBUTE_USABLE, classLabels));
+		ArrayList<String> classLabels = new ArrayList<String>();
+		classLabels.add(Util.CLASS_LABEL_POSITIVE);
+		classLabels.add(Util.CLASS_LABEL_NEGATIVE);
+		attributes.add(new Attribute(Util.ATTRIBUTE_USABLE, classLabels));
 		
 		if (this.doAddEventInformation) {
-			attributes.addElement(new Attribute(Util.ATTRIBUTE_URI, (FastVector) null));
-			attributes.addElement(new Attribute(Util.ATTRIBUTE_FILE, (FastVector) null));
+			attributes.add(new Attribute(Util.ATTRIBUTE_URI, (ArrayList<String>) null));
+			attributes.add(new Attribute(Util.ATTRIBUTE_FILE, (ArrayList<String>) null));
 		}
 		
 		int numberOfExpectedExamples = this.benchmark.size();
@@ -152,7 +152,7 @@ public class FeatureExtractor {
 				values[features.size() + 2] = this.fileIndex;
 			}
 			
-			Instance example = new Instance(1.0, values);
+			Instance example = new DenseInstance(1.0, values);
 			
 			return example;
 		}

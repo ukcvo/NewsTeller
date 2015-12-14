@@ -12,16 +12,17 @@
 		<property name="filters">
 			<array>
 				<ref bean="removeStringFilter"/>
+				<ref bean="balancingSpreadFilter"/>
 				<!-- 
 				<ref bean="balancingSMOTEFilter"/>
-				<ref bean="balancingSpreadFilter"/>
+				
 				 -->
 			</array>
 		</property>
 	</bean>
 
 	<bean id="balancingSMOTEFilter" class="weka.filters.supervised.instance.SMOTE">
-		<property name="percentage" value="550" />
+		<property name="percentage" value="100" />
 	</bean>
 
 	<bean id="balancingSpreadFilter" class="weka.filters.supervised.instance.SpreadSubsample">
@@ -88,7 +89,7 @@
 		<property name="options">
 			<array>
 				<value>-cost-matrix</value>
-				<value>"[0.0 1.0; 2.0 0.0]"</value>	<!-- the cost matrix (row-wise) -->
+				<value>"[0.0 4.0; 1.0 0.0]"</value>	<!-- the cost matrix (row-wise): [TP FN; FP TN] -->
 			</array>
 		</property>
 	</bean>
