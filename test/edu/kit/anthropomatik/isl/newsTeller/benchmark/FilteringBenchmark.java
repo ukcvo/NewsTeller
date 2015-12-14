@@ -58,6 +58,8 @@ public class FilteringBenchmark {
 
 	private boolean doEasyEnsemble;
 	
+	private boolean doBalanceCascade;
+	
 	private boolean outputMisclassified;
 	
 	private boolean useCostSensitiveWrapper;
@@ -101,6 +103,10 @@ public class FilteringBenchmark {
 
 	public void setDoEasyEnsemble(boolean doEasyEnsemble) {
 		this.doEasyEnsemble = doEasyEnsemble;
+	}
+	
+	public void setDoBalanceCascade(boolean doBalanceCascade) {
+		this.doBalanceCascade = doBalanceCascade;
 	}
 	
 	public void setOutputMisclassified(boolean outputMisclassified) {
@@ -383,6 +389,117 @@ public class FilteringBenchmark {
 	}
 	// endregion
 	
+	// region balanceCascade
+	private void balanceCascade() {
+			
+			int seed = 1337;
+			int numFolds = 10;
+			
+			List<String> columnNames = new ArrayList<String>();
+			columnNames.add(Util.COLUMN_NAME_BALANCED_ACCURACY);
+			columnNames.add(Util.COLUMN_NAME_KAPPA);
+			columnNames.add(Util.COLUMN_NAME_AUC);
+			columnNames.add(Util.COLUMN_NAME_FSCORE);
+			
+			Map<String, Map<String, Double>> overallResultMap = new HashMap<String, Map<String,Double>>();
+			
+			for (Map.Entry<String, Classifier> entry : this.classifiers.entrySet()) {
+				try {
+					String classifierName = entry.getKey();
+					Classifier classifier = entry.getValue();
+					Evaluation eval = new Evaluation(classificationDataSet);
+					// do crossvalidation manually in order to output misclassified examples
+					Random rand = new Random(seed);
+					Instances randData = new Instances(classificationDataSet);
+					randData.randomize(rand);
+					randData.stratify(numFolds);
+					
+					for (int i = 0; i < numFolds; i++) {
+						Instances train = randData.trainCV(numFolds, i);
+						Instances test = randData.testCV(numFolds, i);
+						
+						Vote votedClassifier = new Vote();
+						Instances trainPos = new Instances(train, 0);
+						Instances trainNeg = new Instances(train, 0);
+						
+						for (int j = 0; j < train.numInstances(); j++) {
+							Instance inst = train.get(j);
+							if (inst.classValue() == train.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE))
+								trainPos.add(inst);
+							else
+								trainNeg.add(inst);
+						}
+						
+						int j = 0;
+						while ((trainNeg.numInstances() >= trainPos.numInstances()) && (j < 100)) {
+							
+							System.out.println(j);
+							Random rand2 = new Random(j++);
+							trainNeg.randomize(rand2);
+							Instances negSample = new Instances(trainNeg, 0, trainPos.numInstances());
+							
+							Instances tempTrain = new Instances(train, 0);
+							tempTrain.addAll(negSample);
+							tempTrain.addAll(trainPos);
+							
+							Classifier c;
+							if (this.useCostSensitiveWrapper) {
+								MetaCost outer = (MetaCost) AbstractClassifier.makeCopy(this.costSensitiveWrapper);
+								Classifier inner = AbstractClassifier.makeCopy(classifier);
+								outer.setClassifier(inner);
+								c = outer;
+							} else {
+								c = AbstractClassifier.makeCopy(classifier);
+							}
+							c.buildClassifier(tempTrain);
+							
+							votedClassifier.addPreBuiltClassifier(c);
+							
+							Instances newTrainNeg = new Instances(trainNeg, 0);
+							for (int k = 0; k < trainNeg.numInstances(); k++) {
+								Instance inst = trainNeg.get(k);
+								double pred = c.classifyInstance(inst);
+								if (pred != inst.classValue())
+									newTrainNeg.add(inst);
+							}
+							
+							trainNeg = newTrainNeg;
+						}
+											
+						eval.evaluateModel(votedClassifier, test);
+						
+						if (outputMisclassified && log.isInfoEnabled()) {
+							outputMisclassifiedInstances(test, votedClassifier);
+						}
+						
+					}
+									
+					if (log.isInfoEnabled()) {
+						log.info(String.format("%s (cross-validation)", classifierName));
+						logEvalResults(eval);
+					}
+					
+					int positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE);
+					Map<String, Double> classifierMap = new HashMap<String, Double>();
+					classifierMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, getBalancedAcc(eval, positiveClassIdx));
+					classifierMap.put(Util.COLUMN_NAME_KAPPA, eval.kappa());
+					classifierMap.put(Util.COLUMN_NAME_AUC, eval.areaUnderROC(positiveClassIdx));
+					classifierMap.put(Util.COLUMN_NAME_FSCORE, eval.fMeasure(positiveClassIdx));
+					
+					overallResultMap.put(classifierName, classifierMap);
+					
+				} catch (Exception e) {
+					if (log.isErrorEnabled())
+						log.error("Can't cross-validate classifier");
+					if (log.isDebugEnabled())
+						log.debug("Can't cross-validate classifier", e);
+				}
+			}
+			
+			Util.writeEvaluationToCsv(this.outputFileName, columnNames, overallResultMap);
+		}
+		// endregion
+	
 	// region helper methods
 	private void logEvalResults(Evaluation eval) throws Exception {
 		// compute balanced accuracy
@@ -463,6 +580,8 @@ public class FilteringBenchmark {
 			leaveOneOut();
 		if (this.doEasyEnsemble)
 			easyEnsemble(this.numberOfEnsembleMembers);
+		if (this.doBalanceCascade)
+			balanceCascade();
 
 	}
 

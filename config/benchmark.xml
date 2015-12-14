@@ -202,14 +202,14 @@
 		
 		<property name="classifiers">
 			<map>
+				<entry key="decisionTree" value-ref="decisionTree"/>
+				
+				<!-- 
 				<entry key="naiveBayes" value-ref="naiveBayes" />
 				<entry key="naiveBayesKernel" value-ref="naiveBayes2"/>
 				<entry key="bayesNet" value-ref="bayesNet"/>
-				<entry key="bayesNetAnnealing" value-ref="bayesNet2"/>
 				<entry key="logistic" value-ref="logistic"/>
-				<entry key="MLP" value-ref="MLP"/>
 				<entry key="MLPValidationSet" value-ref="MLP2"/>
-				<entry key="MLPValidationSetDecay" value-ref="MLP3"/>
 				<entry key="svm" value-ref="svm"/>
 				<entry key="svmLogistic" value-ref="svm2"/>
 				<entry key="svmComplexity2" value-ref="svm3"/>
@@ -227,7 +227,10 @@
 				<entry key="randomForest100" value-ref="randomForest"/>
 				<entry key="randomForest20" value-ref="randomForest2"/>
 				
-				<!-- 
+				
+				<entry key="bayesNetAnnealing" value-ref="bayesNet2"/>
+				<entry key="MLP" value-ref="MLP"/>
+				<entry key="MLPValidationSetDecay" value-ref="MLP3"/>
 				
 				
 				<entry key="adaBoost" value-ref="adaBoost" />
@@ -247,7 +250,8 @@
 		<property name="doFeatureAnalysis" value="false" />
 		<property name="doCrossValidation" value="false" />
 		<property name="doLeaveOneOut" value="false" />
-		<property name="doEasyEnsemble" value="true" />
+		<property name="doEasyEnsemble" value="false" />
+		<property name="doBalanceCascade" value="true" />
 		
 		<property name="outputFileName" value="evaluation.csv" />
 		<property name="numberOfEnsembleMembers" value="10" />
