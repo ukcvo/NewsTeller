@@ -12,8 +12,8 @@
 		<property name="filters">
 			<array>
 				<ref bean="removeStringFilter"/>
-				<ref bean="balancingSpreadFilter"/>
 				<!-- 
+				<ref bean="balancingSpreadFilter"/>
 				<ref bean="balancingSMOTEFilter"/>
 				
 				 -->
@@ -26,7 +26,7 @@
 	</bean>
 
 	<bean id="balancingSpreadFilter" class="weka.filters.supervised.instance.SpreadSubsample">
-		<property name="distributionSpread" value="1" />
+		<property name="distributionSpread" value="4" />
 	</bean>
 
 	<bean id="removeStringFilter" class="weka.filters.unsupervised.attribute.RemoveType">
@@ -194,6 +194,47 @@
 	</bean>
 
 	<!-- classifiers -->
+
+	<bean id="adaBoost" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.meta.AdaBoostM1">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="adaBoost2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.meta.AdaBoostM1">
+				<property name="useResampling" value="true"/>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="adaBoost3" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.meta.AdaBoostM1">
+				<property  name="classifier">
+					<bean class="weka.classifiers.trees.J48" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="adaBoost4" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.meta.AdaBoostM1">
+				<property name="useResampling" value="true"/>
+				<property  name="classifier">
+					<bean class="weka.classifiers.trees.J48" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
 
 	<bean id="naiveBayes" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="balancingFilter" />

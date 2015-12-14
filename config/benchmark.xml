@@ -205,17 +205,11 @@
 				<entry key="naiveBayes" value-ref="naiveBayes" />
 				<entry key="naiveBayesKernel" value-ref="naiveBayes2"/>
 				<entry key="bayesNet" value-ref="bayesNet"/>
-				<!-- 
 				<entry key="bayesNetAnnealing" value-ref="bayesNet2"/>
-				 -->
 				<entry key="logistic" value-ref="logistic"/>
-				<!-- 
 				<entry key="MLP" value-ref="MLP"/>
-				-->
 				<entry key="MLPValidationSet" value-ref="MLP2"/>
-				<!-- 
 				<entry key="MLPValidationSetDecay" value-ref="MLP3"/>
-				 -->
 				<entry key="svm" value-ref="svm"/>
 				<entry key="svmLogistic" value-ref="svm2"/>
 				<entry key="svmComplexity2" value-ref="svm3"/>
@@ -232,6 +226,16 @@
 				<entry key="cartOneSE" value-ref="cart2"/>
 				<entry key="randomForest100" value-ref="randomForest"/>
 				<entry key="randomForest20" value-ref="randomForest2"/>
+				
+				<!-- 
+				
+				
+				<entry key="adaBoost" value-ref="adaBoost" />
+				<entry key="adaBoostResample" value-ref="adaBoost2" />
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				
+				 -->
 			</map>
 		</property>
 
@@ -241,10 +245,12 @@
 		<property name="useCostSensitiveWrapper" value="true" />
 
 		<property name="doFeatureAnalysis" value="false" />
-		<property name="doCrossValidation" value="true" />
+		<property name="doCrossValidation" value="false" />
 		<property name="doLeaveOneOut" value="false" />
+		<property name="doEasyEnsemble" value="true" />
 		
 		<property name="outputFileName" value="evaluation.csv" />
+		<property name="numberOfEnsembleMembers" value="10" />
 	</bean>
 
 </beans>
