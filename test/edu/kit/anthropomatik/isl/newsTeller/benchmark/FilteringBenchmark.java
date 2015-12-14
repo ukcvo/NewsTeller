@@ -21,6 +21,7 @@ import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.meta.Bagging;
 import weka.classifiers.meta.MetaCost;
 import weka.classifiers.meta.Vote;
 import weka.core.Instance;
@@ -50,6 +51,8 @@ public class FilteringBenchmark {
 
 	private Classifier costSensitiveWrapper;
 	
+	private Classifier baggingWrapper;
+	
 	private boolean doFeatureAnalysis;
 
 	private boolean doCrossValidation;
@@ -63,6 +66,8 @@ public class FilteringBenchmark {
 	private boolean outputMisclassified;
 	
 	private boolean useCostSensitiveWrapper;
+	
+	private boolean useBaggingWrapper;
 	
 	private String outputFileName;
 	
@@ -87,6 +92,10 @@ public class FilteringBenchmark {
 
 	public void setCostSensitiveWrapper(Classifier costSensitiveWrapper) {
 		this.costSensitiveWrapper = costSensitiveWrapper;
+	}
+	
+	public void setBaggingWrapper(Classifier baggingWrapper) {
+		this.baggingWrapper = baggingWrapper;
 	}
 	
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
@@ -115,6 +124,10 @@ public class FilteringBenchmark {
 	
 	public void setUseCostSensitiveWrapper(boolean useCostSensitiveWrapper) {
 		this.useCostSensitiveWrapper = useCostSensitiveWrapper;
+	}
+	
+	public void setUseBaggingWrapper(boolean useBaggingWrapper) {
+		this.useBaggingWrapper = useBaggingWrapper;
 	}
 	
 	public void setOutputFileName(String outputFileName) {
@@ -192,7 +205,12 @@ public class FilteringBenchmark {
 					Instances test = randData.testCV(numFolds, i);
 					
 					Classifier c;
-					if (this.useCostSensitiveWrapper) {
+					if (this.useBaggingWrapper) {
+						Bagging outer = (Bagging) AbstractClassifier.makeCopy(this.baggingWrapper);
+						Classifier inner = AbstractClassifier.makeCopy(classifier);
+						outer.setClassifier(inner);
+						c = outer;
+					} else if (this.useCostSensitiveWrapper) {
 						MetaCost outer = (MetaCost) AbstractClassifier.makeCopy(this.costSensitiveWrapper);
 						Classifier inner = AbstractClassifier.makeCopy(classifier);
 						outer.setClassifier(inner);
@@ -571,6 +589,9 @@ public class FilteringBenchmark {
 	public void run() throws Exception {
 		
 		filterDataSet();
+		
+		if (this.useBaggingWrapper && this.useCostSensitiveWrapper && log.isWarnEnabled())
+			log.warn("both useBaggingWrapper and useCostSensitiveWrapper active!"); 
 		
 		if (this.doFeatureAnalysis)
 			featureAnalysis();

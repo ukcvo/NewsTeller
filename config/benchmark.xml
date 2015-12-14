@@ -202,9 +202,7 @@
 		
 		<property name="classifiers">
 			<map>
-				<entry key="decisionTree" value-ref="decisionTree"/>
 				
-				<!-- 
 				<entry key="naiveBayes" value-ref="naiveBayes" />
 				<entry key="naiveBayesKernel" value-ref="naiveBayes2"/>
 				<entry key="bayesNet" value-ref="bayesNet"/>
@@ -228,30 +226,33 @@
 				<entry key="randomForest20" value-ref="randomForest2"/>
 				
 				
+				<!-- 
 				<entry key="bayesNetAnnealing" value-ref="bayesNet2"/>
 				<entry key="MLP" value-ref="MLP"/>
 				<entry key="MLPValidationSetDecay" value-ref="MLP3"/>
-				
 				
 				<entry key="adaBoost" value-ref="adaBoost" />
 				<entry key="adaBoostResample" value-ref="adaBoost2" />
 				<entry key="adaBoostTree" value-ref="adaBoost3" />
 				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
 				
+				
 				 -->
 			</map>
 		</property>
 
 		<property name="costSensitiveWrapper" ref="costSensitiveWrapper" />
+		<property name="baggingWrapper" ref="baggingWrapper" />
 
 		<property name="outputMisclassified" value="false" />
-		<property name="useCostSensitiveWrapper" value="true" />
+		<property name="useCostSensitiveWrapper" value="false" />
+		<property name="useBaggingWrapper" value="true" />
 
 		<property name="doFeatureAnalysis" value="false" />
-		<property name="doCrossValidation" value="false" />
+		<property name="doCrossValidation" value="true" />
 		<property name="doLeaveOneOut" value="false" />
 		<property name="doEasyEnsemble" value="false" />
-		<property name="doBalanceCascade" value="true" />
+		<property name="doBalanceCascade" value="false" />
 		
 		<property name="outputFileName" value="evaluation.csv" />
 		<property name="numberOfEnsembleMembers" value="10" />
