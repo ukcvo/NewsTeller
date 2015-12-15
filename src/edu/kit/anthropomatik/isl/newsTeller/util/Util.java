@@ -74,7 +74,9 @@ public class Util {
 	public static final String COLUMN_NAME_KAPPA = "kappa";
 	public static final String COLUMN_NAME_AUC = "AUC";
 	public static final String COLUMN_NAME_FSCORE = "F";
-	
+	public static final String COLUMN_NAME_TRAINING = "train_";
+	public static final String COLUMN_NAME_TEST = "test_";
+	public static final String COLUMN_NAME_PERCENTAGE = "percentage";
 
 	public static final String CLASS_LABEL_NEGATIVE = "false";
 	public static final String CLASS_LABEL_POSITIVE = "true";
@@ -267,7 +269,7 @@ public class Util {
 	public static void writeEvaluationToCsv(String fileName, List<String> columnNames, Map<String, Map<String, Double>> evaluationResults) {
 
 		try {
-			CsvWriter out = new CsvWriter(new FileWriter(fileName,false), ';');
+			CsvWriter out = new CsvWriter(new FileWriter(fileName, false), ';');
 
 			out.write(Util.COLUMN_NAME_CLASSIFIER_NAME);
 			for (String header : columnNames)
@@ -295,6 +297,48 @@ public class Util {
 		}
 
 	}
+	
+	/**
+	 * Writes the measurments made for learning curve plotting to the given filename.
+	 */
+	public static void writeLearningCurvesToCsv(String fileName, List<String> performanceMeasures, Map<Integer, Map<String, Map<String, Double>>> data) {
+		
+		try {
+			CsvWriter out = new CsvWriter(new FileWriter(fileName, false), ';');
+
+			out.write(Util.COLUMN_NAME_PERCENTAGE);
+			for (String header : performanceMeasures) {
+				out.write(Util.COLUMN_NAME_TRAINING + header);
+				out.write(Util.COLUMN_NAME_TEST + header);
+			}
+				
+			out.endRecord();
+			
+			for (Map.Entry<Integer, Map<String, Map<String, Double>>> entry : data.entrySet()) {
+				
+				Integer percentage = entry.getKey();
+				Map<String, Map<String, Double>> map = entry.getValue();
+				
+				out.write(percentage.toString());
+				for (String header : performanceMeasures) {
+					out.write(map.get(Util.COLUMN_NAME_TRAINING).get(header).toString());
+					out.write(map.get(Util.COLUMN_NAME_TEST).get(header).toString());
+				}
+				
+				out.endRecord();
+			}
+			
+			out.close();
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error(String.format("could not write learning curve file: '%s'", fileName));
+			if (log.isDebugEnabled())
+				log.debug("cannnot write file", e);
+		}
+
+	}
+	
 	// endregion
 
 	// region reading XML files

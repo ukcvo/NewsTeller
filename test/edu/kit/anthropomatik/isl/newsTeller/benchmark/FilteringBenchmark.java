@@ -28,6 +28,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
+import weka.filters.supervised.instance.Resample;
 import weka.filters.unsupervised.attribute.StringToNominal;
 import weka.filters.unsupervised.instance.RemoveWithValues;
 
@@ -38,7 +39,7 @@ public class FilteringBenchmark {
 	private static final int seed = 1337;
 
 	private static final int numFolds = 10;
-	
+
 	private Instances originalDataSet;
 
 	private Instances analysisDataSet; // w/o String attributes
@@ -57,6 +58,8 @@ public class FilteringBenchmark {
 
 	private Classifier baggingWrapper;
 
+	private List<Integer> trainingSetPercentages;
+
 	private boolean doFeatureAnalysis;
 
 	private boolean doCrossValidation;
@@ -67,6 +70,8 @@ public class FilteringBenchmark {
 
 	private boolean doBalanceCascade;
 
+	private boolean doLearningCurve;
+
 	private boolean outputMisclassified;
 
 	private boolean useCostSensitiveWrapper;
@@ -76,6 +81,8 @@ public class FilteringBenchmark {
 	private String outputFileName;
 
 	private int numberOfEnsembleMembers;
+
+	private int positiveClassIdx;
 
 	// region setters
 	public void setAnalysisFilter(Filter analysisFilter) {
@@ -102,6 +109,10 @@ public class FilteringBenchmark {
 		this.baggingWrapper = baggingWrapper;
 	}
 
+	public void setTrainingSetPercentages(List<Integer> trainingSetPercentages) {
+		this.trainingSetPercentages = trainingSetPercentages;
+	}
+
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
 		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
@@ -120,6 +131,10 @@ public class FilteringBenchmark {
 
 	public void setDoBalanceCascade(boolean doBalanceCascade) {
 		this.doBalanceCascade = doBalanceCascade;
+	}
+
+	public void setDoLearningCurve(boolean doLearningCurve) {
+		this.doLearningCurve = doLearningCurve;
 	}
 
 	public void setOutputMisclassified(boolean outputMisclassified) {
@@ -155,6 +170,7 @@ public class FilteringBenchmark {
 			if (log.isDebugEnabled())
 				log.debug("Can't read data set", e);
 		}
+		this.positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE);
 	}
 
 	// region featureAnalysis
@@ -450,6 +466,111 @@ public class FilteringBenchmark {
 	}
 	// endregion
 
+	// region learningCurve
+	private void learningCurve() {
+
+		List<String> performanceMeasures = new ArrayList<String>();
+		performanceMeasures.add(Util.COLUMN_NAME_BALANCED_ACCURACY);
+		performanceMeasures.add(Util.COLUMN_NAME_KAPPA);
+		performanceMeasures.add(Util.COLUMN_NAME_AUC);
+		performanceMeasures.add(Util.COLUMN_NAME_FSCORE);
+		
+		for (Map.Entry<String, Classifier> entry : this.classifiers.entrySet()) {
+
+			try {
+				String classifierName = entry.getKey();
+				Classifier classifier = entry.getValue();
+				
+				Map<Integer, Map<String, Map<String, Double>>> overallMap = new HashMap<Integer, Map<String,Map<String,Double>>>();
+				
+				for (Integer percentage : this.trainingSetPercentages) {
+					Random rand = new Random(seed);
+					Instances randData = new Instances(classificationDataSet);
+					randData.randomize(rand);
+					randData.stratify(numFolds);
+
+					Map<String, Map<String, Double>> percentageMap = new HashMap<String, Map<String,Double>>();
+					Map<String, Double> trainMap = new HashMap<String, Double>();
+					Map<String, Double> testMap = new HashMap<String, Double>();
+					percentageMap.put(Util.COLUMN_NAME_TRAINING, trainMap);
+					percentageMap.put(Util.COLUMN_NAME_TEST, testMap);
+					
+					trainMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, 0.0);
+					trainMap.put(Util.COLUMN_NAME_KAPPA, 0.0);
+					trainMap.put(Util.COLUMN_NAME_AUC, 0.0);
+					trainMap.put(Util.COLUMN_NAME_FSCORE, 0.0);
+					
+					testMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, 0.0);
+					testMap.put(Util.COLUMN_NAME_KAPPA, 0.0);
+					testMap.put(Util.COLUMN_NAME_AUC, 0.0);
+					testMap.put(Util.COLUMN_NAME_FSCORE, 0.0);
+					
+					for (int i = 0; i < numFolds; i++) {
+						Instances train = randData.trainCV(numFolds, i);
+						Instances test = randData.testCV(numFolds, i);
+
+						Resample resample = new Resample();
+						resample.setSampleSizePercent(percentage);
+						resample.setNoReplacement(true);
+						resample.setInputFormat(train);
+						train = Filter.useFilter(train, resample);
+						
+						Classifier c;
+						if (this.useBaggingWrapper) {
+							Bagging outer = (Bagging) AbstractClassifier.makeCopy(this.baggingWrapper);
+							Classifier inner = AbstractClassifier.makeCopy(classifier);
+							outer.setClassifier(inner);
+							c = outer;
+						} else if (this.useCostSensitiveWrapper) {
+							MetaCost outer = (MetaCost) AbstractClassifier.makeCopy(this.costSensitiveWrapper);
+							Classifier inner = AbstractClassifier.makeCopy(classifier);
+							outer.setClassifier(inner);
+							c = outer;
+						} else {
+							c = AbstractClassifier.makeCopy(classifier);
+						}
+						c.buildClassifier(train);
+						Evaluation evalTrain = new Evaluation(train);
+						Evaluation evalTest = new Evaluation(test);
+						evalTrain.evaluateModel(c, train);
+						evalTest.evaluateModel(c, test);
+
+						trainMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, trainMap.get(Util.COLUMN_NAME_BALANCED_ACCURACY) 
+								+ (getBalancedAcc(evalTrain, this.positiveClassIdx) / numFolds));
+						trainMap.put(Util.COLUMN_NAME_KAPPA, trainMap.get(Util.COLUMN_NAME_KAPPA) 
+								+ (evalTrain.kappa() / numFolds));
+						trainMap.put(Util.COLUMN_NAME_AUC, trainMap.get(Util.COLUMN_NAME_AUC) 
+								+ (evalTrain.areaUnderROC(this.positiveClassIdx) / numFolds));
+						trainMap.put(Util.COLUMN_NAME_FSCORE, trainMap.get(Util.COLUMN_NAME_FSCORE) 
+								+ (evalTrain.fMeasure(this.positiveClassIdx) / numFolds));
+						
+						testMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, testMap.get(Util.COLUMN_NAME_BALANCED_ACCURACY) 
+								+ (getBalancedAcc(evalTest, this.positiveClassIdx) / numFolds));
+						testMap.put(Util.COLUMN_NAME_KAPPA, testMap.get(Util.COLUMN_NAME_KAPPA) 
+								+ (evalTest.kappa() / numFolds));
+						testMap.put(Util.COLUMN_NAME_AUC, testMap.get(Util.COLUMN_NAME_AUC) 
+								+ (evalTest.areaUnderROC(this.positiveClassIdx) / numFolds));
+						testMap.put(Util.COLUMN_NAME_FSCORE, testMap.get(Util.COLUMN_NAME_FSCORE) 
+								+ (evalTest.fMeasure(this.positiveClassIdx) / numFolds));
+						
+					}
+					
+					overallMap.put(percentage, percentageMap);
+				}
+				
+				String fileName = String.format("out/%s.csv", classifierName);
+				Util.writeLearningCurvesToCsv(fileName, performanceMeasures, overallMap);
+				
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("Can't create learning curve");
+				if (log.isDebugEnabled())
+					log.debug("Can't create learning curve", e);
+			}
+		}
+	}
+	// endregion
+
 	// region helper methods
 	private Instances getBalancedTrainingSubset(Instances trainPos, Instances trainNeg, int j) {
 		Random rand2 = new Random(j);
@@ -463,12 +584,11 @@ public class FilteringBenchmark {
 	}
 
 	private Map<String, Double> getClassifierMap(Evaluation eval) {
-		int positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE);
 		Map<String, Double> classifierMap = new HashMap<String, Double>();
-		classifierMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, getBalancedAcc(eval, positiveClassIdx));
+		classifierMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, getBalancedAcc(eval, this.positiveClassIdx));
 		classifierMap.put(Util.COLUMN_NAME_KAPPA, eval.kappa());
-		classifierMap.put(Util.COLUMN_NAME_AUC, eval.areaUnderROC(positiveClassIdx));
-		classifierMap.put(Util.COLUMN_NAME_FSCORE, eval.fMeasure(positiveClassIdx));
+		classifierMap.put(Util.COLUMN_NAME_AUC, eval.areaUnderROC(this.positiveClassIdx));
+		classifierMap.put(Util.COLUMN_NAME_FSCORE, eval.fMeasure(this.positiveClassIdx));
 		return classifierMap;
 	}
 
@@ -496,14 +616,13 @@ public class FilteringBenchmark {
 
 	private void logEvalResults(Evaluation eval) throws Exception {
 		// compute balanced accuracy
-		int positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE);
-		double balancedAcc = getBalancedAcc(eval, positiveClassIdx);
+		double balancedAcc = getBalancedAcc(eval, this.positiveClassIdx);
 
 		// output
 		log.info(eval.toSummaryString());
 		log.info(String.format("balanced accuracy: %f", balancedAcc));
 		log.info(String.format("Cohen's kappa: %f", eval.kappa()));
-		log.info(String.format("AUC for usable: %f", eval.areaUnderROC(positiveClassIdx)));
+		log.info(String.format("AUC for usable: %f", eval.areaUnderROC(this.positiveClassIdx)));
 		log.info(eval.toClassDetailsString());
 		log.info(eval.toMatrixString());
 	}
@@ -524,9 +643,9 @@ public class FilteringBenchmark {
 			Instance inst = test.instance(i);
 			double prediction = c.classifyInstance(inst);
 			if (inst.classValue() != prediction) {
-				
+
 				String str = String.format("%s ; %s", inst.stringValue(test.attribute(Util.ATTRIBUTE_URI)), inst.stringValue(test.attribute(Util.ATTRIBUTE_FILE)));
-				
+
 				if (inst.classValue() == inst.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE))
 					log.info(String.format("False Negative: %s", str));
 				else
@@ -581,7 +700,8 @@ public class FilteringBenchmark {
 			easyEnsemble(this.numberOfEnsembleMembers);
 		if (this.doBalanceCascade)
 			balanceCascade();
-
+		if (this.doLearningCurve)
+			learningCurve();
 	}
 
 	public static void main(String[] args) throws Exception {

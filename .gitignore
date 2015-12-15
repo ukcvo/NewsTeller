@@ -1,6 +1,7 @@
 /bin/
 /log.txt
 /log-test.txt
+/out/
 /target/
 /log.txt.1
 /log-benchmark.txt
