@@ -198,7 +198,7 @@
 			</list>
 		</property>
 
-		<property name="classifierFilter" ref="analysisFilter"/>
+		<property name="classifierFilter" ref="allFeaturesFilter"/>
 		
 		<property name="classifiers">
 			<map>
@@ -225,8 +225,29 @@
 				<entry key="randomForest100" value-ref="randomForest"/>
 				<entry key="randomForest20" value-ref="randomForest2"/>
 				
-				
 				<!-- 
+				<entry key="naiveBayes" value-ref="naiveBayes" />
+				<entry key="naiveBayesKernel" value-ref="naiveBayes2"/>
+				<entry key="bayesNet" value-ref="bayesNet"/>
+				<entry key="logistic" value-ref="logistic"/>
+				<entry key="MLPValidationSet" value-ref="MLP2"/>
+				<entry key="svm" value-ref="svm"/>
+				<entry key="svmLogistic" value-ref="svm2"/>
+				<entry key="svmComplexity2" value-ref="svm3"/>
+				<entry key="kNN" value-ref="kNN"/>
+				<entry key="kNNDistanceWeighting" value-ref="kNN2"/>
+				<entry key="decisionTable" value-ref="decisionTable"/>
+				<entry key="decisionTableKNN" value-ref="decisionTable2"/>
+				<entry key="ripper" value-ref="ripper"/>
+				<entry key="ripperUnpruned" value-ref="ripper2"/>
+				<entry key="decisionTree" value-ref="decisionTree"/>
+				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2"/>
+				<entry key="decisionTreeUnpruned" value-ref="decisionTree3"/>
+				<entry key="cart" value-ref="cart"/>
+				<entry key="cartOneSE" value-ref="cart2"/>
+				<entry key="randomForest100" value-ref="randomForest"/>
+				<entry key="randomForest20" value-ref="randomForest2"/>
+				
 				<entry key="bayesNetAnnealing" value-ref="bayesNet2"/>
 				<entry key="MLP" value-ref="MLP"/>
 				<entry key="MLPValidationSetDecay" value-ref="MLP3"/>
@@ -246,7 +267,7 @@
 
 		<property name="outputMisclassified" value="false" />
 		<property name="useCostSensitiveWrapper" value="false" />
-		<property name="useBaggingWrapper" value="true" />
+		<property name="useBaggingWrapper" value="false" />
 
 		<property name="doFeatureAnalysis" value="false" />
 		<property name="doCrossValidation" value="true" />

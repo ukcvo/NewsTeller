@@ -56,6 +56,19 @@
 		</property>
 	</bean>
 
+	<bean id="allFeaturesFilter" class="weka.filters.MultiFilter">
+		<property name="filters">
+			<array>
+				<bean class="weka.filters.unsupervised.attribute.Copy">
+					<property name="attributeIndices" value="first-24" />
+				</bean>
+				<bean class="weka.filters.supervised.attribute.Discretize">
+					<property name="attributeIndices" value="first-24" />
+				</bean>
+			</array>
+		</property>
+	</bean>
+
 	<bean id="classifierFilter" class="weka.filters.MultiFilter">
 		<property name="filters">
 			<array>
