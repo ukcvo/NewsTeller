@@ -481,6 +481,9 @@ public class FilteringBenchmark {
 				String classifierName = entry.getKey();
 				Classifier classifier = entry.getValue();
 				
+				if (log.isInfoEnabled())
+					log.info(classifierName);
+				
 				Map<Integer, Map<String, Map<String, Double>>> overallMap = new HashMap<Integer, Map<String,Map<String,Double>>>();
 				
 				for (Integer percentage : this.trainingSetPercentages) {

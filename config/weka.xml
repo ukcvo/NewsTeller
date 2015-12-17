@@ -6,17 +6,13 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 
-	<!-- filters -->	
+	<!-- filters -->
 
 	<bean id="balancingFilter" class="weka.filters.MultiFilter">
 		<property name="filters">
 			<array>
-				<ref bean="removeStringFilter"/>
-				<!-- 
-				<ref bean="balancingSpreadFilter"/>
-				<ref bean="balancingSMOTEFilter"/>
-				
-				 -->
+				<ref bean="removeStringFilter" />
+				<!-- <ref bean="balancingSpreadFilter"/> <ref bean="balancingSMOTEFilter"/> -->
 			</array>
 		</property>
 	</bean>
@@ -77,6 +73,45 @@
 				</bean>
 				<bean class="weka.filters.unsupervised.attribute.Remove">
 					<property name="attributeIndices" value="9,7,5,11,19,12,3,18,25,26,27" />
+					<property name="invertSelection" value="true" />
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="randomForestFilter" class="weka.filters.MultiFilter">
+		<property name="filters">
+			<array>
+				<bean class="weka.filters.supervised.attribute.Discretize">
+					<property name="attributeIndices"
+						value="1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,20,22,23,24" />
+					<!-- Spread 1.5: <property name="attributeIndices" value="" /> Spread 
+						2: <property name="attributeIndices" value="21" /> Spread 2.5: <property 
+						name="attributeIndices" value="12,24" /> Spread 3: <property name="attributeIndices" 
+						value="1,9,18,24" /> -->
+				</bean>
+				<bean class="weka.filters.unsupervised.attribute.Remove">
+					<property name="attributeIndices"
+						value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27" />
+					<!-- Spread 1.5: <property name="attributeIndices" value="5,15,18,25,26,27" 
+						/> Spread 2: <property name="attributeIndices" value="5,15,18,21,25,26,27" 
+						/> Spread 2.5: <property name="attributeIndices" value="1,10,12,18,24,25,26,27" 
+						/> Spread 3: <property name="attributeIndices" value="1,5,8,9,18,24,25,26,27" 
+						/> -->
+					<property name="invertSelection" value="true" />
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="MLPFilter" class="weka.filters.MultiFilter">
+		<property name="filters">
+			<array>
+				<bean class="weka.filters.supervised.attribute.Discretize">
+					<property name="attributeIndices" value="1,4,12" />
+				</bean>
+				<bean class="weka.filters.unsupervised.attribute.Remove">
+					<property name="attributeIndices" value="1,4,12,15,25,26,27" />
 					<property name="invertSelection" value="true" />
 				</bean>
 			</array>
@@ -210,6 +245,284 @@
 		</property>
 	</bean>
 
+	<!-- individual wrappers for each algorithm -->
+	<bean id="greedySearch" class="weka.attributeSelection.GreedyStepwise">
+		<property name="generateRanking" value="false" />
+		<property name="numToSelect" value="10" />
+		<property name="searchBackwards" value="false" />
+	</bean>
+
+	<bean id="wrapperNaiveBayes" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="naiveBayes" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperNaiveBayes2" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="naiveBayes2" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperBayesNet" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="bayesNet" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperLogistic" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="logistic" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperMLP2" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="MLP2" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperSvm" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="svm" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperKNN" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="kNN" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperKNN2" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="kNN2" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperDecisionTable" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="decisionTable" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperDecisionTable2" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="decisionTable2" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperRipper" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="ripper" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperRipper2" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="ripper2" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperDecisionTree" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="decisionTree" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperDecisionTree2" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="decisionTree2" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperDecisionTree3" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="decisionTree3" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperCart" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="cart" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperRandomForest" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="randomForest" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
+	<bean id="wrapperRandomForest2" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="options">
+					<array>
+						<value>-E</value>
+						<value>f-meas</value>
+					</array>
+				</property>
+				<property name="classifier" ref="randomForest2" />
+			</bean>
+		</property>
+		<property name="search" ref="greedySearch" />
+	</bean>
+
 	<!-- classifiers -->
 
 	<bean id="adaBoost" class="weka.classifiers.meta.FilteredClassifier">
@@ -224,16 +537,16 @@
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.meta.AdaBoostM1">
-				<property name="useResampling" value="true"/>
+				<property name="useResampling" value="true" />
 			</bean>
 		</property>
 	</bean>
-	
+
 	<bean id="adaBoost3" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.meta.AdaBoostM1">
-				<property  name="classifier">
+				<property name="classifier">
 					<bean class="weka.classifiers.trees.J48" />
 				</property>
 			</bean>
@@ -244,14 +557,14 @@
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.meta.AdaBoostM1">
-				<property name="useResampling" value="true"/>
-				<property  name="classifier">
+				<property name="useResampling" value="true" />
+				<property name="classifier">
 					<bean class="weka.classifiers.trees.J48" />
 				</property>
 			</bean>
 		</property>
 	</bean>
-	
+
 
 	<bean id="naiveBayes" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="balancingFilter" />
@@ -264,7 +577,7 @@
 		<property name="filter" ref="removeStringFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.bayes.NaiveBayes">
-				<property name="useKernelEstimator" value="true"/>
+				<property name="useKernelEstimator" value="true" />
 			</bean>
 		</property>
 	</bean>
@@ -305,7 +618,7 @@
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.MultilayerPerceptron">
-				<property name="validationSetSize" value="10"/>
+				<property name="validationSetSize" value="10" />
 			</bean>
 		</property>
 	</bean>
@@ -314,8 +627,113 @@
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.MultilayerPerceptron">
-				<property name="validationSetSize" value="10"/>
-				<property name="decay" value="true"/>
+				<property name="validationSetSize" value="10" />
+				<property name="decay" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="MLP4" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="0" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="MLP5" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="1" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="MLP6" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="2" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="MLP7" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="3" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="MLP8" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="4" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="MLP9" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="5" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="MLP10" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="6" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="MLP11" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="7" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="MLP12" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="8" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="MLP13" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="hiddenLayers" value="a" />
+				<property name="seed" value="9" />
 			</bean>
 		</property>
 	</bean>
@@ -341,7 +759,7 @@
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.SMO">
-				<property name="c" value="2.0"/>
+				<property name="c" value="2.0" />
 			</bean>
 		</property>
 	</bean>
@@ -446,7 +864,7 @@
 			<bean class="weka.classifiers.trees.J48" />
 		</property>
 	</bean>
-	
+
 	<bean id="decisionTree2" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
@@ -455,7 +873,7 @@
 			</bean>
 		</property>
 	</bean>
-	
+
 	<bean id="decisionTree3" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
@@ -464,14 +882,14 @@
 			</bean>
 		</property>
 	</bean>
-	
+
 	<bean id="cart" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.SimpleCart" />
 		</property>
 	</bean>
-	
+
 	<bean id="cart2" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
@@ -487,7 +905,7 @@
 			<bean class="weka.classifiers.trees.RandomForest" />
 		</property>
 	</bean>
-	
+
 	<bean id="randomForest2" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
@@ -496,4 +914,38 @@
 			</bean>
 		</property>
 	</bean>
+
+	<bean id="randomForest3" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numTrees" value="20" />
+				<property name="numFeatures" value="0" />
+				<property name="maxDepth" value="0" />
+				<property name="numExecutionSlots" value="4" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="optimizedRandomForest" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.meta.CVParameterSelection">
+				<property name="CVParameters">
+					<array>
+						<value>I 50 200 3</value> <!-- #trees: from 1 to 199 in 4 steps (i.e. step size of 50) -->
+						<!-- <value>K 0 14 8</value> --> <!-- #features/tree: from 0 to 15 in 8 steps (i.e. step size of 2) -->
+						<!-- <value>depth 0 14 8</value> --> <!-- maxDepth of each tree: from 0 to 15 in 8 steps (i.e. step size of 2) -->
+					</array>
+				</property>
+				<property name="classifier">
+					<bean class="weka.classifiers.trees.RandomForest">
+						<property name="numExecutionSlots" value="4" />
+					</bean>
+				</property>
+				<property name="numFolds" value="4" />
+			</bean>
+		</property>
+	</bean>
+
 </beans>

@@ -137,6 +137,13 @@
 			<artifactId>simpleCART</artifactId>
 			<version>1.0.2</version>
 		</dependency>
+		<dependency>
+			<groupId>nz.ac.waikato.cms.weka</groupId>
+			<artifactId>costSensitiveAttributeSelection</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+
+
 
 		<!-- KnowledgeStore dependencies -->
 		<dependency>

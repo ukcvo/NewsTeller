@@ -189,81 +189,75 @@
 
 		<property name="configurations">
 			<list>
-				<ref bean="relief-f" />
-				<ref bean="oneR" />
-				<ref bean="gainRatio" />
-				<ref bean="cfs" />
-				<ref bean="wrapperDT" />
-				<ref bean="wrapperNB" />
+				<ref bean="wrapperMLP2" />
+
+				<!-- <ref bean="relief-f" /> <ref bean="oneR" /> <ref bean="gainRatio" 
+					/> <ref bean="cfs" /> <ref bean="wrapperDT" /> <ref bean="wrapperNB" /> <ref 
+					bean="wrapperNaiveBayes"/> <ref bean="wrapperNaiveBayes2"/> <ref bean="wrapperBayesNet"/> 
+					<ref bean="wrapperLogistic"/> <ref bean="wrapperMLP2"/> <ref bean="wrapperSvm"/> 
+					<ref bean="wrapperKNN"/> <ref bean="wrapperKNN2"/> <ref bean="wrapperDecisionTable"/> 
+					<ref bean="wrapperDecisionTable2"/> <ref bean="wrapperRipper" /> <ref bean="wrapperRipper2"/> 
+					<ref bean="wrapperDecisionTree"/> <ref bean="wrapperDecisionTree2"/> <ref 
+					bean="wrapperDecisionTree3"/> <ref bean="wrapperCart"/> <ref bean="wrapperRandomForest"/> 
+					<ref bean="wrapperRandomForest2"/> -->
 			</list>
 		</property>
 
-		<property name="classifierFilter" ref="allFeaturesFilter"/>
-		
+		<property name="classifierFilter" ref="allFeaturesFilter" />
+
 		<property name="classifiers">
 			<map>
-				
-				<entry key="randomForest100" value-ref="randomForest"/>
-				
-				<!-- 
-				<entry key="naiveBayes" value-ref="naiveBayes" />
-				<entry key="naiveBayesKernel" value-ref="naiveBayes2"/>
-				<entry key="bayesNet" value-ref="bayesNet"/>
-				<entry key="logistic" value-ref="logistic"/>
-				<entry key="MLPValidationSet" value-ref="MLP2"/>
-				<entry key="svm" value-ref="svm"/>
-				<entry key="svmLogistic" value-ref="svm2"/>
-				<entry key="svmComplexity2" value-ref="svm3"/>
-				<entry key="kNN" value-ref="kNN"/>
-				<entry key="kNNDistanceWeighting" value-ref="kNN2"/>
-				<entry key="decisionTable" value-ref="decisionTable"/>
-				<entry key="decisionTableKNN" value-ref="decisionTable2"/>
-				<entry key="ripper" value-ref="ripper"/>
-				<entry key="ripperUnpruned" value-ref="ripper2"/>
-				<entry key="decisionTree" value-ref="decisionTree"/>
-				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2"/>
-				<entry key="decisionTreeUnpruned" value-ref="decisionTree3"/>
-				<entry key="cart" value-ref="cart"/>
-				<entry key="cartOneSE" value-ref="cart2"/>
-				<entry key="randomForest100" value-ref="randomForest"/>
-				<entry key="randomForest20" value-ref="randomForest2"/>
-				
-				<entry key="bayesNetAnnealing" value-ref="bayesNet2"/>
-				<entry key="MLP" value-ref="MLP"/>
-				<entry key="MLPValidationSetDecay" value-ref="MLP3"/>
-				
-				<entry key="adaBoost" value-ref="adaBoost" />
-				<entry key="adaBoostResample" value-ref="adaBoost2" />
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				
-				
-				 -->
+
+				<entry key="MLPSeed0" value-ref="MLP4" />
+				<entry key="MLPSeed1" value-ref="MLP5" />
+				<entry key="MLPSeed2" value-ref="MLP6" />
+				<entry key="MLPSeed3" value-ref="MLP7" />
+				<entry key="MLPSeed4" value-ref="MLP8" />
+				<entry key="MLPSeed5" value-ref="MLP9" />
+				<entry key="MLPSeed6" value-ref="MLP10" />
+				<entry key="MLPSeed7" value-ref="MLP11" />
+				<entry key="MLPSeed8" value-ref="MLP12" />
+				<entry key="MLPSeed9" value-ref="MLP13" />
+				<!-- <entry key="naiveBayes" value-ref="naiveBayes" /> <entry key="naiveBayesKernel" 
+					value-ref="naiveBayes2"/> <entry key="bayesNet" value-ref="bayesNet"/> <entry 
+					key="logistic" value-ref="logistic"/> <entry key="MLPValidationSet" value-ref="MLP2"/> 
+					<entry key="svm" value-ref="svm"/> <entry key="svmLogistic" value-ref="svm2"/> 
+					<entry key="svmComplexity2" value-ref="svm3"/> <entry key="kNN" value-ref="kNN"/> 
+					<entry key="kNNDistanceWeighting" value-ref="kNN2"/> <entry key="decisionTable" 
+					value-ref="decisionTable"/> <entry key="decisionTableKNN" value-ref="decisionTable2"/> 
+					<entry key="ripper" value-ref="ripper"/> <entry key="ripperUnpruned" value-ref="ripper2"/> 
+					<entry key="decisionTree" value-ref="decisionTree"/> <entry key="decisionTreeReducedErrorPruning" 
+					value-ref="decisionTree2"/> <entry key="decisionTreeUnpruned" value-ref="decisionTree3"/> 
+					<entry key="cart" value-ref="cart"/> <entry key="cartOneSE" value-ref="cart2"/> 
+					<entry key="randomForest100" value-ref="randomForest"/> <entry key="randomForest20" 
+					value-ref="randomForest2"/> <entry key="bayesNetAnnealing" value-ref="bayesNet2"/> 
+					<entry key="MLP" value-ref="MLP"/> <entry key="MLPValidationSetDecay" value-ref="MLP3"/> 
+					<entry key="adaBoost" value-ref="adaBoost" /> <entry key="adaBoostResample" 
+					value-ref="adaBoost2" /> <entry key="adaBoostTree" value-ref="adaBoost3" 
+					/> <entry key="adaBoostTreeResample" value-ref="adaBoost4" /> <entry key="svmLogistic" 
+					value-ref="svm2"/> <entry key="svmComplexity2" value-ref="svm3"/> <entry 
+					key="cartOneSE" value-ref="cart2"/> <entry key="optimizedRandomForest" value-ref="optimizedRandomForest"/> -->
 			</map>
 		</property>
 
 		<property name="trainingSetPercentages">
 			<list>
-				<value>5</value>
 				<value>10</value>
-				<value>15</value>
 				<value>20</value>
-				<value>25</value>
 				<value>30</value>
-				<value>35</value>
 				<value>40</value>
-				<value>45</value>
 				<value>50</value>
-				<value>55</value>
 				<value>60</value>
-				<value>65</value>
 				<value>70</value>
-				<value>75</value>
 				<value>80</value>
-				<value>85</value>
 				<value>90</value>
-				<value>95</value>
 				<value>100</value>
+
+				<!-- <value>5</value> <value>10</value> <value>15</value> <value>20</value> 
+					<value>25</value> <value>30</value> <value>35</value> <value>40</value> <value>45</value> 
+					<value>50</value> <value>55</value> <value>60</value> <value>65</value> <value>70</value> 
+					<value>75</value> <value>80</value> <value>85</value> <value>90</value> <value>95</value> 
+					<value>100</value> -->
 			</list>
 		</property>
 
@@ -280,7 +274,7 @@
 		<property name="doEasyEnsemble" value="false" />
 		<property name="doBalanceCascade" value="false" />
 		<property name="doLearningCurve" value="true" />
-		
+
 		<property name="outputFileName" value="evaluation.csv" />
 		<property name="numberOfEnsembleMembers" value="10" />
 	</bean>
