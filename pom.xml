@@ -142,7 +142,16 @@
 			<artifactId>costSensitiveAttributeSelection</artifactId>
 			<version>1.0.3</version>
 		</dependency>
-
+		<dependency>
+			<groupId>nz.ac.waikato.cms.weka</groupId>
+			<artifactId>multiLayerPerceptrons</artifactId>
+			<version>1.0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>nz.ac.waikato.cms.weka</groupId>
+			<artifactId>RBFNetwork</artifactId>
+			<version>1.0.8</version>
+		</dependency>
 
 
 		<!-- KnowledgeStore dependencies -->

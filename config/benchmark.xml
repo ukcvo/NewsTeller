@@ -189,7 +189,7 @@
 
 		<property name="configurations">
 			<list>
-				<ref bean="wrapperMLP2" />
+				<ref bean="wrapperMLPClassifier" />
 
 				<!-- <ref bean="relief-f" /> <ref bean="oneR" /> <ref bean="gainRatio" 
 					/> <ref bean="cfs" /> <ref bean="wrapperDT" /> <ref bean="wrapperNB" /> <ref 
@@ -203,11 +203,47 @@
 			</list>
 		</property>
 
-		<property name="classifierFilter" ref="allFeaturesFilter" />
+		<property name="classifierFilter" ref="MLPClassifierFilter" />
 
 		<property name="classifiers">
 			<map>
-
+				
+				<entry key="MLPClassifier" value-ref="MLPClassifier" />
+				
+				<!--
+				<entry key="naiveBayes" value-ref="naiveBayes" />
+				<entry key="naiveBayesKernel" value-ref="naiveBayes2" />
+				<entry key="bayesNet" value-ref="bayesNet" />
+				<entry key="logistic" value-ref="logistic" />
+				<entry key="MLPValidationSet" value-ref="MLP2" />
+				<entry key="svm" value-ref="svm" />
+				<entry key="svmLogistic" value-ref="svm2" />
+				<entry key="svmComplexity2" value-ref="svm3" />
+				<entry key="kNN" value-ref="kNN" />
+				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
+				<entry key="decisionTable" value-ref="decisionTable" />
+				<entry key="decisionTableKNN" value-ref="decisionTable2" />
+				<entry key="ripper" value-ref="ripper" />
+				<entry key="ripperUnpruned" value-ref="ripper2" />
+				<entry key="decisionTree" value-ref="decisionTree" />
+				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
+				<entry key="decisionTreeUnpruned" value-ref="decisionTree3" />
+				<entry key="cart" value-ref="cart" />
+				<entry key="cartOneSE" value-ref="cart2" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				<entry key="bayesNetAnnealing" value-ref="bayesNet2" />
+				<entry key="MLP" value-ref="MLP" />
+				<entry key="MLPValidationSetDecay" value-ref="MLP3" />
+				<entry key="adaBoost" value-ref="adaBoost" />
+				<entry key="adaBoostResample" value-ref="adaBoost2" />
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="svmLogistic" value-ref="svm2" />
+				<entry key="svmComplexity2" value-ref="svm3" />
+				<entry key="cartOneSE" value-ref="cart2" />
+				<entry key="optimizedRandomForest" value-ref="optimizedRandomForest" />
+				
 				<entry key="MLPSeed0" value-ref="MLP4" />
 				<entry key="MLPSeed1" value-ref="MLP5" />
 				<entry key="MLPSeed2" value-ref="MLP6" />
@@ -218,25 +254,11 @@
 				<entry key="MLPSeed7" value-ref="MLP11" />
 				<entry key="MLPSeed8" value-ref="MLP12" />
 				<entry key="MLPSeed9" value-ref="MLP13" />
-				<!-- <entry key="naiveBayes" value-ref="naiveBayes" /> <entry key="naiveBayesKernel" 
-					value-ref="naiveBayes2"/> <entry key="bayesNet" value-ref="bayesNet"/> <entry 
-					key="logistic" value-ref="logistic"/> <entry key="MLPValidationSet" value-ref="MLP2"/> 
-					<entry key="svm" value-ref="svm"/> <entry key="svmLogistic" value-ref="svm2"/> 
-					<entry key="svmComplexity2" value-ref="svm3"/> <entry key="kNN" value-ref="kNN"/> 
-					<entry key="kNNDistanceWeighting" value-ref="kNN2"/> <entry key="decisionTable" 
-					value-ref="decisionTable"/> <entry key="decisionTableKNN" value-ref="decisionTable2"/> 
-					<entry key="ripper" value-ref="ripper"/> <entry key="ripperUnpruned" value-ref="ripper2"/> 
-					<entry key="decisionTree" value-ref="decisionTree"/> <entry key="decisionTreeReducedErrorPruning" 
-					value-ref="decisionTree2"/> <entry key="decisionTreeUnpruned" value-ref="decisionTree3"/> 
-					<entry key="cart" value-ref="cart"/> <entry key="cartOneSE" value-ref="cart2"/> 
-					<entry key="randomForest100" value-ref="randomForest"/> <entry key="randomForest20" 
-					value-ref="randomForest2"/> <entry key="bayesNetAnnealing" value-ref="bayesNet2"/> 
-					<entry key="MLP" value-ref="MLP"/> <entry key="MLPValidationSetDecay" value-ref="MLP3"/> 
-					<entry key="adaBoost" value-ref="adaBoost" /> <entry key="adaBoostResample" 
-					value-ref="adaBoost2" /> <entry key="adaBoostTree" value-ref="adaBoost3" 
-					/> <entry key="adaBoostTreeResample" value-ref="adaBoost4" /> <entry key="svmLogistic" 
-					value-ref="svm2"/> <entry key="svmComplexity2" value-ref="svm3"/> <entry 
-					key="cartOneSE" value-ref="cart2"/> <entry key="optimizedRandomForest" value-ref="optimizedRandomForest"/> -->
+				
+				<entry key="MLPClassifier" value-ref="MLPClassifier" />
+				<entry key="RBF" value-ref="RBF" />
+				
+				-->
 			</map>
 		</property>
 
