@@ -24,7 +24,7 @@ import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import eu.fbk.knowledgestore.KnowledgeStore;
@@ -43,13 +43,13 @@ public class RuntimeTester {
 	
 	private boolean doKSAccessTests;
 	
-	private boolean doSparqlFindingTests;
+	private boolean doSparqlSearchTests;
 	
 	private boolean doSparqlFeatureTests;
 	
-	private boolean doSequentialFinderTest;
+	private boolean doSequentialSearcherTest;
 	
-	private boolean doParallelFinderTest;
+	private boolean doParallelSearcherTest;
 	
 	private boolean doParallelSparqlTest;
 	
@@ -59,7 +59,7 @@ public class RuntimeTester {
 	
 	private KnowledgeStoreAdapter ksAdapter;
 	
-	private Map<String, String> sparqlFindingQueries;
+	private Map<String, String> sparqlSearchQueries;
 	
 	private Map<String, String> sparqlFeatureQueries;
 	
@@ -69,9 +69,9 @@ public class RuntimeTester {
 	
 	private Map<List<Keyword>, Set<NewsEvent>> keywordsToEventsMap;
 	
-	private EventFinder sequentialFinder;
+	private EventSearcher sequentialSearcher;
 	
-	private EventFinder parallelFinder;
+	private EventSearcher parallelSearcher;
 	
 	private SequentialEventFilter sequentialFilter;
 	
@@ -88,20 +88,20 @@ public class RuntimeTester {
 		this.doKSAccessTests = doKSAccessTests;
 	}
 		
-	public void setDoSparqlFindingTests(boolean doSparqlFindingTests) {
-		this.doSparqlFindingTests = doSparqlFindingTests;
+	public void setDoSparqlSearchTests(boolean doSparqlSearchTests) {
+		this.doSparqlSearchTests = doSparqlSearchTests;
 	}
 	
 	public void setDoSparqlFeatureTests(boolean doSparqlFeatureTests) {
 		this.doSparqlFeatureTests = doSparqlFeatureTests;
 	}
 	
-	public void setDoSequentialFinderTest(boolean doSequentialFinderTest) {
-		this.doSequentialFinderTest = doSequentialFinderTest;
+	public void setDoSequentialSearcherTest(boolean doSequentialSearcherTest) {
+		this.doSequentialSearcherTest = doSequentialSearcherTest;
 	}
 	
-	public void setDoParallelFinderTest(boolean doParallelFinderTest) {
-		this.doParallelFinderTest = doParallelFinderTest;
+	public void setDoParallelSearcherTest(boolean doParallelSearcherTest) {
+		this.doParallelSearcherTest = doParallelSearcherTest;
 	}
 	
 	public void setDoParallelSparqlTest(boolean doParallelSparqlTest) {
@@ -120,10 +120,10 @@ public class RuntimeTester {
 		this.ksAdapter = ksAdapter;
 	}
 	
-	public void setSparqlFindingQueries(Set<String> fileNames) {
-		this.sparqlFindingQueries = new HashMap<String, String>();
+	public void setSparqlSearchQueries(Set<String> fileNames) {
+		this.sparqlSearchQueries = new HashMap<String, String>();
 		for (String s : fileNames) {
-			sparqlFindingQueries.put(s, Util.readStringFromFile(s));
+			sparqlSearchQueries.put(s, Util.readStringFromFile(s));
 		}
 	}
 	
@@ -138,12 +138,12 @@ public class RuntimeTester {
 		this.stemmedKeywords = stemmedKeywords;
 	}
 	
-	public void setSequentialFinder(EventFinder sequentialFinder) {
-		this.sequentialFinder = sequentialFinder;
+	public void setSequentialSearcher(EventSearcher sequentialSearcher) {
+		this.sequentialSearcher = sequentialSearcher;
 	}
 	
-	public void setParallelFinder(EventFinder parallelFinder) {
-		this.parallelFinder = parallelFinder;
+	public void setParallelSearcher(EventSearcher parallelSearcher) {
+		this.parallelSearcher = parallelSearcher;
 	}
 	
 	public void setSequentialFilter(SequentialEventFilter sequentialFilter) {
@@ -233,10 +233,10 @@ public class RuntimeTester {
 	}
 	//endregion
 	
-	//region sparqlFindingTests
-	private void sparqlFindingTests() {
+	//region sparqlSearchTests
+	private void sparqlSearchTests() {
 		
-		for (Map.Entry<String, String> entry : sparqlFindingQueries.entrySet()) {
+		for (Map.Entry<String, String> entry : sparqlSearchQueries.entrySet()) {
 			String fileName = entry.getKey();
 			String query = entry.getValue();
 			long averageQueryTime = 0;
@@ -285,13 +285,13 @@ public class RuntimeTester {
 	//endregion
 	
 	//region evaluateFinder
-	private void evaluateFinder(EventFinder finder, String finderName) {
+	private void evaluateSearcher(EventSearcher searcher, String searcherName) {
 		long averageFindingTime = 0;
 		DummyUserModel um = new DummyUserModel();
 		for (int i = 0; i < this.numberOfRepetitions; i++) {
 			for (List<Keyword> queryKeywords : this.keywords) {
 				long t1 = System.currentTimeMillis();
-				finder.findEvents(queryKeywords, um);
+				searcher.findEvents(queryKeywords, um);
 				long t2 = System.currentTimeMillis();
 				averageFindingTime += (t2 - t1);
 			}
@@ -299,7 +299,7 @@ public class RuntimeTester {
 		averageFindingTime /= this.numberOfRepetitions;
 		averageFindingTime /= this.keywords.size();
 		if (log.isInfoEnabled())
-			log.info(String.format("%s: %d ms",finderName, averageFindingTime));
+			log.info(String.format("%s: %d ms",searcherName, averageFindingTime));
 	}
 	//endregion
 	
@@ -339,7 +339,7 @@ public class RuntimeTester {
 		ExecutorService threadPool = Executors.newFixedThreadPool(10);
 		List<Future<?>> futures = new ArrayList<Future<?>>();
 		
-		for (Map.Entry<String, String> entry : sparqlFindingQueries.entrySet()) {
+		for (Map.Entry<String, String> entry : sparqlSearchQueries.entrySet()) {
 			futures.add(threadPool.submit(new ParallelSparqlTestWorker(ks, entry.getValue().replace(Util.PLACEHOLDER_KEYWORD, "Real Madrid"), entry.getKey())));
 		}
 		for (Future<?> f : futures) {
@@ -351,7 +351,7 @@ public class RuntimeTester {
 		}
 		threadPool.shutdown();
 		
-		for (Map.Entry<String, String> entry : sparqlFindingQueries.entrySet()) {
+		for (Map.Entry<String, String> entry : sparqlSearchQueries.entrySet()) {
 			(new ParallelSparqlTestWorker(ks, entry.getValue().replace(Util.PLACEHOLDER_KEYWORD, "Real Madrid"), entry.getKey() + " seq")).run();
 		}
 		ks.close();
@@ -397,14 +397,14 @@ public class RuntimeTester {
 		
 		if (this.doKSAccessTests)
 			ksAccessTests();
-		if (this.doSparqlFindingTests)
-			sparqlFindingTests();
+		if (this.doSparqlSearchTests)
+			sparqlSearchTests();
 		if (this.doSparqlFeatureTests)
 			sparqlFeatureTests();
-		if (this.doSequentialFinderTest)
-			evaluateFinder(sequentialFinder, "sequential finder");
-		if (this.doParallelFinderTest)
-			evaluateFinder(parallelFinder, "parallel finder");
+		if (this.doSequentialSearcherTest)
+			evaluateSearcher(sequentialSearcher, "sequential finder");
+		if (this.doParallelSearcherTest)
+			evaluateSearcher(parallelSearcher, "parallel finder");
 		if (this.doParallelSparqlTest)
 			parallelSparqlTest();
 		if (this.doSequentialFilterTest) {
@@ -415,8 +415,8 @@ public class RuntimeTester {
 		}
 			
 		
-		sequentialFinder.shutDown();
-		parallelFinder.shutDown();
+		sequentialSearcher.shutDown();
+		parallelSearcher.shutDown();
 		sequentialFilter.shutDown();
 		parallelFilter.shutDown();
 		this.ksAdapter.closeConnection();

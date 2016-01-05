@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval.finding;
+package edu.kit.anthropomatik.isl.newsTeller.retrieval.search;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,7 +25,7 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class EventFinder {
+public class EventSearcher {
 
 	private class QueryWorker implements Callable<List<NewsEvent>> {
 
@@ -42,7 +42,7 @@ public class EventFinder {
 		
 	}
 	
-	private static Log log = LogFactory.getLog(EventFinder.class);
+	private static Log log = LogFactory.getLog(EventSearcher.class);
 
 	// access to KnowledgeStore
 	private KnowledgeStoreAdapter ksAdapter;
@@ -68,7 +68,7 @@ public class EventFinder {
 			this.threadPool = Executors.newFixedThreadPool(nThreads);
 	}
 
-	public EventFinder(String userQueryConfigFileName, String userInterestConfigFileName, String previousEventConfigFileName) {
+	public EventSearcher(String userQueryConfigFileName, String userInterestConfigFileName, String previousEventConfigFileName) {
 		this.userQuerySPARQLTemplates = Util.readQueriesFromConfigFile(userQueryConfigFileName);
 		this.userInterestSPARQLTemplates = Util.readQueriesFromConfigFile(userInterestConfigFileName);
 		this.previousEventSPARQLTemplates = Util.readQueriesFromConfigFile(previousEventConfigFileName);

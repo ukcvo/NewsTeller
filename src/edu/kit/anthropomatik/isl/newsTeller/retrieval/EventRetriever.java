@@ -10,9 +10,9 @@ import org.springframework.util.StringUtils;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.EventRanker;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.RelevanceScorer;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
@@ -26,7 +26,7 @@ public class EventRetriever {
 
 	private static Log log = LogFactory.getLog(EventRetriever.class);
 	
-	private EventFinder eventFinder;
+	private EventSearcher eventSearcher;
 	
 	private IEventFilter eventFilter;
 	
@@ -37,8 +37,8 @@ public class EventRetriever {
 	private EventSelector eventSelector;
 	
 	//region setters
-	public void setEventFinder(EventFinder eventFinder) {
-		this.eventFinder = eventFinder;
+	public void setEventSearcher(EventSearcher eventSearcher) {
+		this.eventSearcher = eventSearcher;
 	}
 
 	public void setEventFilter(IEventFilter eventFilter) {
@@ -66,7 +66,7 @@ public class EventRetriever {
 		long t0 = System.currentTimeMillis();
 		long old = System.currentTimeMillis();
 		//endregion
-		Set<NewsEvent> events = eventFinder.findEvents(userQuery, userModel);
+		Set<NewsEvent> events = eventSearcher.findEvents(userQuery, userModel);
 		//region time logging
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();
@@ -110,7 +110,7 @@ public class EventRetriever {
 	}
 	
 	public void shutDown() {
-		this.eventFinder.shutDown();
+		this.eventSearcher.shutDown();
 		this.eventFilter.shutDown();
 	}
 }

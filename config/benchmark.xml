@@ -17,26 +17,26 @@
 		<property name="maxNumberOfConnections" value="100" />
 	</bean>
 
-	<bean id="finder1"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
+	<bean id="searcher1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
 		<constructor-arg name="userQueryConfigFileName"
-			value="config/SPARQL/finding_userQuery_Scope1.txt" />
+			value="config/SPARQL/search_userQuery_Scope1.txt" />
 		<constructor-arg name="userInterestConfigFileName"
-			value="config/SPARQL/finding_userInterest_Scope1.txt" />
+			value="config/SPARQL/search_userInterest_Scope1.txt" />
 		<constructor-arg name="previousEventConfigFileName"
-			value="config/SPARQL/finding_previousEvent_Scope1.txt" />
+			value="config/SPARQL/search_previousEvent_Scope1.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="nThreads" value="1" />
 	</bean>
 
-	<bean id="finder2"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
+	<bean id="searcher2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
 		<constructor-arg name="userQueryConfigFileName"
-			value="config/SPARQL/finding_userQuery_Scope1.txt" />
+			value="config/SPARQL/search_userQuery_Scope1.txt" />
 		<constructor-arg name="userInterestConfigFileName"
-			value="config/SPARQL/finding_userInterest_Scope1.txt" />
+			value="config/SPARQL/search_userInterest_Scope1.txt" />
 		<constructor-arg name="previousEventConfigFileName"
-			value="config/SPARQL/finding_previousEvent_Scope1.txt" />
+			value="config/SPARQL/search_previousEvent_Scope1.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="nThreads" value="0" />
 	</bean>
@@ -111,11 +111,11 @@
 			</set>
 		</property>
 
-		<property name="sparqlFindingQueries">
+		<property name="sparqlSearchQueries">
 			<set>
-				<value>resources/SPARQL/finding/findByActor.qry</value>
-				<value>resources/SPARQL/finding/findByPlace.qry</value>
-				<value>resources/SPARQL/finding/findByLabel.qry</value>
+				<value>resources/SPARQL/search/findByActor.qry</value>
+				<value>resources/SPARQL/search/findByPlace.qry</value>
+				<value>resources/SPARQL/search/findByLabel.qry</value>
 			</set>
 		</property>
 
@@ -139,8 +139,8 @@
 			</set>
 		</property>
 
-		<property name="sequentialFinder" ref="finder1" />
-		<property name="parallelFinder" ref="finder2" />
+		<property name="sequentialSearcher" ref="searcher1" />
+		<property name="parallelSearcher" ref="searcher2" />
 		<property name="sequentialFilter" ref="filter2a" />
 		<property name="parallelFilter" ref="filter2b" />
 
@@ -160,10 +160,10 @@
 		</property>
 
 		<property name="doKSAccessTests" value="false" />
-		<property name="doSparqlFindingTests" value="false" />
+		<property name="doSparqlSearchTests" value="false" />
 		<property name="doSparqlFeatureTests" value="false" />
-		<property name="doSequentialFinderTest" value="false" />
-		<property name="doParallelFinderTest" value="false" />
+		<property name="doSequentialSearcherTest" value="false" />
+		<property name="doParallelSearcherTest" value="false" />
 		<property name="doParallelSparqlTest" value="false" />
 		<property name="doSequentialFilterTest" value="false" />
 		<property name="doParallelFilterTest" value="true" />
@@ -172,11 +172,11 @@
 
 	</bean>
 
-	<bean id="findingBenchmark"
-		class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FindingBenchmark">
+	<bean id="searchBenchmark"
+		class="edu.kit.anthropomatik.isl.newsTeller.benchmark.SearchBenchmark">
 		<constructor-arg name="configFileName"
 			value="resources/benchmark/Scope 0.csv" />
-		<property name="finder" ref="finder2" />
+		<property name="searcher" ref="searcher2" />
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 

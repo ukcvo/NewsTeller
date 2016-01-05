@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.retrieval.finding;
+package edu.kit.anthropomatik.isl.newsTeller.retrieval.search;
 
 import static org.junit.Assert.*;
 
@@ -18,12 +18,13 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
-public class EventFinderTest {
+public class EventSearcherTest {
 
-	private EventFinder finder1;
-	private EventFinder finder2;
+	private EventSearcher searcher1;
+	private EventSearcher searcher2;
 	private UserModel userModel;
 	private KnowledgeStoreAdapter ksAdapter;
 	
@@ -40,8 +41,8 @@ public class EventFinderTest {
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		finder1 = (EventFinder) context.getBean("finder1");
-		finder2 = (EventFinder) context.getBean("finder2");
+		searcher1 = (EventSearcher) context.getBean("searcher1");
+		searcher2 = (EventSearcher) context.getBean("searcher2");
 		userModel = (UserModel) context.getBean("userModel0");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
@@ -58,7 +59,7 @@ public class EventFinderTest {
 	public void shouldReturn8EventsFinder1() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial intelligence"));
-		Set<NewsEvent> result = finder1.findEvents(keywords, userModel);
+		Set<NewsEvent> result = searcher1.findEvents(keywords, userModel);
 		assertTrue(result.size() == 8);
 	}
 
@@ -66,7 +67,7 @@ public class EventFinderTest {
 	public void shouldReturn221EventsFinder1() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("album"));
-		Set<NewsEvent> result = finder1.findEvents(keywords, userModel);
+		Set<NewsEvent> result = searcher1.findEvents(keywords, userModel);
 		assertTrue(result.size() == 221);
 	}
 	//endregion
@@ -76,7 +77,7 @@ public class EventFinderTest {
 	public void shouldReturn8EventsFinder2() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial intelligence"));
-		Set<NewsEvent> result = finder2.findEvents(keywords, userModel);
+		Set<NewsEvent> result = searcher2.findEvents(keywords, userModel);
 		assertTrue(result.size() == 8);
 	}
 
@@ -84,7 +85,7 @@ public class EventFinderTest {
 	public void shouldReturn221EventsFinder2() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("album"));
-		Set<NewsEvent> result = finder2.findEvents(keywords, userModel);
+		Set<NewsEvent> result = searcher2.findEvents(keywords, userModel);
 		assertTrue(result.size() == 221);
 	}
 	//endregion

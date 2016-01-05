@@ -1,3 +1,3 @@
-resources/SPARQL/finding/findByActor.qry
-resources/SPARQL/finding/findByPlace.qry
-resources/SPARQL/finding/findByLabel.qry
+resources/SPARQL/search/findByActor.qry
+resources/SPARQL/search/findByPlace.qry
+resources/SPARQL/search/findByLabel.qry

@@ -19,29 +19,29 @@ import edu.kit.anthropomatik.isl.newsTeller.data.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
-public class FindingBenchmark {
+public class SearchBenchmark {
 
-	private static Log log = LogFactory.getLog(FindingBenchmark.class);
+	private static Log log = LogFactory.getLog(SearchBenchmark.class);
 	
 	private Map<List<Keyword>, Set<NewsEvent>> keywordsToEventsMap;
 
-	private EventFinder finder;
+	private EventSearcher searcher;
 	
 	private KnowledgeStoreAdapter ksAdapter;
 	
-	public void setFinder(EventFinder finder) {
-		this.finder = finder;
+	public void setSearcher(EventSearcher searcher) {
+		this.searcher = searcher;
 	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
 	
-	public FindingBenchmark(String configFileName) {
+	public SearchBenchmark(String configFileName) {
 		this.keywordsToEventsMap = new HashMap<List<Keyword>, Set<NewsEvent>>();
 		
 		Map<String,List<Keyword>> configFile = Util.readBenchmarkConfigFile(configFileName);
@@ -65,7 +65,7 @@ public class FindingBenchmark {
 		if (log.isInfoEnabled())
 			log.info(StringUtils.collectionToCommaDelimitedString(keywords));
 		
-		Set<NewsEvent> foundEvents = finder.findEvents(keywords, new DummyUserModel());
+		Set<NewsEvent> foundEvents = searcher.findEvents(keywords, new DummyUserModel());
 		
 		if (foundEvents.size() != expectedEvents.size()) {
 			if (log.isWarnEnabled())
@@ -101,13 +101,13 @@ public class FindingBenchmark {
 		System.setProperty("java.util.logging.config.file", "./config/logging-benchmark.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(FindingBenchmark.class);
+			log = LogFactory.getLog(SearchBenchmark.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/benchmark.xml");
-		FindingBenchmark test = (FindingBenchmark) context.getBean("findingBenchmark");
+		SearchBenchmark test = (SearchBenchmark) context.getBean("searchBenchmark");
 		((AbstractApplicationContext) context).close();
 		
 		test.run();

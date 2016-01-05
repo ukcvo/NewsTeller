@@ -16,11 +16,11 @@
 		<property name="maxNumberOfConnections" value="100"/>
 	</bean>
 
-	<bean id="finder"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.finding.EventFinder">
-		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/finding_userQuery_Scope1.txt" />
-		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/finding_userInterest_Scope1.txt" />
-		<constructor-arg name="previousEventConfigFileName" value="config/SPARQL/finding_previousEvent_Scope1.txt" />
+	<bean id="searcher"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
+		<constructor-arg name="userQueryConfigFileName"	value="config/SPARQL/search_userQuery_Scope1.txt" />
+		<constructor-arg name="userInterestConfigFileName" value="config/SPARQL/search_userInterest_Scope1.txt" />
+		<constructor-arg name="previousEventConfigFileName" value="config/SPARQL/search_previousEvent_Scope1.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="nThreads" value="3"/>
 	</bean>
@@ -66,7 +66,7 @@
 
 	<bean id="retriever"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
-		<property name="eventFinder" ref="finder" />
+		<property name="eventSearcher" ref="searcher" />
 		<property name="eventFilter" ref="filter" />
 		<property name="relevanceScorer" ref="relevanceScorer"/>
 		<property name="eventRanker" ref="ranker" />
