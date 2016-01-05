@@ -1,0 +1,5 @@
+SELECT ?label
+WHERE
+{
+    <*x*> rdfs:label ?label
+}

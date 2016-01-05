@@ -16,7 +16,7 @@ public class DummySummaryCreator extends SummaryCreator {
 	private static Log log = LogFactory.getLog(SummaryCreator.class);
 	
 	@Override
-	public String summarizeEvent(NewsEvent event) {
+	public String createSummary(NewsEvent event) {
 		if (log.isTraceEnabled()) 
 			log.trace(String.format("summarizeEvent(URI = '%s')", (event == null) ? "null" : event.getEventURI()));
 		

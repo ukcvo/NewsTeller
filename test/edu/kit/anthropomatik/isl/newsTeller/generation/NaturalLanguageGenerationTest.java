@@ -16,9 +16,9 @@ import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
-public class SentencePickerTest {
+public class NaturalLanguageGenerationTest {
 
-	private SummaryCreator sentencePicker;
+	private NaturalLanguageGeneration nlg;
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	@BeforeClass
@@ -34,32 +34,21 @@ public class SentencePickerTest {
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		sentencePicker = (SummaryCreator) context.getBean("generator1");
-		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
+		this.nlg = (NaturalLanguageGeneration) context.getBean("generator2");
+		this.ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.openConnection();
 	}
 
 	@After
-	public void tearDown() {
+	public void tearDown() throws Exception {
 		ksAdapter.closeConnection();
-	}
-	
-	@Test
-	public void shouldReturnEmptyEventResponseBecauseOfNullEvent() {
-		String result = sentencePicker.summarizeEvent(null);
-		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 
 	@Test
-	public void shouldReturnEmptyEventResponseBecauseOfNonexistentEvent() {
-		String result = sentencePicker.summarizeEvent(new NewsEvent("http://en.wikinews.org/wiki/Non_existing_text#ev999"));
+	public void shouldReturnEmptyEventResponse() {
+		String result = this.nlg.summarizeEvent(new NewsEvent("null"));
 		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
-	
-	@Test
-	public void shouldReturnRegularResponse() {
-		String result = sentencePicker.summarizeEvent(new NewsEvent("http://en.wikinews.org/wiki/Journals_tackle_scientific_fraud#ev34"));
-		assertTrue(!result.isEmpty() && !result.equals(Util.EMPTY_EVENT_RESPONSE));
-	}
+
 }

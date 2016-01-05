@@ -14,7 +14,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
-import edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class NewsTellerTest {
 
@@ -55,7 +55,7 @@ public class NewsTellerTest {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial intelligence"));
 		String result = newsTellerScope1.getNews(keywords);
-		assertTrue(!result.isEmpty() && !result.equals(SentencePicker.EMPTY_EVENT_RESPONSE));
+		assertTrue(!result.isEmpty() && !result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class NewsTellerTest {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial brain"));
 		String result = newsTellerScope1.getNews(keywords);
-		assertTrue(result.equals(SentencePicker.EMPTY_EVENT_RESPONSE));
+		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 	
 	//endregion

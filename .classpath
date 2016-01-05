@@ -22,5 +22,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/simplenlg-v4.4.3.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

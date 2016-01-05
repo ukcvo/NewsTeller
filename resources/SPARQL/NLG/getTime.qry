@@ -1,0 +1,6 @@
+SELECT ?label
+WHERE
+{
+	<*x*> sem:hasTime ?time .
+	?time rdfs:label ?label .
+}

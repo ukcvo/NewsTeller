@@ -153,6 +153,11 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
+	<bean id="generator2"
+		class="edu.kit.anthropomatik.isl.newsTeller.generation.NaturalLanguageGeneration">
+		<property name="ksAdapter" ref="ksAdapter" />
+	</bean>
+
 	<bean id="userModel0"
 		class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel">
 	</bean>
