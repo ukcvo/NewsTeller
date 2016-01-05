@@ -128,6 +128,30 @@ public class UtilTest {
 		
 		assertTrue(map.get("resources/benchmark/queries/album.csv").get(0).getWord().equals("album"));
 	}
+	
+	@Test
+	public void shouldReturnEmptyNLGMapNoConfig() {
+		Map<String, String> map = Util.readNLGQueries("config/SPARQL/nonexisting-file.csv");
+		assertTrue(map.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturnEmptyNLGMapEmptyConfig() {
+		Map<String, String> map = Util.readNLGQueries("config/SPARQL/test/NLGConfigEmpty.csv");
+		assertTrue(map.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturnEmptyNLGMapBrokenConfig() {
+		Map<String, String> map = Util.readNLGQueries("config/SPARQL/test/NLGConfigWrongFile.csv");
+		assertTrue(map.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturnCorrectNLGMap() {
+		Map<String, String> map = Util.readNLGQueries("config/SPARQL/test/NLGConfigTest.csv");
+		assertTrue(map.size() == 1);
+	}
 	//endregion
 
 	//region regarding XML

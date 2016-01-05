@@ -1,0 +1,7 @@
+constituent,filename
+A0, resources/SPARQL/NLG/getA0.qry
+A1, resources/SPARQL/NLG/getA1.qry
+A2, resources/SPARQL/NLG/getA2.qry
+eventLabel, resources/SPARQL/NLG/getEventLabel.qry
+place, resources/SPARQL/NLG/getPlace.qry
+time, resources/SPARQL/NLG/getTime.qry

@@ -77,6 +77,7 @@ public class Util {
 	public static final String COLUMN_NAME_TRAINING = "train_";
 	public static final String COLUMN_NAME_TEST = "test_";
 	public static final String COLUMN_NAME_PERCENTAGE = "percentage";
+	public static final String COLUMN_NAME_CONSTITUENT = "constituent";
 
 	public static final String CLASS_LABEL_NEGATIVE = "false";
 	public static final String CLASS_LABEL_POSITIVE = "true";
@@ -84,7 +85,7 @@ public class Util {
 	public static final String ATTRIBUTE_USABLE = "usable";
 	public static final String ATTRIBUTE_URI = "eventURI";
 	public static final String ATTRIBUTE_FILE = "fileName";
-
+	
 	public static final double EPSILON = 0.00001;
 
 	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 5;
@@ -339,6 +340,43 @@ public class Util {
 				log.debug("cannnot write file", e);
 		}
 
+	}
+	
+	/**
+	 * Reads the given config file and returns a map of constituents to queries.
+	 */
+	public static Map<String, String> readNLGQueries(String configFileName) {
+		
+		if (log.isTraceEnabled())
+			log.trace(String.format("readNLGQueries(configFileName = '%s')", configFileName));
+
+		Map<String, String> result = new HashMap<String, String>();
+		
+		try {
+			CsvReader in = new CsvReader(configFileName);
+			in.readHeaders();
+
+			while (in.readRecord()) {
+				String constituentName = in.get(Util.COLUMN_NAME_CONSTITUENT);
+				String queryFileName = in.get(Util.COLUMN_NAME_FILENAME);
+				
+				String query = readStringFromFile(queryFileName);
+				if (!query.isEmpty())
+					result.put(constituentName, query);
+				else if (log.isWarnEnabled())
+					log.warn(String.format("empty query file, skipping: '%s'", queryFileName));
+			}
+
+			in.close();
+
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error(String.format("could not read benchmark config file, returning empty result: '%s'", configFileName));
+			if (log.isDebugEnabled())
+				log.debug("cannnot read file", e);
+		}
+		
+		return result;
 	}
 	
 	// endregion
