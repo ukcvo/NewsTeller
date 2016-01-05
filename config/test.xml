@@ -157,6 +157,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.generation.NaturalLanguageGeneration">
 		<constructor-arg name="configFileName" value="config/SPARQL/NLGQueries.csv"/>
 		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="wordNetFeature" ref="wordNetFeature" />
 	</bean>
 
 	<bean id="userModel0"

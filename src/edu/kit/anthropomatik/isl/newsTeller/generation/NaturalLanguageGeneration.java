@@ -9,9 +9,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import simplenlg.features.Feature;
 import simplenlg.features.Tense;
+import simplenlg.framework.CoordinatedPhraseElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.lexicon.Lexicon;
 import simplenlg.phrasespec.NPPhraseSpec;
@@ -36,9 +38,16 @@ public class NaturalLanguageGeneration extends SummaryCreator {
 	private static final String PLACE = "place";
 	private static final String TIME = "time";
 	
+	// SimpleNLG stuff, will be created in constructor
 	private Lexicon lexicon;
 	private NLGFactory nlgFactory;
 	private Realiser realiser;
+	
+	private WordNetVerbCountFeature wordNetFeature;
+	
+	public void setWordNetFeature(WordNetVerbCountFeature wordNetFeature) {
+		this.wordNetFeature = wordNetFeature;
+	}
 	
 	// contains the SPARQL queries
 	private Map<String,String> sparqlQueries;
@@ -69,6 +78,23 @@ public class NaturalLanguageGeneration extends SummaryCreator {
 		return result;
 	}
 	
+	// select the event label with the highest fraction of verb senses according to WordNet.
+	private String selectVerb(List<String> eventLabels) {
+		
+		String result = null;
+		double verbProbability = 0;
+		
+		for (String label : eventLabels) {
+			double labelProbability = this.wordNetFeature.getLabelVerbFrequency(label);
+			if (labelProbability > verbProbability) {
+				result = label;
+				verbProbability = labelProbability;
+			}
+		}
+		
+		return result;
+	}
+	
 	@Override
 	public String createSummary(NewsEvent event) {
 		
@@ -92,16 +118,43 @@ public class NaturalLanguageGeneration extends SummaryCreator {
 		Map<String, List<String>> constituents = analyzeEvent(event);
 		
 		SPhraseSpec sentence = nlgFactory.createClause();
-		NPPhraseSpec object = nlgFactory.createNounPhrase();
-		NPPhraseSpec subject = nlgFactory.createNounPhrase();
+		CoordinatedPhraseElement subject = nlgFactory.createCoordinatedPhrase();
 		VPPhraseSpec verb = nlgFactory.createVerbPhrase();
+		CoordinatedPhraseElement object = nlgFactory.createCoordinatedPhrase();
 		sentence.setSubject(subject);
 		sentence.setObject(object);
 		sentence.setVerb(verb);
 		
-		subject.setNoun(constituents.get(A0).isEmpty() ? null : constituents.get(A0).get(0));
-		object.setNoun(constituents.get(A1).isEmpty() ? null : constituents.get(A1).get(0));
-		verb.setVerb(constituents.get(LABEL).isEmpty() ? null : constituents.get(LABEL));
+		String verbString = selectVerb(constituents.get(LABEL));
+		if (verbString != null) {
+			// there is a verb --> construct a normal sentence
+			
+			for (String subjectString : constituents.get(A0)) {
+				NPPhraseSpec subjectNP = nlgFactory.createNounPhrase(subjectString);
+				subject.addCoordinate(subjectNP);
+			}
+			
+			verb.setVerb(verbString);
+			
+			for (String objectString : constituents.get(A1)) {
+				NPPhraseSpec objectNP = nlgFactory.createNounPhrase(objectString);
+				subject.addCoordinate(objectNP);
+			}
+			
+		} else {
+			// there is nothing that can be interpreted as verb --> construct "there is" sentence.
+			
+			NPPhraseSpec subjectNP = nlgFactory.createNounPhrase("there");
+			subject.addCoordinate(subjectNP);
+			
+			verb.setVerb("be");
+			
+			NPPhraseSpec objectNP = nlgFactory.createNounPhrase();
+			objectNP.setDeterminer("a");
+			objectNP.setNoun(constituents.get(LABEL).isEmpty() ? "nothing" : constituents.get(LABEL).get(0)); 
+			object.addCoordinate(objectNP);
+			
+		}
 		
 		String result = "";
 		
