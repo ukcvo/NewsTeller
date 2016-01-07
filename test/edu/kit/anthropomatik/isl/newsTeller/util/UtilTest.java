@@ -86,25 +86,25 @@ public class UtilTest {
 	}
 	
 	@Test
-	public void shouldReturn77ElementBenchmarkMap() {
-		Map<BenchmarkEvent, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
-		assertTrue(map.size() == 77);
+	public void shouldReturn93ElementBenchmarkMap() {
+		Map<BenchmarkEvent, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/artificial intelligence.csv");
+		assertTrue(map.size() == 93);
 	}
 	
 	@Test
 	public void shouldReturnRating1() {
-		Map<BenchmarkEvent, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
-		BenchmarkEvent e = new BenchmarkEvent("resources/benchmark/queries/riot.csv", 
-				"http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev67");
+		Map<BenchmarkEvent, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/artificial intelligence.csv");
+		BenchmarkEvent e = new BenchmarkEvent("resources/benchmark/queries/artificial intelligence.csv", 
+				"http://en.wikinews.org/wiki/Computer_professionals_celebrate_10th_birthday_of_A.L.I.C.E.#ev32");
 		GroundTruth buf = map.get(e);
 		assertTrue(buf.getUsabilityRating() - 1.0 < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnRank1() {
-		Map<BenchmarkEvent, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/riot.csv");
-		BenchmarkEvent e = new BenchmarkEvent("resources/benchmark/queries/riot.csv", 
-				"http://en.wikinews.org/wiki/60th_anniversary_of_the_end_of_the_war_in_Asia_and_Pacific_commemorated#ev67");
+		Map<BenchmarkEvent, GroundTruth> map = Util.readBenchmarkQueryFromFile("resources/benchmark/queries/artificial intelligence.csv");
+		BenchmarkEvent e = new BenchmarkEvent("resources/benchmark/queries/artificial intelligence.csv", 
+				"http://en.wikinews.org/wiki/Computer_professionals_celebrate_10th_birthday_of_A.L.I.C.E.#ev32");
 		GroundTruth buf = map.get(e);
 		
 		assertTrue(buf.getRelevanceRank() == 1);
@@ -119,7 +119,7 @@ public class UtilTest {
 	@Test
 	public void shouldReturn44ElementConfigMap() {
 		Map<String, List<Keyword>> map = Util.readBenchmarkConfigFile("resources/benchmark/Scope 0.csv");
-		assertTrue(map.size() == 44);
+		assertTrue(map.size() == 43);
 	}
 	
 	@Test

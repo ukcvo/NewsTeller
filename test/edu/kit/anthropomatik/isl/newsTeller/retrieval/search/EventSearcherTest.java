@@ -64,11 +64,11 @@ public class EventSearcherTest {
 	}
 
 	@Test
-	public void shouldReturn221EventsFinder1() {
+	public void shouldReturn211EventsFinder1() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(new Keyword("album"));
+		keywords.add(new Keyword("erupt"));
 		Set<NewsEvent> result = searcher1.findEvents(keywords, userModel);
-		assertTrue(result.size() == 221);
+		assertTrue(result.size() == 211);
 	}
 	//endregion
 	
@@ -82,11 +82,11 @@ public class EventSearcherTest {
 	}
 
 	@Test
-	public void shouldReturn221EventsFinder2() {
+	public void shouldReturn211EventsFinder2() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(new Keyword("album"));
+		keywords.add(new Keyword("erupt"));
 		Set<NewsEvent> result = searcher2.findEvents(keywords, userModel);
-		assertTrue(result.size() == 221);
+		assertTrue(result.size() == 211);
 	}
 	//endregion
 }
