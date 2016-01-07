@@ -45,7 +45,7 @@ public class NewsTellerTest {
 	//region Scope 0
 	@Test
 	public void shouldReturnDummySummary() {
-		assertTrue(newsTellerScope0.getNews(null).equals("dummySummary"));
+		assertTrue(newsTellerScope0.getNews(null).equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 	//endregion
 	

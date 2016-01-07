@@ -46,20 +46,20 @@ public class WordNetVerbCountFeatureTest {
 	
 	@Test
 	public void shouldReturnOne() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Pakistani_scientist_says_government_knew_about_nuclear_shipment_to_North_Korea#ev49", null);
+		double value = feature.getValue("http://en.wikinews.org/wiki/Pranab_and_Oli_discuss_Nepal_peace_talks#ev34", null);
 		assertTrue(value == 1.0);
 	}
 	
 	@Test
 	public void shouldReturnZero() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/9_US_soldiers_killed_in_Iraq_bombing;_20_others_wounded#ev27", null);
+		double value = feature.getValue("http://en.wikinews.org/wiki/Two_boys_dead_after_their_father_throws_them_off_hotel_balcony#ev33", null);
 		assertTrue(value == 0.0);
 	}
 	
 	@Test
-	public void shouldReturnAboutZeroPointFive() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/SpaceX_successfully_test_fires_Falcon_9_rocket_in_Texas#ev27_1", null);
-		assertTrue(Math.abs(value - 0.5384615384615384) < Util.EPSILON);
+	public void shouldReturnAboutZeroPointFourFive() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/Nick_Smith_responds_to_claims_he_is_New_Zealand's_worst_behaved_politician#ev33", null);
+		assertTrue(Math.abs(value - 0.4444444444) < Util.EPSILON);
 	}
 
 }

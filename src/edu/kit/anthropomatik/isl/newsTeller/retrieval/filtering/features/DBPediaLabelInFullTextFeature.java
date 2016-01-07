@@ -14,11 +14,14 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 
-	private String labelQuery;
+	private String directLabelQuery;
 	
-	public DBPediaLabelInFullTextFeature(String queryFileName, String labelQueryFileName) {
+	private String inheritedLabelQuery;
+	
+	public DBPediaLabelInFullTextFeature(String queryFileName, String directLabelQueryFileName, String inheritedLabelQueryFileName) {
 		super(queryFileName);
-		this.labelQuery = Util.readStringFromFile(labelQueryFileName);
+		this.directLabelQuery = Util.readStringFromFile(directLabelQueryFileName);
+		this.inheritedLabelQuery = Util.readStringFromFile(inheritedLabelQueryFileName);
 	}
 	
 	@Override
@@ -30,7 +33,9 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 					sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), Util.VARIABLE_ENTITY);
 			
 			for (String entity : entities) {
-				List<String> labels = ksAdapter.runSingleVariableStringQuery(labelQuery.replace(Util.PLACEHOLDER_ENTITY, entity), Util.VARIABLE_LABEL);
+				List<String> labels = ksAdapter.runSingleVariableStringQuery(directLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity), Util.VARIABLE_LABEL);
+				if (labels.isEmpty())	// no direct DBpedia labels --> look at parent concepts
+					labels = ksAdapter.runSingleVariableStringQuery(inheritedLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity), Util.VARIABLE_LABEL); 
 				result.add(labels);
 			}
 		}

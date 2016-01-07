@@ -81,7 +81,7 @@ public class KeywordInFullTextFeatureTest {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(k);
 		
-		double result = this.onlyStemFeature.getValue("http://en.wikinews.org/wiki/BBC's_Strictly_Come_Dancing_to_be_broadcast_from_Blackpool_Tower#ev13", keywords);
+		double result = this.onlyStemFeature.getValue("http://en.wikinews.org/wiki/Chinese_short_movie_mocks_Kim_Jong_il_and_his_secret_agent#ev40", keywords);
 		
 		assertTrue(result == 1.0);
 	}
@@ -112,12 +112,12 @@ public class KeywordInFullTextFeatureTest {
 	
 	@Test
 	public void shouldReturnOneForBothBecauseOfStem() {
-		Keyword k = new Keyword("charity");
+		Keyword k = new Keyword("dance");
 		Util.stemKeyword(k);
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(k);
 		
-		double result = this.keywordAndStemFeature.getValue("http://en.wikinews.org/wiki/Australian_Senate_Committee_recommends_formation_of_Charities_Commission#ev38_7", keywords);
+		double result = this.keywordAndStemFeature.getValue("http://en.wikinews.org/wiki/Chinese_short_movie_mocks_Kim_Jong_il_and_his_secret_agent#ev40", keywords);
 		
 		assertTrue(result == 1.0);
 	}

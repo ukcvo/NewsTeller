@@ -6,6 +6,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>NewsTeller</name>
 	<description>NewsTeller system - giving short summaries about news relevant to the user</description>
+
+
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
@@ -18,12 +20,49 @@
 			</resource>
 		</resources>
 		<plugins>
+
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
+				<version>${compiler-plugin.version}</version>
 				<configuration>
-					<source />
-					<target />
+					<source>${java.source.version}</source>
+					<target>${java.target.version}</target>
+					<debug>true</debug>
+					<optimize>false</optimize>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${assembly-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-assemblies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/src.xml</descriptor>
+						<descriptor>src/main/assembly/bin.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>${eclipse-plugin.version}</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<useProjectReferences>true</useProjectReferences>
+					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -169,24 +208,106 @@
 		<dependency>
 			<groupId>eu.fbk.rdfpro</groupId>
 			<artifactId>rdfpro-core</artifactId>
-			<version>0.3</version>
+			<version>${rdfpro.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.fbk.rdfpro</groupId>
 			<artifactId>rdfpro-tql</artifactId>
-			<version>0.3</version>
+			<version>${rdfpro.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.fbk.rdfpro</groupId>
 			<artifactId>rdfpro-jsonld</artifactId>
-			<version>0.3</version>
+			<version>${rdfpro.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.fbk.knowledgestore</groupId>
 			<artifactId>ks-client</artifactId>
-			<version>1.5.1</version>
+			<version>${ks.version}</version>
 		</dependency>
-		
-
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-model</artifactId>
+			<version>${sesame.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-util</artifactId>
+			<version>${sesame.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-api</artifactId>
+			<version>${sesame.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-binary</artifactId>
+			<version>${sesame.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-n3</artifactId>
+			<version>${sesame.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-nquads</artifactId>
+			<version>${sesame.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-ntriples</artifactId>
+			<version>${sesame.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-rdfjson</artifactId>
+			<version>${sesame.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-rdfxml</artifactId>
+			<version>${sesame.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-trig</artifactId>
+			<version>${sesame.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-trix</artifactId>
+			<version>${sesame.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-turtle</artifactId>
+			<version>${sesame.version}</version>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.source.version>1.8</java.source.version>
+		<java.target.version>1.8</java.target.version>
+
+		<sesame.version>2.7.10</sesame.version>
+		<ks.version>1.6.2</ks.version>
+		<rdfpro.version>0.4.1</rdfpro.version>
+
+		<compiler-plugin.version>3.1</compiler-plugin.version>
+		<assembly-plugin.version>2.4</assembly-plugin.version>
+		<eclipse-plugin.version>2.9</eclipse-plugin.version>
+
+	</properties>
 </project>

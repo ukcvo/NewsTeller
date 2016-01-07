@@ -56,11 +56,11 @@ public class EventSearcherTest {
 
 	//region scope 1 (sequential)
 	@Test
-	public void shouldReturn8EventsFinder1() {
+	public void shouldReturn93EventsFinder1() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial intelligence"));
 		Set<NewsEvent> result = searcher1.findEvents(keywords, userModel);
-		assertTrue(result.size() == 8);
+		assertTrue(result.size() == 93);
 	}
 
 	@Test
@@ -74,11 +74,11 @@ public class EventSearcherTest {
 	
 	//region scope 2 (parallel)
 	@Test
-	public void shouldReturn8EventsFinder2() {
+	public void shouldReturn93EventsFinder2() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial intelligence"));
 		Set<NewsEvent> result = searcher2.findEvents(keywords, userModel);
-		assertTrue(result.size() == 8);
+		assertTrue(result.size() == 93);
 	}
 
 	@Test

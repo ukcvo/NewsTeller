@@ -76,24 +76,24 @@ public class KnowledgeStoreAdapterTest {
 	}
 
 	@Test
-	public void shouldReturn624439() {
+	public void shouldReturn632704() {
 		double number = ksAdapter.runSingleVariableDoubleQuerySingleResult("SELECT (count(?s) as ?n) WHERE {?s rdf:type sem:Event}", "n");
-		assertTrue(number == 624439);
+		assertTrue(number == 632704);
 	}
 	
 	@Test
 	public void shouldReturnCorrectSentenceForSingleMentionEvent() {
-		String expectedResult = "The Live 8 event, however, was broadcast live.";
-		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev27");
+		String expectedResult = "The stars accused of swearing before the watershed include Snoop Dogg, Madonna, Johnny Borrell (Razorlight) and Billie-Joe Armstrong (Green Day).";
+		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev41");
 		assertTrue(expectedResult.equals(retrievedSentence));
 	}
 	
 	@Test
 	public void shouldReturnCorrectSentenceForMultipleMentionEvent() {
 		List<String> expectedResults = 
-				Arrays.asList(	"Under the act, nuclear power generation is specified as a prohibited activity.",
-								"Dr Clive Hamilton, executive director of the Australia Institute said that the government is yet to give an indication on potential nuclear power sites and there is only a small number of sites which would be suitable for a power generation reactor.");
-		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/The_Australia_Institute_identifies_ideal_sites_for_nuclear_power_stations#ev27_4");
+				Arrays.asList(	"Instead, Kucinich is going to focus on his re-election bid to the United States House of Representatives because he is facing four other candidates in the Democratic primary for Ohio's 10th congressional district and has received criticism for spending more time on running for President than on the district which he has represented for the past 12 years.",
+								"This was his second run for the presidency, his first was the 2004 presidential election.");
+		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22");
 		assertTrue(expectedResults.contains(retrievedSentence));
 	}
 }

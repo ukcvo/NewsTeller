@@ -62,7 +62,7 @@ public class SparqlFeatureTest {
 		Keyword k = new Keyword("Hawking");
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(k);
-		double result = feature.getValue("http://en.wikinews.org/wiki/Stephen_Hawking_concludes_visit_to_Israel_and_Palestine#ev12", keywords);
+		double result = feature.getValue("http://en.wikinews.org/wiki/Stephen_Hawking_concludes_visit_to_Israel_and_Palestine#ev16", keywords);
 
 		assertTrue(result == 1.0);
 	}

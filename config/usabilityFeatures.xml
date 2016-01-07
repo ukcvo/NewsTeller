@@ -167,18 +167,23 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/getEntities.qry" />
-		<constructor-arg name="labelQueryFileName"
+		<constructor-arg name="directLabelQueryFileName"
 			value="resources/SPARQL/usability/getLabels.qry" />
+		<constructor-arg name="inheritedLabelQueryFileName"
+			value="resources/SPARQL/usability/getInheritedLabels.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="appearLabelsInText" />
 	</bean>
 
-	<bean id="propBankFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropBankFeature">
-		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/areLabelsVerbs.qry"/>
-		<constructor-arg name="countQueryFileName" value="resources/SPARQL/usability/propBankFeature.qry"/>
-		<constructor-arg name="propBankFolderName" value="resources/propbank-frames"/>
+	<bean id="propBankFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropBankFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/areLabelsVerbs.qry" />
+		<constructor-arg name="countQueryFileName"
+			value="resources/SPARQL/usability/propBankFeature.qry" />
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="propBankFeature"/>
+		<property name="name" value="propBankFeature" />
 	</bean>
 
 	<bean id="hasActorOrPlaceFeature"
@@ -196,46 +201,45 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasKeywordAsLabel" />
 	</bean>
-	
+
 	<bean id="keywordInTextFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
-		<constructor-arg name="queryFileName"
-			value="" />
+		<constructor-arg name="queryFileName" value="" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="keywordInText" />
-		
+
 		<property name="useOriginalString" value="true" />
 		<property name="useStem" value="false" />
 	</bean>
-	
+
 	<bean id="keywordStemInTextFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
-		<constructor-arg name="queryFileName"
-			value="" />
+		<constructor-arg name="queryFileName" value="" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="keywordStemInText" />
-		
+
 		<property name="useOriginalString" value="false" />
 		<property name="useStem" value="true" />
 	</bean>
-	
+
 	<bean id="keywordOrStemInTextFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
-		<constructor-arg name="queryFileName"
-			value="" />
+		<constructor-arg name="queryFileName" value="" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="keywordOrStemInText" />
-		
+
 		<property name="useOriginalString" value="true" />
 		<property name="useStem" value="true" />
 	</bean>
-	
+
 	<bean id="appearKeywordLabelsInTextFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/getEntitiesByKeyword.qry" />
-		<constructor-arg name="labelQueryFileName"
+		<constructor-arg name="directLabelQueryFileName"
 			value="resources/SPARQL/usability/getLabels.qry" />
+		<constructor-arg name="inheritedLabelQueryFileName"
+			value="resources/SPARQL/usability/getInheritedLabels.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="appearKeywordLabelsInText" />
 	</bean>

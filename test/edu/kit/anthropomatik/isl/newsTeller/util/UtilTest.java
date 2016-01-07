@@ -117,16 +117,16 @@ public class UtilTest {
 	}
 	
 	@Test
-	public void shouldReturn45ElementConfigMap() {
+	public void shouldReturn44ElementConfigMap() {
 		Map<String, List<Keyword>> map = Util.readBenchmarkConfigFile("resources/benchmark/Scope 0.csv");
-		assertTrue(map.size() == 45);
+		assertTrue(map.size() == 44);
 	}
 	
 	@Test
-	public void shouldReturnAlbum() {
+	public void shouldReturnArtificialIntelligence() {
 		Map<String, List<Keyword>> map = Util.readBenchmarkConfigFile("resources/benchmark/Scope 0.csv");
 		
-		assertTrue(map.get("resources/benchmark/queries/album.csv").get(0).getWord().equals("album"));
+		assertTrue(map.get("resources/benchmark/queries/artificial intelligence.csv").get(0).getWord().equals("artificial intelligence"));
 	}
 	
 	@Test
