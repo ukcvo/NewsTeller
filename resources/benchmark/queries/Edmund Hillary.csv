@@ -1,1 +1,11 @@
-"URI","usabilityRating","relevanceRank"
+"URI","usabilityRating","reason_1","reason_2","reason_3","relevanceRank"
+"http://en.wikinews.org/wiki/Sherpa_mountaineer_Nawang_Gombu,_first_to_summit_Mount_Everest_twice,_dies#ev18",0,2,9,,10
+"http://en.wikinews.org/wiki/Sherpa_mountaineer_Nawang_Gombu,_first_to_summit_Mount_Everest_twice,_dies#ev19",0,2,,,10
+"http://en.wikinews.org/wiki/Sir_Edmund_Hillary_angry_with_mountaineers_who_left_British_climber_to_die#ev52",0,6,10,8,10
+"http://en.wikinews.org/wiki/Sir_Edmund_Hillary_angry_with_mountaineers_who_left_British_climber_to_die#ev57",0,4,,,10
+"http://en.wikinews.org/wiki/Sir_Edmund_Hillary_dead_at_88#ev23",0,9,,,10
+"http://en.wikinews.org/wiki/Sir_Edmund_Hillary_dead_at_88#ev24",0,10,2,5,10
+"http://en.wikinews.org/wiki/Sir_Edmund_Hillary_dead_at_88#ev38",1,1,,,1
+"http://en.wikinews.org/wiki/Sir_Edmund_Hillary_dead_at_88#ev47",1,1,,,1
+"http://en.wikinews.org/wiki/Sir_Edmund_Hillary_dead_at_88#ev49",0,7,,,10
+"http://en.wikinews.org/wiki/Sir_Edmund_Hillary_dead_at_88#ev51",1,1,,,1
