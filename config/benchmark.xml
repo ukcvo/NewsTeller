@@ -12,7 +12,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
 		<constructor-arg name="getMentionFromEventFileName"
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
-		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews-elastic" />
+		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
 		<property name="maxNumberOfConnections" value="100" />
 	</bean>

@@ -1,4 +1,4 @@
-package edu.kit.anthropomatik.isl.newsTeller.data;
+package edu.kit.anthropomatik.isl.newsTeller.data.benchmark;
 
 /**
  * Represents an event within the benchmark (consisting of fileName and eventURI).

@@ -26,9 +26,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import edu.kit.anthropomatik.isl.newsTeller.data.BenchmarkEvent;
-import edu.kit.anthropomatik.isl.newsTeller.data.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.UsabilityRatingReason;
 import weka.core.SerializationHelper;
 
 /**
@@ -78,6 +79,7 @@ public class Util {
 	public static final String COLUMN_NAME_TEST = "test_";
 	public static final String COLUMN_NAME_PERCENTAGE = "percentage";
 	public static final String COLUMN_NAME_CONSTITUENT = "constituent";
+	public static final String COLUMN_NAME_REASON = "reason_";
 
 	public static final String CLASS_LABEL_NEGATIVE = "false";
 	public static final String CLASS_LABEL_POSITIVE = "true";
@@ -89,6 +91,7 @@ public class Util {
 	public static final double EPSILON = 0.00001;
 
 	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 5;
+	public static final int MAX_NUMBER_OF_REASONS = 4;
 
 	public static final String EMPTY_EVENT_RESPONSE = "I'm sorry, but there's nothing I can tell you about this topic.";
 
@@ -207,7 +210,16 @@ public class Util {
 					String eventURI = in.get(Util.COLUMN_NAME_URI);
 					double usabilityRating = Double.parseDouble(in.get(Util.COLUMN_NAME_USABILITY_RATING));
 					int relevanceRank = Integer.parseInt(in.get(Util.COLUMN_NAME_RELEVANCE_RANK));
-					result.put(new BenchmarkEvent(fileName, eventURI), new GroundTruth(usabilityRating, relevanceRank));
+					
+					Set<UsabilityRatingReason> reasons = new HashSet<>();
+					for (int i = 1; i <= Util.MAX_NUMBER_OF_REASONS; i++) {
+						String s = in.get(Util.COLUMN_NAME_REASON + i);
+						if (s != null && !s.isEmpty())
+							reasons.add(UsabilityRatingReason.fromInteger(Integer.parseInt(s)));
+					}
+					
+					result.put(new BenchmarkEvent(fileName, eventURI), new GroundTruth(usabilityRating, relevanceRank, reasons));
+					
 				} catch (NumberFormatException e) {
 					if (log.isWarnEnabled())
 						log.warn(String.format("malformed entry, skipping: '%s'", in.getRawRecord()));
