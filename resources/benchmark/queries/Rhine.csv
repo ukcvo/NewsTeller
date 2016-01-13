@@ -1,1 +1,16 @@
-"URI","usabilityRating","relevanceRank"
+"URI","usabilityRating","reason_1","reason_2","relevanceRank"
+"http://en.wikinews.org/wiki/Angela_Merkel_elected_new_German_chancellor#ev61",0,8,,15
+"http://en.wikinews.org/wiki/Automaker_GM_to_cut_10,000_jobs_at_Opel#ev33",0,2,,15
+"http://en.wikinews.org/wiki/Automaker_GM_to_cut_10,000_jobs_at_Opel#ev50",0,2,,15
+"http://en.wikinews.org/wiki/Buck_Owens,_country_music_icon,_dies_at_76#ev60",0,13,9,15
+"http://en.wikinews.org/wiki/Chelsea_Clinton_marries_Marc_Mezvinsky_in_Rhinebeck,_New_York#ev27",0,13,2,15
+"http://en.wikinews.org/wiki/Chelsea_Clinton_marries_Marc_Mezvinsky_in_Rhinebeck,_New_York#ev64",0,10,13,15
+"http://en.wikinews.org/wiki/Forces_capture_Somali_pirates_who_mistakenly_attacked_naval_ship#ev22",0,4,,15
+"http://en.wikinews.org/wiki/Former_German_president_Johannes_Rau_dies_at_75#ev26",0,2,9,15
+"http://en.wikinews.org/wiki/Former_German_president_Johannes_Rau_dies_at_75#ev27",0,2,,15
+"http://en.wikinews.org/wiki/Karlheinz_Stockhausen,_composer,_dies_aged_79#ev22",0,2,,15
+"http://en.wikinews.org/wiki/Pope_visits_World_Youth_Day_in_Cologne#ev14",1,1,,1
+"http://en.wikinews.org/wiki/Snow_causes_German_travel_woes#ev12",0,2,,15
+"http://en.wikinews.org/wiki/Snow_causes_German_travel_woes#ev33",0,4,9,15
+"http://en.wikinews.org/wiki/U.S._names_German_bases_to_close#ev20",0,4,,15
+"http://en.wikinews.org/wiki/UK_police_involved_in_stand-off_with_gunman_Raoul_Moat#ev59",0,3,,15

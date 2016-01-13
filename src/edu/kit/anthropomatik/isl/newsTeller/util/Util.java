@@ -91,7 +91,7 @@ public class Util {
 	public static final double EPSILON = 0.00001;
 
 	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 5;
-	public static final int MAX_NUMBER_OF_REASONS = 4;
+	public static final int MAX_NUMBER_OF_REASONS = 6;
 
 	public static final String EMPTY_EVENT_RESPONSE = "I'm sorry, but there's nothing I can tell you about this topic.";
 
