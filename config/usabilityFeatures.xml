@@ -9,20 +9,16 @@
 
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
-		<ref bean="A2Feature" />
 		<ref bean="numberOfFramesFeature" />
 		<ref bean="numberOfLinksFeature" />
 		<ref bean="areActorsAgentsFeature" />
 		<ref bean="arePlacesPlacesFeature" />
 		<ref bean="numberOfEntityLabelsDBPediaFeature" />
 		<ref bean="appearLabelsInTextFeature" />
-		<ref bean="A0Feature" />
-		<ref bean="A1Feature" />
 		<ref bean="eventLabelFeature" />
 		<ref bean="hasActorFeature" />
 		<ref bean="hasPlaceFeature" />
 		<ref bean="hasTimeFeature" />
-		<ref bean="isSpeechCognitiveFeature" />
 		<ref bean="isStatementFeature" />
 		<ref bean="numberOfMentionsFeature" />
 		<ref bean="wordNetFeature" />
@@ -51,22 +47,6 @@
 		<property name="name" value="hasPlace" />
 	</bean>
 
-	<bean id="A0Feature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/A0.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="A0" />
-	</bean>
-
-	<bean id="A1Feature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/A1.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="A1" />
-	</bean>
-
 	<bean id="eventLabelFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
@@ -81,14 +61,6 @@
 			value="resources/SPARQL/usability/hasTime.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasTime" />
-	</bean>
-
-	<bean id="isSpeechCognitiveFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/isSpeechCognitive.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="isSpeechCognitive" />
 	</bean>
 
 	<bean id="numberOfMentionsFeature"
@@ -113,14 +85,6 @@
 			value="resources/SPARQL/usability/areLabelsVerbs.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="areLabelsVerbs" />
-	</bean>
-
-	<bean id="A2Feature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/A2.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="A2" />
 	</bean>
 
 	<bean id="numberOfLinksFeature"

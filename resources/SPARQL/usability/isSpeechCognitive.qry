@@ -1,5 +1,0 @@
-SELECT (COUNT(?link) AS ?number)
-WHERE
-{
-    <*e*> ?link <http://www.newsreader-project.eu/ontologies/SPEECH_COGNITIVE>
-}
