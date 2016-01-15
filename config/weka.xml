@@ -55,6 +55,8 @@
 		</property>
 	</bean>
 
+	<bean id="dummyFilter" class="weka.filters.AllFilter"/>
+
 	<bean id="allFeaturesFilter" class="weka.filters.MultiFilter">
 		<property name="filters">
 			<array>

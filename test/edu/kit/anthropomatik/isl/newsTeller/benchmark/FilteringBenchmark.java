@@ -170,7 +170,7 @@ public class FilteringBenchmark {
 			if (log.isDebugEnabled())
 				log.debug("Can't read data set", e);
 		}
-		this.positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE);
+		this.positiveClassIdx = this.originalDataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.LABEL_TRUE);
 	}
 
 	// region featureAnalysis
@@ -335,7 +335,7 @@ public class FilteringBenchmark {
 
 					for (int j = 0; j < train.numInstances(); j++) {
 						Instance inst = train.get(j);
-						if (inst.classValue() == train.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE))
+						if (inst.classValue() == train.classAttribute().indexOfValue(Util.LABEL_TRUE))
 							trainPos.add(inst);
 						else
 							trainNeg.add(inst);
@@ -409,7 +409,7 @@ public class FilteringBenchmark {
 
 					for (int j = 0; j < train.numInstances(); j++) {
 						Instance inst = train.get(j);
-						if (inst.classValue() == train.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE))
+						if (inst.classValue() == train.classAttribute().indexOfValue(Util.LABEL_TRUE))
 							trainPos.add(inst);
 						else
 							trainNeg.add(inst);
@@ -649,7 +649,7 @@ public class FilteringBenchmark {
 
 				String str = String.format("%s ; %s", inst.stringValue(test.attribute(Util.ATTRIBUTE_URI)), inst.stringValue(test.attribute(Util.ATTRIBUTE_FILE)));
 
-				if (inst.classValue() == inst.classAttribute().indexOfValue(Util.CLASS_LABEL_POSITIVE))
+				if (inst.classValue() == inst.classAttribute().indexOfValue(Util.LABEL_TRUE))
 					log.info(String.format("False Negative: %s", str));
 				else
 					log.info(String.format("False Positive: %s", str));

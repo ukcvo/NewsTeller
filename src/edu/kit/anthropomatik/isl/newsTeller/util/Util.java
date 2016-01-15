@@ -81,12 +81,13 @@ public class Util {
 	public static final String COLUMN_NAME_CONSTITUENT = "constituent";
 	public static final String COLUMN_NAME_REASON = "reason_";
 
-	public static final String CLASS_LABEL_NEGATIVE = "false";
-	public static final String CLASS_LABEL_POSITIVE = "true";
+	public static final String LABEL_FALSE = "false";
+	public static final String LABEL_TRUE = "true";
 
 	public static final String ATTRIBUTE_USABLE = "usable";
 	public static final String ATTRIBUTE_URI = "eventURI";
 	public static final String ATTRIBUTE_FILE = "fileName";
+	public static final String ATTRIBUTE_REASON = "reason_";
 	
 	public static final String MENTION_PROPERTY_POS = "http://dkm.fbk.eu/ontologies/newsreader#pos";
 	public static final String MENTION_PROPERTY_POS_VERB = "http://dkm.fbk.eu/ontologies/newsreader#pos_verb";

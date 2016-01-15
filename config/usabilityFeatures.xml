@@ -11,7 +11,9 @@
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
 		<ref bean="posFeature" />
+		<ref bean="wordNetFeature" />
 		
+		<!-- 
 		<ref bean="numberOfFramesFeature" />
 		<ref bean="numberOfLinksFeature" />
 		<ref bean="areActorsAgentsFeature" />
@@ -24,7 +26,6 @@
 		<ref bean="hasTimeFeature" />
 		<ref bean="isStatementFeature" />
 		<ref bean="numberOfMentionsFeature" />
-		<ref bean="wordNetFeature" />
 		<ref bean="propBankFeature" />
 		<ref bean="hasActorOrPlaceFeature" />
 		<ref bean="hasKeywordAsLabelFeature" />
@@ -32,6 +33,8 @@
 		<ref bean="keywordStemInTextFeature" />
 		<ref bean="keywordOrStemInTextFeature" />
 		<ref bean="appearKeywordLabelsInTextFeature" />
+		 -->
+		
 	</util:list>
 
 	<bean id="hasActorFeature"

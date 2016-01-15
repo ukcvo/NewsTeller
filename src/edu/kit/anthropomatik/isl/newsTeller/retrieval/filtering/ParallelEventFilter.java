@@ -114,7 +114,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 			boolean isUsable;
 			try {
 				double label = classifier.classifyInstance(resultMap.get(event));
-				isUsable = (label == header.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.CLASS_LABEL_POSITIVE));
+				isUsable = (label == header.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.LABEL_TRUE));
 			} catch (Exception e) {
 				if (log.isWarnEnabled())
 					log.warn(String.format("Could not classify event, setting classification to false: %s", event.toVerboseString()));

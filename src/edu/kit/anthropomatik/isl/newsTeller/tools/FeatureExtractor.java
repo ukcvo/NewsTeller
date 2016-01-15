@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,6 +23,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.UsabilityRatingReason;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -52,6 +55,12 @@ public class FeatureExtractor {
 	
 	private boolean doAddEventInformation;
 	
+	private boolean doAddReasonInformation;
+	
+	private boolean doKeepOnlyListedReasons;
+	
+	private Set<UsabilityRatingReason> reasonsToKeep;
+	
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
 	}
@@ -66,6 +75,20 @@ public class FeatureExtractor {
 	
 	public void setDoAddEventInformation(boolean doAddEventInformation) {
 		this.doAddEventInformation = doAddEventInformation;
+	}
+	
+	public void setDoAddReasonInformation(boolean doAddReasonInformation) {
+		this.doAddReasonInformation = doAddReasonInformation;
+	}
+	
+	public void setDoKeepOnlyListedReasons(boolean doKeepOnlyListedReasons) {
+		this.doKeepOnlyListedReasons = doKeepOnlyListedReasons;
+	}
+	
+	public void setReasonsToKeep(Set<Integer> reasonsToKeep) {
+		this.reasonsToKeep = new HashSet<UsabilityRatingReason>();
+		for (Integer i : reasonsToKeep)
+			this.reasonsToKeep.add(UsabilityRatingReason.fromInteger(i));
 	}
 	
 	public FeatureExtractor(String configFileName) {
@@ -87,14 +110,20 @@ public class FeatureExtractor {
 			attributes.add(attr);
 		}
 		
-		ArrayList<String> classLabels = new ArrayList<String>();
-		classLabels.add(Util.CLASS_LABEL_POSITIVE);
-		classLabels.add(Util.CLASS_LABEL_NEGATIVE);
-		attributes.add(new Attribute(Util.ATTRIBUTE_USABLE, classLabels));
+		ArrayList<String> booleanLabels = new ArrayList<String>();
+		booleanLabels.add(Util.LABEL_TRUE);
+		booleanLabels.add(Util.LABEL_FALSE);
+		attributes.add(new Attribute(Util.ATTRIBUTE_USABLE, booleanLabels));
 		
 		if (this.doAddEventInformation) {
 			attributes.add(new Attribute(Util.ATTRIBUTE_URI, (ArrayList<String>) null));
 			attributes.add(new Attribute(Util.ATTRIBUTE_FILE, (ArrayList<String>) null));
+		}
+		
+		if (this.doAddReasonInformation) {
+			for (UsabilityRatingReason r : UsabilityRatingReason.values()) {
+				attributes.add(new Attribute(Util.ATTRIBUTE_REASON + r.toString(), booleanLabels));
+			}
 		}
 		
 		int numberOfExpectedExamples = this.benchmark.size();
@@ -125,18 +154,24 @@ public class FeatureExtractor {
 		private int usabilityIndex;
 		private int uriIndex;
 		private int fileIndex;
+		private int[] reasonIndices;
 		
-		public EventWorker(String eventURI, List<Keyword> keywords, int usabilityIndex, int uriIndex, int fileIndex) {
+		public EventWorker(String eventURI, List<Keyword> keywords, int usabilityIndex, int uriIndex, int fileIndex, int[] reasonIndices) {
 			this.eventURI = eventURI;
 			this.keywords = keywords;
 			this.usabilityIndex = usabilityIndex;
 			this.uriIndex = uriIndex;
 			this.fileIndex = fileIndex;
+			this.reasonIndices = reasonIndices;
 		}
 		
 		public Instance call() throws Exception {
 			
-			int numberOfAttributes = doAddEventInformation ? (features.size() + 3) : features.size();
+			int numberOfAttributes = features.size() + 1;
+			if (doAddEventInformation)
+				numberOfAttributes += 2;
+			if (doAddReasonInformation)
+				numberOfAttributes += reasonIndices.length;
 			
 			double[] values = new double[numberOfAttributes];
 			
@@ -150,6 +185,12 @@ public class FeatureExtractor {
 			if (doAddEventInformation) {
 				values[features.size() + 1] = this.uriIndex;
 				values[features.size() + 2] = this.fileIndex;
+			}
+			
+			if (doAddReasonInformation) {
+				int offset = doAddEventInformation ? 3 : 1;
+				for (int i = 0; i < reasonIndices.length; i++)
+					values[features.size() + offset + i] = reasonIndices[i];
 			}
 			
 			Instance example = new DenseInstance(1.0, values);
@@ -169,14 +210,41 @@ public class FeatureExtractor {
 		List<Future<Instance>> futures = new ArrayList<Future<Instance>>();
 		
 		for (Map.Entry<BenchmarkEvent, GroundTruth> entry : this.benchmark.entrySet()) {
-			String eventURI = entry.getKey().getEventURI();
+			BenchmarkEvent event = entry.getKey();
+			GroundTruth gt = entry.getValue();
+			
+			if (this.doKeepOnlyListedReasons) {
+				boolean abort = true;
+				for (UsabilityRatingReason r : this.reasonsToKeep) {
+					if (gt.getReasons().contains(r)) {
+						abort = false;
+						break;
+					}
+				}
+				if (abort)
+					continue;	// skip this entry if it doesn't have any of the required reasons
+			}
+			
+			String eventURI = event.getEventURI();
 			List<Keyword> keywords = this.benchmarkKeywords.get(entry.getKey().getFileName());
-			String fileName = entry.getKey().getFileName();
-			String label = (entry.getValue().getUsabilityRating() == 1.0) ? Util.CLASS_LABEL_POSITIVE : Util.CLASS_LABEL_NEGATIVE;
-			int usabilityIndex = dataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(label);
-			int uriIndex = dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI);
-			int fileIndex = dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName);
-			EventWorker w = new EventWorker(eventURI, keywords, usabilityIndex, uriIndex, fileIndex);
+			String fileName = event.getFileName();
+			String label = (gt.getUsabilityRating() == 1.0) ? Util.LABEL_TRUE : Util.LABEL_FALSE;
+			
+			int usabilityIndex = this.doAddEventInformation ? dataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(label) : 0;
+			int uriIndex = this.doAddEventInformation ? dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI) : 0;
+			int fileIndex = this.doAddEventInformation ? dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName) : 0;
+			
+			UsabilityRatingReason[] reasons = UsabilityRatingReason.values();
+			int[] reasonIndices = new int[reasons.length];
+			if (this.doAddReasonInformation) {
+				for (int i = 0; i < reasons.length; i++) {
+					boolean isReasonActive = gt.getReasons().contains(reasons[i]);
+					int reasonIdx = dataSet.attribute(Util.ATTRIBUTE_REASON + reasons[i].toString()).indexOfValue(Boolean.toString(isReasonActive));	
+					reasonIndices[i] = reasonIdx;
+				}
+			}
+			
+			EventWorker w = new EventWorker(eventURI, keywords, usabilityIndex, uriIndex, fileIndex, reasonIndices);
 			
 			futures.add(threadPool.submit(w));
 		}

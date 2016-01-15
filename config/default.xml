@@ -101,6 +101,14 @@
 		<property name="outputFileName" value="resources/benchmark/dataSet.xrff"/>
 		<property name="features" ref="activeFeatureList"/>
 		<property name="doAddEventInformation" value="true"/>
+		<property name="doAddReasonInformation" value="false"/>
+		<property name="doKeepOnlyListedReasons" value="true"/>
+		<property name="reasonsToKeep">
+			<set>
+				<value>1</value>
+				<value>2</value>
+			</set>
+		</property>
 	</bean>
 
 	<bean id="classifierTrainer" class="edu.kit.anthropomatik.isl.newsTeller.tools.ClassifierTrainer">
