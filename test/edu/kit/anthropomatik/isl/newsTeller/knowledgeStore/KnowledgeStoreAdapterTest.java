@@ -15,6 +15,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class KnowledgeStoreAdapterTest {
 
@@ -95,5 +96,23 @@ public class KnowledgeStoreAdapterTest {
 								"This was his second run for the presidency, his first was the 2004 presidential election.");
 		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22");
 		assertTrue(expectedResults.contains(retrievedSentence));
+	}
+	
+	@Test
+	public void shouldReturnPOSVerb() {
+		List<String> values = ksAdapter.getMentionProperty("http://en.wikinews.org/wiki/Mountaineers_'Climb_Up'_for_AIDS_funding#char=1238,1243", Util.MENTION_PROPERTY_POS);
+		assertTrue(values.size() == 1 && values.contains(Util.MENTION_PROPERTY_POS_VERB));
+	}
+	
+	@Test
+	public void shouldReturnPOSNoun() {
+		List<String> values = ksAdapter.getMentionProperty("http://en.wikinews.org/wiki/AT&amp;T_to_buy_BellSouth_for_$67_billion#char=2998,3008", Util.MENTION_PROPERTY_POS);
+		assertTrue(values.size() == 1 && values.contains(Util.MENTION_PROPERTY_POS_NOUN));
+	}
+	
+	@Test
+	public void shouldReturnPropbankRaise02() {
+		List<String> values = ksAdapter.getMentionProperty("http://en.wikinews.org/wiki/Mountaineers_'Climb_Up'_for_AIDS_funding#char=1238,1243", Util.MENTION_PROPERTY_PROPBANK);
+		assertTrue(values.size() == 1 && values.get(0).endsWith("/raise.02"));
 	}
 }

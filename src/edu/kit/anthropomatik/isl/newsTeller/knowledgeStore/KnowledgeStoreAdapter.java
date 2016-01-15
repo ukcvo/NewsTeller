@@ -18,7 +18,9 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import eu.fbk.knowledgestore.KnowledgeStore;
 import eu.fbk.knowledgestore.Session;
 import eu.fbk.knowledgestore.client.Client;
+import eu.fbk.knowledgestore.data.Record;
 import eu.fbk.knowledgestore.data.Stream;
+import eu.fbk.knowledgestore.vocabulary.KS;
 
 /**
  * Adapter class to facilitate KnowledgeStore access.
@@ -346,4 +348,42 @@ public class KnowledgeStoreAdapter {
 		return originalText.substring(startIdx, endIdx).trim();
 	}
 	//endregion
+
+	// region handling mentions
+	
+	/**
+	 * Retrieves the given property for the given mention within a standard timeout of 10 sec. and returns it as list of Strings.
+	 */
+	public List<String> getMentionProperty(String mentionURI, String propertyURI) {
+		return getMentionProperty(mentionURI, propertyURI, 10000);
+	}
+	
+	/**
+	 * Retrieves the given property for the given mention within the given timeout and returns it as list of Strings.
+	 */
+	public List<String> getMentionProperty(String mentionURI, String propertyURI, long timeoutMillisec) {
+		List<String> result = new ArrayList<String>();
+		Session session = this.knowledgeStore.newSession();
+		
+		try {
+			Stream<Record> stream = session.retrieve(KS.MENTION).ids(new URIImpl(mentionURI)).timeout(timeoutMillisec).exec();
+			List<Record> records = stream.toList();
+			stream.close();
+			
+			for (Record r : records) {
+				List<String> values = r.get(new URIImpl(propertyURI), String.class);
+				result.addAll(values);
+			}
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error(String.format("Cannot retrieve property '%s' of mention '%s'. Returning empty result", propertyURI, mentionURI));
+			if (log.isDebugEnabled())
+				log.debug("Cannot retrieve mention property", e);
+		}
+		
+		session.close();
+		return result;
+	}
+	
+	// endregion
 }

@@ -88,6 +88,11 @@ public class Util {
 	public static final String ATTRIBUTE_URI = "eventURI";
 	public static final String ATTRIBUTE_FILE = "fileName";
 	
+	public static final String MENTION_PROPERTY_POS = "http://dkm.fbk.eu/ontologies/newsreader#pos";
+	public static final String MENTION_PROPERTY_POS_VERB = "http://dkm.fbk.eu/ontologies/newsreader#pos_verb";
+	public static final String MENTION_PROPERTY_POS_NOUN = "http://dkm.fbk.eu/ontologies/newsreader#pos_noun";
+	public static final String MENTION_PROPERTY_PROPBANK = "http://dkm.fbk.eu/ontologies/newsreader#propbankRef";
+	
 	public static final double EPSILON = 0.00001;
 
 	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 5;
