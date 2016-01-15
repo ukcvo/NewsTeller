@@ -9,6 +9,9 @@
 
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
+		
+		<ref bean="posFeature" />
+		
 		<ref bean="numberOfFramesFeature" />
 		<ref bean="numberOfLinksFeature" />
 		<ref bean="areActorsAgentsFeature" />
@@ -206,5 +209,12 @@
 			value="resources/SPARQL/usability/getInheritedLabels.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="appearKeywordLabelsInText" />
+	</bean>
+	
+	<bean id="posFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.POSFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="posFeature" />
 	</bean>
 </beans>

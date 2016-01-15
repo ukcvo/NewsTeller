@@ -385,5 +385,23 @@ public class KnowledgeStoreAdapter {
 		return result;
 	}
 	
+	/**
+	 * Retrieves the given property for the given mention within a standard timeout of 10 sec. and returns the first result as String.
+	 */
+	public String getUniqueMentionProperty(String mentionURI, String propertyURI) {
+		return getUniqueMentionProperty(mentionURI, propertyURI, 10000);
+	}
+	
+	/**
+	 * Retrieves the given property for the given mention within the given timeout and returns the first result as String.
+	 */
+	public String getUniqueMentionProperty(String mentionURI, String propertyURI, long timeoutMillisec) {
+		List<String> results = getMentionProperty(mentionURI, propertyURI, timeoutMillisec);
+		if (results.size() > 0)
+			return results.get(0);
+		else
+			return "";
+	}
+	
 	// endregion
 }

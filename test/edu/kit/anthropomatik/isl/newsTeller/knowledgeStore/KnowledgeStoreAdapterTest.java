@@ -100,19 +100,25 @@ public class KnowledgeStoreAdapterTest {
 	
 	@Test
 	public void shouldReturnPOSVerb() {
-		List<String> values = ksAdapter.getMentionProperty("http://en.wikinews.org/wiki/Mountaineers_'Climb_Up'_for_AIDS_funding#char=1238,1243", Util.MENTION_PROPERTY_POS);
-		assertTrue(values.size() == 1 && values.contains(Util.MENTION_PROPERTY_POS_VERB));
+		String pos = ksAdapter.getUniqueMentionProperty("http://en.wikinews.org/wiki/Mountaineers_'Climb_Up'_for_AIDS_funding#char=1238,1243", Util.MENTION_PROPERTY_POS);
+		assertTrue(pos.equals(Util.MENTION_PROPERTY_POS_VERB));
 	}
 	
 	@Test
 	public void shouldReturnPOSNoun() {
-		List<String> values = ksAdapter.getMentionProperty("http://en.wikinews.org/wiki/AT&amp;T_to_buy_BellSouth_for_$67_billion#char=2998,3008", Util.MENTION_PROPERTY_POS);
-		assertTrue(values.size() == 1 && values.contains(Util.MENTION_PROPERTY_POS_NOUN));
+		String pos = ksAdapter.getUniqueMentionProperty("http://en.wikinews.org/wiki/AT&amp;T_to_buy_BellSouth_for_$67_billion#char=2998,3008", Util.MENTION_PROPERTY_POS);
+		assertTrue(pos.equals(Util.MENTION_PROPERTY_POS_NOUN));
 	}
 	
 	@Test
 	public void shouldReturnPropbankRaise02() {
 		List<String> values = ksAdapter.getMentionProperty("http://en.wikinews.org/wiki/Mountaineers_'Climb_Up'_for_AIDS_funding#char=1238,1243", Util.MENTION_PROPERTY_PROPBANK);
 		assertTrue(values.size() == 1 && values.get(0).endsWith("/raise.02"));
+	}
+	
+	@Test
+	public void shouldReturnPropbankList() {
+		List<String> values = ksAdapter.getMentionProperty("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#char=214,218", Util.MENTION_PROPERTY_PROPBANK);
+		assertTrue(values.size() == 2);
 	}
 }
