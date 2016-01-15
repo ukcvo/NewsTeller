@@ -117,9 +117,9 @@ public class UtilTest {
 	}
 	
 	@Test
-	public void shouldReturn44ElementConfigMap() {
+	public void shouldReturn46ElementConfigMap() {
 		Map<String, List<Keyword>> map = Util.readBenchmarkConfigFile("resources/benchmark/Scope 0.csv");
-		assertTrue(map.size() == 43);
+		assertTrue(map.size() == 46);
 	}
 	
 	@Test
