@@ -12,7 +12,10 @@
 		
 		<ref bean="posFeature" />
 		<ref bean="wordNetFeature" />
-		
+		<ref bean="nombankRefFeature" />
+		<ref bean="propbankRefFeature" />
+		<ref bean="verbnetRefFeature" />
+		<ref bean="wordnetRefFeature" />
 		<!-- 
 		<ref bean="numberOfFramesFeature" />
 		<ref bean="numberOfLinksFeature" />
@@ -220,4 +223,37 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="posFeature" />
 	</bean>
+	
+	<bean id="nombankRefFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionPropertyFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#nombankRef" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="nombankRefFeature" />
+	</bean>
+	
+	<bean id="propbankRefFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionPropertyFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="propbankRefFeature" />
+	</bean>
+	
+	<bean id="verbnetRefFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionPropertyFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#verbnetRef" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="verbnetRefFeature" />
+	</bean>
+	
+	<bean id="wordnetRefFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionPropertyFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#wordnetRef" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="wordnetRefFeature" />
+	</bean>
+	
 </beans>
