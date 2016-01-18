@@ -16,6 +16,7 @@
 		<ref bean="propbankRefFeature" />
 		<ref bean="verbnetRefFeature" />
 		<ref bean="wordnetRefFeature" />
+		<ref bean="propbankExistenceFeature" />
 		<!-- 
 		<ref bean="numberOfFramesFeature" />
 		<ref bean="numberOfLinksFeature" />
@@ -254,6 +255,24 @@
 		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#wordnetRef" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="wordnetRefFeature" />
+	</bean>
+	
+	<bean id="propbankExistenceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankExistenceFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+		<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="propbankExistenceFeature" />
+	</bean>
+	
+	<bean id="nombankExistenceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankExistenceFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#nombankRef" />
+		<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="propbankExistenceFeature" />
 	</bean>
 	
 </beans>

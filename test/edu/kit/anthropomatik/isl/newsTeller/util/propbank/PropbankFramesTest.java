@@ -24,7 +24,7 @@ public class PropbankFramesTest {
 
 	@Before
 	public void setUp() throws Exception {
-		this.propbank = new PropbankFrames("resources/propbank-frames", false);
+		this.propbank = PropbankFrames.getInstance("resources/propbank-frames", false);
 	}
 
 	@Test

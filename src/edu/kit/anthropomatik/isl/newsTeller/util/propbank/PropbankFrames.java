@@ -32,10 +32,20 @@ public class PropbankFrames {
 	
 	private static Log log = LogFactory.getLog(PropbankFrames.class);
 	
+	private static PropbankFrames instance = null;
+	
+	private String folderName;
 	private Map<String, Map<String, PropbankRoleset>> map;
 	
-	public PropbankFrames(String folderName, boolean forceConstruction) {
+	private PropbankFrames(String folderName, boolean forceConstruction) {
 		parseAllPropBankFrames(folderName, forceConstruction);
+		this.folderName = folderName;
+	}
+	
+	public static PropbankFrames getInstance(String folderName, boolean forceConstruction) {
+		if (instance == null || !instance.folderName.equals(folderName)) // only create new object if nonexisting or other folder name
+			instance = new PropbankFrames(folderName, forceConstruction);
+		return instance;
 	}
 	
 	// region parsing
@@ -155,6 +165,14 @@ public class PropbankFrames {
 	public boolean containsFrame(String word, String suffix) {
 		String fullName = word + suffix;
 		return map.containsKey(fullName);
+	}
+	
+	/**
+	 * Checks if the given roleset is contained int he propbank frames.
+	 */
+	public boolean containsRoleset(String word, String suffix, String id) {
+		String fullName = word + suffix;
+		return containsFrame(word, suffix) && map.get(fullName).containsKey(id);
 	}
 	
 	/**
