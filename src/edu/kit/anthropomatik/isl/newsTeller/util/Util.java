@@ -14,23 +14,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jumpmind.symmetric.csv.CsvReader;
 import org.jumpmind.symmetric.csv.CsvWriter;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.UsabilityRatingReason;
-import weka.core.SerializationHelper;
 
 /**
  * Provides some static utility functions.
@@ -397,168 +390,6 @@ public class Util {
 		return result;
 	}
 	
-	// endregion
-
-	// region reading XML files
-	/**
-	 * Parses a single propBank file and returns the minimum set of arguments
-	 * necessary. Returns empty set on failure.
-	 */
-	public static Set<Set<String>> parsePropBankFrame(File file) {
-		try {
-			// Set<Set<String>> result = new HashSet<Set<String>>();
-
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(file);
-			doc.getDocumentElement().normalize();
-
-			NodeList rolesets = doc.getElementsByTagName("roleset");
-
-			Set<Set<String>> hypothesisList = new HashSet<Set<String>>();
-
-			// iterate over "rolesets", i.e. meanings of the word
-			for (int i = 0; i < rolesets.getLength(); i++) {
-				Set<String> roleSetHypothesis = new HashSet<String>();
-				Element roleset = (Element) rolesets.item(i);
-
-				// collect arguments from definition (baseline in case there are
-				// no examples)
-				NodeList roles = roleset.getElementsByTagName("role");
-				for (int j = 0; j < roles.getLength(); j++) {
-					Element role = (Element) roles.item(j);
-					String nString = role.getAttribute("n");
-					boolean isInt = true;
-					int n = -1;
-					try {
-						n = Integer.parseInt(nString);
-					} catch (NumberFormatException e) {
-						isInt = false;
-					}
-					if (isInt)
-						roleSetHypothesis.add(String.format("A%d", n));
-				}
-				hypothesisList.add(roleSetHypothesis);
-
-				// iterate over all examples
-				NodeList examples = roleset.getElementsByTagName("example");
-				for (int j = 0; j < examples.getLength(); j++) {
-					Set<String> exampleHypothesis = new HashSet<String>();
-					Element example = (Element) examples.item(j);
-
-					// look for arguments used in example
-					NodeList args = example.getElementsByTagName("arg");
-					for (int k = 0; k < args.getLength(); k++) {
-						Element arg = (Element) args.item(k);
-						String nString = arg.getAttribute("n");
-						boolean isInt = true;
-						int n = -1;
-						try {
-							n = Integer.parseInt(nString);
-						} catch (NumberFormatException e) {
-							isInt = false;
-						}
-						if (isInt)
-							exampleHypothesis.add(String.format("A%d", n));
-					}
-					hypothesisList.add(exampleHypothesis);
-
-				}
-			}
-
-			// for (Set<String> hypothesis : hypothesisList) {
-			// boolean shouldBeKept = true;
-			// for (Set<String> otherHypothesis : hypothesisList) {
-			// if ((otherHypothesis.size() < hypothesis.size()) &&
-			// (hypothesis.containsAll(otherHypothesis)))
-			// shouldBeKept = false;
-			// }
-			// if (shouldBeKept)
-			// result.add(hypothesis);
-			// }
-			//
-			// return result;
-			return hypothesisList;
-
-		} catch (Exception e) {
-			if (log.isErrorEnabled())
-				log.error(String.format("can't process XML file '%s'", file.getName()));
-			if (log.isDebugEnabled())
-				log.debug("XML error", e);
-
-			return new HashSet<Set<String>>();
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	// either collect them manually, or just read map from file
-	public static Map<String, Set<Set<String>>> parseAllPropBankFrames(String folderName, boolean forceConstruction) {
-
-		Map<String, Set<Set<String>>> result = new HashMap<String, Set<Set<String>>>();
-
-		File map = new File(folderName + ".map");
-		if (!forceConstruction && map.exists()) {
-			try {
-				result = (Map<String, Set<Set<String>>>) SerializationHelper.read(map.getAbsolutePath());
-				return result;
-			} catch (Exception e) {
-				if (log.isWarnEnabled())
-					log.warn("wanted to load map file, but failed... constructing it manually");
-				if (log.isDebugEnabled())
-					log.debug("failure to read map", e);
-			}
-		}
-
-		File folder = new File(folderName);
-
-		for (File file : folder.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.endsWith(".xml");
-			}
-		})) {
-			String fileName = file.getName();
-			String word = fileName.substring(0, fileName.indexOf('-')); // "contradict-v.xml"
-																		// -->
-																		// "contradict"
-			Set<Set<String>> fileResult = parsePropBankFrame(file);
-
-			if (!result.containsKey(word))
-				result.put(word, fileResult);
-			else {
-				Set<Set<String>> allWordResults = result.get(word);
-				allWordResults.addAll(fileResult);
-
-				// Set<Set<String>> mergedWordResults = new
-				// HashSet<Set<String>>();
-				// for (Set<String> hypothesis : allWordResults) {
-				// boolean shouldBeKept = true;
-				// for (Set<String> otherHypothesis : allWordResults) {
-				// if ((otherHypothesis.size() < hypothesis.size()) &&
-				// (hypothesis.containsAll(otherHypothesis)))
-				// shouldBeKept = false;
-				// }
-				// if (shouldBeKept)
-				// mergedWordResults.add(hypothesis);
-				// }
-				//
-				// result.put(word, mergedWordResults);
-				result.put(word, allWordResults);
-			}
-		}
-
-		try {
-			SerializationHelper.write(folderName + ".map", result);
-		} catch (Exception e) {
-			if (log.isWarnEnabled())
-				log.warn("unable to write map file... proceeding w/o storing it");
-			if (log.isDebugEnabled())
-				log.debug("failure to write map", e);
-		}
-
-		return result;
-	}
-
 	// endregion
 
 	// region other stuff
