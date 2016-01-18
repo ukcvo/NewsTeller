@@ -28,4 +28,9 @@ public class PropbankArgument implements Serializable {
 		this.f = f;
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("[%s,%s]", n, f);
+	}
+	
 }

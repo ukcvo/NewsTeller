@@ -93,7 +93,8 @@ public class PropbankFrames {
 						String fString = arg.getAttribute("f");
 						exampleArguments.add(new PropbankArgument(nString, fString));
 					}
-					r.addArgumentSet(exampleArguments);
+					if (!exampleArguments.isEmpty())
+						r.addArgumentSet(exampleArguments);
 				}
 				
 				result.put(rolesetName, r);

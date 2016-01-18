@@ -35,4 +35,9 @@ public class PropbankRoleset implements Serializable {
 		this.argumentSets = new HashSet<Set<PropbankArgument>>();
 	}
 
+	@Override
+	public String toString() {
+		return String.format("[%s]", name);
+	}
+	
 }

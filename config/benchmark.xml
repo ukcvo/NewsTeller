@@ -203,7 +203,7 @@
 		<property name="classifiers">
 			<map>
 				
-				<entry key="naiveBayes" value-ref="naiveBayes" />
+				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
 				
 				<!--
 				<entry key="naiveBayes" value-ref="naiveBayes" />
@@ -237,6 +237,7 @@
 				<entry key="svmLogistic" value-ref="svm2" />
 				<entry key="svmComplexity2" value-ref="svm3" />
 				<entry key="cartOneSE" value-ref="cart2" />
+				
 				<entry key="optimizedRandomForest" value-ref="optimizedRandomForest" />
 				
 				<entry key="MLPSeed0" value-ref="MLP4" />
