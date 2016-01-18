@@ -1,4 +1,4 @@
-SELECT ?label
+SELECT DISTINCT ?label
 WHERE
 {
     GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> 

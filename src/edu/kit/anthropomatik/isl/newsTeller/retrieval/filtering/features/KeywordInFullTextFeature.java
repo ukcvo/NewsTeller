@@ -16,6 +16,8 @@ public class KeywordInFullTextFeature extends FullTextFeature {
 	
 	private boolean useStem;
 	
+	//TODO: also check for parts of the label?
+	
 	public void setUseOriginalString(boolean useOriginalString) {
 		this.useOriginalString = useOriginalString;
 	}
@@ -29,8 +31,8 @@ public class KeywordInFullTextFeature extends FullTextFeature {
 	}
 
 	@Override
-	protected List<List<String>> getLabels(String eventURI, List<Keyword> keywords) {
-		List<List<String>> result = new ArrayList<List<String>>();
+	protected List<List<List<String>>> getLabels(String eventURI, List<Keyword> keywords) {
+		List<List<List<String>>> result = new ArrayList<List<List<String>>>();
 		
 		for (Keyword keyword : keywords) {
 			List<String> list = new ArrayList<String>();
@@ -38,7 +40,9 @@ public class KeywordInFullTextFeature extends FullTextFeature {
 				list.add(keyword.getWord());
 			if (this.useStem)
 				list.add(keyword.getStem());
-			result.add(list);
+			List<List<String>> innerList = new ArrayList<List<String>>();
+			innerList.add(list);
+			result.add(innerList);
 		}
 		
 		return result;

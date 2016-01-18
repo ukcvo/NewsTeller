@@ -16,7 +16,7 @@ import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter
 
 public class PropBankFeatureTest {
 
-	private PropBankFeature feature;
+	private PropbankArgumentFeature feature;
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	@BeforeClass
@@ -32,7 +32,7 @@ public class PropBankFeatureTest {
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		feature = (PropBankFeature) context.getBean("propBankFeature");
+		feature = (PropbankArgumentFeature) context.getBean("propBankFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.openConnection();

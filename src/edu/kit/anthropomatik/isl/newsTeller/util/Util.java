@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -185,6 +186,13 @@ public class Util {
 		}
 
 		return result;
+	}
+	
+	/**
+	 * Reads the given file and returns a list of the lines
+	 */
+	public static List<String> readStringListFromFile(String fileName) {
+		return Arrays.asList(readStringFromFile(fileName).split("\n"));
 	}
 	// endregion
 

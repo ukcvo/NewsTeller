@@ -24,7 +24,7 @@ public class SparqlFeature extends UsabilityFeature {
 		double weightSum = 0;
 		for (Keyword keyword : keywords) {
 			weightSum += keyword.getWeight();
-			sum += this.ksAdapter.runSingleVariableDoubleQuerySingleResult(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI).replace(Util.PLACEHOLDER_KEYWORD, keyword.getWord()), Util.VARIABLE_NUMBER);
+			sum += this.ksAdapter.runSingleVariableDoubleQuerySingleResult(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), Util.VARIABLE_NUMBER);
 		}
 		double result = sum / weightSum;
 		return result;

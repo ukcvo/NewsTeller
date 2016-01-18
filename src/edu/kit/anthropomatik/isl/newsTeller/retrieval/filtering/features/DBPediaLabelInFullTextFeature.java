@@ -1,6 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -18,6 +19,12 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 	
 	private String inheritedLabelQuery;
 	
+	private boolean splitLabels;
+	
+	public void setSplitLabels(boolean splitLabels) {
+		this.splitLabels = splitLabels;
+	}
+	
 	public DBPediaLabelInFullTextFeature(String queryFileName, String directLabelQueryFileName, String inheritedLabelQueryFileName) {
 		super(queryFileName);
 		this.directLabelQuery = Util.readStringFromFile(directLabelQueryFileName);
@@ -25,18 +32,35 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 	}
 	
 	@Override
-	protected List<List<String>> getLabels(String eventURI, List<Keyword> keywords) {
-		List<List<String>> result = new ArrayList<List<String>>();
+	protected List<List<List<String>>> getLabels(String eventURI, List<Keyword> keywords) {
+		List<List<List<String>>> result = new ArrayList<List<List<String>>>();
 		
 		for (Keyword keyword : keywords) {
 			List<String> entities = ksAdapter.runSingleVariableStringQuery(
-					sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), Util.VARIABLE_ENTITY);
+					sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()),
+					Util.VARIABLE_ENTITY);
 			
 			for (String entity : entities) {
-				List<String> labels = ksAdapter.runSingleVariableStringQuery(directLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity), Util.VARIABLE_LABEL);
+				List<String> labels = ksAdapter.runSingleVariableStringQuery(
+						directLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
+						Util.VARIABLE_LABEL);
 				if (labels.isEmpty())	// no direct DBpedia labels --> look at parent concepts
-					labels = ksAdapter.runSingleVariableStringQuery(inheritedLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity), Util.VARIABLE_LABEL); 
-				result.add(labels);
+					labels = ksAdapter.runSingleVariableStringQuery(
+							inheritedLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()),
+							Util.VARIABLE_LABEL); 
+				
+				List<List<String>> list = new ArrayList<List<String>>();
+				for (String label : labels) {
+					if (this.splitLabels)
+						list.add(Arrays.asList(label.split(" ")));
+					else {
+						List<String> dummyList = new ArrayList<String>();
+						dummyList.add(label);
+						list.add(dummyList);
+					}
+				}
+				
+				result.add(list);
 			}
 		}
 		

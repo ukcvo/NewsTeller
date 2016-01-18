@@ -1,0 +1,6 @@
+SELECT ?label
+WHERE
+{
+    <*e*> sem:hasActor ?actor .
+    ?actor skos:prefLabel ?label .
+}

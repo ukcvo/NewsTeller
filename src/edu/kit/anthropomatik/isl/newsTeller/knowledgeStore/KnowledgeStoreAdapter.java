@@ -317,35 +317,51 @@ public class KnowledgeStoreAdapter {
 	 * Given the eventURI, picks the first mention and extracts the surrounding sentence from the original resource.
 	 */
 	public String retrieveSentencefromEvent(String eventURI) {
+		List<String> results = retrieveSentencesfromEvent(eventURI);
+		if (results.isEmpty())
+			return "";
+		else
+			return results.get(0);
+	}
+	
+	/**
+	 * Given the eventURI, returns a list of all sentences mentioning this event.
+	 */
+	public List<String> retrieveSentencesfromEvent(String eventURI) {
 		
-		// get mention TODO: instead of picking first mention, maybe use nwr:factualityConfidence?
-		String mentionURI = runSingleVariableStringQuerySingleResult(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, eventURI), 
+		List<String> result = new ArrayList<String>();
+		
+		List<String> mentions = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, eventURI), 
 																		Util.VARIABLE_MENTION);
 
-		if (mentionURI.isEmpty()) {
+		if (mentions.isEmpty()) {
 			if(log.isErrorEnabled())
-				log.error(String.format("Could not retrieve mention for event, returning empty string: '%s'", eventURI));
-			return "";
+				log.error(String.format("Could not retrieve mentions for event, returning empty list: '%s'", eventURI));
+			return result;
 		}
-		// get mention information TODO: better way to access this?
-		String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
-		int startIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf("=")+1, mentionURI.indexOf(",", mentionURI.indexOf("="))));
-		int endIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf(",", mentionURI.indexOf("="))+1));
 		
-		// get original text
-		String originalText = getOriginalText(resourceURI);
-		if (originalText.isEmpty())
-			return "";
+		for (String mention : mentions) {
+			
+			String resourceURI = mention.substring(0, mention.indexOf("#"));
+			int startIdx = Integer.parseInt(mention.substring(mention.indexOf("=")+1, mention.indexOf(",", mention.indexOf("="))));
+			int endIdx = Integer.parseInt(mention.substring(mention.indexOf(",", mention.indexOf("="))+1));
+			
+			// get original text
+			String originalText = getOriginalText(resourceURI);
+			if (originalText.isEmpty())
+				continue;
+			
+			// search for sentence boundaries using a very simple heuristic
+			List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
+			while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))
+				startIdx--;
+			while((endIdx < originalText.length() - 1) && (!sentenceDelimiters.contains(originalText.charAt(endIdx-1))))
+				endIdx++;
+			
+			result.add(originalText.substring(startIdx, endIdx).trim());
+		}
 		
-		// search for sentence boundaries using a very simple heuristic
-		List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
-		while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))
-			startIdx--;
-		while((endIdx < originalText.length() - 1) && (!sentenceDelimiters.contains(originalText.charAt(endIdx-1))))
-			endIdx++;
-		
-		// pick correct substring
-		return originalText.substring(startIdx, endIdx).trim();
+		return result;
 	}
 	//endregion
 
