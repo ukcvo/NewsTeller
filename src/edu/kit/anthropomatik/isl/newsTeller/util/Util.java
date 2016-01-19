@@ -87,6 +87,7 @@ public class Util {
 	public static final String MENTION_PROPERTY_POS_VERB = "http://dkm.fbk.eu/ontologies/newsreader#pos_verb";
 	public static final String MENTION_PROPERTY_POS_NOUN = "http://dkm.fbk.eu/ontologies/newsreader#pos_noun";
 	public static final String MENTION_PROPERTY_PROPBANK = "http://dkm.fbk.eu/ontologies/newsreader#propbankRef";
+	public static final String MENTION_PROPERTY_NOMBANK = "http://dkm.fbk.eu/ontologies/newsreader#nombankRef";
 	public static final String MENTION_PROPERTY_PRED = "http://dkm.fbk.eu/ontologies/newsreader#pred";
 	public static final String MENTION_PROPERTY_ANCHOR_OF = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf";
 	

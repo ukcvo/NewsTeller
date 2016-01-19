@@ -17,6 +17,24 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 	
 	private PropbankFrames propbank;
 	
+	private boolean doComputeAverageInsteadOfMax;
+	
+	private boolean doAutomaticallyChooseProperty;
+	
+	private boolean doUseVerbAsFallback;
+	
+	public void setDoComputeAverageInsteadOfMax(boolean doComputeAverageInsteadOfMax) {
+		this.doComputeAverageInsteadOfMax = doComputeAverageInsteadOfMax;
+	}
+	
+	public void setDoAutomaticallyChooseProperty(boolean doAutomaticallyChooseProperty) {
+		this.doAutomaticallyChooseProperty = doAutomaticallyChooseProperty;
+	}
+	
+	public void setDoUseVerbAsFallback(boolean doUseVerbAsFallback) {
+		this.doUseVerbAsFallback = doUseVerbAsFallback;
+	}
+	
 	public PropbankArgumentFeature(String queryFileName, String countQueryFileName, String propertyURI, String propBankFolderName) {
 		super(queryFileName);
 		this.countQuery = Util.readStringFromFile(countQueryFileName);
@@ -27,43 +45,70 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 		
-		double result = Double.POSITIVE_INFINITY;
-		
 		List<String> mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), 
 				Util.VARIABLE_MENTION, false);
 		
 		double numberOfActors = ksAdapter.runSingleVariableDoubleQuerySingleResult(countQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_NUMBER);
 		
+		double bestFraction = Double.POSITIVE_INFINITY;
+		double averageFraction = 0;
+		
 		for (String mentionURI : mentionURIs) {
 			
 			double bestMentionFraction = Double.POSITIVE_INFINITY;
+			double averageMentionFraction = 0;
 			
-			List<String> rolesetIds = ksAdapter.getMentionProperty(mentionURI, propertyURI);
 			String pos = ksAdapter.getUniqueMentionProperty(mentionURI, Util.MENTION_PROPERTY_POS);
-			String pred = ksAdapter.getUniqueMentionProperty(mentionURI, Util.MENTION_PROPERTY_PRED);
 			
 			String suffix;
 			switch (pos) {
 			case Util.MENTION_PROPERTY_POS_NOUN:
 				suffix = PropbankFrames.SUFFIX_NOUN;
+				if (this.doAutomaticallyChooseProperty)
+					this.propertyURI = Util.MENTION_PROPERTY_NOMBANK;
 				break;
 			case Util.MENTION_PROPERTY_POS_VERB:
 				suffix = PropbankFrames.SUFFIX_VERB;
+				if (this.doAutomaticallyChooseProperty)
+					this.propertyURI = Util.MENTION_PROPERTY_PROPBANK;
 				break;
 			default:
 				suffix = "";	// should never happen, though...
 				break;
 			}
 			
+			List<String> rolesetIds = ksAdapter.getMentionProperty(mentionURI, propertyURI);
+			
+			if (suffix.equals(PropbankFrames.SUFFIX_NOUN) && this.doUseVerbAsFallback) {
+				boolean useFallback = false;
+				for (String roleset : rolesetIds) {
+					if (!propbank.containsFrame(roleset.substring(roleset.lastIndexOf("/") + 1, roleset.lastIndexOf(".")), suffix)) {
+						useFallback = true;
+					}
+				}
+				if (useFallback) {
+					rolesetIds = ksAdapter.getMentionProperty(mentionURI, Util.MENTION_PROPERTY_PROPBANK);
+					suffix = PropbankFrames.SUFFIX_VERB;
+				}
+					
+			}
+			
+//			if (!propbank.containsFrame(pred, suffix) && suffix.equals(PropbankFrames.SUFFIX_NOUN) && this.doUseVerbAsFallback) {
+//				suffix = PropbankFrames.SUFFIX_VERB;
+//			}
+				
+			
 			for (String roleset : rolesetIds) {
 				String id = roleset.substring(roleset.lastIndexOf("/") + 1);
+				String word = id.substring(0, id.indexOf("."));
 				
-				PropbankRoleset r = propbank.getRoleset(pred, suffix, id);
+				PropbankRoleset r = propbank.getRoleset(word, suffix, id);
 				
 				if (r == null)	// skip if roleset not existing
 					continue;
 				
 				double bestRolesetFraction = Double.POSITIVE_INFINITY;
+				double averageRolesetFraction = 0;
 				
 				for (Set<PropbankArgument> argumentSet : r.getArgumentSets()) {
 					
@@ -74,57 +119,38 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 					}
 					
 					double fraction;
-					if (numberOfExpectedActors == 0)
-						fraction = Double.POSITIVE_INFINITY;
+					if (numberOfExpectedActors == 0) {
+						if (this.doComputeAverageInsteadOfMax)
+							fraction = (numberOfActors == 0) ? 1.0 : 0.0;
+						else
+							fraction = (numberOfActors == 0) ? 1.0 : Double.POSITIVE_INFINITY;
+					}
 					else
 						fraction = numberOfActors / numberOfExpectedActors;
 					
 					if (Math.abs(1 - fraction) < Math.abs(1 - bestRolesetFraction))
 						bestRolesetFraction = fraction;
+					averageRolesetFraction += fraction;
 				}
+				averageRolesetFraction /= r.getArgumentSets().size();
 				
 				if (Math.abs(1 - bestRolesetFraction) < Math.abs(1 - bestMentionFraction))
 					bestMentionFraction = bestRolesetFraction;
+				averageMentionFraction += averageRolesetFraction;
 			}
+			averageMentionFraction /= rolesetIds.size();
 			
-			if (Math.abs(1 - bestMentionFraction) < Math.abs(1 - result))
-				result = bestMentionFraction;
-			
+			if (Math.abs(1 - bestMentionFraction) < Math.abs(1 - bestFraction))
+				bestFraction = bestMentionFraction;
+			averageFraction += averageMentionFraction;
 		}
+		averageFraction /= mentionURIs.size();
 		
-		if (Double.isInfinite(result))
-			result = 0;
+		if (this.doComputeAverageInsteadOfMax)
+			return averageFraction;
+		else
+			return Double.isInfinite(bestFraction) ? 0.0 : bestFraction;
 		
-		return result;
-		
-//		List<String> labels = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_LABEL);
-//		
-//		double result = 0;
-//		for (String label : labels) {
-//			if (!propBankMap.containsKey(label) || propBankMap.get(label).isEmpty()) {
-//				result = 1;	// there's at least one label w/o propBank requirements (either unknown or doesn't need arguments)
-//				break;		// so no requirements --> all requirements fulfilled --> return 1
-//			}
-//			Set<Set<String>> argumentPossibilities = propBankMap.get(label);
-//			for (Set<String> expectedArguments : argumentPossibilities) {
-//				if (expectedArguments.isEmpty()) {
-//					result = 1;	// no requirements --> all requirements fulfilled --> return 1
-//					break;
-//				}
-//				double fulfilledness = 0;
-//				for (String arg : expectedArguments) {
-//					double numberOfArgs = ksAdapter.runSingleVariableDoubleQuerySingleResult(
-//							countQuery.replace(Util.PLACEHOLDER_EVENT, eventURI).replace(Util.PLACEHOLDER_LINK, arg), Util.VARIABLE_NUMBER);
-//					if (numberOfArgs > 0)
-//						fulfilledness++;
-//				}
-//				fulfilledness /= expectedArguments.size();
-//				
-//				result = Math.max(result, fulfilledness); // take the max: if one label has everything it needs, we're happy
-//			}
-//		}
-//		
-//		return result;
 	}
 
 }

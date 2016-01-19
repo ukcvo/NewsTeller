@@ -21,7 +21,7 @@
 	</bean>
 
 	<bean id="balancingSMOTEFilter" class="weka.filters.supervised.instance.SMOTE">
-		<property name="percentage" value="100" />
+		<property name="percentage" value="150" />
 	</bean>
 
 	<bean id="balancingSpreadFilter" class="weka.filters.supervised.instance.SpreadSubsample">
@@ -61,10 +61,10 @@
 		<property name="filters">
 			<array>
 				<bean class="weka.filters.unsupervised.attribute.Copy">
-					<property name="attributeIndices" value="1-8" />
+					<property name="attributeIndices" value="1-9" />
 				</bean>
 				<bean class="weka.filters.supervised.attribute.Discretize">
-					<property name="attributeIndices" value="1-8" />
+					<property name="attributeIndices" value="1-9" />
 				</bean>
 			</array>
 		</property>

@@ -18,6 +18,10 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 public class PropbankArgumentFeatureTest {
 
 	private PropbankArgumentFeature feature;
+	private PropbankArgumentFeature avgFeature;
+	private PropbankArgumentFeature smartFeature;
+	private PropbankArgumentFeature fallbackFeature;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	@BeforeClass
@@ -34,6 +38,9 @@ public class PropbankArgumentFeatureTest {
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
 		feature = (PropbankArgumentFeature) context.getBean("propbankArgumentFeature");
+		avgFeature = (PropbankArgumentFeature) context.getBean("propbankAvgArgumentFeature");
+		smartFeature = (PropbankArgumentFeature) context.getBean("smartPropbankArgumentFeature");
+		fallbackFeature = (PropbankArgumentFeature) context.getBean("nombankFallbackArgumentFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.openConnection();
@@ -60,5 +67,66 @@ public class PropbankArgumentFeatureTest {
 	public void shouldReturnZero() {
 		double value = feature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev22", null);
 		assertTrue(value == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnAvgOneThird() {
+		double value = avgFeature.getValue("http://en.wikinews.org/wiki/NSW_appeal_court_acquits_Jeffrey_Gilham_of_parents'_murders#ev49", null);
+		assertTrue(Math.abs(value - (1.0/3)) < Util.EPSILON);
+	}
+	
+	@Test
+	public void shouldReturnAvgZeroPointFiveEight() {
+		double value = avgFeature.getValue("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev28", null);
+		assertTrue(Math.abs(value - 0.583333333) < Util.EPSILON);
+	}
+	
+	@Test
+	public void shouldReturnAvgZero() {
+		double value = avgFeature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev22", null);
+		assertTrue(value == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnSmartZeroVerb() {
+		double value = smartFeature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev22", null);
+		assertTrue(value == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnSmartZeroNounNoEntry() {
+		double value = smartFeature.getValue("http://en.wikinews.org/wiki/Polar_bear_Knut's_death_linked_to_encephalitis#ev28", null);
+		assertTrue(value == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnSmartZeroNounNoEntry2() {
+		double value = smartFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev48", null);
+		assertTrue(value == 0.0);
+	}
+	
+	
+	@Test
+	public void shouldReturnSmartOneVerb() {
+		double value = smartFeature.getValue("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev28", null);
+		assertTrue(value == 1.0);
+	}
+	
+	@Test
+	public void shouldReturnSmartOneNoun() {
+		double value = smartFeature.getValue("http://en.wikinews.org/wiki/Earthquake_reported_near_Rome's_coast,_no_damage_caused#ev10", null);
+		assertTrue(value == 1.0);
+	}
+	
+	@Test
+	public void shouldReturnSmartZeroNounNoArguments() {
+		double value = smartFeature.getValue("http://en.wikinews.org/wiki/Icelandic_volcanic_eruption_prompts_evacuation,_flight_diversions#ev20", null);
+		assertTrue(value == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnFallbackOneNoun() {
+		double value = fallbackFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev48", null);
+		assertTrue(value == 1.0);
 	}
 }

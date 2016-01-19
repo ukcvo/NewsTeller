@@ -10,17 +10,9 @@
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
-		<ref bean="propbankArgumentFeature" />
-		<ref bean="nombankArgumentFeature" />
-		<ref bean="posFeature" />
-		<ref bean="numberOfMentionsFeature" />
-		<ref bean="hasActorFeature" />
-		<ref bean="prepPhraseFeature" />
-		<ref bean="byPhraseFeature" />
-		<ref bean="actorPositionLeftFeature" />
-		<ref bean="actorPositionRightFeature" />
 		
-		<!-- For NO_EVENT:
+		
+		<!-- For NO_EVENT
 		<ref bean="posFeature" />
 		<ref bean="wordNetFeature" />
 		<ref bean="nombankRefFeature" />
@@ -40,6 +32,28 @@
 		 -->
 		
 		<!-- for MISSING_OBJECT and MISSING_SUBJECT
+		<ref bean="propbankArgumentFeature" />
+		<ref bean="nombankArgumentFeature" />
+		<ref bean="posFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="hasActorFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="byPhraseFeature" />
+		<ref bean="actorPositionLeftFeature" />
+		<ref bean="actorPositionRightFeature" />
+		<ref bean="propbankAvgArgumentFeature" />
+		<ref bean="nombankAvgArgumentFeature" />
+		<ref bean="smartPropbankArgumentFeature" />
+		<ref bean="smartPropbankAvgArgumentFeature" />
+		<ref bean="nombankFallbackArgumentFeature" />
+		<ref bean="nombankFallbackAvgArgumentFeature" />
+		<ref bean="smartPropbankFallbackArgumentFeature" />
+		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
+		<ref bean="propbankExistenceFeature" />
+		<ref bean="nombankExistenceFeature" />
+		 -->
+		
+		<!-- for OVERLAPPING_CONSTITUENTS
 		
 		 -->
 		
@@ -75,6 +89,9 @@
 			value="resources/SPARQL/usability/hasActor.qry" />
 		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
 		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="false" />
+		<property name="doComputeAverageInsteadOfMax" value="false" />
+		<property name="doUseVerbAsFallback" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="propbankArgumentFeature" />
 	</bean>
@@ -87,8 +104,131 @@
 			value="resources/SPARQL/usability/hasActor.qry" />
 		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#nombankRef" />
 		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="false" />
+		<property name="doComputeAverageInsteadOfMax" value="false" />
+		<property name="doUseVerbAsFallback" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="nombankArgumentFeature" />
+	</bean>
+	
+	<bean id="propbankAvgArgumentFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="countQueryFileName"
+			value="resources/SPARQL/usability/hasActor.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="false" />
+		<property name="doComputeAverageInsteadOfMax" value="true" />
+		<property name="doUseVerbAsFallback" value="false" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="propbankAvgArgumentFeature" />
+	</bean>
+
+	<bean id="nombankAvgArgumentFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="countQueryFileName"
+			value="resources/SPARQL/usability/hasActor.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#nombankRef" />
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="false" />
+		<property name="doComputeAverageInsteadOfMax" value="true" />
+		<property name="doUseVerbAsFallback" value="false" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="nombankAvgArgumentFeature" />
+	</bean>
+	
+	<bean id="smartPropbankArgumentFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="countQueryFileName"
+			value="resources/SPARQL/usability/hasActor.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="true" />
+		<property name="doComputeAverageInsteadOfMax" value="false" />
+		<property name="doUseVerbAsFallback" value="false" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="smartPropbankArgumentFeature" />
+	</bean>
+	
+	<bean id="smartPropbankAvgArgumentFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="countQueryFileName"
+			value="resources/SPARQL/usability/hasActor.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="true" />
+		<property name="doComputeAverageInsteadOfMax" value="true" />
+		<property name="doUseVerbAsFallback" value="false" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="smartPropbankAvgArgumentFeature" />
+	</bean>
+	
+	<bean id="nombankFallbackArgumentFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="countQueryFileName"
+			value="resources/SPARQL/usability/hasActor.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#nombankRef" />
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="false" />
+		<property name="doComputeAverageInsteadOfMax" value="false" />
+		<property name="doUseVerbAsFallback" value="true" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="nombankFallbackArgumentFeature" />
+	</bean>
+	
+	<bean id="nombankFallbackAvgArgumentFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="countQueryFileName"
+			value="resources/SPARQL/usability/hasActor.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#nombankRef" />
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="false" />
+		<property name="doComputeAverageInsteadOfMax" value="true" />
+		<property name="doUseVerbAsFallback" value="true" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="nombankFallbackAvgArgumentFeature" />
+	</bean>
+	
+	<bean id="smartPropbankFallbackArgumentFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="countQueryFileName"
+			value="resources/SPARQL/usability/hasActor.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="true" />
+		<property name="doComputeAverageInsteadOfMax" value="false" />
+		<property name="doUseVerbAsFallback" value="true" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="smartPropbankFallbackArgumentFeature" />
+	</bean>
+	
+	<bean id="smartPropbankFallbackAvgArgumentFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="countQueryFileName"
+			value="resources/SPARQL/usability/hasActor.qry" />
+		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+		<constructor-arg name="propBankFolderName" value="resources/propbank-frames" />
+		<property name="doAutomaticallyChooseProperty" value="true" />
+		<property name="doComputeAverageInsteadOfMax" value="true" />
+		<property name="doUseVerbAsFallback" value="true" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="smartPropbankFallbackAvgArgumentFeature" />
 	</bean>
 	
 	<bean id="prepPhraseFeature"
