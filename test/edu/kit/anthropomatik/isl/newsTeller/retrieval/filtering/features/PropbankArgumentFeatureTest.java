@@ -13,8 +13,9 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
-public class PropBankFeatureTest {
+public class PropbankArgumentFeatureTest {
 
 	private PropbankArgumentFeature feature;
 	private KnowledgeStoreAdapter ksAdapter;
@@ -32,7 +33,7 @@ public class PropBankFeatureTest {
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		feature = (PropbankArgumentFeature) context.getBean("propBankFeature");
+		feature = (PropbankArgumentFeature) context.getBean("propbankArgumentFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.openConnection();
@@ -44,39 +45,20 @@ public class PropBankFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnZeroPointFive() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Pakistani_scientist_says_government_knew_about_nuclear_shipment_to_North_Korea#ev49", null);
-		assertTrue(value == 0.5);
+	public void shouldReturnOneThird() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/NSW_appeal_court_acquits_Jeffrey_Gilham_of_parents'_murders#ev49", null);
+		assertTrue(Math.abs(value - (1.0/3)) < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnOne() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/UN:_Ethiopian_GDP_grew_only_1.7%25_in_2009,_may_not_reach_anti-poverty_goals#ev24", null);
+		double value = feature.getValue("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev28", null);
 		assertTrue(value == 1.0);
 	}
-	
-	@Test
-	public void shouldReturnOneMultipleLables() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/NSW_appeal_court_acquits_Jeffrey_Gilham_of_parents'_murders#ev49", null);
-		assertTrue(value == 1.0);
-	}
-	
-	@Test
-	public void shouldReturnOneForDance() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev30", null);
-		assertTrue(value == 1.0);
-	}
-	
-	@Test
-	public void shouldReturnZeroPointFiveForLaunch() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev8", null);
-		assertTrue(value == 0.5);
-	}
-	
 	
 	@Test
 	public void shouldReturnZero() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Several_hundred_buried_in_mass_graves_in_Nigeria_following_clashes#ev27", null);
+		double value = feature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev22", null);
 		assertTrue(value == 0.0);
 	}
 }

@@ -99,6 +99,22 @@ public class KnowledgeStoreAdapterTest {
 	}
 	
 	@Test
+	public void shouldReturnAllSentencesForMultipleMentionEvent() {
+		List<String> expectedResults = 
+				Arrays.asList(	"Instead, Kucinich is going to focus on his re-election bid to the United States House of Representatives because he is facing four other candidates in the Democratic primary for Ohio's 10th congressional district and has received criticism for spending more time on running for President than on the district which he has represented for the past 12 years.",
+								"This was his second run for the presidency, his first was the 2004 presidential election.");
+		List<String> retrievedSentences = ksAdapter.retrieveSentencesfromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22");
+		assertTrue(expectedResults.equals(retrievedSentences));
+	}
+	
+	@Test
+	public void shouldReturnCorrectSentenceForMention() {
+		String expectedResult = "This was his second run for the presidency, his first was the 2004 presidential election.";
+		String retrievedSentence = ksAdapter.retrieveSentenceFromMention("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=1013,1016");
+		assertTrue(expectedResult.equals(retrievedSentence));
+	}
+	
+	@Test
 	public void shouldReturnPOSVerb() {
 		String pos = ksAdapter.getUniqueMentionProperty("http://en.wikinews.org/wiki/Mountaineers_'Climb_Up'_for_AIDS_funding#char=1238,1243", Util.MENTION_PROPERTY_POS);
 		assertTrue(pos.equals(Util.MENTION_PROPERTY_POS_VERB));

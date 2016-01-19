@@ -48,6 +48,7 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 					labels = ksAdapter.runSingleVariableStringQuery(
 							inheritedLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()),
 							Util.VARIABLE_LABEL); 
+				// if there is no dbpedia label, then labels will be empty!
 				
 				List<List<String>> list = new ArrayList<List<String>>();
 				for (String label : labels) {

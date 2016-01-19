@@ -121,6 +121,7 @@ public class PropbankFrames {
 		if (!forceConstruction && mapFile.exists()) {
 			try {
 				this.map = (Map<String, Map<String, PropbankRoleset>>) SerializationHelper.read(mapFile.getAbsolutePath());
+				return;
 			} catch (Exception e) {
 				if (log.isWarnEnabled())
 					log.warn("wanted to load map file, but failed... constructing it manually");

@@ -314,6 +314,29 @@ public class KnowledgeStoreAdapter {
 	}
 	
 	/**
+	 * Returns the sentence corresponding to the given mention.
+	 */
+	public String retrieveSentenceFromMention(String mentionURI) {
+		String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
+		int startIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf("=")+1, mentionURI.indexOf(",", mentionURI.indexOf("="))));
+		int endIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf(",", mentionURI.indexOf("="))+1));
+		
+		// get original text
+		String originalText = getOriginalText(resourceURI);
+		if (originalText.isEmpty())
+			return "";
+		
+		// search for sentence boundaries using a very simple heuristic
+		List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
+		while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))
+			startIdx--;
+		while((endIdx < originalText.length()) && (!sentenceDelimiters.contains(originalText.charAt(endIdx-1))))
+			endIdx++;
+		
+		return originalText.substring(startIdx, endIdx).trim();
+	}
+	
+	/**
 	 * Given the eventURI, picks the first mention and extracts the surrounding sentence from the original resource.
 	 */
 	public String retrieveSentencefromEvent(String eventURI) {
@@ -342,23 +365,9 @@ public class KnowledgeStoreAdapter {
 		
 		for (String mention : mentions) {
 			
-			String resourceURI = mention.substring(0, mention.indexOf("#"));
-			int startIdx = Integer.parseInt(mention.substring(mention.indexOf("=")+1, mention.indexOf(",", mention.indexOf("="))));
-			int endIdx = Integer.parseInt(mention.substring(mention.indexOf(",", mention.indexOf("="))+1));
-			
-			// get original text
-			String originalText = getOriginalText(resourceURI);
-			if (originalText.isEmpty())
-				continue;
-			
-			// search for sentence boundaries using a very simple heuristic
-			List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
-			while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))
-				startIdx--;
-			while((endIdx < originalText.length() - 1) && (!sentenceDelimiters.contains(originalText.charAt(endIdx-1))))
-				endIdx++;
-			
-			result.add(originalText.substring(startIdx, endIdx).trim());
+			String sentence = retrieveSentenceFromMention(mention);
+			if (!sentence.isEmpty())
+				result.add(sentence);
 		}
 		
 		return result;

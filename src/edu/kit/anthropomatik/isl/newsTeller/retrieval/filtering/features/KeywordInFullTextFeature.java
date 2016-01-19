@@ -35,14 +35,18 @@ public class KeywordInFullTextFeature extends FullTextFeature {
 		List<List<List<String>>> result = new ArrayList<List<List<String>>>();
 		
 		for (Keyword keyword : keywords) {
-			List<String> list = new ArrayList<String>();
-			if (this.useOriginalString)
-				list.add(keyword.getWord());
-			if (this.useStem)
-				list.add(keyword.getStem());
-			List<List<String>> innerList = new ArrayList<List<String>>();
-			innerList.add(list);
-			result.add(innerList);
+			List<List<String>> list = new ArrayList<List<String>>();
+			if (this.useOriginalString) {
+				List<String> innerList = new ArrayList<String>();
+				innerList.add(keyword.getWord());
+				list.add(innerList);
+			}
+			if (this.useStem) {
+				List<String> innerList = new ArrayList<String>();
+				innerList.add(keyword.getStem());
+				list.add(innerList);
+			}	
+			result.add(list);
 		}
 		
 		return result;

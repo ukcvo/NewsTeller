@@ -2,8 +2,6 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.LogManager;
 
 import org.junit.After;
@@ -14,15 +12,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
-public class SparqlFeatureTest {
+public class PrepPhraseFeatureTest {
 
-	private KnowledgeStoreAdapter ksAdapter;
+	private PrepPhraseFeature feature;
 	
-	private SparqlFeature feature;
+	private KnowledgeStoreAdapter ksAdapter;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -37,37 +34,44 @@ public class SparqlFeatureTest {
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		feature = (SparqlFeature) context.getBean("hasKeywordAsLabelFeature");
+		feature = (PrepPhraseFeature) context.getBean("prepPhraseFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.openConnection();
 	}
 
 	@After
-	public void tearDown() {
+	public void tearDown() throws Exception {
 		ksAdapter.closeConnection();
+	}
+
+	@Test
+	public void shouldReturnZeroBecauseNoActors() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev22", null);
+		assertTrue(value == 0.0);
+	}
+
+	@Test
+	public void shouldReturnZero() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18", null);
+		assertTrue(value == 0.0);
 	}
 	
 	@Test
-	public void shouldReturnZero() {
-		Keyword k = new Keyword("Hawking");
-		Util.stemKeyword(k);
-		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(k);
-		double result = feature.getValue("http://en.wikinews.org/wiki/14_US_soldiers_dead_after_helicopter_crash_in_Iraq#ev15", keywords);
-
-		assertTrue(result == 0.0);
+	public void shouldReturnOneQuarter() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19", null);
+		assertTrue(Math.abs(value - 0.25) < Util.EPSILON);
+	}
+	
+	@Test
+	public void shouldReturnOneThird() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/Amnesty_International_calls_for_Guantanamo_shutdown#ev29", null);
+		assertTrue(Math.abs(value - (1.0/3)) < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnOne() {
-		Keyword k = new Keyword("Hawking");
-		Util.stemKeyword(k);
-		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(k);
-		double result = feature.getValue("http://en.wikinews.org/wiki/Stephen_Hawking_concludes_visit_to_Israel_and_Palestine#ev16", keywords);
-
-		assertTrue(result == 1.0);
+		double value = feature.getValue("http://en.wikinews.org/wiki/Iceland_voters_reject_deal_to_repay_billions_to_UK,_Dutch#ev87", null);
+		assertTrue(value == 1.0);
 	}
-
 }

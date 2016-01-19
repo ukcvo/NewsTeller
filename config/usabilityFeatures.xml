@@ -16,6 +16,7 @@
 		<ref bean="numberOfMentionsFeature" />
 		<ref bean="hasActorFeature" />
 		<ref bean="prepPhraseFeature" />
+		<ref bean="byPhraseFeature" />
 		
 		<!-- For NO_EVENT:
 		<ref bean="posFeature" />
@@ -90,10 +91,20 @@
 	
 	<bean id="prepPhraseFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
-		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActorLabels.qry" />
-		<constructor-arg name="prepositionFileName" value="resources/prepositions.txt" />
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
+		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
+		<constructor-arg name="prepositionFileName" value="resources/features/prepositions.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="prepPhraseFeature" />
+	</bean>
+	
+	<bean id="byPhraseFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
+		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
+		<constructor-arg name="prepositionFileName" value="resources/features/by.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="byPhraseFeature" />
 	</bean>
 	
 	<!-- for NO_EVENT -->

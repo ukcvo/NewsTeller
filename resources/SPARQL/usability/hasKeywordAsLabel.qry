@@ -11,5 +11,5 @@ WHERE
         ?class rdfs:label ?label
         }
     }
-    FILTER(REGEX(STR(?label),"(-| |^|\\()*k*(\\w)*(-| |$|\\))", "i"))
+    FILTER(REGEX(STR(?label),"*k*", "i"))
 }

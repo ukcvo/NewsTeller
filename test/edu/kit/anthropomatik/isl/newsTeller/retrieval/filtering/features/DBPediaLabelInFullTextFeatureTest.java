@@ -72,14 +72,14 @@ public class DBPediaLabelInFullTextFeatureTest {
 	}
 
 	@Test
-	public void ShouldReturnZeroPointSix() {
+	public void ShouldReturnZeroPointFour() {
 		Keyword k = new Keyword("comedy");
 		Util.stemKeyword(k);
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(k);
 		
 		double value = feature.getValue("http://en.wikinews.org/wiki/US_nuclear_security_director_asked_to_resign#ev10", keywords);
-		assertTrue(Math.abs(value - 0.6) < Util.EPSILON);
+		assertTrue(Math.abs(value - 0.4) < Util.EPSILON);
 	}
 	
 	@Test
