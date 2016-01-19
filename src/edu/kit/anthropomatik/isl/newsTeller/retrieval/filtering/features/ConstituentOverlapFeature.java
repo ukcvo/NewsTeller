@@ -32,13 +32,16 @@ public class ConstituentOverlapFeature extends UsabilityFeature {
 		List<String> constituents = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_ENTITY);
 		List<List<String>> constituentLabels = new ArrayList<List<String>>();
 		for (String constituent : constituents) {
-			constituentLabels.add(ksAdapter.runSingleVariableStringQuery(labelQuery.replace(Util.PLACEHOLDER_ENTITY, constituent), Util.VARIABLE_LABEL));
+			List<String> labels = ksAdapter.retrievePhrasesFromEntity(constituent);
+			if (labels.isEmpty())
+				labels = ksAdapter.runSingleVariableStringQuery(labelQuery.replace(Util.PLACEHOLDER_ENTITY, constituent), Util.VARIABLE_LABEL);
+			constituentLabels.add(labels);
 		}
 		
 		List<String> mentions = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION);
 		for (String mention : mentions) {
 			List<String> checkForOverlap = new ArrayList<String>();
-			checkForOverlap.add(ksAdapter.getUniqueMentionProperty(mention, Util.MENTION_PROPERTY_PRED));
+			checkForOverlap.add(ksAdapter.getUniqueMentionProperty(mention, Util.MENTION_PROPERTY_ANCHOR_OF));
 			String mentionSentence = ksAdapter.retrieveSentenceFromMention(mention);
 			
 			// collect all the labels to be used
@@ -54,6 +57,10 @@ public class ConstituentOverlapFeature extends UsabilityFeature {
 					for (int j = i + 1; j < relevantLabels.size(); j++) { // now eliminate the ones overlapping like "Bob Hawke" and "Hawke"
 						String first = relevantLabels.get(i);
 						String second = relevantLabels.get(j);
+						if (first.equals(second)) {
+							pickedLabels.remove(first);
+							break;
+						}
 						if (first.contains(second))
 							pickedLabels.remove(second);
 						else if (second.contains(first))

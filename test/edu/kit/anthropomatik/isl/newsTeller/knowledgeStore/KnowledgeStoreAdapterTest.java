@@ -115,6 +115,20 @@ public class KnowledgeStoreAdapterTest {
 	}
 	
 	@Test
+	public void shouldReturnCorrectPhraseFromMention() {
+		String expectedResult = "videos uploaded by their users";
+		String retrievedSentence = ksAdapter.retrievePhraseFromMention("http://en.wikinews.org/wiki/Movie_'The_Assassination_of_Jesse_James'_leaked_on_the_internet#char=352,382");
+		assertTrue(expectedResult.equals(retrievedSentence));
+	}
+	
+	@Test
+	public void shouldReturnCorrectPhraseFromEntity() {
+		String expectedResult = "videos uploaded by their users";
+		List<String> retrievedSentences = ksAdapter.retrievePhrasesFromEntity("http://www.newsreader-project.eu/data/wikinews/non-entities/videos+uploaded+by+their+users");
+		assertTrue(retrievedSentences.size() == 1 && retrievedSentences.contains(expectedResult));
+	}
+	
+	@Test
 	public void shouldReturnPOSVerb() {
 		String pos = ksAdapter.getUniqueMentionProperty("http://en.wikinews.org/wiki/Mountaineers_'Climb_Up'_for_AIDS_funding#char=1238,1243", Util.MENTION_PROPERTY_POS);
 		assertTrue(pos.equals(Util.MENTION_PROPERTY_POS_VERB));

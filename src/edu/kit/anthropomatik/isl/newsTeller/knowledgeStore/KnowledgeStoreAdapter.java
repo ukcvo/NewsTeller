@@ -314,9 +314,16 @@ public class KnowledgeStoreAdapter {
 	}
 	
 	/**
-	 * Returns the sentence corresponding to the given mention.
+	 * Returns the phrase the mention is referring to from the original text.
 	 */
-	public String retrieveSentenceFromMention(String mentionURI) {
+	public String retrievePhraseFromMention(String mentionURI) {
+		return retrievePhraseFromMention(mentionURI, false);
+	}
+	
+	/**
+	 * Returns the phrase the mention is referring to from the original text. If wholeSentence is set to true, will expand phrase to whole sentence.
+	 */
+	public String retrievePhraseFromMention(String mentionURI, boolean wholeSentence) {
 		String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
 		int startIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf("=")+1, mentionURI.indexOf(",", mentionURI.indexOf("="))));
 		int endIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf(",", mentionURI.indexOf("="))+1));
@@ -326,14 +333,55 @@ public class KnowledgeStoreAdapter {
 		if (originalText.isEmpty())
 			return "";
 		
-		// search for sentence boundaries using a very simple heuristic
-		List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
-		while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))
-			startIdx--;
-		while((endIdx < originalText.length()) && (!sentenceDelimiters.contains(originalText.charAt(endIdx-1))))
-			endIdx++;
+		if (wholeSentence) {
+			// search for sentence boundaries using a very simple heuristic
+			List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
+			while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))
+				startIdx--;
+			while((endIdx < originalText.length()) && (!sentenceDelimiters.contains(originalText.charAt(endIdx-1))))
+				endIdx++;
+		}
 		
 		return originalText.substring(startIdx, endIdx).trim();
+	}
+	
+	/**
+	 * Returns the phrases of the mentions of the given entity.
+	 */
+	public List<String> retrievePhrasesFromEntity(String entityURI) {
+		return retrievePhrasesFromEntity(entityURI, false);
+	}
+	
+	/**
+	 * Returns the phrases of the mentions of the given entity. If wholeSentence is set, returns whole sentences.
+	 */
+	public List<String> retrievePhrasesFromEntity(String entityURI, boolean wholeSentence) {
+		List<String> result = new ArrayList<String>();
+		
+		List<String> mentions = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, entityURI), 
+																		Util.VARIABLE_MENTION);
+
+		if (mentions.isEmpty()) {
+			if(log.isErrorEnabled())
+				log.error(String.format("Could not retrieve mentions for entity, returning empty list: '%s'", entityURI));
+			return result;
+		}
+		
+		for (String mention : mentions) {
+			
+			String sentence = retrievePhraseFromMention(mention, wholeSentence);
+			if (!sentence.isEmpty())
+				result.add(sentence);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Returns the sentence corresponding to the given mention.
+	 */
+	public String retrieveSentenceFromMention(String mentionURI) {
+		return retrievePhraseFromMention(mentionURI, true);
 	}
 	
 	/**
@@ -351,26 +399,7 @@ public class KnowledgeStoreAdapter {
 	 * Given the eventURI, returns a list of all sentences mentioning this event.
 	 */
 	public List<String> retrieveSentencesfromEvent(String eventURI) {
-		
-		List<String> result = new ArrayList<String>();
-		
-		List<String> mentions = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, eventURI), 
-																		Util.VARIABLE_MENTION);
-
-		if (mentions.isEmpty()) {
-			if(log.isErrorEnabled())
-				log.error(String.format("Could not retrieve mentions for event, returning empty list: '%s'", eventURI));
-			return result;
-		}
-		
-		for (String mention : mentions) {
-			
-			String sentence = retrieveSentenceFromMention(mention);
-			if (!sentence.isEmpty())
-				result.add(sentence);
-		}
-		
-		return result;
+		return retrievePhrasesFromEntity(eventURI, true);
 	}
 	//endregion
 
