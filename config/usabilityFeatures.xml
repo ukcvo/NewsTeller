@@ -17,6 +17,8 @@
 		<ref bean="hasActorFeature" />
 		<ref bean="prepPhraseFeature" />
 		<ref bean="byPhraseFeature" />
+		<ref bean="actorPositionLeftFeature" />
+		<ref bean="actorPositionRightFeature" />
 		
 		<!-- For NO_EVENT:
 		<ref bean="posFeature" />
@@ -105,6 +107,26 @@
 		<constructor-arg name="prepositionFileName" value="resources/features/by.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="byPhraseFeature" />
+	</bean>
+	
+	<bean id="actorPositionLeftFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="actorPositionLeftFeature" />
+		<property name="directionToLookAt" value="0" />
+	</bean>
+	
+	<bean id="actorPositionRightFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="actorPositionRightFeature" />
+		<property name="directionToLookAt" value="1" />
 	</bean>
 	
 	<!-- for NO_EVENT -->
