@@ -10,7 +10,7 @@
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
-		
+		<ref bean="overlapFeature" />
 		
 		<!-- For NO_EVENT
 		<ref bean="posFeature" />
@@ -79,6 +79,17 @@
 		
 	</util:list>
 
+	<!-- for OVERLAPPING_CONSTITUENTS -->
+	<bean id="overlapFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentOverlapFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="overlapFeature" />
+	</bean>
 
 	<!-- for MISSING_OBJECT and MISSING_SUBJECT -->
 	<bean id="propbankArgumentFeature"
