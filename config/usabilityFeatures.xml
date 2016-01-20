@@ -10,7 +10,17 @@
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
-		
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="numberOfFramesFeature" />
+		<ref bean="numberOfLinksFeature" />
+		<ref bean="eventLabelFeature" />
+		<ref bean="avgConstituentsPerMentionFeature" />
+		<ref bean="maxConstituentsPerMentionFeature" />
+		<ref bean="minConstituentsPerMentionFeature" />
+		<ref bean="zeroConstituentsPerMentionFeature" />
+		<ref bean="mentionTextComparisonFeature" />
+		<ref bean="mentionDistanceComparisonFeature" />
+		<ref bean="mentionSentenceComparisonFeature" />
 		
 		<!-- For NO_EVENT
 		<ref bean="posFeature" />
@@ -62,17 +72,13 @@
 		 -->
 		
 		<!-- 
-		<ref bean="numberOfFramesFeature" />
-		<ref bean="numberOfLinksFeature" />
 		<ref bean="areActorsAgentsFeature" />
 		<ref bean="arePlacesPlacesFeature" />
 		<ref bean="numberOfEntityLabelsDBPediaFeature" />
 		<ref bean="appearLabelsInTextFeature" />
-		<ref bean="eventLabelFeature" />
 		<ref bean="hasPlaceFeature" />
 		<ref bean="hasTimeFeature" />
 		<ref bean="isStatementFeature" />
-		<ref bean="numberOfMentionsFeature" />
 		<ref bean="hasActorOrPlaceFeature" />
 		<ref bean="hasKeywordAsLabelFeature" />
 		<ref bean="keywordInTextFeature" />
@@ -84,7 +90,92 @@
 	</util:list>
 
 	<!-- for EVENT_MERGE -->
+	<bean id="avgConstituentsPerMentionFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="0" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="avgConstituentsPerMentionFeature" />
+	</bean>
 
+	<bean id="maxConstituentsPerMentionFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="1" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="maxConstituentsPerMentionFeature" />
+	</bean>
+	
+	<bean id="minConstituentsPerMentionFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="2" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="minConstituentsPerMentionFeature" />
+	</bean>
+	
+	<bean id="zeroConstituentsPerMentionFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="3" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="zeroConstituentsPerMentionFeature" />
+	</bean>
+
+	<bean id="nonzeroConstituentsPerMentionFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="4" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="nonzeroConstituentsPerMentionFeature" />
+	</bean>
+
+	<bean id="mentionTextComparisonFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionComparisonFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="0" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="mentionTextComparisonFeature" />
+	</bean>
+
+	<bean id="mentionDistanceComparisonFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionComparisonFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="1" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="mentionDistanceComparisonFeature" />
+	</bean>
+
+	<bean id="mentionSentenceComparisonFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionComparisonFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="2" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="mentionSentenceComparisonFeature" />
+	</bean>
+
+	<bean id="mentionIntersectionComparisonFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionComparisonFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="3" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="mentionIntersectionComparisonFeature" />
+	</bean>
 
 	<!-- for OVERLAPPING_CONSTITUENTS -->
 	<bean id="overlapFeature"

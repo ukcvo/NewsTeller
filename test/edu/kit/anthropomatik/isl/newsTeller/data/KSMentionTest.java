@@ -85,4 +85,34 @@ public class KSMentionTest {
 		double overlapTwo = mentionI.overlap(mentionA);
 		assertTrue((overlapOne == overlapTwo) && (overlapOne == 1.0));
 	}
+	
+	@Test
+	public void shouldReturnTrueForContains() {
+		assertTrue(mentionA.contains(mentionD));
+	}
+	
+	@Test
+	public void shouldReturnFalseForContains() {
+		assertFalse(mentionD.contains(mentionA));
+	}
+	
+	@Test
+	public void shouldReturnTrueForSameText() {
+		assertTrue(mentionA.hasSameResourceURI(mentionB));
+	}
+	
+	@Test
+	public void shouldReturnFalseForSameText() {
+		assertFalse(mentionA.hasSameResourceURI(mentionG));
+	}
+	
+	@Test
+	public void shouldReturnDistanceZero() {
+		assertTrue(mentionA.distanceTo(mentionE) == 0);
+	}
+	
+	@Test
+	public void shouldReturnDistanceEleven() {
+		assertTrue(mentionA.distanceTo(mentionC) == 11);
+	}
 }

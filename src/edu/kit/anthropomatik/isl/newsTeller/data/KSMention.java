@@ -50,7 +50,30 @@ public class KSMention {
 	 * Decides whether this mention completely contains the other one.
 	 */
 	public boolean contains(KSMention other) {
-		return (this.resourceURI.equals(other.resourceURI) && this.isIdxInRange(other.startIdx) && this.isIdxInRange(other.endIdx));
+		return (this.hasSameResourceURI(other) && this.isIdxInRange(other.startIdx) && this.isIdxInRange(other.endIdx));
+	}
+	
+	/**
+	 * Returns true iff the resourceURIs of the both mentions are equal.
+	 */
+	public boolean hasSameResourceURI(KSMention other) {
+		return this.resourceURI.equals(other.resourceURI);
+	}
+	
+	/**
+	 * Calculates the distance between two mentions in the same text. 
+	 * 'other' must have the same resourceURI as this object (check before with hasSameResourceURI()).
+	 */
+	public int distanceTo(KSMention other) {
+		if (!this.hasSameResourceURI(other))
+			throw new IllegalArgumentException("Argument 'other' must have same resourceURI!");
+		
+		if (this.overlap(other) > 0)
+			return 0;
+		if (this.startIdx > other.endIdx)
+			return (this.startIdx - other.endIdx + 1);
+		else
+			return (other.startIdx - this.endIdx + 1);
 	}
 	
 	/**
@@ -59,7 +82,7 @@ public class KSMention {
 	public double overlap(KSMention other) {
 		double result = 0;
 		
-		if (this.resourceURI.equals(other.resourceURI)) {
+		if (this.hasSameResourceURI(other)) {
 			// can only overlap if from same source text
 			
 			if (this.contains(other)) {
@@ -86,4 +109,8 @@ public class KSMention {
 		return String.format("[%s,%d,%d]", this.resourceURI, this.startIdx, this.endIdx);
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		return this.toString().equals(obj.toString());
+	}
 }
