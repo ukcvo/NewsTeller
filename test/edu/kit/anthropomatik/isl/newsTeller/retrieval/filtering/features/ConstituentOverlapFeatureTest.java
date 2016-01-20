@@ -17,9 +17,9 @@ import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter
 public class ConstituentOverlapFeatureTest {
 
 	private ConstituentOverlapFeature feature;
-	
+
 	private KnowledgeStoreAdapter ksAdapter;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
@@ -55,10 +55,28 @@ public class ConstituentOverlapFeatureTest {
 		double value = feature.getValue("http://en.wikinews.org/wiki/Air_Berlin_to_code-share_with_American_Airlines_and_Finnair_by_November#ev19", null);
 		assertTrue(value == 1.0);
 	}
-	
+
 	@Test
 	public void shouldReturnTwo() {
 		double value = feature.getValue("http://en.wikinews.org/wiki/Air_Berlin_to_code-share_with_American_Airlines_and_Finnair_by_November#ev18", null);
 		assertTrue(value == 2.0);
+	}
+
+	@Test
+	public void shouldReturnZeroForFacebook() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/Facebook_blocked_in_Bangladesh#ev8", null);
+		assertTrue(value == 0.0);
+	}
+
+	@Test
+	public void shouldReturnZeroForMerkel() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/EU_adopts_renewable_energy_measures#ev96", null);
+		assertTrue(value == 0.0);
+	}
+
+	@Test
+	public void shouldReturnOneForRiot() {
+		double value = feature.getValue("http://en.wikinews.org/wiki/Calm_returns_to_Salt,_Jordan_after_riots_over_police_shooting;_35_arrested#ev13", null);
+		assertTrue(value == 1.0);
 	}
 }

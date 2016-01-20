@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.query.BindingSet;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import eu.fbk.knowledgestore.KnowledgeStore;
@@ -324,25 +325,15 @@ public class KnowledgeStoreAdapter {
 	 * Returns the phrase the mention is referring to from the original text. If wholeSentence is set to true, will expand phrase to whole sentence.
 	 */
 	public String retrievePhraseFromMention(String mentionURI, boolean wholeSentence) {
-		String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
-		int startIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf("=")+1, mentionURI.indexOf(",", mentionURI.indexOf("="))));
-		int endIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf(",", mentionURI.indexOf("="))+1));
+		
+		KSMention mention = retrieveKSMentionFromMentionURI(mentionURI, wholeSentence);
 		
 		// get original text
-		String originalText = getOriginalText(resourceURI);
+		String originalText = getOriginalText(mention.getResourceURI());
 		if (originalText.isEmpty())
 			return "";
 		
-		if (wholeSentence) {
-			// search for sentence boundaries using a very simple heuristic
-			List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
-			while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))
-				startIdx--;
-			while((endIdx < originalText.length()) && (!sentenceDelimiters.contains(originalText.charAt(endIdx-1))))
-				endIdx++;
-		}
-		
-		return originalText.substring(startIdx, endIdx).trim();
+		return originalText.substring(mention.getStartIdx(), mention.getEndIdx()).trim();
 	}
 	
 	/**
@@ -375,6 +366,27 @@ public class KnowledgeStoreAdapter {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * Converts the given mentionURI into a KSMention object; if wholeSentence is set, expands the mention to a complete sentence.
+	 */
+	public KSMention retrieveKSMentionFromMentionURI(String mentionURI, boolean wholeSentence) {
+		String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
+		int startIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf("=")+1, mentionURI.indexOf(",", mentionURI.indexOf("="))));
+		int endIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf(",", mentionURI.indexOf("="))+1));
+		
+		if (wholeSentence) {
+			// search for sentence boundaries using a very simple heuristic
+			String originalText = getOriginalText(resourceURI);
+			List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
+			while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))
+				startIdx--;
+			while((endIdx < originalText.length()) && (!sentenceDelimiters.contains(originalText.charAt(endIdx-1))))
+				endIdx++;
+		}
+		
+		return new KSMention(resourceURI, startIdx, endIdx);
 	}
 	
 	/**
