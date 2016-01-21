@@ -1,7 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
@@ -34,8 +33,6 @@ public class EntityMentionSurroundingsFeature extends UsabilityFeature {
 
 		double result = 0;
 
-		List<Character> stopChars = Arrays.asList('.', '!', '?', ' ');
-		
 		List<String> entities = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_ENTITY);
 		List<List<KSMention>> entityMentions = new ArrayList<List<KSMention>>();
 		for (String entity : entities) {
@@ -72,9 +69,9 @@ public class EntityMentionSurroundingsFeature extends UsabilityFeature {
 						case OPERATION_TYPE_PREVIOUS_WORD:
 							
 							endIdx = idx - 1;
-							if (endIdx > 0 && stopChars.contains(sentence.charAt(endIdx-1)))
+							if (endIdx > 0 && Util.STOP_CHARS.contains(sentence.charAt(endIdx-1)))
 								endIdx--;
-							for (startIdx = endIdx - 1; (startIdx >= 0) && !stopChars.contains(sentence.charAt(startIdx)); startIdx--) { }
+							for (startIdx = endIdx - 1; (startIdx >= 0) && !Util.STOP_CHARS.contains(sentence.charAt(startIdx)); startIdx--) { }
 							startIdx++;
 							break;
 
@@ -88,7 +85,7 @@ public class EntityMentionSurroundingsFeature extends UsabilityFeature {
 							}
 							if (sentence.charAt(startIdx) == ' ')
 								startIdx++;
-							for (endIdx = startIdx + 1; (endIdx < sentence.length()) && !stopChars.contains(sentence.charAt(endIdx)); endIdx++) { }
+							for (endIdx = startIdx + 1; (endIdx < sentence.length()) && !Util.STOP_CHARS.contains(sentence.charAt(endIdx)); endIdx++) { }
 							if (endIdx == sentence.length() - 1)
 								endIdx++;
 							break;
@@ -99,9 +96,6 @@ public class EntityMentionSurroundingsFeature extends UsabilityFeature {
 							endIdx = 0;
 							break;
 						}
-						
-						if (startIdx < 0)
-							System.out.println("beep");
 						
 						String word = sentence.substring(startIdx, endIdx);
 						if (targetWords.contains(word)) {

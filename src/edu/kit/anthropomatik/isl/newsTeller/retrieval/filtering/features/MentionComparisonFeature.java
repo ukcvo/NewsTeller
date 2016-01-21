@@ -39,7 +39,7 @@ public class MentionComparisonFeature extends UsabilityFeature {
 		for (String mentionURI : mentionURIs) {
 			mentions.add(new KSMention(mentionURI));
 			mentionSentences.add(ksAdapter.retrieveKSMentionFromMentionURI(mentionURI, true));
-			mentionSentenceStrings.add(new HashSet<String>(Arrays.asList(ksAdapter.retrieveSentenceFromMention(mentionURI).toLowerCase().split("[ .,\"!?;:]"))));
+			mentionSentenceStrings.add(new HashSet<String>(Arrays.asList(ksAdapter.retrieveSentenceFromMention(mentionURI).toLowerCase().split(Util.SPLIT_REGEX))));
 		}
 
 		for (int i = 0; i < mentionURIs.size(); i++) {

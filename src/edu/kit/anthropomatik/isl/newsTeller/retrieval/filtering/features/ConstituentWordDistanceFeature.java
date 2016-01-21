@@ -1,7 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
@@ -44,8 +43,6 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 		
 		double result = (this.operationType == OPERATION_TYPE_MIN) ? Double.POSITIVE_INFINITY : 0;
 		
-		List<Character> stopChars = Arrays.asList('.', '!', '?', ' ');
-		
 		List<String> constituents = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_ENTITY);
 		List<KSMention> constituentMentions = new ArrayList<KSMention>();
 		for (String constituent : constituents) {
@@ -75,7 +72,7 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 			KSMention eventMention = ksAdapter.retrieveKSMentionFromMentionURI(mentionURI, false);
 			String sentenceString = ksAdapter.retrieveSentenceFromMention(mentionURI);
 			
-			int sentenceLength = sentenceString.split("[ .,;:?!\"'\\[\\]()]").length;
+			int sentenceLength = sentenceString.split(Util.SPLIT_REGEX).length;
 			
 			int eventStartIdx = eventMention.getStartIdx() - sentenceMention.getStartIdx();
 			int eventEndIdx = eventMention.getEndIdx() - sentenceMention.getStartIdx();
@@ -95,7 +92,7 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 					int order = eventMention.compareTo(mention);
 					if (order > 0) { // event mention comes AFTER entity mention
 						for (int idx = endIdx; idx < eventStartIdx; idx++) { // start walking at end of entity mention until you hit start of event mention
-							if (stopChars.contains(sentenceString.charAt(idx)))
+							if (Util.STOP_CHARS.contains(sentenceString.charAt(idx)))
 								inWord = false;
 							else {
 								if (!inWord) {
@@ -106,7 +103,7 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 						}
 					} else if (order < 0) {	// event mention comes BEFORE entity mention
 						for (int idx = startIdx - 1; idx >= eventEndIdx; idx--) { // start walking at end of entity mention until you hit start of event mention
-							if (stopChars.contains(sentenceString.charAt(idx)))
+							if (Util.STOP_CHARS.contains(sentenceString.charAt(idx)))
 								inWord = false;
 							else {
 								if (!inWord) {

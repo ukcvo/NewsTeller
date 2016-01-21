@@ -23,7 +23,7 @@ public class DBPediaLabelInFullTextFeatureTest {
 	private DBPediaLabelInFullTextFeature feature;
 	private DBPediaLabelInFullTextFeature keywordFeature;
 	private KnowledgeStoreAdapter ksAdapter;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
@@ -55,19 +55,19 @@ public class DBPediaLabelInFullTextFeatureTest {
 		Util.stemKeyword(k);
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(k);
-		
+
 		double value = feature.getValue("http://en.wikinews.org/wiki/'Buried'_video_surfaces_of_police_making_mass_arrests_during_the_Republican_National_Convention#ev62", keywords);
 		assertTrue(value == 0.0);
 	}
-	
+
 	@Test
-	public void ShouldReturnOne() {
+	public void ShouldReturnOneForKeyword() {
 		Keyword k = new Keyword("Flying disc");
 		Util.stemKeyword(k);
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(k);
-		
-		double value = feature.getValue("http://en.wikinews.org/wiki/Walter_Frederick_Morrison,_inventor_of_frisbee,_dies_at_age_90#ev30", keywords);
+
+		double value = keywordFeature.getValue("http://en.wikinews.org/wiki/Walter_Frederick_Morrison,_inventor_of_frisbee,_dies_at_age_90#ev30", keywords);
 		assertTrue(value == 1.0);
 	}
 
@@ -77,20 +77,20 @@ public class DBPediaLabelInFullTextFeatureTest {
 		Util.stemKeyword(k);
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(k);
-		
+
 		double value = feature.getValue("http://en.wikinews.org/wiki/US_nuclear_security_director_asked_to_resign#ev10", keywords);
 		assertTrue(Math.abs(value - 0.4) < Util.EPSILON);
 	}
-	
+
 	@Test
 	public void ShouldReturnZeroForKeyword() {
 		Keyword k = new Keyword("actor");
 		Util.stemKeyword(k);
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(k);
-		
+
 		double value = keywordFeature.getValue("http://en.wikinews.org/wiki/US_nuclear_security_director_asked_to_resign#ev10", keywords);
 		assertTrue(value == 0.0);
 	}
-	
+
 }

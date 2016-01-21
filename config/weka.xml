@@ -13,8 +13,8 @@
 			<array>
 				<ref bean="removeStringFilter" />
 				<!-- 
-				<ref bean="balancingSpreadFilter"/> 
 				<ref bean="balancingSMOTEFilter"/> 
+				<ref bean="balancingSpreadFilter"/> 
 				-->
 			</array>
 		</property>

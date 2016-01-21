@@ -11,7 +11,6 @@
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
 		
-		
 		<!-- For NO_EVENT
 		<ref bean="posFeature" />
 		<ref bean="wordNetFeature" />
@@ -121,6 +120,12 @@
 		 -->
 		
 		<!-- for OTHER_ENTITY_CATEGORIZATION
+		<ref bean="appearLabelsInTextFeature" />
+		<ref bean="appearSplitLabelsInTextFeature" />
+		<ref bean="appearInheritedLabelsInTextFeature" />
+		<ref bean="appearSplitInheritedLabelsInTextFeature" />
+		<ref bean="areActorsPlacesFeature" />
+		<ref bean="arePlacesAgentsFeature" />
 		
 		 -->
 		
@@ -134,7 +139,6 @@
 		
 		<!-- 
 		<ref bean="numberOfEntityLabelsDBPediaFeature" />
-		<ref bean="appearLabelsInTextFeature" />
 		<ref bean="hasPlaceFeature" />
 		<ref bean="hasTimeFeature" />
 		<ref bean="isStatementFeature" />
@@ -149,7 +153,57 @@
 	</util:list>
 
 	<!-- for OTHER_ENTITY_CATEGORIZATION -->
-	
+	<bean id="appearLabelsInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="directLabelQueryFileName"
+			value="resources/SPARQL/usability/getLabels.qry" />
+		<constructor-arg name="inheritedLabelQueryFileName"
+			value="" />
+		<property name="splitLabels" value="false" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="appearLabelsInText" />
+	</bean>
+
+	<bean id="appearSplitLabelsInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="directLabelQueryFileName"
+			value="resources/SPARQL/usability/getLabels.qry" />
+		<constructor-arg name="inheritedLabelQueryFileName"
+			value="" />
+		<property name="splitLabels" value="true" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="appearSplitLabelsInTextFeature" />
+	</bean>
+
+	<bean id="appearInheritedLabelsInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="directLabelQueryFileName"
+			value="resources/SPARQL/usability/getLabels.qry" />
+		<constructor-arg name="inheritedLabelQueryFileName"
+			value="resources/SPARQL/usability/getInheritedLabels.qry" />
+		<property name="splitLabels" value="false" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="appearInheritedLabelsInTextFeature" />
+	</bean>
+
+	<bean id="appearSplitInheritedLabelsInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="directLabelQueryFileName"
+			value="resources/SPARQL/usability/getLabels.qry" />
+		<constructor-arg name="inheritedLabelQueryFileName"
+			value="resources/SPARQL/usability/getInheritedLabels.qry" />
+		<property name="splitLabels" value="true" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="appearSplitInheritedLabelsInTextFeature" />
+	</bean>
 
 	<!-- for WRONG_PARSE -->
 	<bean id="avgWordDistanceFeature"
@@ -805,18 +859,6 @@
 			value="resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="numberOfEntityLabelsDBPedia" />
-	</bean>
-
-	<bean id="appearLabelsInTextFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/getEntities.qry" />
-		<constructor-arg name="directLabelQueryFileName"
-			value="resources/SPARQL/usability/getLabels.qry" />
-		<constructor-arg name="inheritedLabelQueryFileName"
-			value="resources/SPARQL/usability/getInheritedLabels.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="appearLabelsInText" />
 	</bean>
 
 	<bean id="hasActorOrPlaceFeature"

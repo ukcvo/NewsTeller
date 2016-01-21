@@ -98,6 +98,9 @@ public class Util {
 
 	public static final String EMPTY_EVENT_RESPONSE = "I'm sorry, but there's nothing I can tell you about this topic.";
 
+	public static final List<Character> STOP_CHARS = Arrays.asList('.', '!', '?', ' ');
+	public static final String SPLIT_REGEX = "[ .,;:?!\"'\\[\\](){}]";
+	
 	// private constructor to prevent instantiation
 	private Util() {
 	}

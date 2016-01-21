@@ -34,7 +34,7 @@ public class PrepPhraseFeature extends UsabilityFeature {
 			
 			double actorResult = 0;
 			for (String label : labels) {
-				String[] tokens = label.split(" ");
+				String[] tokens = label.split(Util.SPLIT_REGEX);
 				if (this.doSearchInsidePhrase) {
 					for (int i = 1; i < tokens.length; i++) { // look at all tokens
 						if (prepositions.contains(tokens[i])) {

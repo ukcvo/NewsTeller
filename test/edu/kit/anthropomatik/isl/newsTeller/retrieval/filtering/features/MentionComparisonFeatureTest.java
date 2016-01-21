@@ -70,9 +70,9 @@ public class MentionComparisonFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnZeroPointEightOneForIntersection() {
+	public void shouldReturnZeroPointEightFourForIntersection() {
 		double value = intersectionFeature.getValue("http://en.wikinews.org/wiki/US_Federal_Reserve_prepares_to_take_over_AIG#ev39", null);
-		assertTrue(Math.abs(value - 0.8125) < Util.EPSILON);
+		assertTrue(Math.abs(value - 0.8484848484848485) < Util.EPSILON);
 	}
 	
 	@Test

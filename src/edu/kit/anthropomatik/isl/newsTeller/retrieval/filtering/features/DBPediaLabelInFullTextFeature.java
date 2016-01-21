@@ -44,7 +44,7 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 				List<String> labels = ksAdapter.runSingleVariableStringQuery(
 						directLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
 						Util.VARIABLE_LABEL);
-				if (labels.isEmpty())	// no direct DBpedia labels --> look at parent concepts
+				if (labels.isEmpty() && !inheritedLabelQuery.isEmpty())	// no direct DBpedia labels --> look at parent concepts
 					labels = ksAdapter.runSingleVariableStringQuery(
 							inheritedLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()),
 							Util.VARIABLE_LABEL); 
@@ -53,7 +53,7 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 				List<List<String>> list = new ArrayList<List<String>>();
 				for (String label : labels) {
 					if (this.splitLabels)
-						list.add(Arrays.asList(label.split(" ")));
+						list.add(Arrays.asList(label.split(Util.SPLIT_REGEX)));
 					else {
 						List<String> dummyList = new ArrayList<String>();
 						dummyList.add(label);
