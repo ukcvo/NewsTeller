@@ -115,4 +115,19 @@ public class KSMentionTest {
 	public void shouldReturnDistanceEleven() {
 		assertTrue(mentionA.distanceTo(mentionC) == 11);
 	}
+	
+	@Test
+	public void shouldReturnGreater() {
+		assertTrue(mentionA.compareTo(mentionB) > 0);
+	}
+	
+	@Test
+	public void shouldReturnLess() {
+		assertTrue(mentionA.compareTo(mentionC) < 0);
+	}
+	
+	@Test
+	public void shouldReturnEqual() {
+		assertTrue(mentionA.compareTo(mentionD) == 0);
+	}
 }

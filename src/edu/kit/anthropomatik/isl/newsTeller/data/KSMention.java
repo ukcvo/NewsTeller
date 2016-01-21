@@ -6,7 +6,7 @@ package edu.kit.anthropomatik.isl.newsTeller.data;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class KSMention {
+public class KSMention implements Comparable<KSMention> {
 
 	private String resourceURI;
 	
@@ -115,5 +115,14 @@ public class KSMention {
 	@Override
 	public boolean equals(Object obj) {
 		return this.toString().equals(obj.toString());
+	}
+
+	@Override
+	public int compareTo(KSMention o) {
+		if (this.overlap(o) > 0)
+			return 0;
+		if (this.startIdx > o.endIdx)
+			return 1;
+		return -1;
 	}
 }

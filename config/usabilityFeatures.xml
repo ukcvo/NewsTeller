@@ -10,6 +10,8 @@
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
+		
+		
 		<!-- For NO_EVENT
 		<ref bean="posFeature" />
 		<ref bean="wordNetFeature" />
@@ -85,6 +87,48 @@
 		 -->
 		
 		<!-- for WRONG_PARSE
+		<ref bean="propbankArgumentFeature" />
+		<ref bean="nombankArgumentFeature" />
+		<ref bean="hasActorFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="byPhraseFeature" />
+		<ref bean="actorPositionLeftFeature" />
+		<ref bean="actorPositionRightFeature" />
+		<ref bean="propbankAvgArgumentFeature" />
+		<ref bean="nombankAvgArgumentFeature" />
+		<ref bean="smartPropbankArgumentFeature" />
+		<ref bean="smartPropbankAvgArgumentFeature" />
+		<ref bean="nombankFallbackArgumentFeature" />
+		<ref bean="nombankFallbackAvgArgumentFeature" />
+		<ref bean="smartPropbankFallbackArgumentFeature" />
+		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
+		<ref bean="avgWordDistanceFeature" />
+		<ref bean="minWordDistanceFeature" />
+		<ref bean="maxWordDistanceFeature" />
+		<ref bean="avgNormalizedWordDistanceFeature" />
+		<ref bean="minNormalizedWordDistanceFeature" />
+		<ref bean="maxNormalizedWordDistanceFeature" />
+		<ref bean="avgConstituentsPerMentionFeature" />
+		<ref bean="maxConstituentsPerMentionFeature" />
+		<ref bean="minConstituentsPerMentionFeature" />
+		<ref bean="prepPhraseLocationFeature" />
+		<ref bean="prepInsidePhraseFeature" />
+		<ref bean="containActorsNumberFeature" />
+		<ref bean="prepBeforeActorFeature" />
+		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="prepAfterActorFeature" />
+		<ref bean="genitiveFeature" />
+		 -->
+		
+		<!-- for OTHER_ENTITY_CATEGORIZATION
+		
+		 -->
+		
+		<!-- for MISSING_LOCATION
+		
+		 -->
+		
+		<!-- for KEYWORD_REGEX_MISMATCH
 		
 		 -->
 		
@@ -104,8 +148,69 @@
 		
 	</util:list>
 
-	<!-- for WRONG_PARSE -->
+	<!-- for OTHER_ENTITY_CATEGORIZATION -->
 	
+
+	<!-- for WRONG_PARSE -->
+	<bean id="avgWordDistanceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="normalize" value="false" />
+		<property name="operationType" value="0" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="avgWordDistanceFeature" />
+	</bean>
+	
+	<bean id="minWordDistanceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="normalize" value="false" />
+		<property name="operationType" value="1" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="minWordDistanceFeature" />
+	</bean>
+	
+	<bean id="maxWordDistanceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="normalize" value="false" />
+		<property name="operationType" value="2" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="maxWordDistanceFeature" />
+	</bean>
+
+	<bean id="avgNormalizedWordDistanceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="normalize" value="true" />
+		<property name="operationType" value="0" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="avgNormalizedWordDistanceFeature" />
+	</bean>
+	
+	<bean id="minNormalizedWordDistanceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="normalize" value="true" />
+		<property name="operationType" value="1" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="minNormalizedWordDistanceFeature" />
+	</bean>
+	
+	<bean id="maxNormalizedWordDistanceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="normalize" value="true" />
+		<property name="operationType" value="2" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="maxNormalizedWordDistanceFeature" />
+	</bean>
 
 	<!-- for BROKEN_CONSTITUENT -->
 	<bean id="areActorsAgentsFeature"

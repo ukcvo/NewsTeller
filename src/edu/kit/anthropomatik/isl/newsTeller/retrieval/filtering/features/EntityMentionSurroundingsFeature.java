@@ -38,18 +38,14 @@ public class EntityMentionSurroundingsFeature extends UsabilityFeature {
 		
 		List<String> entities = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_ENTITY);
 		List<List<KSMention>> entityMentions = new ArrayList<List<KSMention>>();
-		//List<List<String>> entityPhrases = new ArrayList<List<String>>();
 		for (String entity : entities) {
 			List<String> mentionURIs = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, entity), Util.VARIABLE_MENTION);
 			List<KSMention> mentions = new ArrayList<KSMention>();
-			//List<String> phrases = new ArrayList<String>();
 			for (String mention : mentionURIs) {
 				mentions.add(new KSMention(mention));
-			//	phrases.add(ksAdapter.retrievePhraseFromMention(mention));
 			}
 
 			entityMentions.add(mentions);
-			//entityPhrases.add(phrases);
 		}
 
 		List<String> mentionURIs = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION);
@@ -60,14 +56,12 @@ public class EntityMentionSurroundingsFeature extends UsabilityFeature {
 
 			for (int i = 0; i < entityMentions.size(); i++) {
 				List<KSMention> entity = entityMentions.get(i);
-				//List<String> phrases = entityPhrases.get(i);
 				
 				for (int j = 0; j < entity.size(); j++) {
 					KSMention mention = entity.get(j);
-					//String phrase = phrases.get(j);
 					if (sentenceMention.contains(mention)) {
 						
-						int idx = mention.getStartIdx() - sentenceMention.getStartIdx(); //sentence.indexOf(phrase);
+						int idx = mention.getStartIdx() - sentenceMention.getStartIdx(); 
 						if (idx == 0 && this.operationType == OPERATION_TYPE_PREVIOUS_WORD)
 							continue;
 						int startIdx;
