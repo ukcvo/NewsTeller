@@ -18,8 +18,14 @@ public abstract class FullTextFeature extends UsabilityFeature {
 
 	private boolean doOnlyUseSentence;
 	
+	protected boolean doUseContainsInsteadOfRegex;
+	
 	public void setDoOnlyUseSentence(boolean doOnlyUseSentence) {
 		this.doOnlyUseSentence = doOnlyUseSentence;
+	}
+	
+	public void setDoUseContainsInsteadOfRegex(boolean doUseContainsInsteadOfRegex) {
+		this.doUseContainsInsteadOfRegex = doUseContainsInsteadOfRegex;
 	}
 	
 	public FullTextFeature(String queryFileName) {
@@ -29,10 +35,17 @@ public abstract class FullTextFeature extends UsabilityFeature {
 	private double checkLabel(List<String> labelParts, Set<String> originalTexts) {
 		double max = 0.0;
 		for (String text : originalTexts) { // take max over all texts
+			String[] lowerCaseText = text.toLowerCase().split("\n");
 			double sum = 0.0;
 			for (String labelPart : labelParts) { // compute fraction of label parts that are actually mentioned
-				if (text.toLowerCase().contains(labelPart.toLowerCase())) //ignoring case
-					sum++;
+				String regex = Util.KEYWORD_REGEX_PREFIX_JAVA + labelPart.toLowerCase() + Util.KEYWORD_REGEX_SUFFIX_JAVA;
+				for (String line : lowerCaseText) {
+					if ((this.doUseContainsInsteadOfRegex && line.contains(labelPart)) || (line.matches(regex))) { // ignoring case
+						sum++;
+						break;
+					}
+				}
+				
 			}
 			sum /= labelParts.size();
 			if (sum > max)

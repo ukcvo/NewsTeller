@@ -100,7 +100,13 @@ public class Util {
 
 	public static final List<Character> STOP_CHARS = Arrays.asList('.', '!', '?', ' ');
 	public static final String SPLIT_REGEX = "[ .,;:?!\"'\\[\\](){}]";
-	
+	public static final String KEYWORD_REGEX_PREFIX = "(-| |^|\\\\()";
+	public static final String KEYWORD_REGEX_PREFIX_JAVA = ".*(-| |^|\\()";
+	public static final String KEYWORD_REGEX_SUFFIX = "(-| |$|\\\\))";
+	public static final String KEYWORD_REGEX_SUFFIX_JAVA = "(-| |$|\\)).*";
+	public static final String KEYWORD_REGEX_LETTERS = "(\\\\w)*";
+	public static final String KEYWORD_REGEX_LETTERS_JAVA = "(\\w)*";
+
 	// private constructor to prevent instantiation
 	private Util() {
 	}
@@ -450,19 +456,20 @@ public class Util {
 
 		String[] tokens = stemmedKeyword.split(" ");
 		StringBuilder builder = new StringBuilder();
-		builder.append("(-| |^|\\\\()");
+		builder.append(KEYWORD_REGEX_PREFIX);
 		for (int i = 0; i < tokens.length; i++) {
 			String token = tokens[i];
 			if (token.endsWith("i"))
 				token = token.substring(0, token.length() - 1) + "(i|y)";
 			builder.append(token);
-			builder.append("(\\\\w)*");
+			builder.append(KEYWORD_REGEX_LETTERS);
 			if (i < tokens.length - 1)
 				builder.append(" ");
 		}
-		builder.append("(-| |$|\\\\))");
+		builder.append(KEYWORD_REGEX_SUFFIX);
 		String stemmedRegex = builder.toString();
 		keyword.setStemmedRegex(stemmedRegex);
+		keyword.setWordRegex(KEYWORD_REGEX_PREFIX_JAVA + keyword.getWord().toLowerCase() + KEYWORD_REGEX_SUFFIX_JAVA);
 	}
 	// endregion
 }

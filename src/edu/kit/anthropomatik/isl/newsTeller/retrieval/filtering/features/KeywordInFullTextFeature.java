@@ -3,6 +3,7 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 import java.util.ArrayList;
 import java.util.List;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
  * Checks if the keywords appear anywhere in the orginal text.
@@ -43,7 +44,8 @@ public class KeywordInFullTextFeature extends FullTextFeature {
 			}
 			if (this.useStem) {
 				List<String> innerList = new ArrayList<String>();
-				innerList.add(keyword.getStem());
+				String stem = this.doUseContainsInsteadOfRegex ? keyword.getStem() : keyword.getStem() + Util.KEYWORD_REGEX_LETTERS_JAVA;
+				innerList.add(stem);
 				list.add(innerList);
 			}	
 			result.add(list);

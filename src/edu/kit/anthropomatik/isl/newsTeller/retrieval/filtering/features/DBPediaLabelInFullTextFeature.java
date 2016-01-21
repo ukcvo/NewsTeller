@@ -52,8 +52,9 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 				
 				List<List<String>> list = new ArrayList<List<String>>();
 				for (String label : labels) {
-					if (this.splitLabels)
+					if (this.splitLabels) {
 						list.add(Arrays.asList(label.split(Util.SPLIT_REGEX)));
+					}
 					else {
 						List<String> dummyList = new ArrayList<String>();
 						dummyList.add(label);
@@ -64,7 +65,6 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 				result.add(list);
 			}
 		}
-		
 		
 		return result;
 	}

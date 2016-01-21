@@ -133,4 +133,29 @@ public class KeywordInFullTextFeatureTest {
 		
 		assertTrue(result == 0.0);
 	}
+	
+	@Test
+	public void shouldReturnZeroForKeywordRegex() {
+		Keyword k = new Keyword("erupt");
+		Util.stemKeyword(k);
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(k);
+		
+		double result = this.onlyKeywordFeature.getValue("http://en.wikinews.org/wiki/Dozens_killed_in_Mexican_prison_riots#ev19", keywords);
+		
+		assertTrue(result == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnOneForKeywordContains() {
+		Keyword k = new Keyword("erupt");
+		Util.stemKeyword(k);
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(k);
+		
+		this.onlyKeywordFeature.setDoUseContainsInsteadOfRegex(true);
+		double result = this.onlyKeywordFeature.getValue("http://en.wikinews.org/wiki/Dozens_killed_in_Mexican_prison_riots#ev19", keywords);
+		
+		assertTrue(result == 1.0);
+	}
 }

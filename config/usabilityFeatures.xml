@@ -10,7 +10,6 @@
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
-		
 		<!-- For NO_EVENT
 		<ref bean="posFeature" />
 		<ref bean="wordNetFeature" />
@@ -134,6 +133,22 @@
 		 -->
 		
 		<!-- for KEYWORD_REGEX_MISMATCH
+		<ref bean="hasKeywordAsLabelFeature" />
+		<ref bean="keywordInTextFeature" />
+		<ref bean="keywordStemInTextFeature" />
+		<ref bean="keywordOrStemInTextFeature" />
+		<ref bean="keywordInSentenceFeature" />
+		<ref bean="keywordStemInSentenceFeature" />
+		<ref bean="keywordOrStemInSentenceFeature" />
+		<ref bean="keywordInTextContainsFeature" />
+		<ref bean="keywordStemInTextContainsFeature" />
+		<ref bean="keywordOrStemInTextContainsFeature" />
+		<ref bean="keywordInSentenceContainsFeature" />
+		<ref bean="keywordStemInSentenceContainsFeature" />
+		<ref bean="keywordOrStemInSentenceContainsFeature" />
+		<ref bean="hasDBpediaEntitiesFeature" />
+		<ref bean="keywordEntityMatchingKeywordFeature" />
+		<ref bean="keywordEntityDescriptionMatchingKeywordFeature" />
 		
 		 -->
 		
@@ -143,15 +158,178 @@
 		<ref bean="hasTimeFeature" />
 		<ref bean="isStatementFeature" />
 		<ref bean="hasActorOrPlaceFeature" />
-		<ref bean="hasKeywordAsLabelFeature" />
-		<ref bean="keywordInTextFeature" />
-		<ref bean="keywordStemInTextFeature" />
-		<ref bean="keywordOrStemInTextFeature" />
 		
 		 -->
 		
 	</util:list>
 
+	<!-- for KEYWORD_REGEX_MISMATCH -->
+	<bean id="hasKeywordAsLabelFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/hasKeywordAsLabel.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="hasKeywordAsLabel" />
+	</bean>
+
+	<bean id="keywordInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInText" />
+
+		<property name="doOnlyUseSentence" value="false" />
+		<property name="doUseContainsInsteadOfRegex" value="false" />
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="false" />
+	</bean>
+
+	<bean id="keywordStemInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordStemInText" />
+
+		<property name="doOnlyUseSentence" value="false" />
+		<property name="doUseContainsInsteadOfRegex" value="false" />
+		<property name="useOriginalString" value="false" />
+		<property name="useStem" value="true" />
+	</bean>
+
+	<bean id="keywordOrStemInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordOrStemInText" />
+
+		<property name="doOnlyUseSentence" value="false" />
+		<property name="doUseContainsInsteadOfRegex" value="false" />
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="true" />
+	</bean>
+	
+	<bean id="keywordInSentenceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence" />
+
+		<property name="doOnlyUseSentence" value="true" />
+		<property name="doUseContainsInsteadOfRegex" value="false" />
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="false" />
+	</bean>
+	
+	<bean id="keywordStemInSentenceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordStemInSentence" />
+
+		<property name="doOnlyUseSentence" value="true" />
+		<property name="doUseContainsInsteadOfRegex" value="false" />
+		<property name="useOriginalString" value="false" />
+		<property name="useStem" value="true" />
+	</bean>
+
+	<bean id="keywordOrStemInSentenceFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordOrStemInSentence" />
+
+		<property name="doOnlyUseSentence" value="true" />
+		<property name="doUseContainsInsteadOfRegex" value="false" />
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="true" />
+	</bean>
+	
+	<bean id="keywordInTextContainsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInTextContains" />
+
+		<property name="doOnlyUseSentence" value="false" />
+		<property name="doUseContainsInsteadOfRegex" value="true" />
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="false" />
+	</bean>
+
+	<bean id="keywordStemInTextContainsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordStemInTextContains" />
+
+		<property name="doOnlyUseSentence" value="false" />
+		<property name="doUseContainsInsteadOfRegex" value="true" />
+		<property name="useOriginalString" value="false" />
+		<property name="useStem" value="true" />
+	</bean>
+
+	<bean id="keywordOrStemInTextContainsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordOrStemInTextContains" />
+
+		<property name="doOnlyUseSentence" value="false" />
+		<property name="doUseContainsInsteadOfRegex" value="true" />
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="true" />
+	</bean>
+	
+	<bean id="keywordInSentenceContainsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentenceContains" />
+
+		<property name="doOnlyUseSentence" value="true" />
+		<property name="doUseContainsInsteadOfRegex" value="true" />
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="false" />
+	</bean>
+	
+	<bean id="keywordStemInSentenceContainsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordStemInSentenceContains" />
+
+		<property name="doOnlyUseSentence" value="true" />
+		<property name="doUseContainsInsteadOfRegex" value="true" />
+		<property name="useOriginalString" value="false" />
+		<property name="useStem" value="true" />
+	</bean>
+
+	<bean id="keywordOrStemInSentenceContainsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+		<constructor-arg name="queryFileName" value="" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordOrStemInSentenceContains" />
+
+		<property name="doOnlyUseSentence" value="true" />
+		<property name="doUseContainsInsteadOfRegex" value="true" />
+		<property name="useOriginalString" value="true" />
+		<property name="useStem" value="true" />
+	</bean>
+		
+	<bean id="keywordEntityMatchingKeywordFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordEntityMatchingKeywordFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntityLabelsByKeyword.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntityMatchingKeywordFeature" />
+	</bean>
+	
+	<bean id="keywordEntityDescriptionMatchingKeywordFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordEntityMatchingKeywordFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntityDescriptionsByKeyword.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntityDescriptionMatchingKeywordFeature" />
+	</bean>
+	
 	<!-- for OTHER_ENTITY_CATEGORIZATION -->
 	<bean id="appearLabelsInTextFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
@@ -869,45 +1047,6 @@
 		<property name="name" value="hasActorOrPlace" />
 	</bean>
 
-	<bean id="hasKeywordAsLabelFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/hasKeywordAsLabel.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="hasKeywordAsLabel" />
-	</bean>
-
-	<bean id="keywordInTextFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
-		<constructor-arg name="queryFileName" value="" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="keywordInText" />
-
-		<property name="doOnlyUseSentence" value="false" />
-		<property name="useOriginalString" value="true" />
-		<property name="useStem" value="false" />
-	</bean>
-
-	<bean id="keywordStemInTextFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
-		<constructor-arg name="queryFileName" value="" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="keywordStemInText" />
-
-		<property name="doOnlyUseSentence" value="false" />
-		<property name="useOriginalString" value="false" />
-		<property name="useStem" value="true" />
-	</bean>
-
-	<bean id="keywordOrStemInTextFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
-		<constructor-arg name="queryFileName" value="" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="keywordOrStemInText" />
-
-		<property name="doOnlyUseSentence" value="false" />
-		<property name="useOriginalString" value="true" />
-		<property name="useStem" value="true" />
-	</bean>
+	
 	
 </beans>
