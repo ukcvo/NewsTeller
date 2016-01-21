@@ -42,7 +42,10 @@ public class KSMention {
 		return ((idx >= this.startIdx) && (idx <= this.endIdx));
 	}
 	
-	private double getLength() {
+	/**
+	 * Returns the length of this mention.
+	 */
+	public int getLength() {
 		return  (this.endIdx - this.startIdx);
 	}
 	
@@ -93,10 +96,10 @@ public class KSMention {
 				result = 1;
 			} else if (this.isIdxInRange(other.startIdx)) {
 				// other starts in this, but continues after this ends
-				result = (this.endIdx - other.startIdx) / Math.min(other.getLength(), this.getLength());
+				result = (this.endIdx - other.startIdx) / (1.0 * Math.min(other.getLength(), this.getLength()));
 			} else if (this.isIdxInRange(other.endIdx)) {
 				// other ends in this, but starts before this
-				result = (other.endIdx - this.startIdx) / Math.min(other.getLength(), this.getLength());
+				result = (other.endIdx - this.startIdx) / (1.0 * Math.min(other.getLength(), this.getLength()));
 			}
 			// otherwise: no overlap
 		}

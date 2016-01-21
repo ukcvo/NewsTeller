@@ -1,0 +1,11 @@
+SELECT (MAX(?count) AS ?number)
+WHERE
+{
+    SELECT (COUNT(?link) AS ?count)
+    WHERE
+    {
+        <*e*> sem:hasPlace ?entity .
+        OPTIONAL { ?entity ?link <http://dbpedia.org/ontology/Agent> }
+    }
+    GROUP BY ?entity
+}

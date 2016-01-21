@@ -11,6 +11,12 @@ public class PrepPhraseFeature extends UsabilityFeature {
 	
 	private String labelQuery;
 	
+	private boolean doSearchInsidePhrase;
+	
+	public void setDoSearchInsidePhrase(boolean doSearchInsidePhrase) {
+		this.doSearchInsidePhrase = doSearchInsidePhrase;
+	}
+		
 	public PrepPhraseFeature(String queryFileName, String labelQueryFileName, String prepositionFileName) {
 		super(queryFileName);
 		this.prepositions = Util.readStringListFromFile(prepositionFileName);
@@ -29,7 +35,14 @@ public class PrepPhraseFeature extends UsabilityFeature {
 			double actorResult = 0;
 			for (String label : labels) {
 				String[] tokens = label.split(" ");
-				if (prepositions.contains(tokens[0]))
+				if (this.doSearchInsidePhrase) {
+					for (int i = 1; i < tokens.length; i++) { // look at all tokens
+						if (prepositions.contains(tokens[i])) {
+							actorResult++;
+							break;
+						}
+					}
+				} else if (prepositions.contains(tokens[0])) // look at first token
 					actorResult++;
 			}
 			result += actorResult/labels.size();

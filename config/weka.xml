@@ -21,7 +21,7 @@
 	</bean>
 
 	<bean id="balancingSMOTEFilter" class="weka.filters.supervised.instance.SMOTE">
-		<property name="percentage" value="150" />
+		<property name="percentage" value="100" />
 	</bean>
 
 	<bean id="balancingSpreadFilter" class="weka.filters.supervised.instance.SpreadSubsample">

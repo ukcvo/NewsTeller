@@ -1,7 +1,10 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
@@ -32,11 +35,11 @@ public class MentionComparisonFeature extends UsabilityFeature {
 		List<String> mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION);
 		List<KSMention> mentions = new ArrayList<KSMention>();
 		List<KSMention> mentionSentences = new ArrayList<KSMention>();
-		List<String[]> mentionSentenceStrings = new ArrayList<String[]>();
+		List<Set<String>> mentionSentenceStrings = new ArrayList<Set<String>>();
 		for (String mentionURI : mentionURIs) {
 			mentions.add(new KSMention(mentionURI));
 			mentionSentences.add(ksAdapter.retrieveKSMentionFromMentionURI(mentionURI, true));
-			mentionSentenceStrings.add(ksAdapter.retrieveSentenceFromMention(mentionURI).split(" "));
+			mentionSentenceStrings.add(new HashSet<String>(Arrays.asList(ksAdapter.retrieveSentenceFromMention(mentionURI).toLowerCase().split("[ .,\"!?;:]"))));
 		}
 
 		for (int i = 0; i < mentionURIs.size(); i++) {
@@ -61,18 +64,14 @@ public class MentionComparisonFeature extends UsabilityFeature {
 					break;
 
 				case OPERATION_TYPE_INTERSECTION:
-					String[] firstText = mentionSentenceStrings.get(i);
-					String[] secondText = mentionSentenceStrings.get(j);
+					Set<String> firstText = mentionSentenceStrings.get(i);
+					Set<String> secondText = mentionSentenceStrings.get(j);
 					double count = 0;
-					for (int a = 0; a < firstText.length; a++) {
-						for (int b = 0; b < secondText.length; b++) {
-							if (firstText[a].equalsIgnoreCase(secondText[b])) {
-								count++;
-								break;
-							}
-						}
+					for (String s : firstText) {
+						if (secondText.contains(s)) 
+							count++;
 					}
-					result += count / Math.min(firstText.length, secondText.length);
+					result += count / Math.min(firstText.size(), secondText.size());
 					break;
 
 				default:

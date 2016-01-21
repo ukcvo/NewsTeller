@@ -53,6 +53,8 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 		double bestFraction = Double.POSITIVE_INFINITY;
 		double averageFraction = 0;
 		
+		String propertyURI = this.propertyURI;
+		
 		for (String mentionURI : mentionURIs) {
 			
 			double bestMentionFraction = Double.POSITIVE_INFINITY;
@@ -65,12 +67,12 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 			case Util.MENTION_PROPERTY_POS_NOUN:
 				suffix = PropbankFrames.SUFFIX_NOUN;
 				if (this.doAutomaticallyChooseProperty)
-					this.propertyURI = Util.MENTION_PROPERTY_NOMBANK;
+					propertyURI = Util.MENTION_PROPERTY_NOMBANK;
 				break;
 			case Util.MENTION_PROPERTY_POS_VERB:
 				suffix = PropbankFrames.SUFFIX_VERB;
 				if (this.doAutomaticallyChooseProperty)
-					this.propertyURI = Util.MENTION_PROPERTY_PROPBANK;
+					propertyURI = Util.MENTION_PROPERTY_PROPBANK;
 				break;
 			default:
 				suffix = "";	// should never happen, though...
@@ -80,10 +82,11 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 			List<String> rolesetIds = ksAdapter.getMentionProperty(mentionURI, propertyURI);
 			
 			if (suffix.equals(PropbankFrames.SUFFIX_NOUN) && this.doUseVerbAsFallback) {
-				boolean useFallback = false;
+				boolean useFallback = true;
 				for (String roleset : rolesetIds) {
-					if (!propbank.containsFrame(roleset.substring(roleset.lastIndexOf("/") + 1, roleset.lastIndexOf(".")), suffix)) {
-						useFallback = true;
+					if (propbank.containsFrame(roleset.substring(roleset.lastIndexOf("/") + 1, roleset.lastIndexOf(".")), suffix)) {
+						useFallback = false;
+						break;
 					}
 				}
 				if (useFallback) {
@@ -92,11 +95,6 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 				}
 					
 			}
-			
-//			if (!propbank.containsFrame(pred, suffix) && suffix.equals(PropbankFrames.SUFFIX_NOUN) && this.doUseVerbAsFallback) {
-//				suffix = PropbankFrames.SUFFIX_VERB;
-//			}
-				
 			
 			for (String roleset : rolesetIds) {
 				String id = roleset.substring(roleset.lastIndexOf("/") + 1);

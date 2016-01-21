@@ -70,9 +70,9 @@ public class MentionComparisonFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnZeroPointEightNineForIntersection() {
+	public void shouldReturnZeroPointEightOneForIntersection() {
 		double value = intersectionFeature.getValue("http://en.wikinews.org/wiki/US_Federal_Reserve_prepares_to_take_over_AIG#ev39", null);
-		assertTrue(Math.abs(value - 0.8974358974358975) < Util.EPSILON);
+		assertTrue(Math.abs(value - 0.8125) < Util.EPSILON);
 	}
 	
 	@Test
@@ -94,9 +94,9 @@ public class MentionComparisonFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnZeroPointOneTwoForIntersection() {
+	public void shouldReturnZeroPointOneSevenForIntersection() {
 		double value = intersectionFeature.getValue("http://en.wikinews.org/wiki/67th_Annual_Golden_Globe_Award_highlights#ev30", null);
-		assertTrue(value == 0.12);
+		assertTrue(Math.abs(value - 0.17391304347826086) < Util.EPSILON);
 	}
 	
 	@Test

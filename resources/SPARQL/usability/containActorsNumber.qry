@@ -1,0 +1,15 @@
+SELECT (MAX(?count) AS ?number)
+WHERE
+{
+    SELECT (COUNT(?label) AS ?count)
+    WHERE
+    {
+        <*e*> sem:hasActor ?entity .
+        OPTIONAL 
+        {
+            ?entity skos:prefLabel ?label .
+            FILTER(REGEX(STR(?label),"[0-9]", "i"))
+        }
+    }
+    GROUP BY ?entity
+}

@@ -10,18 +10,6 @@
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
-		<ref bean="numberOfMentionsFeature" />
-		<ref bean="numberOfFramesFeature" />
-		<ref bean="numberOfLinksFeature" />
-		<ref bean="eventLabelFeature" />
-		<ref bean="avgConstituentsPerMentionFeature" />
-		<ref bean="maxConstituentsPerMentionFeature" />
-		<ref bean="minConstituentsPerMentionFeature" />
-		<ref bean="zeroConstituentsPerMentionFeature" />
-		<ref bean="mentionTextComparisonFeature" />
-		<ref bean="mentionDistanceComparisonFeature" />
-		<ref bean="mentionSentenceComparisonFeature" />
-		
 		<!-- For NO_EVENT
 		<ref bean="posFeature" />
 		<ref bean="wordNetFeature" />
@@ -68,12 +56,39 @@
 		 -->
 		
 		<!-- for EVENT_MERGE
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="numberOfFramesFeature" />
+		<ref bean="numberOfLinksFeature" />
+		<ref bean="eventLabelFeature" />
+		<ref bean="avgConstituentsPerMentionFeature" />
+		<ref bean="maxConstituentsPerMentionFeature" />
+		<ref bean="minConstituentsPerMentionFeature" />
+		<ref bean="zeroConstituentsPerMentionFeature" />
+		<ref bean="mentionTextComparisonFeature" />
+		<ref bean="mentionDistanceComparisonFeature" />
+		<ref bean="mentionSentenceComparisonFeature" />
+		 -->
+		
+		<!-- for BROKEN_CONSTITUENT
+		<ref bean="areActorsAgentsFeature" />
+		<ref bean="arePlacesPlacesFeature" />
+		<ref bean="areActorsPlacesFeature" />
+		<ref bean="arePlacesAgentsFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="prepPhraseLocationFeature" />
+		<ref bean="prepInsidePhraseFeature" />
+		<ref bean="containActorsNumberFeature" />
+		<ref bean="prepBeforeActorFeature" />
+		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="prepAfterActorFeature" />
+		<ref bean="genitiveFeature" />
+		 -->
+		
+		<!-- for WRONG_PARSE
 		
 		 -->
 		
 		<!-- 
-		<ref bean="areActorsAgentsFeature" />
-		<ref bean="arePlacesPlacesFeature" />
 		<ref bean="numberOfEntityLabelsDBPediaFeature" />
 		<ref bean="appearLabelsInTextFeature" />
 		<ref bean="hasPlaceFeature" />
@@ -88,6 +103,108 @@
 		 -->
 		
 	</util:list>
+
+	<!-- for WRONG_PARSE -->
+	
+
+	<!-- for BROKEN_CONSTITUENT -->
+	<bean id="areActorsAgentsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/areActorsAgents.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="areActorsAgents" />
+	</bean>
+
+	<bean id="arePlacesPlacesFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/arePlacesPlaces.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="arePlacesPlaces" />
+	</bean>
+
+	<bean id="areActorsPlacesFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/areActorsPlaces.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="areActorsPlaces" />
+	</bean>
+
+	<bean id="arePlacesAgentsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/arePlacesAgents.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="arePlacesAgents" />
+	</bean>
+
+	<bean id="prepPhraseLocationFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
+		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
+		<constructor-arg name="prepositionFileName" value="resources/features/prepositions-local.txt" />
+		<property name="doSearchInsidePhrase" value="false" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="prepPhraseLocationFeature" />
+	</bean>
+
+	<bean id="prepInsidePhraseFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
+		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
+		<constructor-arg name="prepositionFileName" value="resources/features/prepositions.txt" />
+		<property name="doSearchInsidePhrase" value="true" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="prepInsidePhraseFeature" />
+	</bean>
+
+	<bean id="containActorsNumberFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/containActorsNumber.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="containActorsNumberFeature" />
+	</bean>
+
+	<bean id="prepBeforeActorFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.EntityMentionSurroundingsFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="targetWordsFileName" value="resources/features/prepositions.txt" />
+		<property name="operationType" value="1" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="prepBeforeActorFeature" />
+	</bean>
+
+	<bean id="locationPrepBeforeActorFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.EntityMentionSurroundingsFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="targetWordsFileName" value="resources/features/prepositions-location.txt" />
+		<property name="operationType" value="1" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="locationPrepBeforeActorFeature" />
+	</bean>
+
+	<bean id="prepAfterActorFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.EntityMentionSurroundingsFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="targetWordsFileName" value="resources/features/prepositions.txt" />
+		<property name="operationType" value="0" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="prepAfterActorFeature" />
+	</bean>
+
+	<bean id="genitiveFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.GenitiveFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="genitiveFeature" />
+	</bean>
 
 	<!-- for EVENT_MERGE -->
 	<bean id="avgConstituentsPerMentionFeature"
@@ -175,6 +292,38 @@
 		<property name="operationType" value="3" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="mentionIntersectionComparisonFeature" />
+	</bean>
+
+		<bean id="eventLabelFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/eventLabel.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="eventLabel" />
+	</bean>
+	
+	<bean id="numberOfMentionsFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/numberOfMentions.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfMentions" />
+	</bean>
+
+	<bean id="numberOfLinksFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/numberOfLinks.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfLinks" />
+	</bean>
+
+	<bean id="numberOfFramesFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/numberOfFrames.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfFrames" />
 	</bean>
 
 	<!-- for OVERLAPPING_CONSTITUENTS -->
@@ -344,6 +493,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
 		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
 		<constructor-arg name="prepositionFileName" value="resources/features/prepositions.txt" />
+		<property name="doSearchInsidePhrase" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="prepPhraseFeature" />
 	</bean>
@@ -353,6 +503,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getActors.qry" />
 		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
 		<constructor-arg name="prepositionFileName" value="resources/features/by.txt" />
+		<property name="doSearchInsidePhrase" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="byPhraseFeature" />
 	</bean>
@@ -527,28 +678,12 @@
 		<property name="name" value="hasPlace" />
 	</bean>
 
-	<bean id="eventLabelFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/eventLabel.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="eventLabel" />
-	</bean>
-
 	<bean id="hasTimeFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/hasTime.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasTime" />
-	</bean>
-
-	<bean id="numberOfMentionsFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/numberOfMentions.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfMentions" />
 	</bean>
 
 	<bean id="isStatementFeature"
@@ -559,44 +694,12 @@
 		<property name="name" value="isStatement" />
 	</bean>
 
-	<bean id="numberOfLinksFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/numberOfLinks.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfLinks" />
-	</bean>
-
-	<bean id="numberOfFramesFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/numberOfFrames.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfFrames" />
-	</bean>
-
 	<bean id="numberOfEntityLabelsDBPediaFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/numberOfEntityLabelsDBPedia.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="numberOfEntityLabelsDBPedia" />
-	</bean>
-
-	<bean id="areActorsAgentsFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/areActorsAgents.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="areActorsAgents" />
-	</bean>
-
-	<bean id="arePlacesPlacesFeature"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-		<constructor-arg name="queryFileName"
-			value="resources/SPARQL/usability/arePlacesPlaces.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="arePlacesPlaces" />
 	</bean>
 
 	<bean id="appearLabelsInTextFeature"

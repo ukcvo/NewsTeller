@@ -333,7 +333,7 @@ public class KnowledgeStoreAdapter {
 		if (originalText.isEmpty())
 			return "";
 		
-		return originalText.substring(mention.getStartIdx(), mention.getEndIdx()).trim();
+		return originalText.substring(mention.getStartIdx(), mention.getEndIdx());
 	}
 	
 	/**
@@ -380,8 +380,12 @@ public class KnowledgeStoreAdapter {
 			// search for sentence boundaries using a very simple heuristic
 			String originalText = getOriginalText(resourceURI);
 			List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
+			List<Character> skipChars = Arrays.asList(' ', '\n', '\t');
 			while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))
 				startIdx--;
+			while (skipChars.contains(originalText.charAt(startIdx)))
+				startIdx++;
+			
 			while((endIdx < originalText.length()) && (!sentenceDelimiters.contains(originalText.charAt(endIdx-1))))
 				endIdx++;
 		}
