@@ -52,12 +52,19 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 				
 				List<List<String>> list = new ArrayList<List<String>>();
 				for (String label : labels) {
+					
 					if (this.splitLabels) {
-						list.add(Arrays.asList(label.split(Util.SPLIT_REGEX)));
+						String[] labelParts = label.split(Util.SPLIT_REGEX);
+						if (!this.doUseContainsInsteadOfRegex) {
+							for (int i = 0; i < labelParts.length; i++)
+								labelParts[i] = Util.escapeText(labelParts[i]);
+						}
+						list.add(Arrays.asList(labelParts));
 					}
 					else {
 						List<String> dummyList = new ArrayList<String>();
-						dummyList.add(label);
+						String escapedLabel = this.doUseContainsInsteadOfRegex ? label : Util.escapeText(label);
+						dummyList.add(escapedLabel);
 						list.add(dummyList);
 					}
 				}

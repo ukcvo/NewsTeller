@@ -99,7 +99,7 @@ public class Util {
 	public static final String EMPTY_EVENT_RESPONSE = "I'm sorry, but there's nothing I can tell you about this topic.";
 
 	public static final List<Character> STOP_CHARS = Arrays.asList('.', '!', '?', ' ');
-	public static final String SPLIT_REGEX = "[ .,;:?!\"'\\[\\](){}]";
+	public static final String SPLIT_REGEX = "[ .,;:?!\"'\\[\\]\\(\\)\\{\\}\\|\\\\]";
 	public static final String KEYWORD_REGEX_PREFIX = "(-| |^|\\\\()";
 	public static final String KEYWORD_REGEX_PREFIX_JAVA = ".*(-| |^|\\()";
 	public static final String KEYWORD_REGEX_SUFFIX = "(-| |$|\\\\))";
@@ -447,6 +447,9 @@ public class Util {
 		return sum / collection.size();
 	}
 
+	/**
+	 * Stems the given keyword.
+	 */
 	public static void stemKeyword(Keyword keyword) {
 		SnowballStemmer stemmer = getStemmer();
 		stemmer.setCurrent(keyword.getWord());
@@ -470,6 +473,19 @@ public class Util {
 		String stemmedRegex = builder.toString();
 		keyword.setStemmedRegex(stemmedRegex);
 		keyword.setWordRegex(KEYWORD_REGEX_PREFIX_JAVA + keyword.getWord().toLowerCase() + KEYWORD_REGEX_SUFFIX_JAVA);
+	}
+	
+	/**
+	 * Escapes all special characters in the text that would cause trouble when used inside a regex.
+	 */
+	public static String escapeText(String text) {
+		String result = text;
+		String[] charsToReplace = "\\.[]{}()*+-?^$|".split("");
+		
+		for (String c : charsToReplace)
+			result = result.replace(c, "\\" + c);
+		
+		return result;
 	}
 	// endregion
 }

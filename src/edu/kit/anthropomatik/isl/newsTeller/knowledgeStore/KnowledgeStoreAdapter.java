@@ -2,11 +2,11 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,7 +45,7 @@ public class KnowledgeStoreAdapter {
 	
 	private String getMentionFromEventTemplate;
 	
-	private Map<String, String> resourceCache;
+	private ConcurrentMap<String, String> resourceCache;
 	
 	public void setServerURL(String serverURL) {
 		this.serverURL = serverURL;
@@ -69,7 +69,7 @@ public class KnowledgeStoreAdapter {
 	
 	public KnowledgeStoreAdapter(String getMentionFromEventFileName) {
 		this.getMentionFromEventTemplate = Util.readStringFromFile(getMentionFromEventFileName);
-		this.resourceCache = new HashMap<String, String>();
+		this.resourceCache = new ConcurrentHashMap<String, String>();
 	}
 	
 	/**
@@ -281,9 +281,9 @@ public class KnowledgeStoreAdapter {
 		else {
 			try {
 				Session session = this.knowledgeStore.newSession();
-				result = session.download(new URIImpl(resourceURI)).exec().writeToString();
+				result = session.download(new URIImpl(resourceURI)).timeout((long) 10000).exec().writeToString();
 				session.close();
-				resourceCache.put(resourceURI, result);
+				resourceCache.putIfAbsent(resourceURI, result);
 			} catch (Exception e) {
 				if(log.isErrorEnabled())
 					log.error(String.format("Could not retrieve resource, returning empty String. URI: '%s'", resourceURI));
@@ -379,6 +379,11 @@ public class KnowledgeStoreAdapter {
 		if (wholeSentence) {
 			// search for sentence boundaries using a very simple heuristic
 			String originalText = getOriginalText(resourceURI);
+			if (originalText.isEmpty()) {
+				if (log.isWarnEnabled())
+					log.warn(String.format("empty original text, cannot find sentence boundaries for mention '%s'", mentionURI));
+				return new KSMention(mentionURI);
+			}
 			List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
 			List<Character> skipChars = Arrays.asList(' ', '\n', '\t');
 			while((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx-1))))

@@ -38,8 +38,12 @@ public abstract class FullTextFeature extends UsabilityFeature {
 			String[] lowerCaseText = text.toLowerCase().split("\n");
 			double sum = 0.0;
 			for (String labelPart : labelParts) { // compute fraction of label parts that are actually mentioned
+				if (labelPart.isEmpty())
+					continue;
 				String regex = Util.KEYWORD_REGEX_PREFIX_JAVA + labelPart.toLowerCase() + Util.KEYWORD_REGEX_SUFFIX_JAVA;
 				for (String line : lowerCaseText) {
+					if (line.isEmpty())
+						continue;
 					if ((this.doUseContainsInsteadOfRegex && line.contains(labelPart)) || (line.matches(regex))) { // ignoring case
 						sum++;
 						break;

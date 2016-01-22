@@ -10,6 +10,26 @@
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
+		<ref bean="propbankArgumentFeature" />
+		<ref bean="nombankArgumentFeature" />
+		<ref bean="posFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="hasActorFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="byPhraseFeature" />
+		<ref bean="actorPositionLeftFeature" />
+		<ref bean="actorPositionRightFeature" />
+		<ref bean="propbankAvgArgumentFeature" />
+		<ref bean="nombankAvgArgumentFeature" />
+		<ref bean="smartPropbankArgumentFeature" />
+		<ref bean="smartPropbankAvgArgumentFeature" />
+		<ref bean="nombankFallbackArgumentFeature" />
+		<ref bean="nombankFallbackAvgArgumentFeature" />
+		<ref bean="smartPropbankFallbackArgumentFeature" />
+		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
+		<ref bean="propbankExistenceFeature" />
+		<ref bean="nombankExistenceFeature" />
+		
 		<!-- For NO_EVENT
 		<ref bean="posFeature" />
 		<ref bean="wordNetFeature" />
@@ -26,10 +46,11 @@
 		<ref bean="appearKeywordLabelPartsInTextFeature" />
 		<ref bean="appearKeywordLabelsInSentenceFeature" />
 		<ref bean="appearKeywordLabelPartsInSentenceFeature" />
+		<ref bean="appearKeywordDescriptionPartsInTextFeature" />
 		<ref bean="hasDBpediaEntitiesFeature" />
 		 -->
 		
-		<!-- for MISSING_OBJECT and MISSING_SUBJECT
+		<!-- for MISSING_OBJECT and MISSING_LOCATION
 		<ref bean="propbankArgumentFeature" />
 		<ref bean="nombankArgumentFeature" />
 		<ref bean="posFeature" />
@@ -67,6 +88,10 @@
 		<ref bean="mentionTextComparisonFeature" />
 		<ref bean="mentionDistanceComparisonFeature" />
 		<ref bean="mentionSentenceComparisonFeature" />
+		 -->
+		
+		<!-- for MISSING_SUBJECT
+		
 		 -->
 		
 		<!-- for BROKEN_CONSTITUENT
@@ -123,12 +148,10 @@
 		<ref bean="appearSplitLabelsInTextFeature" />
 		<ref bean="appearInheritedLabelsInTextFeature" />
 		<ref bean="appearSplitInheritedLabelsInTextFeature" />
+		<ref bean="appearSplitDescriptionsInTextFeature" />
+		<ref bean="appearSplitInheritedDescriptionsInTextFeature" />
 		<ref bean="areActorsPlacesFeature" />
 		<ref bean="arePlacesAgentsFeature" />
-		
-		 -->
-		
-		<!-- for MISSING_LOCATION
 		
 		 -->
 		
@@ -162,6 +185,20 @@
 		 -->
 		
 	</util:list>
+
+	<bean id="appearKeywordDescriptionPartsInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntitiesByKeyword.qry" />
+		<constructor-arg name="directLabelQueryFileName"
+			value="resources/SPARQL/usability/getDescriptions.qry" />
+		<constructor-arg name="inheritedLabelQueryFileName"
+			value="resources/SPARQL/usability/getInheritedDescriptions.qry" />
+		<property name="splitLabels" value="true" />
+		<property name="doOnlyUseSentence" value="false" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="appearKeywordDescriptionPartsInTextFeature" />
+	</bean>
 
 	<!-- for KEYWORD_REGEX_MISMATCH -->
 	<bean id="hasKeywordAsLabelFeature"
@@ -381,6 +418,32 @@
 		<property name="splitLabels" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="appearSplitInheritedLabelsInTextFeature" />
+	</bean>
+
+	<bean id="appearSplitDescriptionsInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="directLabelQueryFileName"
+			value="resources/SPARQL/usability/getDescriptions.qry" />
+		<constructor-arg name="inheritedLabelQueryFileName"
+			value="" />
+		<property name="splitLabels" value="true" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="appearSplitDescriptionsInTextFeature" />
+	</bean>
+
+	<bean id="appearSplitInheritedDescriptionsInTextFeature"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+		<constructor-arg name="queryFileName"
+			value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="directLabelQueryFileName"
+			value="resources/SPARQL/usability/getDescriptions.qry" />
+		<constructor-arg name="inheritedLabelQueryFileName"
+			value="resources/SPARQL/usability/getInheritedDescriptions.qry" />
+		<property name="splitLabels" value="true" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="appearSplitInheritedDescriptionsInTextFeature" />
 	</bean>
 
 	<!-- for WRONG_PARSE -->

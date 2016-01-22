@@ -39,12 +39,13 @@ public class KeywordInFullTextFeature extends FullTextFeature {
 			List<List<String>> list = new ArrayList<List<String>>();
 			if (this.useOriginalString) {
 				List<String> innerList = new ArrayList<String>();
-				innerList.add(keyword.getWord());
+				String word = this.doUseContainsInsteadOfRegex ? keyword.getWord() : Util.escapeText(keyword.getWord());
+				innerList.add(word);
 				list.add(innerList);
 			}
 			if (this.useStem) {
 				List<String> innerList = new ArrayList<String>();
-				String stem = this.doUseContainsInsteadOfRegex ? keyword.getStem() : keyword.getStem() + Util.KEYWORD_REGEX_LETTERS_JAVA;
+				String stem = this.doUseContainsInsteadOfRegex ? keyword.getStem() : Util.escapeText(keyword.getStem()) + Util.KEYWORD_REGEX_LETTERS_JAVA;
 				innerList.add(stem);
 				list.add(innerList);
 			}	
