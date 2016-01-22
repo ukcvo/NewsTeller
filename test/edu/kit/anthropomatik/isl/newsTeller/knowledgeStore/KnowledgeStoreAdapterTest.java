@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.LogManager;
@@ -14,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
@@ -151,5 +153,15 @@ public class KnowledgeStoreAdapterTest {
 	public void shouldReturnPropbankList() {
 		List<String> values = ksAdapter.getMentionProperty("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#char=214,218", Util.MENTION_PROPERTY_PROPBANK);
 		assertTrue(values.size() == 2);
+	}
+	
+	@Test
+	public void shouldReturnAllEventMentions() {
+		List<String> mentionURIs = Util.readStringListFromFile("resources/test/eventList.txt");
+		List<KSMention> expected = new ArrayList<KSMention>();
+		for (String uri : mentionURIs)
+			expected.add(new KSMention(uri));
+		List<KSMention> retrieved = ksAdapter.getAllEventMentions("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup");
+		assertTrue(retrieved.equals(expected));
 	}
 }

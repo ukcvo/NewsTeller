@@ -1,0 +1,6 @@
+SELECT ?event
+WHERE
+{
+    ?event gaf:denotedBy <*m*> .
+    ?event rdf:type sem:Event
+}

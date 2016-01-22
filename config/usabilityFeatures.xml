@@ -12,8 +12,6 @@
 		
 		<ref bean="propbankArgumentFeature" />
 		<ref bean="nombankArgumentFeature" />
-		<ref bean="posFeature" />
-		<ref bean="numberOfMentionsFeature" />
 		<ref bean="hasActorFeature" />
 		<ref bean="prepPhraseFeature" />
 		<ref bean="byPhraseFeature" />
@@ -27,15 +25,26 @@
 		<ref bean="nombankFallbackAvgArgumentFeature" />
 		<ref bean="smartPropbankFallbackArgumentFeature" />
 		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
-		<ref bean="propbankExistenceFeature" />
-		<ref bean="nombankExistenceFeature" />
-		<ref bean="a1Feature" />
-		<ref bean="a2Feature" />
-		<ref bean="hasPlaceFeature" />
-		<ref bean="needsA1Feature" />
-		<ref bean="needsA2Feature" />
-		<ref bean="needsLocFeature" />
-		
+		<ref bean="avgWordDistanceFeature" />
+		<ref bean="minWordDistanceFeature" />
+		<ref bean="maxWordDistanceFeature" />
+		<ref bean="avgNormalizedWordDistanceFeature" />
+		<ref bean="minNormalizedWordDistanceFeature" />
+		<ref bean="maxNormalizedWordDistanceFeature" />
+		<ref bean="avgConstituentsPerMentionFeature" />
+		<ref bean="maxConstituentsPerMentionFeature" />
+		<ref bean="minConstituentsPerMentionFeature" />
+		<ref bean="prepPhraseLocationFeature" />
+		<ref bean="prepInsidePhraseFeature" />
+		<ref bean="containActorsNumberFeature" />
+		<ref bean="prepBeforeActorFeature" />
+		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="prepAfterActorFeature" />
+		<ref bean="genitiveFeature" />
+		<ref bean="avgConstituentSeparatedByEventFeature" />
+		<ref bean="minConstituentSeparatedByEventFeature" />
+		<ref bean="maxConstituentSeparatedByEventFeature" />
+			
 		<!-- For NO_EVENT
 		<ref bean="posFeature" />
 		<ref bean="wordNetFeature" />
@@ -56,7 +65,7 @@
 		<ref bean="hasDBpediaEntitiesFeature" />
 		 -->
 		
-		<!-- for MISSING_OBJECT and MISSING_LOCATION
+		<!-- for MISSING_OBJECT and MISSING_LOCATION and MISSING_SUBJECT
 		<ref bean="propbankArgumentFeature" />
 		<ref bean="nombankArgumentFeature" />
 		<ref bean="posFeature" />
@@ -76,7 +85,15 @@
 		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
 		<ref bean="propbankExistenceFeature" />
 		<ref bean="nombankExistenceFeature" />
-		 -->
+		<ref bean="a0Feature" />
+		<ref bean="a1Feature" />
+		<ref bean="a2Feature" />
+		<ref bean="hasPlaceFeature" />
+		<ref bean="needsA0Feature" />
+		<ref bean="needsA1Feature" />
+		<ref bean="needsA2Feature" />
+		<ref bean="needsLocFeature" />
+		-->
 		
 		<!-- for OVERLAPPING_CONSTITUENTS
 		<ref bean="overlapFeature" />
@@ -94,10 +111,6 @@
 		<ref bean="mentionTextComparisonFeature" />
 		<ref bean="mentionDistanceComparisonFeature" />
 		<ref bean="mentionSentenceComparisonFeature" />
-		 -->
-		
-		<!-- for MISSING_SUBJECT
-		
 		 -->
 		
 		<!-- for BROKEN_CONSTITUENT
@@ -147,6 +160,7 @@
 		<ref bean="locationPrepBeforeActorFeature" />
 		<ref bean="prepAfterActorFeature" />
 		<ref bean="genitiveFeature" />
+		<ref bean="constituentSeparatedByEventFeature" />
 		 -->
 		
 		<!-- for OTHER_ENTITY_CATEGORIZATION
@@ -511,6 +525,33 @@
 		<property name="operationType" value="2" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="maxNormalizedWordDistanceFeature" />
+	</bean>
+
+	<bean id="avgConstituentSeparatedByEventFeature" 
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentSeparatedByEventFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="0" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="avgConstituentSeparatedByEventFeature" />
+	</bean>
+	
+	<bean id="minConstituentSeparatedByEventFeature" 
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentSeparatedByEventFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="1" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="minConstituentSeparatedByEventFeature" />
+	</bean>
+
+	<bean id="maxConstituentSeparatedByEventFeature" 
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentSeparatedByEventFeature">
+		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
+		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<property name="operationType" value="2" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="maxConstituentSeparatedByEventFeature" />
 	</bean>
 
 	<!-- for BROKEN_CONSTITUENT -->

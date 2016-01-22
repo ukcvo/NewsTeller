@@ -11,6 +11,8 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
 		<constructor-arg name="getMentionFromEventFileName"
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="getEventFromMentionFileName"
+			value="resources/SPARQL/general/getEventFromMention.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
 		<property name="maxNumberOfConnections" value="100"/>
@@ -106,8 +108,7 @@
 		<property name="reasonsToKeep">
 			<set>
 				<value>1</value>
-				<value>4</value>
-				<value>12</value>
+				<value>9</value>
 			</set>
 		</property>
 	</bean>

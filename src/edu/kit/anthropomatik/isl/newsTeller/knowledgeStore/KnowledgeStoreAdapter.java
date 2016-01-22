@@ -12,7 +12,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.query.BindingSet;
-
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -45,7 +44,11 @@ public class KnowledgeStoreAdapter {
 	
 	private String getMentionFromEventTemplate;
 	
+	private String getEventFromMentionTemplate;
+	
 	private ConcurrentMap<String, String> resourceCache;
+	
+	private ConcurrentMap<String, List<KSMention>> eventMentionCache;
 	
 	public void setServerURL(String serverURL) {
 		this.serverURL = serverURL;
@@ -67,9 +70,11 @@ public class KnowledgeStoreAdapter {
 		return isConnectionOpen;
 	}
 	
-	public KnowledgeStoreAdapter(String getMentionFromEventFileName) {
+	public KnowledgeStoreAdapter(String getMentionFromEventFileName, String getEventFromMentionFileName) {
 		this.getMentionFromEventTemplate = Util.readStringFromFile(getMentionFromEventFileName);
+		this.getEventFromMentionTemplate = Util.readStringFromFile(getEventFromMentionFileName);
 		this.resourceCache = new ConcurrentHashMap<String, String>();
+		this.eventMentionCache = new ConcurrentHashMap<String, List<KSMention>>();
 	}
 	
 	/**
@@ -476,6 +481,42 @@ public class KnowledgeStoreAdapter {
 			return results.get(0);
 		else
 			return "";
+	}
+	
+	/**
+	 * Takes the given resourceURI and returns all mentions of this resource that link to an event.
+	 */
+	public List<KSMention> getAllEventMentions(String resourceURI) {
+		
+		if (this.eventMentionCache.containsKey(resourceURI)) 
+			return this.eventMentionCache.get(resourceURI);
+		
+		List<KSMention> result = new ArrayList<KSMention>();
+
+		try {
+			Session session = knowledgeStore.newSession();
+			Stream<Record> stream = session.retrieve(KS.RESOURCE).ids(new URIImpl(resourceURI)).timeout(10000L).exec();
+			List<Record> records = stream.toList();
+			stream.close();
+			session.close();
+			
+			for (Record r : records) {
+				List<String> mentionURIs = r.get(new URIImpl("http://dkm.fbk.eu/ontologies/knowledgestore#hasMention"), String.class);
+				
+				for (String mentionURI : mentionURIs) {
+					String event = runSingleVariableStringQuerySingleResult(this.getEventFromMentionTemplate.replace(Util.PLACEHOLDER_MENTION, mentionURI), Util.VARIABLE_EVENT);
+					if (!event.isEmpty())
+						result.add(new KSMention(mentionURI));
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 		
+		
+		this.eventMentionCache.putIfAbsent(resourceURI, result);
+		
+		return result;
 	}
 	
 	// endregion
