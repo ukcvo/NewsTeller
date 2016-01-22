@@ -58,15 +58,15 @@ public class PropbankArgumentFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnOne() {
+	public void shouldReturnZeroPointFive() {
 		double value = feature.getValue("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev28", null);
-		assertTrue(value == 1.0);
+		assertTrue(value == 0.5);
 	}
 	
 	@Test
-	public void shouldReturnZero() {
+	public void shouldReturnOneThirdESA() {
 		double value = feature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev22", null);
-		assertTrue(value == 0.0);
+		assertTrue(Math.abs(value - (1.0/3)) < Util.EPSILON);
 	}
 	
 	@Test
@@ -76,21 +76,21 @@ public class PropbankArgumentFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnAvgZeroPointFiveEight() {
+	public void shouldReturnAvgZeroPointThreeEight() {
 		double value = avgFeature.getValue("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev28", null);
-		assertTrue(Math.abs(value - 0.583333333) < Util.EPSILON);
+		assertTrue(Math.abs(value - 0.3833333333333333) < Util.EPSILON);
 	}
 	
 	@Test
-	public void shouldReturnAvgZero() {
+	public void shouldReturnAvgZeroPointZeroEight() {
 		double value = avgFeature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev22", null);
-		assertTrue(value == 0.0);
+		assertTrue(Math.abs(value - 0.0833333333333333) < Util.EPSILON);
 	}
 	
 	@Test
-	public void shouldReturnSmartZeroVerb() {
+	public void shouldReturnSmartOneThirdVerb() {
 		double value = smartFeature.getValue("http://en.wikinews.org/wiki/ESA_launches_largest_commercial_telecom_satellite#ev22", null);
-		assertTrue(value == 0.0);
+		assertTrue(Math.abs(value - (1.0/3)) < Util.EPSILON);
 	}
 	
 	@Test
@@ -107,15 +107,15 @@ public class PropbankArgumentFeatureTest {
 	
 	
 	@Test
-	public void shouldReturnSmartOneVerb() {
+	public void shouldReturnSmartZeroPointFiveVerb() {
 		double value = smartFeature.getValue("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev28", null);
-		assertTrue(value == 1.0);
+		assertTrue(value == 0.5);
 	}
 	
 	@Test
-	public void shouldReturnSmartOneNoun() {
+	public void shouldReturnSmartOneThirdNoun() {
 		double value = smartFeature.getValue("http://en.wikinews.org/wiki/Earthquake_reported_near_Rome's_coast,_no_damage_caused#ev10", null);
-		assertTrue(value == 1.0);
+		assertTrue(Math.abs(value - (1.0/3)) < Util.EPSILON);
 	}
 	
 	@Test
@@ -125,8 +125,8 @@ public class PropbankArgumentFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnFallbackOneNoun() {
+	public void shouldReturnFallbackOneThirdNoun() {
 		double value = fallbackFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev48", null);
-		assertTrue(value == 1.0);
+		assertTrue(Math.abs(value - (1.0/3)) < Util.EPSILON);
 	}
 }

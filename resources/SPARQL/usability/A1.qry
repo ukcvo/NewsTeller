@@ -1,0 +1,5 @@
+SELECT (COUNT(?actor) AS ?number)
+WHERE
+{
+    <*e*> propbank:A1 ?actor
+}
