@@ -230,7 +230,7 @@ public class FeatureExtractor {
 			String fileName = event.getFileName();
 			String label = (gt.getUsabilityRating() == 1.0) ? Util.LABEL_TRUE : Util.LABEL_FALSE;
 			
-			int usabilityIndex = this.doAddEventInformation ? dataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(label) : 0;
+			int usabilityIndex = dataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(label);
 			int uriIndex = this.doAddEventInformation ? dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI) : 0;
 			int fileIndex = this.doAddEventInformation ? dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName) : 0;
 			

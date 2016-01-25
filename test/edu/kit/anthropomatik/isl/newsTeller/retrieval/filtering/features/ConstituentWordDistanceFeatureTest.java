@@ -123,4 +123,10 @@ public class ConstituentWordDistanceFeatureTest {
 		double value = normFeature.getValue("http://en.wikinews.org/wiki/EU_adopts_renewable_energy_measures#ev96", null);
 		assertTrue(Math.abs(value - 0.06060606060606061) < Util.EPSILON);
 	}
+	
+	@Test
+	public void shouldReturnNegativeOneMin() {
+		double value = minFeature.getValue("http://en.wikinews.org/wiki/Wikinews_interviews_Pa%c3%bal_M._Velazco_about_new_yellow-shouldered_bat_species#ev155", null);
+		assertTrue(value == -1);
+	}
 }

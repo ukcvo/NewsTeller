@@ -6,16 +6,154 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 
+	<!-- final classifiers -->
+
+	<bean id="classifier2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices" value="65,68,73,81,82,87,88,89,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="classifier3" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices" value="7,8,9,10,11,30,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="classifier4" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices"
+					value="1,2,3,4,5,25,29,32,59,60,61,62,63,64,65,66,67,71,73,77,79,80,81,83,84,85,86,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="classifier5" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices" value="72,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.rules.OneR">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="classifier6" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices" value="22,27,49,52,53,54,56,69,70,71,90,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="classifier7" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices"
+					value="1,2,3,4,5,25,29,32,59,60,61,62,63,64,65,66,67,71,73,77,79,80,81,83,84,85,86,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="classifier8" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices" value="17,18,19,20,26,28,47,74,75,76,77,78,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.meta.AdaBoostM1">
+				<property name="classifier">
+					<bean class="weka.classifiers.trees.J48" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="classifier9" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices" value="4,5,21,22,23,24,25,26,28,29,47,48,49,51,55,56,57,58,63,64,66,67,74,75,76,77,78,79,80,83,84,85,86,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="classifier10" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices" value="6,12,13,14,15,16,18,19,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="classifier13" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices" value="30,31,33,34,35,36,37,38,39,40,41,42,43,44,45,46,91" />
+				<property name="invertSelection" value="true" />
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+			</bean>
+		</property>
+	</bean>
+
 	<!-- filters -->
+
+	<bean id="reasonFilter" class="weka.filters.unsupervised.attribute.RemoveByName">
+		<property name="expression" value="reason_(\w)*" />
+	</bean>
 
 	<bean id="balancingFilter" class="weka.filters.MultiFilter">
 		<property name="filters">
 			<array>
 				<ref bean="removeStringFilter" />
-				<!-- 
-				<ref bean="balancingSMOTEFilter"/> 
-				<ref bean="balancingSpreadFilter"/> 
-				-->
+				<!-- <ref bean="balancingSMOTEFilter"/> <ref bean="balancingSpreadFilter"/> -->
 			</array>
 		</property>
 	</bean>
@@ -55,7 +193,7 @@
 		</property>
 	</bean>
 
-	<bean id="dummyFilter" class="weka.filters.AllFilter"/>
+	<bean id="dummyFilter" class="weka.filters.AllFilter" />
 
 	<bean id="allFeaturesFilter" class="weka.filters.MultiFilter">
 		<property name="filters">
@@ -148,23 +286,19 @@
 			<array>
 				<bean class="weka.filters.supervised.attribute.Discretize">
 					<property name="attributeIndices" value="2,9,12,23,24" />
-					<!-- 
-					Spread 2.5: <property name="attributeIndices" value="9,23" />
-					Spread 2.0: <property name="attributeIndices" value="24" />
-					Spread 1.5: <property name="attributeIndices" value="" />
-					Spread 1.0: <property name="attributeIndices" value="2,12" />
-					Union: <property name="attributeIndices" value="2,9,12,23,24" />
-					 -->
+					<!-- Spread 2.5: <property name="attributeIndices" value="9,23" /> Spread 
+						2.0: <property name="attributeIndices" value="24" /> Spread 1.5: <property 
+						name="attributeIndices" value="" /> Spread 1.0: <property name="attributeIndices" 
+						value="2,12" /> Union: <property name="attributeIndices" value="2,9,12,23,24" 
+						/> -->
 				</bean>
 				<bean class="weka.filters.unsupervised.attribute.Remove">
 					<property name="attributeIndices" value="2,5,9,10,12,18,23,24,25,26,27" />
-					<!-- 
-					Spread 2.5: <property name="attributeIndices" value="5,9,18,23,24,25,26,27" />
-					Spread 2.0: <property name="attributeIndices" value="5,10,18,24,25,26,27" />
-					Spread 1.5: <property name="attributeIndices" value="18,25,26,27" />
-					Spread 1.0: <property name="attributeIndices" value="2,5,12,25,26,27" />
-					Union: <property name="attributeIndices" value="2,5,9,10,12,18,23,24,25,26,27" />
-					 -->
+					<!-- Spread 2.5: <property name="attributeIndices" value="5,9,18,23,24,25,26,27" 
+						/> Spread 2.0: <property name="attributeIndices" value="5,10,18,24,25,26,27" 
+						/> Spread 1.5: <property name="attributeIndices" value="18,25,26,27" /> Spread 
+						1.0: <property name="attributeIndices" value="2,5,12,25,26,27" /> Union: 
+						<property name="attributeIndices" value="2,5,9,10,12,18,23,24,25,26,27" /> -->
 					<property name="invertSelection" value="true" />
 				</bean>
 			</array>
@@ -811,9 +945,9 @@
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.MLPClassifier">
-				<property name="poolSize" value="10"/>
-				<property name="numThreads" value="10"/>
-				<property name="numFunctions" value="2"/>
+				<property name="poolSize" value="10" />
+				<property name="numThreads" value="10" />
+				<property name="numFunctions" value="2" />
 			</bean>
 		</property>
 	</bean>
@@ -822,9 +956,9 @@
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.RBFClassifier">
-				<property name="poolSize" value="10"/>
-				<property name="numThreads" value="10"/>
-				<property name="numFunctions" value="16"/>
+				<property name="poolSize" value="10" />
+				<property name="numThreads" value="10" />
+				<property name="numFunctions" value="16" />
 			</bean>
 		</property>
 	</bean>
@@ -1036,6 +1170,13 @@
 				</property>
 				<property name="numFolds" value="4" />
 			</bean>
+		</property>
+	</bean>
+
+	<bean id="oneRClassifier" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="balancingFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.rules.OneR" />
 		</property>
 	</bean>
 

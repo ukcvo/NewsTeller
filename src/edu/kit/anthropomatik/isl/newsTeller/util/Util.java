@@ -69,6 +69,9 @@ public class Util {
 	public static final String COLUMN_NAME_KAPPA = "kappa";
 	public static final String COLUMN_NAME_AUC = "AUC";
 	public static final String COLUMN_NAME_FSCORE = "F";
+	public static final String COLUMN_NAME_PRECISION = "p";
+	public static final String COLUMN_NAME_RECALL = "r";
+	public static final String COLUMN_NAME_ACCURACY = "acc";
 	public static final String COLUMN_NAME_TRAINING = "train_";
 	public static final String COLUMN_NAME_TEST = "test_";
 	public static final String COLUMN_NAME_PERCENTAGE = "percentage";

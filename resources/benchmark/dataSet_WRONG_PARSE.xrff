@@ -2806,7 +2806,7 @@
             <value>0</value>
             <value>1</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>false</value>
             <value>http://en.wikinews.org/wiki/Illinois_man_charged_in_Facebook_harassment_case#ev12</value>
             <value>resources/benchmark/queries/Facebook.csv</value>
@@ -5363,10 +5363,10 @@
             <value>0.5</value>
             <value>0.375</value>
             <value missing="yes"/>
-            <value>Infinity</value>
+            <value>-1</value>
             <value>0</value>
             <value missing="yes"/>
-            <value>Infinity</value>
+            <value>-1</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
@@ -39917,10 +39917,10 @@
             <value>0.333333</value>
             <value>0.222222</value>
             <value missing="yes"/>
-            <value>Infinity</value>
+            <value>-1</value>
             <value>0</value>
             <value missing="yes"/>
-            <value>Infinity</value>
+            <value>-1</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
@@ -41453,7 +41453,7 @@
             <value>0</value>
             <value>0</value>
             <value>0.5</value>
-            <value>1</value>
+            <value>0.5</value>
             <value>0</value>
             <value>1</value>
             <value>false</value>
@@ -48709,7 +48709,7 @@
             <value>0</value>
             <value>0.5</value>
             <value>0</value>
-            <value>1</value>
+            <value>0</value>
             <value>true</value>
             <value>http://en.wikinews.org/wiki/President_Bush_tours_Katrina_affected_region#ev51</value>
             <value>resources/benchmark/queries/hurricane Katrina.csv</value>
@@ -74354,10 +74354,10 @@
             <value>1</value>
             <value>0.54375</value>
             <value missing="yes"/>
-            <value>Infinity</value>
+            <value>-1</value>
             <value>0</value>
             <value missing="yes"/>
-            <value>Infinity</value>
+            <value>-1</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
@@ -75914,10 +75914,10 @@
             <value>0.5</value>
             <value>0.5</value>
             <value missing="yes"/>
-            <value>Infinity</value>
+            <value>-1</value>
             <value>0</value>
             <value missing="yes"/>
-            <value>Infinity</value>
+            <value>-1</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>

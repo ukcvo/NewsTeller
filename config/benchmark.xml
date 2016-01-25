@@ -204,8 +204,137 @@
 
 		<property name="classifiers">
 			<map>
-				<entry key="decisionTree" value-ref="decisionTree" />
 				
+				<!-- NO_EVENT
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="bayesNetAnnealing" value-ref="bayesNet2" />
+				<entry key="kNN" value-ref="kNN" />
+				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				 -->
+				
+				<!-- KEYWORD_ENTITY_CATEGORIZATION
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="kNN" value-ref="kNN" />
+				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				 -->
+				
+				<!-- MISSING_OBJECT / MISSING_LOCATION
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="cart" value-ref="cart" />
+				<entry key="cartOneSE" value-ref="cart2" />
+				<entry key="decisionTree" value-ref="decisionTree" />
+				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				<entry key="RBF" value-ref="RBF" />
+				<entry key="ripper" value-ref="ripper" />
+				 -->
+				
+				<!-- OVERLAPPING_CONSTITUENTS
+				<entry key="oneR" value-ref="oneRClassifier" />
+				 -->
+				
+				<!-- EVENT_MERGE
+				<entry key="bayesNetAnnealing" value-ref="bayesNet2" />
+				<entry key="cart" value-ref="cart" />
+				<entry key="decisionTree" value-ref="decisionTree" />
+				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
+				<entry key="MLP" value-ref="MLP" />
+				<entry key="MLPClassifier" value-ref="MLPClassifier" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				 -->
+				
+				<!-- MISSING_SUBJECT
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				 -->
+				
+				<!-- BROKEN_CONSTITUENT
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="decisionTable" value-ref="decisionTable" />
+				<entry key="decisionTableKNN" value-ref="decisionTable2" />
+				<entry key="MLPClassifier" value-ref="MLPClassifier" />
+				<entry key="RBF" value-ref="RBF" />
+				<entry key="ripper" value-ref="ripper" />
+				 -->
+				 
+				<!-- WRONG_PARSE
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="logistic" value-ref="logistic" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				<entry key="RBF" value-ref="RBF" />
+				<entry key="svmLogistic" value-ref="svm2" />
+				 -->
+				
+				<!-- OTHER_ENTITY_CATEGORIZATION
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="cart" value-ref="cart" />
+				<entry key="cartOneSE" value-ref="cart2" />
+				<entry key="decisionTreeUnpruned" value-ref="decisionTree3" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				<entry key="RBF" value-ref="RBF" />
+				 -->
+				
+				<!-- KEYWORD_REGEX_MISMATCH
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="decisionTable" value-ref="decisionTable" />
+				<entry key="decisionTableKNN" value-ref="decisionTable2" />
+				<entry key="kNN" value-ref="kNN" />
+				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
+				<entry key="MLP" value-ref="MLP" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				<entry key="RBF" value-ref="RBF" />
+				 -->
+				
+				<!--  full set
+				<entry key="adaBoost" value-ref="adaBoost" />
+				<entry key="adaBoostResample" value-ref="adaBoost2" />
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="bayesNet" value-ref="bayesNet" />
+				<entry key="bayesNetAnnealing" value-ref="bayesNet2" />
+				<entry key="cart" value-ref="cart" />
+				<entry key="cartOneSE" value-ref="cart2" />
+				<entry key="decisionTable" value-ref="decisionTable" />
+				<entry key="decisionTableKNN" value-ref="decisionTable2" />
+				<entry key="decisionTree" value-ref="decisionTree" />
+				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
+				<entry key="decisionTreeUnpruned" value-ref="decisionTree3" />
+				<entry key="kNN" value-ref="kNN" />
+				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
+				<entry key="logistic" value-ref="logistic" />
+				<entry key="MLP" value-ref="MLP" />
+				<entry key="MLPClassifier" value-ref="MLPClassifier" />
+				<entry key="MLPValidationSet" value-ref="MLP2" />
+				<entry key="MLPValidationSetDecay" value-ref="MLP3" />
+				<entry key="naiveBayes" value-ref="naiveBayes" />
+				<entry key="naiveBayesKernel" value-ref="naiveBayes2" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				<entry key="RBF" value-ref="RBF" />
+				<entry key="ripper" value-ref="ripper" />
+				<entry key="ripperUnpruned" value-ref="ripper2" />
+				<entry key="svm" value-ref="svm" />
+				<entry key="svmComplexity2" value-ref="svm3" />
+				<entry key="svmLogistic" value-ref="svm2" />
+				 -->
+				
+
 				<!--
 				<entry key="naiveBayes" value-ref="naiveBayes" />
 				<entry key="naiveBayesKernel" value-ref="naiveBayes2" />
@@ -283,16 +412,37 @@
 		<property name="costSensitiveWrapper" ref="costSensitiveWrapper" />
 		<property name="baggingWrapper" ref="baggingWrapper" />
 
-		<property name="outputMisclassified" value="true" />
+		<property name="reasonClassifiers">
+			<map>
+				<entry key="2" value-ref="classifier2" />
+				<!-- 
+				<entry key="3" value-ref="classifier3" />
+				<entry key="4" value-ref="classifier4" />
+				<entry key="5" value-ref="classifier5" />
+				<entry key="6" value-ref="classifier6" />
+				<entry key="7" value-ref="classifier7" />
+				<entry key="8" value-ref="classifier8" />
+				<entry key="9" value-ref="classifier9" />
+				<entry key="10" value-ref="classifier10" />
+				<entry key="13" value-ref="classifier13" />
+				 -->
+			</map>
+		</property>
+ 
+ 		<property name="reasonFilter" ref="reasonFilter" />
+ 
+		
+		<property name="outputMisclassified" value="false" />
 		<property name="useCostSensitiveWrapper" value="false" />
 		<property name="useBaggingWrapper" value="false" />
 
 		<property name="doFeatureAnalysis" value="false" />
-		<property name="doCrossValidation" value="true" />
+		<property name="doCrossValidation" value="false" />
 		<property name="doLeaveOneOut" value="false" />
 		<property name="doEasyEnsemble" value="false" />
 		<property name="doBalanceCascade" value="false" />
 		<property name="doLearningCurve" value="false" />
+		<property name="doOverallCrossvalidation" value="true" />
 
 		<property name="outputFileName" value="evaluation.csv" />
 		<property name="numberOfEnsembleMembers" value="10" />

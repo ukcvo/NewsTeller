@@ -150,6 +150,9 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 		if (this.operationType == OPERATION_TYPE_AVG)
 			result /= mentionURIs.size();
 		
+		if (Double.isInfinite(result))
+			result = -1;
+		
 		return result;
 	}
 

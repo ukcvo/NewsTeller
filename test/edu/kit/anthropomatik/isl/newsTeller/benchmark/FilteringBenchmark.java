@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.UsabilityRatingReason;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.AbstractClassifier;
@@ -26,6 +27,7 @@ import weka.classifiers.meta.MetaCost;
 import weka.classifiers.meta.Vote;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.Utils;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
 import weka.filters.supervised.instance.Resample;
@@ -60,6 +62,10 @@ public class FilteringBenchmark {
 
 	private List<Integer> trainingSetPercentages;
 
+	private Map<UsabilityRatingReason, Classifier> reasonClassifiers;
+	
+	private Filter reasonFilter;
+	
 	private boolean doFeatureAnalysis;
 
 	private boolean doCrossValidation;
@@ -71,6 +77,8 @@ public class FilteringBenchmark {
 	private boolean doBalanceCascade;
 
 	private boolean doLearningCurve;
+	
+	private boolean doOverallCrossvalidation;
 
 	private boolean outputMisclassified;
 
@@ -113,6 +121,18 @@ public class FilteringBenchmark {
 		this.trainingSetPercentages = trainingSetPercentages;
 	}
 
+	public void setReasonClassifiers(Map<Integer, Classifier> reasonClassifiers) {
+		this.reasonClassifiers = new HashMap<UsabilityRatingReason, Classifier>();
+		for (Map.Entry<Integer, Classifier> entry : reasonClassifiers.entrySet()) {
+			this.reasonClassifiers.put(UsabilityRatingReason.fromInteger(entry.getKey()), entry.getValue());
+		}
+	}
+	
+	public void setReasonFilter(Filter reasonFilter) {
+		this.reasonFilter = reasonFilter;
+	}
+	
+	
 	public void setDoFeatureAnalysis(boolean doFeatureAnalysis) {
 		this.doFeatureAnalysis = doFeatureAnalysis;
 	}
@@ -137,6 +157,11 @@ public class FilteringBenchmark {
 		this.doLearningCurve = doLearningCurve;
 	}
 
+	public void setDoOverallCrossvalidation(boolean doOverallCrossvalidation) {
+		this.doOverallCrossvalidation = doOverallCrossvalidation;
+	}
+
+	
 	public void setOutputMisclassified(boolean outputMisclassified) {
 		this.outputMisclassified = outputMisclassified;
 	}
@@ -258,6 +283,97 @@ public class FilteringBenchmark {
 		}
 
 		Util.writeEvaluationToCsv(this.outputFileName, columnNames, overallResultMap);
+	}
+	// endregion
+
+	// region overallCrossvalidation
+	// do cross-validation on the complete data-set with the combined classifier
+	private void overallCrossvalidation() {
+
+		try {
+			Random rand = new Random(seed);
+			Instances randData = new Instances(classificationDataSet);
+			randData.randomize(rand);
+			randData.stratify(numFolds);
+
+			double tp = 0;
+			double tn = 0;
+			double fp = 0;
+			double fn = 0;
+			
+			Evaluation eval = new Evaluation(classificationDataSet);
+			
+			for (int i = 0; i < numFolds; i++) {
+				Instances train = randData.trainCV(numFolds, i);
+				Instances test = randData.testCV(numFolds, i);
+				
+				// prepare the training data for each classifier
+				Map<UsabilityRatingReason, Instances> classifierInstances = new HashMap<UsabilityRatingReason, Instances>();
+				for (UsabilityRatingReason r : this.reasonClassifiers.keySet()) {
+					classifierInstances.put(r, new Instances(train, 0));
+				}
+				for (Instance instance : train) {
+					for (UsabilityRatingReason r : classifierInstances.keySet()) {
+						if (instance.classValue() == this.positiveClassIdx || instance.value(train.attribute(Util.ATTRIBUTE_REASON + r.toString())) == this.positiveClassIdx) {
+							UsabilityRatingReason toAdd = (r.equals(UsabilityRatingReason.MISSING_LOCATION)) ? UsabilityRatingReason.MISSING_OBJECT : r;
+							classifierInstances.get(toAdd).add(instance);
+						}
+					}
+				}
+				
+				Vote vote = new Vote();
+				vote.setOptions(Utils.splitOptions("-R MIN")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
+				
+				// now train each classifier with its specified filter
+				for (Map.Entry<UsabilityRatingReason, Classifier> entry : this.reasonClassifiers.entrySet()) {
+					UsabilityRatingReason r = entry.getKey();
+					Classifier c = entry.getValue();
+					Instances classifierTrain = classifierInstances.get(r);
+					this.reasonFilter.setInputFormat(classifierTrain);
+					Instances filtered = Filter.useFilter(classifierTrain, this.reasonFilter);
+					c.buildClassifier(filtered);
+					vote.addPreBuiltClassifier(c);
+				}
+				
+				// now test the aggregation-stuff on the test set w/ the Vote classifier
+				eval.evaluateModel(vote, test);
+				
+				// and manually test w/o the voting stuff but with a hard AND
+				for (Instance instance : test) {
+					boolean isPositiveExample = (instance.classValue() == this.positiveClassIdx);
+					boolean isClassifiedPositive = true;
+					for (Classifier c : reasonClassifiers.values()) {
+						double prediction = c.classifyInstance(instance);
+						isClassifiedPositive = isClassifiedPositive && (prediction == this.positiveClassIdx);
+						if (!isClassifiedPositive)
+							break;
+					}
+					if (isPositiveExample) {
+						if (isClassifiedPositive)
+							tp++;
+						else
+							fn++;
+					} else {
+						if (isClassifiedPositive)
+							fp++;
+						else
+							tn++;
+					}
+				}
+			}
+			
+			if (log.isInfoEnabled()) {
+				logEvalResults(eval);
+				logEvalResults(tp, fn, fp, tn);
+			}
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't do overall crossvalidation");
+			if (log.isDebugEnabled())
+				log.debug("Can't do overall crossvalidation", e);
+		}
+		
 	}
 	// endregion
 
@@ -474,40 +590,40 @@ public class FilteringBenchmark {
 		performanceMeasures.add(Util.COLUMN_NAME_KAPPA);
 		performanceMeasures.add(Util.COLUMN_NAME_AUC);
 		performanceMeasures.add(Util.COLUMN_NAME_FSCORE);
-		
+
 		for (Map.Entry<String, Classifier> entry : this.classifiers.entrySet()) {
 
 			try {
 				String classifierName = entry.getKey();
 				Classifier classifier = entry.getValue();
-				
+
 				if (log.isInfoEnabled())
 					log.info(classifierName);
-				
-				Map<Integer, Map<String, Map<String, Double>>> overallMap = new HashMap<Integer, Map<String,Map<String,Double>>>();
-				
+
+				Map<Integer, Map<String, Map<String, Double>>> overallMap = new HashMap<Integer, Map<String, Map<String, Double>>>();
+
 				for (Integer percentage : this.trainingSetPercentages) {
 					Random rand = new Random(seed);
 					Instances randData = new Instances(classificationDataSet);
 					randData.randomize(rand);
 					randData.stratify(numFolds);
 
-					Map<String, Map<String, Double>> percentageMap = new HashMap<String, Map<String,Double>>();
+					Map<String, Map<String, Double>> percentageMap = new HashMap<String, Map<String, Double>>();
 					Map<String, Double> trainMap = new HashMap<String, Double>();
 					Map<String, Double> testMap = new HashMap<String, Double>();
 					percentageMap.put(Util.COLUMN_NAME_TRAINING, trainMap);
 					percentageMap.put(Util.COLUMN_NAME_TEST, testMap);
-					
+
 					trainMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, 0.0);
 					trainMap.put(Util.COLUMN_NAME_KAPPA, 0.0);
 					trainMap.put(Util.COLUMN_NAME_AUC, 0.0);
 					trainMap.put(Util.COLUMN_NAME_FSCORE, 0.0);
-					
+
 					testMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, 0.0);
 					testMap.put(Util.COLUMN_NAME_KAPPA, 0.0);
 					testMap.put(Util.COLUMN_NAME_AUC, 0.0);
 					testMap.put(Util.COLUMN_NAME_FSCORE, 0.0);
-					
+
 					for (int i = 0; i < numFolds; i++) {
 						Instances train = randData.trainCV(numFolds, i);
 						Instances test = randData.testCV(numFolds, i);
@@ -517,7 +633,7 @@ public class FilteringBenchmark {
 						resample.setNoReplacement(true);
 						resample.setInputFormat(train);
 						train = Filter.useFilter(train, resample);
-						
+
 						Classifier c;
 						if (this.useBaggingWrapper) {
 							Bagging outer = (Bagging) AbstractClassifier.makeCopy(this.baggingWrapper);
@@ -538,32 +654,24 @@ public class FilteringBenchmark {
 						evalTrain.evaluateModel(c, train);
 						evalTest.evaluateModel(c, test);
 
-						trainMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, trainMap.get(Util.COLUMN_NAME_BALANCED_ACCURACY) 
-								+ (getBalancedAcc(evalTrain, this.positiveClassIdx) / numFolds));
-						trainMap.put(Util.COLUMN_NAME_KAPPA, trainMap.get(Util.COLUMN_NAME_KAPPA) 
-								+ (evalTrain.kappa() / numFolds));
-						trainMap.put(Util.COLUMN_NAME_AUC, trainMap.get(Util.COLUMN_NAME_AUC) 
-								+ (evalTrain.areaUnderROC(this.positiveClassIdx) / numFolds));
-						trainMap.put(Util.COLUMN_NAME_FSCORE, trainMap.get(Util.COLUMN_NAME_FSCORE) 
-								+ (evalTrain.fMeasure(this.positiveClassIdx) / numFolds));
-						
-						testMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, testMap.get(Util.COLUMN_NAME_BALANCED_ACCURACY) 
-								+ (getBalancedAcc(evalTest, this.positiveClassIdx) / numFolds));
-						testMap.put(Util.COLUMN_NAME_KAPPA, testMap.get(Util.COLUMN_NAME_KAPPA) 
-								+ (evalTest.kappa() / numFolds));
-						testMap.put(Util.COLUMN_NAME_AUC, testMap.get(Util.COLUMN_NAME_AUC) 
-								+ (evalTest.areaUnderROC(this.positiveClassIdx) / numFolds));
-						testMap.put(Util.COLUMN_NAME_FSCORE, testMap.get(Util.COLUMN_NAME_FSCORE) 
-								+ (evalTest.fMeasure(this.positiveClassIdx) / numFolds));
-						
+						trainMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, trainMap.get(Util.COLUMN_NAME_BALANCED_ACCURACY) + (getBalancedAcc(evalTrain, this.positiveClassIdx) / numFolds));
+						trainMap.put(Util.COLUMN_NAME_KAPPA, trainMap.get(Util.COLUMN_NAME_KAPPA) + (evalTrain.kappa() / numFolds));
+						trainMap.put(Util.COLUMN_NAME_AUC, trainMap.get(Util.COLUMN_NAME_AUC) + (evalTrain.areaUnderROC(this.positiveClassIdx) / numFolds));
+						trainMap.put(Util.COLUMN_NAME_FSCORE, trainMap.get(Util.COLUMN_NAME_FSCORE) + (evalTrain.fMeasure(this.positiveClassIdx) / numFolds));
+
+						testMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, testMap.get(Util.COLUMN_NAME_BALANCED_ACCURACY) + (getBalancedAcc(evalTest, this.positiveClassIdx) / numFolds));
+						testMap.put(Util.COLUMN_NAME_KAPPA, testMap.get(Util.COLUMN_NAME_KAPPA) + (evalTest.kappa() / numFolds));
+						testMap.put(Util.COLUMN_NAME_AUC, testMap.get(Util.COLUMN_NAME_AUC) + (evalTest.areaUnderROC(this.positiveClassIdx) / numFolds));
+						testMap.put(Util.COLUMN_NAME_FSCORE, testMap.get(Util.COLUMN_NAME_FSCORE) + (evalTest.fMeasure(this.positiveClassIdx) / numFolds));
+
 					}
-					
+
 					overallMap.put(percentage, percentageMap);
 				}
-				
+
 				String fileName = String.format("out/%s.csv", classifierName);
 				Util.writeLearningCurvesToCsv(fileName, performanceMeasures, overallMap);
-				
+
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
 					log.error("Can't create learning curve");
@@ -592,6 +700,9 @@ public class FilteringBenchmark {
 		classifierMap.put(Util.COLUMN_NAME_KAPPA, eval.kappa());
 		classifierMap.put(Util.COLUMN_NAME_AUC, eval.areaUnderROC(this.positiveClassIdx));
 		classifierMap.put(Util.COLUMN_NAME_FSCORE, eval.fMeasure(this.positiveClassIdx));
+		classifierMap.put(Util.COLUMN_NAME_PRECISION, eval.precision(this.positiveClassIdx));
+		classifierMap.put(Util.COLUMN_NAME_RECALL, eval.recall(this.positiveClassIdx));
+		classifierMap.put(Util.COLUMN_NAME_ACCURACY, eval.pctCorrect());
 		return classifierMap;
 	}
 
@@ -601,6 +712,9 @@ public class FilteringBenchmark {
 		columnNames.add(Util.COLUMN_NAME_KAPPA);
 		columnNames.add(Util.COLUMN_NAME_AUC);
 		columnNames.add(Util.COLUMN_NAME_FSCORE);
+		columnNames.add(Util.COLUMN_NAME_PRECISION);
+		columnNames.add(Util.COLUMN_NAME_RECALL);
+		columnNames.add(Util.COLUMN_NAME_ACCURACY);
 		return columnNames;
 	}
 
@@ -617,6 +731,30 @@ public class FilteringBenchmark {
 		return c;
 	}
 
+	private void logEvalResults(double tp, double fn, double fp, double tn) {
+		
+		double n = tp + fn + fp + tn;
+		double accuracy = (tp + tn) / n;
+		double balancedAcc = ((0.5 * tp) / (tp + fn)) + ((0.5 * tn) / (tn + fp));
+		double precision = tp / (tp + fp);
+		double recall = tp / (tp + fn);
+		double fScore = (2 * precision * recall) / (precision + recall);
+		double pc = (((tp + fp) * (tp + fn)) + ((tn + fp) * (tn + fn))) / (n * n);
+		double kappa = (accuracy - pc) / (1 - pc);
+		
+		log.info("AND of individual classifiers");
+		log.info("-----------------------------");
+		log.info(String.format("accuracy: %f", accuracy));
+		log.info(String.format("balanced accuracy: %f", balancedAcc));
+		log.info(String.format("precision: %f", precision));
+		log.info(String.format("recall: %f", recall));
+		log.info(String.format("f score: %f", fScore));
+		log.info(String.format("Cohen's kappa: %f", kappa));
+		log.info("    a     b    <-- classified as");
+		log.info(String.format("%d %d | a = true", (int) tp, (int) fn));
+		log.info(String.format("%d %d | b = false", (int) fp, (int) tn));
+	}
+	
 	private void logEvalResults(Evaluation eval) throws Exception {
 		// compute balanced accuracy
 		double balancedAcc = getBalancedAcc(eval, this.positiveClassIdx);
@@ -705,6 +843,8 @@ public class FilteringBenchmark {
 			balanceCascade();
 		if (this.doLearningCurve)
 			learningCurve();
+		if (this.doOverallCrossvalidation)
+			overallCrossvalidation();
 	}
 
 	public static void main(String[] args) throws Exception {
