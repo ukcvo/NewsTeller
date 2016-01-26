@@ -698,11 +698,10 @@ public class FilteringBenchmark {
 		Map<String, Double> classifierMap = new HashMap<String, Double>();
 		classifierMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, getBalancedAcc(eval, this.positiveClassIdx));
 		classifierMap.put(Util.COLUMN_NAME_KAPPA, eval.kappa());
-		classifierMap.put(Util.COLUMN_NAME_AUC, eval.areaUnderROC(this.positiveClassIdx));
 		classifierMap.put(Util.COLUMN_NAME_FSCORE, eval.fMeasure(this.positiveClassIdx));
 		classifierMap.put(Util.COLUMN_NAME_PRECISION, eval.precision(this.positiveClassIdx));
 		classifierMap.put(Util.COLUMN_NAME_RECALL, eval.recall(this.positiveClassIdx));
-		classifierMap.put(Util.COLUMN_NAME_ACCURACY, eval.pctCorrect());
+		classifierMap.put(Util.COLUMN_NAME_ACCURACY, eval.pctCorrect()/100.0);
 		return classifierMap;
 	}
 
@@ -710,7 +709,6 @@ public class FilteringBenchmark {
 		List<String> columnNames = new ArrayList<String>();
 		columnNames.add(Util.COLUMN_NAME_BALANCED_ACCURACY);
 		columnNames.add(Util.COLUMN_NAME_KAPPA);
-		columnNames.add(Util.COLUMN_NAME_AUC);
 		columnNames.add(Util.COLUMN_NAME_FSCORE);
 		columnNames.add(Util.COLUMN_NAME_PRECISION);
 		columnNames.add(Util.COLUMN_NAME_RECALL);
@@ -763,7 +761,6 @@ public class FilteringBenchmark {
 		log.info(eval.toSummaryString());
 		log.info(String.format("balanced accuracy: %f", balancedAcc));
 		log.info(String.format("Cohen's kappa: %f", eval.kappa()));
-		log.info(String.format("AUC for usable: %f", eval.areaUnderROC(this.positiveClassIdx)));
 		log.info(eval.toClassDetailsString());
 		log.info(eval.toMatrixString());
 	}

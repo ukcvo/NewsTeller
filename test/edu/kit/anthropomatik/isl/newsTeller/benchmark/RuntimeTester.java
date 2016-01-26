@@ -24,6 +24,7 @@ import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -57,6 +58,8 @@ public class RuntimeTester {
 	
 	private boolean doParallelFilterTest;
 	
+	private boolean doFeatureTest;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	private Map<String, String> sparqlSearchQueries;
@@ -82,6 +85,8 @@ public class RuntimeTester {
 	private Set<List<Keyword>> keywords;
 	
 	private int numberOfRepetitions;
+	
+	private List<UsabilityFeature> features;
 	
 	//region setters
 	public void setDoKSAccessTests(boolean doKSAccessTests) {
@@ -114,6 +119,10 @@ public class RuntimeTester {
 	
 	public void setDoParallelFilterTest(boolean doParallelFilterTest) {
 		this.doParallelFilterTest = doParallelFilterTest;
+	}
+	
+	public void setDoFeatureTest(boolean doFeatureTest) {
+		this.doFeatureTest = doFeatureTest;
 	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
@@ -160,6 +169,10 @@ public class RuntimeTester {
 	
 	public void setNumberOfRepetitions(int numberOfRepetitions) {
 		this.numberOfRepetitions = numberOfRepetitions;
+	}
+	
+	public void setFeatures(List<UsabilityFeature> features) {
+		this.features = features;
 	}
 	//endregion
 	
@@ -392,6 +405,36 @@ public class RuntimeTester {
 	}
 	//endregion
 	
+	//region featureTest
+	private void featureTest() {
+		
+		for (UsabilityFeature feature : this.features) {
+			long avgQueryTime = 0;
+			int i = 0;
+			for (Map.Entry<List<Keyword>, Set<NewsEvent>> entry : this.keywordsToEventsMap.entrySet()) {
+				
+				List<Keyword> keywords = entry.getKey();
+				Set<NewsEvent> events = entry.getValue();
+				
+				for (NewsEvent event : events) {
+					String uri = event.getEventURI();
+					long t1 = System.currentTimeMillis();
+					feature.getValue(uri, keywords);
+					long t2 = System.currentTimeMillis();
+					avgQueryTime += (t2 - t1);
+					i++;
+				}
+				if (i >= 1000)
+					break;
+			}
+			avgQueryTime /= i;
+			
+			if (log.isInfoEnabled())
+				log.info(String.format("%s: %d ms", feature.getName(), avgQueryTime));
+		}
+	}
+	//endregion
+	
 	public void run() {
 		this.ksAdapter.openConnection();
 		
@@ -413,7 +456,8 @@ public class RuntimeTester {
 		if (this.doParallelFilterTest) {
 			parallelFilterTest();
 		}
-			
+		if (this.doFeatureTest)
+			featureTest();
 		
 		sequentialSearcher.shutDown();
 		parallelSearcher.shutDown();

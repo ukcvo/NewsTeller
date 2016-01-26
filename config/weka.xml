@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
+	<context:property-placeholder properties-ref="wekaProperties" />
+	<util:properties id="wekaProperties">
+		<prop key="toSelect">7</prop>
+		<prop key="numFeatures">34</prop>
+	</util:properties>
 
+	<!-- final classifier filters -->
+	<bean id="filter2" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="3,7,8,9" />
+		<property name="invertSelection" value="true" />
+	</bean>
+	
+	<bean id="filter3" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="1,5,6,7" />
+		<property name="invertSelection" value="true" />
+	</bean>
+	
+	<bean id="filter4" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="3,6,17,21,26,28" /> 
+		<property name="invertSelection" value="true" />
+	</bean>
+	
+	<bean id="filter6" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="8,11,13" /> 
+		<property name="invertSelection" value="true" />
+	</bean>
+	
+	<bean id="filter7" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="4,5,19,21,28" /> 
+		<property name="invertSelection" value="true" />
+	</bean>
+	
+	<bean id="filter8" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="7,12,13" /> 
+		<property name="invertSelection" value="true" />
+	</bean>
+	
+	<bean id="filter9" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="35" /> 
+		<property name="invertSelection" value="true" />
+	</bean>
+	
 	<!-- final classifiers -->
 
 	<bean id="classifier2" class="weka.classifiers.meta.FilteredClassifier">
@@ -30,6 +75,7 @@
 		</property>
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numTrees" value="20" />
 			</bean>
 		</property>
 	</bean>
@@ -43,7 +89,10 @@
 			</bean>
 		</property>
 		<property name="classifier">
-			<bean class="weka.classifiers.trees.RandomForest">
+			<bean class="weka.classifiers.functions.RBFClassifier">
+				<property name="poolSize" value="10" />
+				<property name="numThreads" value="10" />
+				<property name="numFunctions" value="16" />
 			</bean>
 		</property>
 	</bean>
@@ -69,7 +118,7 @@
 			</bean>
 		</property>
 		<property name="classifier">
-			<bean class="weka.classifiers.trees.RandomForest">
+			<bean class="weka.classifiers.trees.J48">
 			</bean>
 		</property>
 	</bean>
@@ -83,7 +132,7 @@
 			</bean>
 		</property>
 		<property name="classifier">
-			<bean class="weka.classifiers.trees.RandomForest">
+			<bean class="weka.classifiers.trees.J48">
 			</bean>
 		</property>
 	</bean>
@@ -96,11 +145,7 @@
 			</bean>
 		</property>
 		<property name="classifier">
-			<bean class="weka.classifiers.meta.AdaBoostM1">
-				<property name="classifier">
-					<bean class="weka.classifiers.trees.J48" />
-				</property>
-			</bean>
+			<bean class="weka.classifiers.trees.J48" />
 		</property>
 	</bean>
 
@@ -327,7 +372,7 @@
 		</property>
 		<property name="search">
 			<bean class="weka.attributeSelection.Ranker">
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelect}" />
 			</bean>
 		</property>
 	</bean>
@@ -343,7 +388,7 @@
 		</property>
 		<property name="search">
 			<bean class="weka.attributeSelection.Ranker">
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelect}" />
 			</bean>
 		</property>
 	</bean>
@@ -357,7 +402,7 @@
 		</property>
 		<property name="search">
 			<bean class="weka.attributeSelection.Ranker">
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelect}" />
 			</bean>
 		</property>
 	</bean>
@@ -371,7 +416,7 @@
 		<property name="search">
 			<bean class="weka.attributeSelection.GreedyStepwise">
 				<property name="generateRanking" value="false" />
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelect}" />
 			</bean>
 		</property>
 	</bean>
@@ -380,19 +425,14 @@
 		<property name="evaluator">
 			<bean class="weka.attributeSelection.WrapperSubsetEval">
 				<property name="classifier">
-					<bean class="weka.classifiers.meta.FilteredClassifier">
-						<property name="filter" ref="spreadFilter" />
-						<property name="classifier">
-							<bean class="weka.classifiers.trees.J48" />
-						</property>
-					</bean>
+					<bean class="weka.classifiers.trees.J48" />
 				</property>
 			</bean>
 		</property>
 		<property name="search">
 			<bean class="weka.attributeSelection.GreedyStepwise">
 				<property name="generateRanking" value="false" />
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelect}" />
 			</bean>
 		</property>
 	</bean>
@@ -401,19 +441,14 @@
 		<property name="evaluator">
 			<bean class="weka.attributeSelection.WrapperSubsetEval">
 				<property name="classifier">
-					<bean class="weka.classifiers.meta.FilteredClassifier">
-						<property name="filter" ref="spreadFilter" />
-						<property name="classifier">
-							<bean class="weka.classifiers.bayes.NaiveBayes" />
-						</property>
-					</bean>
+					<bean class="weka.classifiers.bayes.NaiveBayes" />
 				</property>
 			</bean>
 		</property>
 		<property name="search">
 			<bean class="weka.attributeSelection.GreedyStepwise">
 				<property name="generateRanking" value="false" />
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelect}" />
 			</bean>
 		</property>
 	</bean>
@@ -421,7 +456,7 @@
 	<!-- individual wrappers for each algorithm -->
 	<bean id="greedySearch" class="weka.attributeSelection.GreedyStepwise">
 		<property name="generateRanking" value="false" />
-		<property name="numToSelect" value="10" />
+		<property name="numToSelect" value="${toSelect}" />
 		<property name="searchBackwards" value="false" />
 	</bean>
 
@@ -456,7 +491,7 @@
 		<property name="search" ref="greedySearch" />
 	</bean>
 
-	<bean id="wrapperBayesNet" class="weka.attributeSelection.AttributeSelection">
+	<bean id="wrapperBayesNetAnnealing" class="weka.attributeSelection.AttributeSelection">
 		<property name="evaluator">
 			<bean class="weka.attributeSelection.WrapperSubsetEval">
 				<property name="options">
@@ -465,7 +500,7 @@
 						<value>f-meas</value>
 					</array>
 				</property>
-				<property name="classifier" ref="bayesNet" />
+				<property name="classifier" ref="bayesNet2" />
 			</bean>
 		</property>
 		<property name="search" ref="greedySearch" />

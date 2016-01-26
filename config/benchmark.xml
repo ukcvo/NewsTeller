@@ -156,6 +156,8 @@
 			</list>
 		</property>
 
+		<property name="features" ref="activeFeatureList" />
+
 		<property name="doKSAccessTests" value="false" />
 		<property name="doSparqlSearchTests" value="false" />
 		<property name="doSparqlFeatureTests" value="false" />
@@ -163,7 +165,8 @@
 		<property name="doParallelSearcherTest" value="false" />
 		<property name="doParallelSparqlTest" value="false" />
 		<property name="doSequentialFilterTest" value="false" />
-		<property name="doParallelFilterTest" value="true" />
+		<property name="doParallelFilterTest" value="false" />
+		<property name="doFeatureTest" value="true" />
 
 		<property name="numberOfRepetitions" value="5" />
 
@@ -186,17 +189,35 @@
 
 		<property name="configurations">
 			<list>
+			 
+				<ref bean="relief-f" /> 
+				<ref bean="oneR" /> 
+				<ref bean="gainRatio" /> 
+				<ref bean="cfs" /> 
+				<ref bean="wrapperDT" /> 
+				<ref bean="wrapperNB" /> 
+				
+				<ref bean="wrapperRandomForest"/> 
+				<ref bean="wrapperRandomForest2"/>
+				<ref bean="wrapperLogistic"/> 
+				
+				<!-- 
+				<ref bean="wrapperNaiveBayes"/> 
+				<ref bean="wrapperNaiveBayes2"/> 
+				<ref bean="wrapperBayesNet"/> 
+				<ref bean="wrapperMLP2"/> 
 				<ref bean="wrapperMLPClassifier" />
-
-				<!-- <ref bean="relief-f" /> <ref bean="oneR" /> <ref bean="gainRatio" 
-					/> <ref bean="cfs" /> <ref bean="wrapperDT" /> <ref bean="wrapperNB" /> <ref 
-					bean="wrapperNaiveBayes"/> <ref bean="wrapperNaiveBayes2"/> <ref bean="wrapperBayesNet"/> 
-					<ref bean="wrapperLogistic"/> <ref bean="wrapperMLP2"/> <ref bean="wrapperSvm"/> 
-					<ref bean="wrapperKNN"/> <ref bean="wrapperKNN2"/> <ref bean="wrapperDecisionTable"/> 
-					<ref bean="wrapperDecisionTable2"/> <ref bean="wrapperRipper" /> <ref bean="wrapperRipper2"/> 
-					<ref bean="wrapperDecisionTree"/> <ref bean="wrapperDecisionTree2"/> <ref 
-					bean="wrapperDecisionTree3"/> <ref bean="wrapperCart"/> <ref bean="wrapperRandomForest"/> 
-					<ref bean="wrapperRandomForest2"/> -->
+				<ref bean="wrapperSvm"/> 
+				<ref bean="wrapperRipper2"/> 
+				<ref bean="wrapperDecisionTree"/> 
+				<ref bean="wrapperDecisionTree2"/> 
+				<ref bean="wrapperDecisionTree3"/> 
+				<ref bean="wrapperCart"/> 
+				<ref bean="wrapperDecisionTable"/> 
+				<ref bean="wrapperDecisionTable2"/> 
+				<ref bean="wrapperRipper" /> 
+				
+				 -->
 			</list>
 		</property>
 
@@ -204,6 +225,20 @@
 
 		<property name="classifiers">
 			<map>
+				
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="logistic" value-ref="logistic" />
+				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				<entry key="RBF" value-ref="RBF" />
+				<entry key="svmLogistic" value-ref="svm2" />
+				
+				
+				<entry key="decisionTree" value-ref="decisionTree" />
+				<!-- <entry key="logistic" value-ref="logistic" /> -->
+				<entry key="naiveBayes" value-ref="naiveBayes" />
+				
 				
 				<!-- NO_EVENT
 				<entry key="adaBoostTree" value-ref="adaBoost3" />
@@ -437,12 +472,12 @@
 		<property name="useBaggingWrapper" value="false" />
 
 		<property name="doFeatureAnalysis" value="false" />
-		<property name="doCrossValidation" value="false" />
+		<property name="doCrossValidation" value="true" />
 		<property name="doLeaveOneOut" value="false" />
 		<property name="doEasyEnsemble" value="false" />
 		<property name="doBalanceCascade" value="false" />
 		<property name="doLearningCurve" value="false" />
-		<property name="doOverallCrossvalidation" value="true" />
+		<property name="doOverallCrossvalidation" value="false" />
 
 		<property name="outputFileName" value="evaluation.csv" />
 		<property name="numberOfEnsembleMembers" value="10" />

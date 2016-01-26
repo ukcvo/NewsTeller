@@ -10,79 +10,40 @@
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
-		<ref bean="a0Feature" />
-		<ref bean="a1Feature" />
-		<ref bean="a2Feature" />
+		<ref bean="avgConstituentSeparatedByEventFeature" />
+		<ref bean="avgNormalizedWordDistanceFeature" />
+		<ref bean="avgWordDistanceFeature" />
+		<ref bean="maxConstituentSeparatedByEventFeature" />
+		<ref bean="maxNormalizedWordDistanceFeature" />
+		<ref bean="maxWordDistanceFeature" />
+		<ref bean="minConstituentSeparatedByEventFeature" />
+		<ref bean="minNormalizedWordDistanceFeature" />
+		<ref bean="minWordDistanceFeature" />
+		
+		<!-- 
 		<ref bean="actorPositionLeftFeature" />
 		<ref bean="actorPositionRightFeature" />
-		<ref bean="appearInheritedLabelsInTextFeature" />
-		<ref bean="appearKeywordDescriptionPartsInTextFeature" />
-		<ref bean="appearKeywordLabelPartsInSentenceFeature" />
-		<ref bean="appearKeywordLabelPartsInTextFeature" />
-		<ref bean="appearKeywordLabelsInSentenceFeature" />
-		<ref bean="appearKeywordLabelsInTextFeature" />
-		<ref bean="appearLabelsInTextFeature" />
-		<ref bean="appearSplitDescriptionsInTextFeature" />
-		<ref bean="appearSplitInheritedDescriptionsInTextFeature" />
-		<ref bean="appearSplitInheritedLabelsInTextFeature" />
-		<ref bean="appearSplitLabelsInTextFeature" />
-		<ref bean="areActorsAgentsFeature" />
-		<ref bean="areActorsPlacesFeature" />
-		<ref bean="arePlacesAgentsFeature" />
-		<ref bean="arePlacesPlacesFeature" />
 		<ref bean="avgConstituentSeparatedByEventFeature" />
 		<ref bean="avgConstituentsPerMentionFeature" />
 		<ref bean="avgNormalizedWordDistanceFeature" />
 		<ref bean="avgWordDistanceFeature" />
 		<ref bean="byPhraseFeature" />
 		<ref bean="containActorsNumberFeature" />
-		<ref bean="eventLabelFeature" />
 		<ref bean="genitiveFeature" />
 		<ref bean="hasActorFeature" />
-		<ref bean="hasDBpediaEntitiesFeature" />
-		<ref bean="hasKeywordAsLabelFeature" />
-		<ref bean="hasPlaceFeature" />
-		<ref bean="keywordEntityDescriptionMatchingKeywordFeature" />
-		<ref bean="keywordEntityMatchingKeywordFeature" />
-		<ref bean="keywordInSentenceContainsFeature" />
-		<ref bean="keywordInSentenceFeature" />
-		<ref bean="keywordInTextContainsFeature" />
-		<ref bean="keywordInTextFeature" />
-		<ref bean="keywordOrStemInSentenceContainsFeature" />
-		<ref bean="keywordOrStemInSentenceFeature" />
-		<ref bean="keywordOrStemInTextContainsFeature" />
-		<ref bean="keywordOrStemInTextFeature" />
-		<ref bean="keywordStemInSentenceContainsFeature" />
-		<ref bean="keywordStemInSentenceFeature" />
-		<ref bean="keywordStemInTextContainsFeature" />
-		<ref bean="keywordStemInTextFeature" />
 		<ref bean="locationPrepBeforeActorFeature" />
 		<ref bean="maxConstituentSeparatedByEventFeature" />
 		<ref bean="maxConstituentsPerMentionFeature" />
 		<ref bean="maxNormalizedWordDistanceFeature" />
 		<ref bean="maxWordDistanceFeature" />
-		<ref bean="mentionDistanceComparisonFeature" />
-		<ref bean="mentionSentenceComparisonFeature" />
-		<ref bean="mentionTextComparisonFeature" />
 		<ref bean="minConstituentSeparatedByEventFeature" />
 		<ref bean="minConstituentsPerMentionFeature" />
 		<ref bean="minNormalizedWordDistanceFeature" />
 		<ref bean="minWordDistanceFeature" />
-		<ref bean="needsA0Feature" />
-		<ref bean="needsA1Feature" />
-		<ref bean="needsA2Feature" />
-		<ref bean="needsLocFeature" />
 		<ref bean="nombankArgumentFeature" />
 		<ref bean="nombankAvgArgumentFeature" />
-		<ref bean="nombankExistenceFeature" />
 		<ref bean="nombankFallbackArgumentFeature" />
 		<ref bean="nombankFallbackAvgArgumentFeature" />
-		<ref bean="nombankRefFeature" />
-		<ref bean="numberOfFramesFeature" />
-		<ref bean="numberOfLinksFeature" />
-		<ref bean="numberOfMentionsFeature" />
-		<ref bean="overlapFeature" />
-		<ref bean="posFeature" />
 		<ref bean="prepAfterActorFeature" />
 		<ref bean="prepBeforeActorFeature" />
 		<ref bean="prepInsidePhraseFeature" />
@@ -90,18 +51,34 @@
 		<ref bean="prepPhraseLocationFeature" />
 		<ref bean="propbankArgumentFeature" />
 		<ref bean="propbankAvgArgumentFeature" />
-		<ref bean="propbankExistenceFeature" />
-		<ref bean="propbankRefFeature" />
 		<ref bean="smartPropbankArgumentFeature" />
 		<ref bean="smartPropbankAvgArgumentFeature" />
 		<ref bean="smartPropbankFallbackArgumentFeature" />
 		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
-		<ref bean="verbnetRefFeature" />
-		<ref bean="wordNetFeature" />
-		<ref bean="wordnetRefFeature" />
-		<ref bean="zeroConstituentsPerMentionFeature" />
+		 -->
 		
 		<!-- full feature set 
+		<ref bean="a1Feature" />
+		<ref bean="actorPositionLeftFeature" />
+		<ref bean="actorPositionRightFeature" />
+		<ref bean="appearKeywordLabelPartsInTextFeature" />
+		<ref bean="appearKeywordLabelsInSentenceFeature" />
+		<ref bean="appearKeywordDescriptionPartsInTextFeature" />
+		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="needsA2Feature" />
+		<ref bean="nonzeroConstituentsPerMentionFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="overlapFeature" />
+		<ref bean="posFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="prepPhraseLocationFeature" />
+		<ref bean="propbankArgumentFeature" />
+		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
+		<ref bean="wordnetFeature" />
+		<ref bean="wordnetRefFeature" />
+		
+		
+		
 		<ref bean="a0Feature" />
 		<ref bean="a1Feature" />
 		<ref bean="a2Feature" />
@@ -189,23 +166,33 @@
 		<ref bean="smartPropbankFallbackArgumentFeature" />
 		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
 		<ref bean="verbnetRefFeature" />
-		<ref bean="wordNetFeature" />
+		<ref bean="wordnetFeature" />
 		<ref bean="wordnetRefFeature" />
 		<ref bean="zeroConstituentsPerMentionFeature" />
 		-->
 		
 		<!-- For NO_EVENT
 		<ref bean="posFeature" />
-		<ref bean="wordNetFeature" />
+		<ref bean="wordnetFeature" />
+		<ref bean="wordnetRefFeature" />
+		
+		
+		<ref bean="nombankExistenceFeature" />
 		<ref bean="nombankRefFeature" />
+		<ref bean="posFeature" />
+		<ref bean="propbankExistenceFeature" />
 		<ref bean="propbankRefFeature" />
 		<ref bean="verbnetRefFeature" />
+		<ref bean="wordnetFeature" />
 		<ref bean="wordnetRefFeature" />
-		<ref bean="propbankExistenceFeature" />
-		<ref bean="nombankExistenceFeature" />
 		 -->
 		
 		<!-- for KEYWORD_ENTITY_CATEGORIZATION
+		<ref bean="appearKeywordDescriptionPartsInTextFeature" />
+		<ref bean="appearKeywordLabelPartsInTextFeature" />
+		<ref bean="appearKeywordLabelsInSentenceFeature" />
+		
+		
 		<ref bean="appearKeywordLabelsInTextFeature" />
 		<ref bean="appearKeywordLabelPartsInTextFeature" />
 		<ref bean="appearKeywordLabelsInSentenceFeature" />
@@ -215,6 +202,21 @@
 		 -->
 		
 		<!-- for MISSING_OBJECT and MISSING_LOCATION and MISSING_SUBJECT
+		MISSING_OBJECT & MISSING_LOCATION
+		<ref bean="a1Feature" />
+		<ref bean="needsA2Feature" />
+		<ref bean="posFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
+		
+		MISSING_SUBJECT
+		<ref bean="actorPositionLeftFeature" />
+		<ref bean="actorPositionRightFeature" />
+		<ref bean="posFeature" />
+		<ref bean="propbankArgumentFeature" />
+		
+		
+		
 		<ref bean="propbankArgumentFeature" />
 		<ref bean="nombankArgumentFeature" />
 		<ref bean="posFeature" />
@@ -249,6 +251,10 @@
 		 -->
 		
 		<!-- for EVENT_MERGE
+		<ref bean="nonzeroConstituentsPerMentionFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		
+		
 		<ref bean="numberOfMentionsFeature" />
 		<ref bean="numberOfFramesFeature" />
 		<ref bean="numberOfLinksFeature" />
@@ -257,61 +263,67 @@
 		<ref bean="maxConstituentsPerMentionFeature" />
 		<ref bean="minConstituentsPerMentionFeature" />
 		<ref bean="zeroConstituentsPerMentionFeature" />
+		<ref bean="nonzeroConstituentsPerMentionFeature" />
 		<ref bean="mentionTextComparisonFeature" />
 		<ref bean="mentionDistanceComparisonFeature" />
 		<ref bean="mentionSentenceComparisonFeature" />
 		 -->
 		
 		<!-- for BROKEN_CONSTITUENT
+		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="prepPhraseLocationFeature" />
+		
+		
 		<ref bean="areActorsAgentsFeature" />
-		<ref bean="arePlacesPlacesFeature" />
 		<ref bean="areActorsPlacesFeature" />
 		<ref bean="arePlacesAgentsFeature" />
-		<ref bean="prepPhraseFeature" />
-		<ref bean="prepPhraseLocationFeature" />
-		<ref bean="prepInsidePhraseFeature" />
+		<ref bean="arePlacesPlacesFeature" />
 		<ref bean="containActorsNumberFeature" />
-		<ref bean="prepBeforeActorFeature" />
+		<ref bean="genitiveFeature" />
 		<ref bean="locationPrepBeforeActorFeature" />
 		<ref bean="prepAfterActorFeature" />
-		<ref bean="genitiveFeature" />
+		<ref bean="prepBeforeActorFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="prepInsidePhraseFeature" />
+		<ref bean="prepPhraseLocationFeature" />
 		 -->
 		
 		<!-- for WRONG_PARSE
-		<ref bean="propbankArgumentFeature" />
-		<ref bean="nombankArgumentFeature" />
-		<ref bean="hasActorFeature" />
-		<ref bean="prepPhraseFeature" />
-		<ref bean="byPhraseFeature" />
+		
 		<ref bean="actorPositionLeftFeature" />
 		<ref bean="actorPositionRightFeature" />
-		<ref bean="propbankAvgArgumentFeature" />
+		<ref bean="avgConstituentSeparatedByEventFeature" />
+		<ref bean="avgConstituentsPerMentionFeature" />
+		<ref bean="avgNormalizedWordDistanceFeature" />
+		<ref bean="avgWordDistanceFeature" />
+		<ref bean="byPhraseFeature" />
+		<ref bean="containActorsNumberFeature" />
+		<ref bean="genitiveFeature" />
+		<ref bean="hasActorFeature" />
+		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="maxConstituentSeparatedByEventFeature" />
+		<ref bean="maxConstituentsPerMentionFeature" />
+		<ref bean="maxNormalizedWordDistanceFeature" />
+		<ref bean="maxWordDistanceFeature" />
+		<ref bean="minConstituentSeparatedByEventFeature" />
+		<ref bean="minConstituentsPerMentionFeature" />
+		<ref bean="minNormalizedWordDistanceFeature" />
+		<ref bean="minWordDistanceFeature" />
+		<ref bean="nombankArgumentFeature" />
 		<ref bean="nombankAvgArgumentFeature" />
-		<ref bean="smartPropbankArgumentFeature" />
-		<ref bean="smartPropbankAvgArgumentFeature" />
 		<ref bean="nombankFallbackArgumentFeature" />
 		<ref bean="nombankFallbackAvgArgumentFeature" />
+		<ref bean="prepAfterActorFeature" />
+		<ref bean="prepBeforeActorFeature" />
+		<ref bean="prepInsidePhraseFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="prepPhraseLocationFeature" />
+		<ref bean="propbankArgumentFeature" />
+		<ref bean="propbankAvgArgumentFeature" />
+		<ref bean="smartPropbankArgumentFeature" />
+		<ref bean="smartPropbankAvgArgumentFeature" />
 		<ref bean="smartPropbankFallbackArgumentFeature" />
 		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
-		<ref bean="avgWordDistanceFeature" />
-		<ref bean="minWordDistanceFeature" />
-		<ref bean="maxWordDistanceFeature" />
-		<ref bean="avgNormalizedWordDistanceFeature" />
-		<ref bean="minNormalizedWordDistanceFeature" />
-		<ref bean="maxNormalizedWordDistanceFeature" />
-		<ref bean="avgConstituentsPerMentionFeature" />
-		<ref bean="maxConstituentsPerMentionFeature" />
-		<ref bean="minConstituentsPerMentionFeature" />
-		<ref bean="prepPhraseLocationFeature" />
-		<ref bean="prepInsidePhraseFeature" />
-		<ref bean="containActorsNumberFeature" />
-		<ref bean="prepBeforeActorFeature" />
-		<ref bean="locationPrepBeforeActorFeature" />
-		<ref bean="prepAfterActorFeature" />
-		<ref bean="genitiveFeature" />
-		<ref bean="avgConstituentSeparatedByEventFeature" />
-		<ref bean="minConstituentSeparatedByEventFeature" />
-		<ref bean="maxConstituentSeparatedByEventFeature" />
 		 -->
 		
 		<!-- for OTHER_ENTITY_CATEGORIZATION
@@ -368,7 +380,7 @@
 		<property name="splitLabels" value="true" />
 		<property name="doOnlyUseSentence" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="appearKeywordDescriptionPartsInTextFeature" />
+		<property name="name" value="appearKeywordDescriptionPartsInText" />
 	</bean>
 
 	<!-- for KEYWORD_REGEX_MISMATCH -->
@@ -528,14 +540,14 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordEntityMatchingKeywordFeature">
 		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntityLabelsByKeyword.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="keywordEntityMatchingKeywordFeature" />
+		<property name="name" value="keywordEntityMatchingKeyword" />
 	</bean>
 	
 	<bean id="keywordEntityDescriptionMatchingKeywordFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordEntityMatchingKeywordFeature">
 		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntityDescriptionsByKeyword.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="keywordEntityDescriptionMatchingKeywordFeature" />
+		<property name="name" value="keywordEntityDescriptionMatchingKeyword" />
 	</bean>
 	
 	<!-- for OTHER_ENTITY_CATEGORIZATION -->
@@ -562,7 +574,7 @@
 			value="" />
 		<property name="splitLabels" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="appearSplitLabelsInTextFeature" />
+		<property name="name" value="appearSplitLabelsInText" />
 	</bean>
 
 	<bean id="appearInheritedLabelsInTextFeature"
@@ -575,7 +587,7 @@
 			value="resources/SPARQL/usability/getInheritedLabels.qry" />
 		<property name="splitLabels" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="appearInheritedLabelsInTextFeature" />
+		<property name="name" value="appearInheritedLabelsInText" />
 	</bean>
 
 	<bean id="appearSplitInheritedLabelsInTextFeature"
@@ -588,7 +600,7 @@
 			value="resources/SPARQL/usability/getInheritedLabels.qry" />
 		<property name="splitLabels" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="appearSplitInheritedLabelsInTextFeature" />
+		<property name="name" value="appearSplitInheritedLabelsInText" />
 	</bean>
 
 	<bean id="appearSplitDescriptionsInTextFeature"
@@ -601,7 +613,7 @@
 			value="" />
 		<property name="splitLabels" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="appearSplitDescriptionsInTextFeature" />
+		<property name="name" value="appearSplitDescriptionsInText" />
 	</bean>
 
 	<bean id="appearSplitInheritedDescriptionsInTextFeature"
@@ -614,7 +626,7 @@
 			value="resources/SPARQL/usability/getInheritedDescriptions.qry" />
 		<property name="splitLabels" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="appearSplitInheritedDescriptionsInTextFeature" />
+		<property name="name" value="appearSplitInheritedDescriptionsInText" />
 	</bean>
 
 	<!-- for WRONG_PARSE -->
@@ -625,7 +637,7 @@
 		<property name="normalize" value="false" />
 		<property name="operationType" value="0" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="avgWordDistanceFeature" />
+		<property name="name" value="avgWordDistance" />
 	</bean>
 	
 	<bean id="minWordDistanceFeature"
@@ -635,7 +647,7 @@
 		<property name="normalize" value="false" />
 		<property name="operationType" value="1" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="minWordDistanceFeature" />
+		<property name="name" value="minWordDistance" />
 	</bean>
 	
 	<bean id="maxWordDistanceFeature"
@@ -645,7 +657,7 @@
 		<property name="normalize" value="false" />
 		<property name="operationType" value="2" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="maxWordDistanceFeature" />
+		<property name="name" value="maxWordDistance" />
 	</bean>
 
 	<bean id="avgNormalizedWordDistanceFeature"
@@ -655,7 +667,7 @@
 		<property name="normalize" value="true" />
 		<property name="operationType" value="0" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="avgNormalizedWordDistanceFeature" />
+		<property name="name" value="avgNormalizedWordDistance" />
 	</bean>
 	
 	<bean id="minNormalizedWordDistanceFeature"
@@ -665,7 +677,7 @@
 		<property name="normalize" value="true" />
 		<property name="operationType" value="1" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="minNormalizedWordDistanceFeature" />
+		<property name="name" value="minNormalizedWordDistance" />
 	</bean>
 	
 	<bean id="maxNormalizedWordDistanceFeature"
@@ -675,7 +687,7 @@
 		<property name="normalize" value="true" />
 		<property name="operationType" value="2" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="maxNormalizedWordDistanceFeature" />
+		<property name="name" value="maxNormalizedWordDistance" />
 	</bean>
 
 	<bean id="avgConstituentSeparatedByEventFeature" 
@@ -684,7 +696,7 @@
 		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="0" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="avgConstituentSeparatedByEventFeature" />
+		<property name="name" value="avgConstituentSeparatedByEvent" />
 	</bean>
 	
 	<bean id="minConstituentSeparatedByEventFeature" 
@@ -693,7 +705,7 @@
 		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="1" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="minConstituentSeparatedByEventFeature" />
+		<property name="name" value="minConstituentSeparatedByEvent" />
 	</bean>
 
 	<bean id="maxConstituentSeparatedByEventFeature" 
@@ -702,7 +714,7 @@
 		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="2" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="maxConstituentSeparatedByEventFeature" />
+		<property name="name" value="maxConstituentSeparatedByEvent" />
 	</bean>
 
 	<!-- for BROKEN_CONSTITUENT -->
@@ -745,7 +757,7 @@
 		<constructor-arg name="prepositionFileName" value="resources/features/prepositions-local.txt" />
 		<property name="doSearchInsidePhrase" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="prepPhraseLocationFeature" />
+		<property name="name" value="prepPhraseLocation" />
 	</bean>
 
 	<bean id="prepInsidePhraseFeature"
@@ -755,7 +767,7 @@
 		<constructor-arg name="prepositionFileName" value="resources/features/prepositions.txt" />
 		<property name="doSearchInsidePhrase" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="prepInsidePhraseFeature" />
+		<property name="name" value="prepInsidePhrase" />
 	</bean>
 
 	<bean id="containActorsNumberFeature"
@@ -763,7 +775,7 @@
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/containActorsNumber.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="containActorsNumberFeature" />
+		<property name="name" value="containActorsNumber" />
 	</bean>
 
 	<bean id="prepBeforeActorFeature"
@@ -773,7 +785,7 @@
 		<constructor-arg name="targetWordsFileName" value="resources/features/prepositions.txt" />
 		<property name="operationType" value="1" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="prepBeforeActorFeature" />
+		<property name="name" value="prepBeforeActor" />
 	</bean>
 
 	<bean id="locationPrepBeforeActorFeature"
@@ -783,7 +795,7 @@
 		<constructor-arg name="targetWordsFileName" value="resources/features/prepositions-local.txt" />
 		<property name="operationType" value="1" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="locationPrepBeforeActorFeature" />
+		<property name="name" value="locationPrepBeforeActor" />
 	</bean>
 
 	<bean id="prepAfterActorFeature"
@@ -793,7 +805,7 @@
 		<constructor-arg name="targetWordsFileName" value="resources/features/prepositions.txt" />
 		<property name="operationType" value="0" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="prepAfterActorFeature" />
+		<property name="name" value="prepAfterActor" />
 	</bean>
 
 	<bean id="genitiveFeature"
@@ -801,7 +813,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/usability/getEntities.qry" />
 		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="genitiveFeature" />
+		<property name="name" value="genitive" />
 	</bean>
 
 	<!-- for EVENT_MERGE -->
@@ -813,7 +825,7 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="0" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="avgConstituentsPerMentionFeature" />
+		<property name="name" value="avgConstituentsPerMention" />
 	</bean>
 
 	<bean id="maxConstituentsPerMentionFeature"
@@ -824,7 +836,7 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="1" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="maxConstituentsPerMentionFeature" />
+		<property name="name" value="maxConstituentsPerMention" />
 	</bean>
 	
 	<bean id="minConstituentsPerMentionFeature"
@@ -835,7 +847,7 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="2" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="minConstituentsPerMentionFeature" />
+		<property name="name" value="minConstituentsPerMention" />
 	</bean>
 	
 	<bean id="zeroConstituentsPerMentionFeature"
@@ -846,7 +858,7 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="3" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="zeroConstituentsPerMentionFeature" />
+		<property name="name" value="zeroConstituentsPerMention" />
 	</bean>
 
 	<bean id="nonzeroConstituentsPerMentionFeature"
@@ -857,7 +869,7 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="4" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="nonzeroConstituentsPerMentionFeature" />
+		<property name="name" value="nonzeroConstituentsPerMention" />
 	</bean>
 
 	<bean id="mentionTextComparisonFeature"
@@ -865,7 +877,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="0" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="mentionTextComparisonFeature" />
+		<property name="name" value="mentionTextComparison" />
 	</bean>
 
 	<bean id="mentionDistanceComparisonFeature"
@@ -873,7 +885,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="1" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="mentionDistanceComparisonFeature" />
+		<property name="name" value="mentionDistanceComparison" />
 	</bean>
 
 	<bean id="mentionSentenceComparisonFeature"
@@ -881,7 +893,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="2" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="mentionSentenceComparisonFeature" />
+		<property name="name" value="mentionSentenceComparison" />
 	</bean>
 
 	<bean id="mentionIntersectionComparisonFeature"
@@ -889,7 +901,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="operationType" value="3" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="mentionIntersectionComparisonFeature" />
+		<property name="name" value="mentionIntersectionComparison" />
 	</bean>
 
 		<bean id="eventLabelFeature"
@@ -932,7 +944,7 @@
 		<constructor-arg name="mentionQueryFileName"
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="overlapFeature" />
+		<property name="name" value="overlap" />
 	</bean>
 
 	<!-- for MISSING_OBJECT and MISSING_LOCATION and MISSING_SUBJECT -->
@@ -954,7 +966,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="false" />
 		<property name="doUseVerbAsFallback" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="propbankArgumentFeature" />
+		<property name="name" value="propbankArgument" />
 	</bean>
 
 	<bean id="nombankArgumentFeature"
@@ -975,7 +987,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="false" />
 		<property name="doUseVerbAsFallback" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="nombankArgumentFeature" />
+		<property name="name" value="nombankArgument" />
 	</bean>
 	
 	<bean id="propbankAvgArgumentFeature"
@@ -996,7 +1008,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="true" />
 		<property name="doUseVerbAsFallback" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="propbankAvgArgumentFeature" />
+		<property name="name" value="propbankAvgArgument" />
 	</bean>
 
 	<bean id="nombankAvgArgumentFeature"
@@ -1017,7 +1029,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="true" />
 		<property name="doUseVerbAsFallback" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="nombankAvgArgumentFeature" />
+		<property name="name" value="nombankAvgArgument" />
 	</bean>
 	
 	<bean id="smartPropbankArgumentFeature"
@@ -1038,7 +1050,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="false" />
 		<property name="doUseVerbAsFallback" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="smartPropbankArgumentFeature" />
+		<property name="name" value="smartPropbankArgument" />
 	</bean>
 	
 	<bean id="smartPropbankAvgArgumentFeature"
@@ -1059,7 +1071,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="true" />
 		<property name="doUseVerbAsFallback" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="smartPropbankAvgArgumentFeature" />
+		<property name="name" value="smartPropbankAvgArgument" />
 	</bean>
 	
 	<bean id="nombankFallbackArgumentFeature"
@@ -1080,7 +1092,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="false" />
 		<property name="doUseVerbAsFallback" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="nombankFallbackArgumentFeature" />
+		<property name="name" value="nombankFallbackArgument" />
 	</bean>
 	
 	<bean id="nombankFallbackAvgArgumentFeature"
@@ -1101,7 +1113,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="true" />
 		<property name="doUseVerbAsFallback" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="nombankFallbackAvgArgumentFeature" />
+		<property name="name" value="nombankFallbackAvgArgument" />
 	</bean>
 	
 	<bean id="smartPropbankFallbackArgumentFeature"
@@ -1122,7 +1134,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="false" />
 		<property name="doUseVerbAsFallback" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="smartPropbankFallbackArgumentFeature" />
+		<property name="name" value="smartPropbankFallbackArgument" />
 	</bean>
 	
 	<bean id="smartPropbankFallbackAvgArgumentFeature"
@@ -1143,7 +1155,7 @@
 		<property name="doComputeAverageInsteadOfMax" value="true" />
 		<property name="doUseVerbAsFallback" value="true" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="smartPropbankFallbackAvgArgumentFeature" />
+		<property name="name" value="smartPropbankFallbackAvgArgument" />
 	</bean>
 	
 	<bean id="prepPhraseFeature"
@@ -1153,7 +1165,7 @@
 		<constructor-arg name="prepositionFileName" value="resources/features/prepositions.txt" />
 		<property name="doSearchInsidePhrase" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="prepPhraseFeature" />
+		<property name="name" value="prepPhrase" />
 	</bean>
 	
 	<bean id="byPhraseFeature"
@@ -1163,7 +1175,7 @@
 		<constructor-arg name="prepositionFileName" value="resources/features/by.txt" />
 		<property name="doSearchInsidePhrase" value="false" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="byPhraseFeature" />
+		<property name="name" value="byPhrase" />
 	</bean>
 	
 	<bean id="actorPositionLeftFeature"
@@ -1172,7 +1184,7 @@
 		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="actorPositionLeftFeature" />
+		<property name="name" value="actorPositionLeft" />
 		<property name="directionToLookAt" value="0" />
 	</bean>
 	
@@ -1182,7 +1194,7 @@
 		<constructor-arg name="mentionQueryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<constructor-arg name="labelQueryFileName" value="resources/SPARQL/usability/getPrefLabels.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="actorPositionRightFeature" />
+		<property name="name" value="actorPositionRight" />
 		<property name="directionToLookAt" value="1" />
 	</bean>
 	
@@ -1227,7 +1239,7 @@
 		<constructor-arg name="argument" value="0" />
 		<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="needsA0Feature" />
+		<property name="name" value="needsA0" />
 	</bean>
 	
 	<bean id="needsA1Feature"
@@ -1237,7 +1249,7 @@
 		<constructor-arg name="argument" value="1" />
 		<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="needsA1Feature" />
+		<property name="name" value="needsA1" />
 	</bean>
 	
 	<bean id="needsA2Feature"
@@ -1247,7 +1259,7 @@
 		<constructor-arg name="argument" value="2" />
 		<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="needsA2Feature" />
+		<property name="name" value="needsA2" />
 	</bean>
 	
 	<bean id="needsLocFeature"
@@ -1257,7 +1269,7 @@
 		<constructor-arg name="argument" value="m" />
 		<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="needsLocFeature" />
+		<property name="name" value="needsLoc" />
 	</bean>
 	
 	<!-- for NO_EVENT -->
@@ -1265,7 +1277,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.POSFeature">
 		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="posFeature" />
+		<property name="name" value="pos" />
 	</bean>
 	
 	<bean id="nombankRefFeature"
@@ -1273,7 +1285,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#nombankRef" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="nombankRefFeature" />
+		<property name="name" value="nombankRef" />
 	</bean>
 	
 	<bean id="propbankRefFeature"
@@ -1281,7 +1293,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="propbankRefFeature" />
+		<property name="name" value="propbankRef" />
 	</bean>
 	
 	<bean id="verbnetRefFeature"
@@ -1289,7 +1301,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#verbnetRef" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="verbnetRefFeature" />
+		<property name="name" value="verbnetRef" />
 	</bean>
 	
 	<bean id="wordnetRefFeature"
@@ -1297,7 +1309,7 @@
 		<constructor-arg name="queryFileName" value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#wordnetRef" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="wordnetRefFeature" />
+		<property name="name" value="wordnetRef" />
 	</bean>
 	
 	<bean id="propbankExistenceFeature"
@@ -1306,7 +1318,7 @@
 		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
 		<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="propbankExistenceFeature" />
+		<property name="name" value="propbankExistence" />
 	</bean>
 	
 	<bean id="nombankExistenceFeature"
@@ -1315,15 +1327,15 @@
 		<constructor-arg name="propertyURI" value="http://dkm.fbk.eu/ontologies/newsreader#nombankRef" />
 		<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="nombankExistenceFeature" />
+		<property name="name" value="nombankExistence" />
 	</bean>
 
-	<bean id="wordNetFeature"
+	<bean id="wordnetFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature">
 		<constructor-arg name="queryFileName"
 			value="resources/SPARQL/usability/areLabelsVerbs.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="areLabelsVerbs" />
+		<property name="name" value="wordnet" />
 	</bean>
 
 	<!-- for KEYWORD_ENTITY_CATEGORIZATION -->

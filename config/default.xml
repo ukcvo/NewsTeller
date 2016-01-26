@@ -15,7 +15,7 @@
 			value="resources/SPARQL/general/getEventFromMention.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
-		<property name="maxNumberOfConnections" value="50"/>
+		<property name="maxNumberOfConnections" value="100"/>
 	</bean>
 
 	<bean id="searcher"
@@ -103,12 +103,12 @@
 		<property name="outputFileName" value="resources/benchmark/dataSet.xrff"/>
 		<property name="features" ref="activeFeatureList"/>
 		<property name="doAddEventInformation" value="false"/>
-		<property name="doAddReasonInformation" value="true"/>
-		<property name="doKeepOnlyListedReasons" value="false"/>
+		<property name="doAddReasonInformation" value="false"/>
+		<property name="doKeepOnlyListedReasons" value="true"/>
 		<property name="reasonsToKeep">
 			<set>
 				<value>1</value>
-				<value>13</value>
+				<value>9</value>
 			</set>
 		</property>
 	</bean>

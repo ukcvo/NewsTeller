@@ -158,12 +158,12 @@ public class KnowledgeStoreAdapter {
 	}
 	
 	/**
-	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
+	 * Sends the given sparqlQuery to the KnowledgeStore instance (with the standard timeout).
 	 * Returns the retrieved results as Strings.
 	 * Don't report empty results as errors if flag is set.
 	 */
 	public List<String> runSingleVariableStringQuery(String sparqlQuery, String variableName, boolean isEmptyResultExpected) {
-		return runSingleVariableStringQuery(sparqlQuery, variableName, 10000, isEmptyResultExpected);
+		return runSingleVariableStringQuery(sparqlQuery, variableName, this.timeoutMsec, isEmptyResultExpected);
 	}
 	
 	/**
@@ -189,11 +189,11 @@ public class KnowledgeStoreAdapter {
 	}
 	
 	/**
-	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
+	 * Sends the given sparqlQuery to the KnowledgeStore instance (with the standard timeout).
 	 * Returns the first retrieved result as String.
 	 */
 	public String runSingleVariableStringQuerySingleResult(String sparqlQuery, String variableName) {
-		return runSingleVariableStringQuerySingleResult(sparqlQuery, variableName, 10000);
+		return runSingleVariableStringQuerySingleResult(sparqlQuery, variableName, this.timeoutMsec);
 	}
 	//endregion
 	
@@ -217,11 +217,11 @@ public class KnowledgeStoreAdapter {
 	}
 
 	/**
-	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
+	 * Sends the given sparqlQuery to the KnowledgeStore instance (with the standard timeout).
 	 * Returns the retrieved results as NewsEvents.
 	 */
 	public List<NewsEvent> runSingleVariableEventQuery(String sparqlQuery, String variableName) {
-		return runSingleVariableEventQuery(sparqlQuery, variableName, 10000);
+		return runSingleVariableEventQuery(sparqlQuery, variableName, this.timeoutMsec);
 	}
 	
 	//endregion
@@ -246,12 +246,12 @@ public class KnowledgeStoreAdapter {
 	}
 	
 	/**
-	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
+	 * Sends the given sparqlQuery to the KnowledgeStore instance (with the standard timeout).
 	 * Returns the retrieved results as Doubles.
 	 * Empty results are expected and passed on.
 	 */
 	public List<Double> runSingleVariableDoubleQuery(String sparqlQuery, String variableName) {
-		return runSingleVariableDoubleQuery(sparqlQuery, variableName, 10000);
+		return runSingleVariableDoubleQuery(sparqlQuery, variableName, this.timeoutMsec);
 	}
 	
 	/**
@@ -268,12 +268,12 @@ public class KnowledgeStoreAdapter {
 	}
 	
 	/**
-	 * Sends the given sparqlQuery to the KnowledgeStore instance (with a standard timeout of 10 seconds).
+	 * Sends the given sparqlQuery to the KnowledgeStore instance (with the standard timeout).
 	 * Returns the first retrieved result as Double.
 	 * Empty results are expected and dealt with by returning Double.NaN
 	 */
 	public double runSingleVariableDoubleQuerySingleResult(String sparqlQuery, String variableName) {
-		return runSingleVariableDoubleQuerySingleResult(sparqlQuery, variableName, 10000);
+		return runSingleVariableDoubleQuerySingleResult(sparqlQuery, variableName, this.timeoutMsec);
 	}
 	//endregion
 	
@@ -286,7 +286,7 @@ public class KnowledgeStoreAdapter {
 		else {
 			try {
 				Session session = this.knowledgeStore.newSession();
-				result = session.download(new URIImpl(resourceURI)).timeout((long) 10000).exec().writeToString();
+				result = session.download(new URIImpl(resourceURI)).timeout((long) this.timeoutMsec).exec().writeToString();
 				session.close();
 				resourceCache.putIfAbsent(resourceURI, result);
 			} catch (Exception e) {
@@ -432,10 +432,10 @@ public class KnowledgeStoreAdapter {
 	// region handling mentions
 	
 	/**
-	 * Retrieves the given property for the given mention within a standard timeout of 10 sec. and returns it as list of Strings.
+	 * Retrieves the given property for the given mention within the standard timeout and returns it as list of Strings.
 	 */
 	public List<String> getMentionProperty(String mentionURI, String propertyURI) {
-		return getMentionProperty(mentionURI, propertyURI, 10000);
+		return getMentionProperty(mentionURI, propertyURI, this.timeoutMsec);
 	}
 	
 	/**
@@ -466,10 +466,10 @@ public class KnowledgeStoreAdapter {
 	}
 	
 	/**
-	 * Retrieves the given property for the given mention within a standard timeout of 10 sec. and returns the first result as String.
+	 * Retrieves the given property for the given mention within the standard timeout and returns the first result as String.
 	 */
 	public String getUniqueMentionProperty(String mentionURI, String propertyURI) {
-		return getUniqueMentionProperty(mentionURI, propertyURI, 10000);
+		return getUniqueMentionProperty(mentionURI, propertyURI, this.timeoutMsec);
 	}
 	
 	/**
@@ -495,7 +495,7 @@ public class KnowledgeStoreAdapter {
 
 		try {
 			Session session = knowledgeStore.newSession();
-			Stream<Record> stream = session.retrieve(KS.RESOURCE).ids(new URIImpl(resourceURI)).timeout(10000L).exec();
+			Stream<Record> stream = session.retrieve(KS.RESOURCE).ids(new URIImpl(resourceURI)).timeout((long) this.timeoutMsec).exec();
 			List<Record> records = stream.toList();
 			stream.close();
 			session.close();

@@ -33,7 +33,7 @@ public class WordNetVerbCountFeatureTest {
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		feature = (WordNetVerbCountFeature) context.getBean("wordNetFeature");
+		feature = (WordNetVerbCountFeature) context.getBean("wordnetFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.openConnection();
