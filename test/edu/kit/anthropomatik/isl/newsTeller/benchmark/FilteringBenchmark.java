@@ -292,7 +292,7 @@ public class FilteringBenchmark {
 
 		try {
 			Random rand = new Random(seed);
-			Instances randData = new Instances(classificationDataSet);
+			Instances randData = new Instances(originalDataSet);
 			randData.randomize(rand);
 			randData.stratify(numFolds);
 
@@ -301,11 +301,25 @@ public class FilteringBenchmark {
 			double fp = 0;
 			double fn = 0;
 			
-			Evaluation eval = new Evaluation(classificationDataSet);
+			Map<UsabilityRatingReason, Integer> falsePositives = new HashMap<UsabilityRatingReason, Integer>();
+			for (UsabilityRatingReason r : this.reasonClassifiers.keySet())
+				falsePositives.put(r, 0);
+				
+				
+			
+			List<String> columnNames = getColumnNames();
+			Map<String, Map<String, Double>> overallResultMap = new HashMap<String, Map<String, Double>>();
+			
+			Evaluation evalMin = new Evaluation(originalDataSet);
+			Evaluation evalAvg = new Evaluation(originalDataSet);
+			Evaluation evalProd = new Evaluation(originalDataSet);
+			Evaluation evalMax = new Evaluation(originalDataSet);
 			
 			for (int i = 0; i < numFolds; i++) {
 				Instances train = randData.trainCV(numFolds, i);
-				Instances test = randData.testCV(numFolds, i);
+				Instances originalTest = randData.testCV(numFolds, i);
+				this.reasonFilter.setInputFormat(originalTest);
+				Instances test = Filter.useFilter(originalTest, this.reasonFilter);
 				
 				// prepare the training data for each classifier
 				Map<UsabilityRatingReason, Instances> classifierInstances = new HashMap<UsabilityRatingReason, Instances>();
@@ -321,29 +335,82 @@ public class FilteringBenchmark {
 					}
 				}
 				
-				Vote vote = new Vote();
-				vote.setOptions(Utils.splitOptions("-R MIN")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
+				Vote voteMin = new Vote();
+				voteMin.setOptions(Utils.splitOptions("-R MIN")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
+				Vote voteAvg = new Vote();
+				voteAvg.setOptions(Utils.splitOptions("-R AVG")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
+				Vote voteProd = new Vote();
+				voteProd.setOptions(Utils.splitOptions("-R PROD")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
+				Vote voteMax = new Vote();
+				voteMax.setOptions(Utils.splitOptions("-R MAX")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
+				
+				List<Classifier> hardFilteringClassifiers = new ArrayList<Classifier>();
 				
 				// now train each classifier with its specified filter
 				for (Map.Entry<UsabilityRatingReason, Classifier> entry : this.reasonClassifiers.entrySet()) {
 					UsabilityRatingReason r = entry.getKey();
-					Classifier c = entry.getValue();
+					Classifier c;
+					if (this.useCostSensitiveWrapper) {
+						MetaCost outer = (MetaCost) AbstractClassifier.makeCopy(this.costSensitiveWrapper);
+						String matrix;
+						switch (r) {
+						case MISSING_SUBJECT:
+						case BROKEN_CONSTITUENT:
+						case WRONG_PARSE:
+							matrix = "[0.0 2.0; 1.0 0.0]";
+							break;
+						case NO_EVENT:
+						case KEYWORD_ENTITY_CATEGORIZATION:
+						case MISSING_OBJECT:
+						case OTHER_ENTITY_CATEGORIZATION:
+							matrix = "[0.0 4.0; 1.0 0.0]";
+							break;
+						case OVERLAPPING_CONSTITUENTS:
+						case EVENT_MERGE:
+						case KEYWORD_REGEX_MISMATCH:
+							matrix = "[0.0 1.0; 1.0 0.0]";
+							break;
+						default:
+							matrix = "[0.0 1.0; 1.0 0.0]";
+							break;
+						}
+						String[] array = {"-cost-matrix", matrix};
+						outer.setOptions(array);
+						Classifier inner = AbstractClassifier.makeCopy(entry.getValue());
+						outer.setClassifier(inner);
+						c = outer;
+					} else {
+						c = AbstractClassifier.makeCopy(entry.getValue());
+					}
 					Instances classifierTrain = classifierInstances.get(r);
 					this.reasonFilter.setInputFormat(classifierTrain);
 					Instances filtered = Filter.useFilter(classifierTrain, this.reasonFilter);
 					c.buildClassifier(filtered);
-					vote.addPreBuiltClassifier(c);
+					voteMin.addPreBuiltClassifier(c);
+					voteAvg.addPreBuiltClassifier(c);
+					voteProd.addPreBuiltClassifier(c);
+					voteMax.addPreBuiltClassifier(c);
+					hardFilteringClassifiers.add(c);
 				}
 				
 				// now test the aggregation-stuff on the test set w/ the Vote classifier
-				eval.evaluateModel(vote, test);
+				evalMin.evaluateModel(voteMin, test);
+				evalAvg.evaluateModel(voteAvg, test);
+				evalProd.evaluateModel(voteProd, test);
+				evalMax.evaluateModel(voteMax, test);
 				
 				// and manually test w/o the voting stuff but with a hard AND
-				for (Instance instance : test) {
+				for (Instance instance : originalTest) {
 					boolean isPositiveExample = (instance.classValue() == this.positiveClassIdx);
 					boolean isClassifiedPositive = true;
-					for (Classifier c : reasonClassifiers.values()) {
-						double prediction = c.classifyInstance(instance);
+					Instances dummy = new Instances(originalTest, 0);
+					dummy.add(instance);
+					reasonFilter.setInputFormat(dummy);
+					dummy = Filter.useFilter(dummy, reasonFilter);
+					Instance filteredInstance = dummy.firstInstance();
+					
+					for (Classifier c : hardFilteringClassifiers) {
+						double prediction = c.classifyInstance(filteredInstance);
 						isClassifiedPositive = isClassifiedPositive && (prediction == this.positiveClassIdx);
 						if (!isClassifiedPositive)
 							break;
@@ -351,21 +418,54 @@ public class FilteringBenchmark {
 					if (isPositiveExample) {
 						if (isClassifiedPositive)
 							tp++;
-						else
+						else {
 							fn++;
+						}
 					} else {
-						if (isClassifiedPositive)
+						if (isClassifiedPositive) {
 							fp++;
-						else
+							if (outputMisclassified) {
+								for (UsabilityRatingReason r : falsePositives.keySet()) {
+									if (instance.value(train.attribute(Util.ATTRIBUTE_REASON + r.toString())) == this.positiveClassIdx)
+										falsePositives.put(r, falsePositives.get(r) + 1);
+								}
+							}
+						} else
 							tn++;
 					}
 				}
+				
+				
 			}
 			
+			Map<String, Double> minMap = getClassifierMap(evalMin);
+			Map<String, Double> avgMap = getClassifierMap(evalAvg);
+			Map<String, Double> prodMap = getClassifierMap(evalProd);
+			Map<String, Double> maxMap = getClassifierMap(evalMax);
+			Map<String, Double> filterMap = getClassifierMap(tp, fn, fp, tn);
+			
+			overallResultMap.put("MIN", minMap);
+			overallResultMap.put("AVG", avgMap);
+			overallResultMap.put("PROD", prodMap);
+			overallResultMap.put("MAX", maxMap);
+			overallResultMap.put("hardFilter", filterMap);
+			
 			if (log.isInfoEnabled()) {
-				logEvalResults(eval);
-				logEvalResults(tp, fn, fp, tn);
+				logEvalResults(evalMin);
+				logEvalResults(evalAvg);
+				logEvalResults(evalProd);
+				logEvalResults(evalMax);
+				logEvalResults(tp, fn, fp, tn, filterMap);
+				
+				if (outputMisclassified) {
+					log.info(" ");
+					for (Map.Entry<UsabilityRatingReason, Integer> entry : falsePositives.entrySet())
+						log.info(String.format("%s: %d", entry.getKey().toString(), entry.getValue()));
+				}
 			}
+			
+			
+			Util.writeEvaluationToCsv(outputFileName, columnNames, overallResultMap);
 			
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
@@ -705,6 +805,29 @@ public class FilteringBenchmark {
 		return classifierMap;
 	}
 
+	private Map<String, Double> getClassifierMap(double tp, double fn, double fp, double tn) {
+		double n = tp + fn + fp + tn;
+		double accuracy = (tp + tn) / n;
+		double balancedAcc = ((0.5 * tp) / (tp + fn)) + ((0.5 * tn) / (tn + fp));
+		double precision = tp / (tp + fp);
+		double recall = tp / (tp + fn);
+		double fScore = (2 * precision * recall) / (precision + recall);
+		double pc = (((tp + fp) * (tp + fn)) + ((tn + fp) * (tn + fn))) / (n * n);
+		double kappa = (accuracy - pc) / (1 - pc);
+		
+		
+		Map<String, Double> classifierMap = new HashMap<String, Double>();
+		
+		classifierMap.put(Util.COLUMN_NAME_BALANCED_ACCURACY, balancedAcc);
+		classifierMap.put(Util.COLUMN_NAME_KAPPA, kappa);
+		classifierMap.put(Util.COLUMN_NAME_FSCORE, fScore);
+		classifierMap.put(Util.COLUMN_NAME_PRECISION, precision);
+		classifierMap.put(Util.COLUMN_NAME_RECALL, recall);
+		classifierMap.put(Util.COLUMN_NAME_ACCURACY, accuracy);
+		
+		return classifierMap;
+	}
+	
 	private List<String> getColumnNames() {
 		List<String> columnNames = new ArrayList<String>();
 		columnNames.add(Util.COLUMN_NAME_BALANCED_ACCURACY);
@@ -729,25 +852,16 @@ public class FilteringBenchmark {
 		return c;
 	}
 
-	private void logEvalResults(double tp, double fn, double fp, double tn) {
-		
-		double n = tp + fn + fp + tn;
-		double accuracy = (tp + tn) / n;
-		double balancedAcc = ((0.5 * tp) / (tp + fn)) + ((0.5 * tn) / (tn + fp));
-		double precision = tp / (tp + fp);
-		double recall = tp / (tp + fn);
-		double fScore = (2 * precision * recall) / (precision + recall);
-		double pc = (((tp + fp) * (tp + fn)) + ((tn + fp) * (tn + fn))) / (n * n);
-		double kappa = (accuracy - pc) / (1 - pc);
+	private void logEvalResults(double tp, double fn, double fp, double tn, Map<String, Double> classifierMap) {
 		
 		log.info("AND of individual classifiers");
 		log.info("-----------------------------");
-		log.info(String.format("accuracy: %f", accuracy));
-		log.info(String.format("balanced accuracy: %f", balancedAcc));
-		log.info(String.format("precision: %f", precision));
-		log.info(String.format("recall: %f", recall));
-		log.info(String.format("f score: %f", fScore));
-		log.info(String.format("Cohen's kappa: %f", kappa));
+		log.info(String.format("accuracy: %f", classifierMap.get(Util.COLUMN_NAME_ACCURACY)));
+		log.info(String.format("balanced accuracy: %f", classifierMap.get(Util.COLUMN_NAME_BALANCED_ACCURACY)));
+		log.info(String.format("precision: %f", classifierMap.get(Util.COLUMN_NAME_PRECISION)));
+		log.info(String.format("recall: %f", classifierMap.get(Util.COLUMN_NAME_RECALL)));
+		log.info(String.format("f score: %f", classifierMap.get(Util.COLUMN_NAME_FSCORE)));
+		log.info(String.format("Cohen's kappa: %f", classifierMap.get(Util.COLUMN_NAME_KAPPA)));
 		log.info("    a     b    <-- classified as");
 		log.info(String.format("%d %d | a = true", (int) tp, (int) fn));
 		log.info(String.format("%d %d | b = false", (int) fp, (int) tn));

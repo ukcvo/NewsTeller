@@ -47,10 +47,9 @@ public class ActorPositionFeature extends UsabilityFeature {
 			
 			String[] sentenceParts = sentence.split(eventLabel);
 			
-			if (sentenceParts.length <= directionToLookAt) {
-				System.out.println(eventURI);
+			// catch if event label is the first or last word in the sentence and we want to look into the "empty" direction
+			if (sentenceParts.length <= directionToLookAt) 
 				continue;
-			}
 			
 			String sentencePart = sentenceParts[directionToLookAt].toLowerCase(); // case-insensitive
 			

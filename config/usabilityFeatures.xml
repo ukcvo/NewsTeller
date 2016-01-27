@@ -10,61 +10,22 @@
 	<util:list id="activeFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature">
 		
-		<ref bean="avgConstituentSeparatedByEventFeature" />
-		<ref bean="avgNormalizedWordDistanceFeature" />
-		<ref bean="avgWordDistanceFeature" />
-		<ref bean="maxConstituentSeparatedByEventFeature" />
-		<ref bean="maxNormalizedWordDistanceFeature" />
-		<ref bean="maxWordDistanceFeature" />
-		<ref bean="minConstituentSeparatedByEventFeature" />
-		<ref bean="minNormalizedWordDistanceFeature" />
-		<ref bean="minWordDistanceFeature" />
-		
-		<!-- 
-		<ref bean="actorPositionLeftFeature" />
-		<ref bean="actorPositionRightFeature" />
-		<ref bean="avgConstituentSeparatedByEventFeature" />
-		<ref bean="avgConstituentsPerMentionFeature" />
-		<ref bean="avgNormalizedWordDistanceFeature" />
-		<ref bean="avgWordDistanceFeature" />
-		<ref bean="byPhraseFeature" />
-		<ref bean="containActorsNumberFeature" />
-		<ref bean="genitiveFeature" />
-		<ref bean="hasActorFeature" />
-		<ref bean="locationPrepBeforeActorFeature" />
-		<ref bean="maxConstituentSeparatedByEventFeature" />
-		<ref bean="maxConstituentsPerMentionFeature" />
-		<ref bean="maxNormalizedWordDistanceFeature" />
-		<ref bean="maxWordDistanceFeature" />
-		<ref bean="minConstituentSeparatedByEventFeature" />
-		<ref bean="minConstituentsPerMentionFeature" />
-		<ref bean="minNormalizedWordDistanceFeature" />
-		<ref bean="minWordDistanceFeature" />
-		<ref bean="nombankArgumentFeature" />
-		<ref bean="nombankAvgArgumentFeature" />
-		<ref bean="nombankFallbackArgumentFeature" />
-		<ref bean="nombankFallbackAvgArgumentFeature" />
-		<ref bean="prepAfterActorFeature" />
-		<ref bean="prepBeforeActorFeature" />
-		<ref bean="prepInsidePhraseFeature" />
-		<ref bean="prepPhraseFeature" />
-		<ref bean="prepPhraseLocationFeature" />
-		<ref bean="propbankArgumentFeature" />
-		<ref bean="propbankAvgArgumentFeature" />
-		<ref bean="smartPropbankArgumentFeature" />
-		<ref bean="smartPropbankAvgArgumentFeature" />
-		<ref bean="smartPropbankFallbackArgumentFeature" />
-		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
-		 -->
-		
-		<!-- full feature set 
 		<ref bean="a1Feature" />
 		<ref bean="actorPositionLeftFeature" />
 		<ref bean="actorPositionRightFeature" />
 		<ref bean="appearKeywordLabelPartsInTextFeature" />
 		<ref bean="appearKeywordLabelsInSentenceFeature" />
 		<ref bean="appearKeywordDescriptionPartsInTextFeature" />
+		<ref bean="appearLabelsInTextFeature" />
+		<ref bean="appearSplitDescriptionsInTextFeature" />
+		<ref bean="appearSplitLabelsInTextFeature" />
+		<ref bean="hasDBpediaEntitiesFeature" />
+		<ref bean="keywordEntityMatchingKeywordFeature" />
+		<ref bean="keywordInTextContainsFeature" />
 		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="maxConstituentSeparatedByEventFeature" />
+		<ref bean="maxConstituentsPerMentionFeature" />
+		<ref bean="minWordDistanceFeature" />
 		<ref bean="needsA2Feature" />
 		<ref bean="nonzeroConstituentsPerMentionFeature" />
 		<ref bean="numberOfMentionsFeature" />
@@ -73,6 +34,37 @@
 		<ref bean="prepPhraseFeature" />
 		<ref bean="prepPhraseLocationFeature" />
 		<ref bean="propbankArgumentFeature" />
+		<ref bean="propbankAvgArgumentFeature" />
+		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
+		<ref bean="wordnetFeature" />
+		<ref bean="wordnetRefFeature" />
+		
+		<!-- full feature set 
+		<ref bean="a1Feature" />
+		<ref bean="actorPositionLeftFeature" />
+		<ref bean="actorPositionRightFeature" />
+		<ref bean="appearKeywordLabelPartsInTextFeature" />
+		<ref bean="appearKeywordLabelsInSentenceFeature" />
+		<ref bean="appearKeywordDescriptionPartsInTextFeature" />
+		<ref bean="appearLabelsInTextFeature" />
+		<ref bean="appearSplitDescriptionsInTextFeature" />
+		<ref bean="appearSplitLabelsInTextFeature" />
+		<ref bean="hasDBpediaEntitiesFeature" />
+		<ref bean="keywordEntityMatchingKeywordFeature" />
+		<ref bean="keywordInTextContainsFeature" />
+		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="maxConstituentSeparatedByEventFeature" />
+		<ref bean="maxConstituentsPerMentionFeature" />
+		<ref bean="minWordDistanceFeature" />
+		<ref bean="needsA2Feature" />
+		<ref bean="nonzeroConstituentsPerMentionFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="overlapFeature" />
+		<ref bean="posFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="prepPhraseLocationFeature" />
+		<ref bean="propbankArgumentFeature" />
+		<ref bean="propbankAvgArgumentFeature" />
 		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
 		<ref bean="wordnetFeature" />
 		<ref bean="wordnetRefFeature" />
@@ -217,33 +209,33 @@
 		
 		
 		
-		<ref bean="propbankArgumentFeature" />
-		<ref bean="nombankArgumentFeature" />
-		<ref bean="posFeature" />
-		<ref bean="numberOfMentionsFeature" />
-		<ref bean="hasActorFeature" />
-		<ref bean="prepPhraseFeature" />
-		<ref bean="byPhraseFeature" />
-		<ref bean="actorPositionLeftFeature" />
-		<ref bean="actorPositionRightFeature" />
-		<ref bean="propbankAvgArgumentFeature" />
-		<ref bean="nombankAvgArgumentFeature" />
-		<ref bean="smartPropbankArgumentFeature" />
-		<ref bean="smartPropbankAvgArgumentFeature" />
-		<ref bean="nombankFallbackArgumentFeature" />
-		<ref bean="nombankFallbackAvgArgumentFeature" />
-		<ref bean="smartPropbankFallbackArgumentFeature" />
-		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
-		<ref bean="propbankExistenceFeature" />
-		<ref bean="nombankExistenceFeature" />
 		<ref bean="a0Feature" />
 		<ref bean="a1Feature" />
 		<ref bean="a2Feature" />
+		<ref bean="actorPositionLeftFeature" />
+		<ref bean="actorPositionRightFeature" />
+		<ref bean="byPhraseFeature" />
+		<ref bean="hasActorFeature" />
 		<ref bean="hasPlaceFeature" />
 		<ref bean="needsA0Feature" />
 		<ref bean="needsA1Feature" />
 		<ref bean="needsA2Feature" />
 		<ref bean="needsLocFeature" />
+		<ref bean="nombankArgumentFeature" />
+		<ref bean="nombankAvgArgumentFeature" />
+		<ref bean="nombankExistenceFeature" />
+		<ref bean="nombankFallbackArgumentFeature" />
+		<ref bean="nombankFallbackAvgArgumentFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="posFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="propbankArgumentFeature" />
+		<ref bean="propbankAvgArgumentFeature" />
+		<ref bean="propbankExistenceFeature" />
+		<ref bean="smartPropbankArgumentFeature" />
+		<ref bean="smartPropbankAvgArgumentFeature" />
+		<ref bean="smartPropbankFallbackArgumentFeature" />
+		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
 		-->
 		
 		<!-- for OVERLAPPING_CONSTITUENTS
@@ -255,18 +247,18 @@
 		<ref bean="numberOfMentionsFeature" />
 		
 		
-		<ref bean="numberOfMentionsFeature" />
-		<ref bean="numberOfFramesFeature" />
-		<ref bean="numberOfLinksFeature" />
-		<ref bean="eventLabelFeature" />
 		<ref bean="avgConstituentsPerMentionFeature" />
+		<ref bean="eventLabelFeature" />
 		<ref bean="maxConstituentsPerMentionFeature" />
-		<ref bean="minConstituentsPerMentionFeature" />
-		<ref bean="zeroConstituentsPerMentionFeature" />
-		<ref bean="nonzeroConstituentsPerMentionFeature" />
-		<ref bean="mentionTextComparisonFeature" />
 		<ref bean="mentionDistanceComparisonFeature" />
 		<ref bean="mentionSentenceComparisonFeature" />
+		<ref bean="mentionTextComparisonFeature" />
+		<ref bean="minConstituentsPerMentionFeature" />
+		<ref bean="nonzeroConstituentsPerMentionFeature" />
+		<ref bean="numberOfFramesFeature" />
+		<ref bean="numberOfLinksFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="zeroConstituentsPerMentionFeature" />
 		 -->
 		
 		<!-- for BROKEN_CONSTITUENT
@@ -289,6 +281,13 @@
 		 -->
 		
 		<!-- for WRONG_PARSE
+		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="maxConstituentSeparatedByEventFeature" />
+		<ref bean="maxConstituentsPerMentionFeature" />
+		<ref bean="minWordDistanceFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="propbankAvgArgumentFeature" />
+		
 		
 		<ref bean="actorPositionLeftFeature" />
 		<ref bean="actorPositionRightFeature" />
@@ -328,33 +327,42 @@
 		
 		<!-- for OTHER_ENTITY_CATEGORIZATION
 		<ref bean="appearLabelsInTextFeature" />
+		<ref bean="appearSplitDescriptionsInTextFeature" />
 		<ref bean="appearSplitLabelsInTextFeature" />
+		
+		
 		<ref bean="appearInheritedLabelsInTextFeature" />
-		<ref bean="appearSplitInheritedLabelsInTextFeature" />
+		<ref bean="appearLabelsInTextFeature" />
 		<ref bean="appearSplitDescriptionsInTextFeature" />
 		<ref bean="appearSplitInheritedDescriptionsInTextFeature" />
+		<ref bean="appearSplitInheritedLabelsInTextFeature" />
+		<ref bean="appearSplitLabelsInTextFeature" />
 		<ref bean="areActorsPlacesFeature" />
 		<ref bean="arePlacesAgentsFeature" />
-		
 		 -->
 		
 		<!-- for KEYWORD_REGEX_MISMATCH
-		<ref bean="hasKeywordAsLabelFeature" />
-		<ref bean="keywordInTextFeature" />
-		<ref bean="keywordStemInTextFeature" />
-		<ref bean="keywordOrStemInTextFeature" />
-		<ref bean="keywordInSentenceFeature" />
-		<ref bean="keywordStemInSentenceFeature" />
-		<ref bean="keywordOrStemInSentenceFeature" />
-		<ref bean="keywordInTextContainsFeature" />
-		<ref bean="keywordStemInTextContainsFeature" />
-		<ref bean="keywordOrStemInTextContainsFeature" />
-		<ref bean="keywordInSentenceContainsFeature" />
-		<ref bean="keywordStemInSentenceContainsFeature" />
-		<ref bean="keywordOrStemInSentenceContainsFeature" />
 		<ref bean="hasDBpediaEntitiesFeature" />
 		<ref bean="keywordEntityMatchingKeywordFeature" />
+		<ref bean="keywordInTextContainsFeature" />
+		
+		
+		<ref bean="hasDBpediaEntitiesFeature" />
+		<ref bean="hasKeywordAsLabelFeature" />
 		<ref bean="keywordEntityDescriptionMatchingKeywordFeature" />
+		<ref bean="keywordEntityMatchingKeywordFeature" />
+		<ref bean="keywordInSentenceContainsFeature" />
+		<ref bean="keywordInSentenceFeature" />
+		<ref bean="keywordInTextContainsFeature" />
+		<ref bean="keywordInTextFeature" />
+		<ref bean="keywordOrStemInSentenceContainsFeature" />
+		<ref bean="keywordOrStemInSentenceFeature" />
+		<ref bean="keywordOrStemInTextContainsFeature" />
+		<ref bean="keywordOrStemInTextFeature" />
+		<ref bean="keywordStemInSentenceContainsFeature" />
+		<ref bean="keywordStemInSentenceFeature" />
+		<ref bean="keywordStemInTextContainsFeature" />
+		<ref bean="keywordStemInTextFeature" />
 		
 		 -->
 		

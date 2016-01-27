@@ -11,8 +11,8 @@
 
 	<context:property-placeholder properties-ref="wekaProperties" />
 	<util:properties id="wekaProperties">
-		<prop key="toSelect">7</prop>
-		<prop key="numFeatures">34</prop>
+		<prop key="toSelect">4</prop>
+		<prop key="numFeatures">8</prop>
 	</util:properties>
 
 	<!-- final classifier filters -->
@@ -47,7 +47,17 @@
 	</bean>
 	
 	<bean id="filter9" class="weka.filters.unsupervised.attribute.Remove">
-		<property name="attributeIndices" value="35" /> 
+		<property name="attributeIndices" value="11,12,13,19,27,30,35" /> 
+		<property name="invertSelection" value="true" />
+	</bean>
+	
+	<bean id="filter10" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="2,3,6,9" /> 
+		<property name="invertSelection" value="true" />
+	</bean>
+	
+	<bean id="filter13" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="1,4,7,17" />
 		<property name="invertSelection" value="true" />
 	</bean>
 	
@@ -56,12 +66,13 @@
 	<bean id="classifier2" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices" value="65,68,73,81,82,87,88,89,91" />
+				<property name="attributeIndices" value="21,27,28,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numExecutionSlots" value="10" />
 			</bean>
 		</property>
 	</bean>
@@ -69,13 +80,14 @@
 	<bean id="classifier3" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices" value="7,8,9,10,11,30,91" />
+				<property name="attributeIndices" value="4,5,6,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
 				<property name="numTrees" value="20" />
+				<property name="numExecutionSlots" value="10" />
 			</bean>
 		</property>
 	</bean>
@@ -83,16 +95,14 @@
 	<bean id="classifier4" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices"
-					value="1,2,3,4,5,25,29,32,59,60,61,62,63,64,65,66,67,71,73,77,79,80,81,83,84,85,86,91" />
+				<property name="attributeIndices" value="1,17,21,22,26,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
 		<property name="classifier">
-			<bean class="weka.classifiers.functions.RBFClassifier">
-				<property name="poolSize" value="10" />
-				<property name="numThreads" value="10" />
-				<property name="numFunctions" value="16" />
+			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numTrees" value="20" />
+				<property name="numExecutionSlots" value="10" />
 			</bean>
 		</property>
 	</bean>
@@ -100,7 +110,7 @@
 	<bean id="classifier5" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices" value="72,91" />
+				<property name="attributeIndices" value="20,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
@@ -113,7 +123,7 @@
 	<bean id="classifier6" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices" value="22,27,49,52,53,54,56,69,70,71,90,91" />
+				<property name="attributeIndices" value="18,19,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
@@ -126,8 +136,7 @@
 	<bean id="classifier7" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices"
-					value="1,2,3,4,5,25,29,32,59,60,61,62,63,64,65,66,67,71,73,77,79,80,81,83,84,85,86,91" />
+				<property name="attributeIndices" value="2,3,21,24,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
@@ -140,7 +149,7 @@
 	<bean id="classifier8" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices" value="17,18,19,20,26,28,47,74,75,76,77,78,91" />
+				<property name="attributeIndices" value="13,23,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
@@ -152,12 +161,13 @@
 	<bean id="classifier9" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices" value="4,5,21,22,23,24,25,26,28,29,47,48,49,51,55,56,57,58,63,64,66,67,74,75,76,77,78,79,80,83,84,85,86,91" />
+				<property name="attributeIndices" value="13,14,15,16,22,25,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numExecutionSlots" value="10" />
 			</bean>
 		</property>
 	</bean>
@@ -165,12 +175,16 @@
 	<bean id="classifier10" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices" value="6,12,13,14,15,16,18,19,91" />
+				<property name="attributeIndices" value="7,8,9,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
 		<property name="classifier">
-			<bean class="weka.classifiers.trees.RandomForest">
+			<bean class="weka.classifiers.meta.AdaBoostM1">
+				<property name="useResampling" value="true" />
+				<property name="classifier">
+					<bean class="weka.classifiers.trees.J48" />
+				</property>
 			</bean>
 		</property>
 	</bean>
@@ -178,12 +192,12 @@
 	<bean id="classifier13" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
 			<bean class="weka.filters.unsupervised.attribute.Remove">
-				<property name="attributeIndices" value="30,31,33,34,35,36,37,38,39,40,41,42,43,44,45,46,91" />
+				<property name="attributeIndices" value="10,11,12,29" />
 				<property name="invertSelection" value="true" />
 			</bean>
 		</property>
 		<property name="classifier">
-			<bean class="weka.classifiers.trees.RandomForest">
+			<bean class="weka.classifiers.trees.J48">
 			</bean>
 		</property>
 	</bean>
@@ -355,7 +369,7 @@
 		<property name="options">
 			<array>
 				<value>-cost-matrix</value>
-				<value>"[0.0 4.0; 1.0 0.0]"</value>	<!-- the cost matrix (row-wise): [TP FN; FP TN] -->
+				<value>"[0.0 6.0; 1.0 0.0]"</value>	<!-- the cost matrix (row-wise): [TP FN; FP TN] -->
 			</array>
 		</property>
 	</bean>
@@ -458,6 +472,7 @@
 		<property name="generateRanking" value="false" />
 		<property name="numToSelect" value="${toSelect}" />
 		<property name="searchBackwards" value="false" />
+		<property name="numExecutionSlots" value="10" />
 	</bean>
 
 	<bean id="wrapperNaiveBayes" class="weka.attributeSelection.AttributeSelection">
@@ -1162,7 +1177,9 @@
 	<bean id="randomForest" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="balancingFilter" />
 		<property name="classifier">
-			<bean class="weka.classifiers.trees.RandomForest" />
+			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numExecutionSlots" value="10" />
+			</bean>
 		</property>
 	</bean>
 
@@ -1171,6 +1188,7 @@
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
 				<property name="numTrees" value="20" />
+				<property name="numExecutionSlots" value="10" />
 			</bean>
 		</property>
 	</bean>
