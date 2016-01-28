@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -16,6 +17,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.UsabilityRatingReason;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.attributeSelection.AttributeSelection;
@@ -27,7 +30,6 @@ import weka.classifiers.meta.MetaCost;
 import weka.classifiers.meta.Vote;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.Utils;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
 import weka.filters.supervised.instance.Resample;
@@ -82,16 +84,24 @@ public class FilteringBenchmark {
 
 	private boolean outputMisclassified;
 
+	private boolean outputMisclassifiedReasons;
+	
 	private boolean useCostSensitiveWrapper;
 
+	private boolean useIndividualCostMatrices;
+	
 	private boolean useBaggingWrapper;
 
+	private boolean storeFilteringResults;
+	
 	private String outputFileName;
 
 	private int numberOfEnsembleMembers;
 
 	private int positiveClassIdx;
 
+	private Map<String, Map<String, GroundTruth>> benchmark;
+	
 	// region setters
 	public void setAnalysisFilter(Filter analysisFilter) {
 		this.analysisFilter = analysisFilter;
@@ -166,10 +176,22 @@ public class FilteringBenchmark {
 		this.outputMisclassified = outputMisclassified;
 	}
 
+	public void setOutputMisclassifiedReasons(boolean outputMisclassifiedReasons) {
+		this.outputMisclassifiedReasons = outputMisclassifiedReasons;
+	}
+	
 	public void setUseCostSensitiveWrapper(boolean useCostSensitiveWrapper) {
 		this.useCostSensitiveWrapper = useCostSensitiveWrapper;
 	}
 
+	public void setUseIndividualCostMatrices(boolean useIndividualCostMatrices) {
+		this.useIndividualCostMatrices = useIndividualCostMatrices;
+	}
+
+	public void setStoreFilteringResults(boolean storeFilteringResults) {
+		this.storeFilteringResults = storeFilteringResults;
+	}
+	
 	public void setUseBaggingWrapper(boolean useBaggingWrapper) {
 		this.useBaggingWrapper = useBaggingWrapper;
 	}
@@ -184,11 +206,24 @@ public class FilteringBenchmark {
 
 	// endregion
 
-	public FilteringBenchmark(String instancesFileName) {
+	public FilteringBenchmark(String instancesFileName, String configFileName) {
 		try {
 			XRFFLoader loader = new XRFFLoader();
 			loader.setSource(new File(instancesFileName));
 			this.originalDataSet = loader.getDataSet();
+			
+			Set<String> fileNames = Util.readBenchmarkConfigFile(configFileName).keySet();
+			this.benchmark = new HashMap<String, Map<String, GroundTruth>>();
+
+			for (String fileName : fileNames) {
+				Map<BenchmarkEvent, GroundTruth> fileContent = Util.readBenchmarkQueryFromFile(fileName);
+				Map<String, GroundTruth> internalMap = new HashMap<String, GroundTruth>();
+				for (Map.Entry<BenchmarkEvent, GroundTruth> entry : fileContent.entrySet()) {
+					internalMap.put(entry.getKey().getEventURI(), entry.getValue());
+				}
+				this.benchmark.put(fileName, internalMap);
+			}
+			
 		} catch (IOException e) {
 			if (log.isErrorEnabled())
 				log.error("Can't read data set");
@@ -225,12 +260,22 @@ public class FilteringBenchmark {
 		List<String> columnNames = getColumnNames();
 
 		Map<String, Map<String, Double>> overallResultMap = new HashMap<String, Map<String, Double>>();
-
+		
+		Map<String, Map<String, GroundTruth>> outputMap = new HashMap<String, Map<String, GroundTruth>>();
+		for (String fileName : this.benchmark.keySet()) {
+			outputMap.put(fileName, new HashMap<String, GroundTruth>(this.benchmark.get(fileName))); //copy benchmark
+		}
+		
 		for (Map.Entry<String, Classifier> entry : this.classifiers.entrySet()) {
 			try {
 				String classifierName = entry.getKey();
 				Classifier classifier = entry.getValue();
 				Evaluation eval = new Evaluation(classificationDataSet);
+				
+				Map<UsabilityRatingReason, Integer> reasonMissclassification = new HashMap<UsabilityRatingReason, Integer>();
+				for (UsabilityRatingReason r : UsabilityRatingReason.values())
+					reasonMissclassification.put(r, 0);
+			
 				// do crossvalidation manually in order to output misclassified
 				// examples
 				Random rand = new Random(seed);
@@ -262,6 +307,28 @@ public class FilteringBenchmark {
 					if (outputMisclassified && log.isInfoEnabled()) {
 						outputMisclassifiedInstances(test, c);
 					}
+					
+					if (storeFilteringResults) {
+						for (Instance instance : test) {
+							if (c.classifyInstance(instance) != this.positiveClassIdx) {
+								// instance gets removed by classifier
+								String fileName = instance.stringValue(test.attribute(Util.ATTRIBUTE_FILE));
+								String eventURI = instance.stringValue(test.attribute(Util.ATTRIBUTE_URI));
+								outputMap.get(fileName).remove(eventURI); // remove from output map
+							}
+						}
+					}
+					
+					if (outputMisclassifiedReasons) {
+						for (Instance instance : test) {
+							if (instance.classValue() != this.positiveClassIdx && c.classifyInstance(instance) == this.positiveClassIdx) { //FP!
+								for (UsabilityRatingReason r : UsabilityRatingReason.values()) {
+									if (instance.value(train.attribute(Util.ATTRIBUTE_REASON + r.toString())) == this.positiveClassIdx) 
+										reasonMissclassification.put(r, reasonMissclassification.get(r) + 1);
+								}
+							}
+						}
+					}
 
 				}
 
@@ -274,6 +341,15 @@ public class FilteringBenchmark {
 
 				overallResultMap.put(classifierName, classifierMap);
 
+				if (outputMisclassifiedReasons && log.isInfoEnabled()) {
+					for (UsabilityRatingReason r : UsabilityRatingReason.values())
+						log.info(String.format("%s: %d", r.toString(), reasonMissclassification.get(r)));
+				}
+				
+				if (storeFilteringResults) {
+					Util.writeBenchmark(outputMap, "out"); // write into "out" directory
+				}
+				
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
 					log.error("Can't cross-validate classifier");
@@ -304,16 +380,9 @@ public class FilteringBenchmark {
 			Map<UsabilityRatingReason, Integer> falsePositives = new HashMap<UsabilityRatingReason, Integer>();
 			for (UsabilityRatingReason r : this.reasonClassifiers.keySet())
 				falsePositives.put(r, 0);
-				
-				
 			
 			List<String> columnNames = getColumnNames();
 			Map<String, Map<String, Double>> overallResultMap = new HashMap<String, Map<String, Double>>();
-			
-			Evaluation evalMin = new Evaluation(originalDataSet);
-			Evaluation evalAvg = new Evaluation(originalDataSet);
-			Evaluation evalProd = new Evaluation(originalDataSet);
-			Evaluation evalMax = new Evaluation(originalDataSet);
 			
 			for (int i = 0; i < numFolds; i++) {
 				Instances train = randData.trainCV(numFolds, i);
@@ -335,15 +404,6 @@ public class FilteringBenchmark {
 					}
 				}
 				
-				Vote voteMin = new Vote();
-				voteMin.setOptions(Utils.splitOptions("-R MIN")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
-				Vote voteAvg = new Vote();
-				voteAvg.setOptions(Utils.splitOptions("-R AVG")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
-				Vote voteProd = new Vote();
-				voteProd.setOptions(Utils.splitOptions("-R PROD")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
-				Vote voteMax = new Vote();
-				voteMax.setOptions(Utils.splitOptions("-R MAX")); //-R <AVG|PROD|MAJ|MIN|MAX|MED>
-				
 				List<Classifier> hardFilteringClassifiers = new ArrayList<Classifier>();
 				
 				// now train each classifier with its specified filter
@@ -352,30 +412,32 @@ public class FilteringBenchmark {
 					Classifier c;
 					if (this.useCostSensitiveWrapper) {
 						MetaCost outer = (MetaCost) AbstractClassifier.makeCopy(this.costSensitiveWrapper);
-						String matrix;
-						switch (r) {
-						case MISSING_SUBJECT:
-						case BROKEN_CONSTITUENT:
-						case WRONG_PARSE:
-							matrix = "[0.0 2.0; 1.0 0.0]";
-							break;
-						case NO_EVENT:
-						case KEYWORD_ENTITY_CATEGORIZATION:
-						case MISSING_OBJECT:
-						case OTHER_ENTITY_CATEGORIZATION:
-							matrix = "[0.0 4.0; 1.0 0.0]";
-							break;
-						case OVERLAPPING_CONSTITUENTS:
-						case EVENT_MERGE:
-						case KEYWORD_REGEX_MISMATCH:
-							matrix = "[0.0 1.0; 1.0 0.0]";
-							break;
-						default:
-							matrix = "[0.0 1.0; 1.0 0.0]";
-							break;
+						if (this.useIndividualCostMatrices) {
+							String matrix;
+							switch (r) {
+							case MISSING_SUBJECT:
+							case BROKEN_CONSTITUENT:
+							case WRONG_PARSE:
+								matrix = "[0.0 2.0; 1.0 0.0]";
+								break;
+							case NO_EVENT:
+							case KEYWORD_ENTITY_CATEGORIZATION:
+							case MISSING_OBJECT:
+							case OTHER_ENTITY_CATEGORIZATION:
+								matrix = "[0.0 4.0; 1.0 0.0]";
+								break;
+							case OVERLAPPING_CONSTITUENTS:
+							case EVENT_MERGE:
+							case KEYWORD_REGEX_MISMATCH:
+								matrix = "[0.0 1.0; 1.0 0.0]";
+								break;
+							default:
+								matrix = "[0.0 1.0; 1.0 0.0]";
+								break;
+							}
+							String[] array = {"-cost-matrix", matrix};
+							outer.setOptions(array);
 						}
-						String[] array = {"-cost-matrix", matrix};
-						outer.setOptions(array);
 						Classifier inner = AbstractClassifier.makeCopy(entry.getValue());
 						outer.setClassifier(inner);
 						c = outer;
@@ -386,31 +448,20 @@ public class FilteringBenchmark {
 					this.reasonFilter.setInputFormat(classifierTrain);
 					Instances filtered = Filter.useFilter(classifierTrain, this.reasonFilter);
 					c.buildClassifier(filtered);
-					voteMin.addPreBuiltClassifier(c);
-					voteAvg.addPreBuiltClassifier(c);
-					voteProd.addPreBuiltClassifier(c);
-					voteMax.addPreBuiltClassifier(c);
 					hardFilteringClassifiers.add(c);
 				}
 				
-				// now test the aggregation-stuff on the test set w/ the Vote classifier
-				evalMin.evaluateModel(voteMin, test);
-				evalAvg.evaluateModel(voteAvg, test);
-				evalProd.evaluateModel(voteProd, test);
-				evalMax.evaluateModel(voteMax, test);
 				
 				// and manually test w/o the voting stuff but with a hard AND
-				for (Instance instance : originalTest) {
+				for (int j = 0; j < test.numInstances(); j++) { //Instance instance : originalTest) {
+					Instance instance = test.get(j);
+					Instance rawInstance = originalTest.get(j);
+					
 					boolean isPositiveExample = (instance.classValue() == this.positiveClassIdx);
 					boolean isClassifiedPositive = true;
-					Instances dummy = new Instances(originalTest, 0);
-					dummy.add(instance);
-					reasonFilter.setInputFormat(dummy);
-					dummy = Filter.useFilter(dummy, reasonFilter);
-					Instance filteredInstance = dummy.firstInstance();
 					
 					for (Classifier c : hardFilteringClassifiers) {
-						double prediction = c.classifyInstance(filteredInstance);
+						double prediction = c.classifyInstance(instance);
 						isClassifiedPositive = isClassifiedPositive && (prediction == this.positiveClassIdx);
 						if (!isClassifiedPositive)
 							break;
@@ -424,9 +475,9 @@ public class FilteringBenchmark {
 					} else {
 						if (isClassifiedPositive) {
 							fp++;
-							if (outputMisclassified) {
+							if (outputMisclassifiedReasons) {
 								for (UsabilityRatingReason r : falsePositives.keySet()) {
-									if (instance.value(train.attribute(Util.ATTRIBUTE_REASON + r.toString())) == this.positiveClassIdx)
+									if (rawInstance.value(train.attribute(Util.ATTRIBUTE_REASON + r.toString())) == this.positiveClassIdx)
 										falsePositives.put(r, falsePositives.get(r) + 1);
 								}
 							}
@@ -438,26 +489,15 @@ public class FilteringBenchmark {
 				
 			}
 			
-			Map<String, Double> minMap = getClassifierMap(evalMin);
-			Map<String, Double> avgMap = getClassifierMap(evalAvg);
-			Map<String, Double> prodMap = getClassifierMap(evalProd);
-			Map<String, Double> maxMap = getClassifierMap(evalMax);
 			Map<String, Double> filterMap = getClassifierMap(tp, fn, fp, tn);
 			
-			overallResultMap.put("MIN", minMap);
-			overallResultMap.put("AVG", avgMap);
-			overallResultMap.put("PROD", prodMap);
-			overallResultMap.put("MAX", maxMap);
 			overallResultMap.put("hardFilter", filterMap);
 			
 			if (log.isInfoEnabled()) {
-				logEvalResults(evalMin);
-				logEvalResults(evalAvg);
-				logEvalResults(evalProd);
-				logEvalResults(evalMax);
+				log.info("FILTER");
 				logEvalResults(tp, fn, fp, tn, filterMap);
 				
-				if (outputMisclassified) {
+				if (outputMisclassifiedReasons) {
 					log.info(" ");
 					for (Map.Entry<UsabilityRatingReason, Integer> entry : falsePositives.entrySet())
 						log.info(String.format("%s: %d", entry.getKey().toString(), entry.getValue()));

@@ -413,6 +413,47 @@ public class Util {
 		return result;
 	}
 	
+	/**
+	 * Writes the given benchmark into the given folder.
+	 */
+	public static void writeBenchmark(Map<String, Map<String, GroundTruth>> benchmark, String folderName) {
+		
+		try {
+			for (Map.Entry<String, Map<String, GroundTruth>> entry : benchmark.entrySet()) {
+				String fileName = folderName + "/" + entry.getKey().substring(entry.getKey().lastIndexOf('/'));
+				
+				CsvWriter out = new CsvWriter(new FileWriter(fileName, false), ';');
+
+				out.write(Util.COLUMN_NAME_URI);
+				out.write(Util.COLUMN_NAME_USABILITY_RATING);
+				out.write(Util.COLUMN_NAME_RELEVANCE_RANK);
+				for (int i = 1; i <= Util.MAX_NUMBER_OF_REASONS; i++)
+					out.write(Util.COLUMN_NAME_REASON + i);
+				out.endRecord();
+				
+				for (Map.Entry<String, GroundTruth> innerEntry : entry.getValue().entrySet()) {
+					
+					String eventURI = innerEntry.getKey();
+					GroundTruth gt = innerEntry.getValue();
+					out.write(eventURI);					
+					out.write(Double.toString(gt.getUsabilityRating()));
+					out.write(Integer.toString(gt.getRelevanceRank()));
+					for (UsabilityRatingReason r : gt.getReasons())
+						out.write(r.toNumberString());
+					
+					out.endRecord();
+				}
+				
+				out.close();
+			}
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("could not write benchmark");
+			if (log.isDebugEnabled())
+				log.debug("cannnot write file", e);
+		}
+	}
+	
 	// endregion
 
 	// region other stuff

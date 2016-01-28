@@ -1,7 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.tools;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.LogManager;
 
@@ -15,6 +14,7 @@ import weka.classifiers.Classifier;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.XRFFLoader;
+import weka.filters.Filter;
 
 /**
  * Trains the given classifiers on the given training data set and stores them in the respective files.
@@ -32,6 +32,8 @@ public class ClassifierTrainer {
 	
 	private Instances dataSet;
 	
+	private Filter filter;
+	
 	public void setClassifiers(List<Classifier> classifiers) {
 		this.classifiers = classifiers;
 	}
@@ -40,12 +42,18 @@ public class ClassifierTrainer {
 		this.fileNames = fileNames;
 	}
 
+	public void setFilter(Filter filter) {
+		this.filter = filter;
+	}
+	
 	public ClassifierTrainer(String dataFileName) {
 		try {
 			XRFFLoader loader = new XRFFLoader();
 			loader.setSource(new File(dataFileName));
-			this.dataSet = loader.getDataSet();
-		} catch (IOException e) {
+			Instances data = loader.getDataSet();
+			this.filter.setInputFormat(data);
+			this.dataSet = Filter.useFilter(data, filter);
+		} catch (Exception e) {
 			if (log.isErrorEnabled())
 				log.error("Can't read data set");
 			if (log.isDebugEnabled())

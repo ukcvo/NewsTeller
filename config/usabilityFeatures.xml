@@ -38,6 +38,58 @@
 		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
 		<ref bean="wordnetFeature" />
 		<ref bean="wordnetRefFeature" />
+			
+		<!-- core semantics
+		<ref bean="appearKeywordDescriptionPartsInTextFeature" />
+		<ref bean="appearKeywordLabelPartsInTextFeature" />
+		<ref bean="appearKeywordLabelsInSentenceFeature" />
+		<ref bean="hasDBpediaEntitiesFeature" />
+		<ref bean="keywordEntityMatchingKeywordFeature" />
+		<ref bean="keywordInTextContainsFeature" />
+		<ref bean="nonzeroConstituentsPerMentionFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="posFeature" />
+		<ref bean="wordnetFeature" />
+		<ref bean="wordnetRefFeature" />
+		
+		 -->
+		
+		<!-- semantics
+		<ref bean="appearKeywordDescriptionPartsInTextFeature" />
+		<ref bean="appearKeywordLabelPartsInTextFeature" />
+		<ref bean="appearKeywordLabelsInSentenceFeature" />
+		<ref bean="appearLabelsInTextFeature" />
+		<ref bean="appearSplitDescriptionsInTextFeature" />
+		<ref bean="appearSplitLabelsInTextFeature" />
+		<ref bean="hasDBpediaEntitiesFeature" />
+		<ref bean="keywordEntityMatchingKeywordFeature" />
+		<ref bean="keywordInTextContainsFeature" />
+		<ref bean="nonzeroConstituentsPerMentionFeature" />
+		<ref bean="numberOfMentionsFeature" />
+		<ref bean="posFeature" />
+		<ref bean="wordnetFeature" />
+		<ref bean="wordnetRefFeature" />
+		
+		 -->
+		
+		<!-- syntax
+		<ref bean="a1Feature" />
+		<ref bean="actorPositionLeftFeature" />
+		<ref bean="actorPositionRightFeature" />
+		<ref bean="locationPrepBeforeActorFeature" />
+		<ref bean="maxConstituentSeparatedByEventFeature" />
+		<ref bean="maxConstituentsPerMentionFeature" />
+		<ref bean="minWordDistanceFeature" />
+		<ref bean="needsA2Feature" />
+		<ref bean="overlapFeature" />
+		<ref bean="posFeature" />
+		<ref bean="prepPhraseFeature" />
+		<ref bean="prepPhraseLocationFeature" />
+		<ref bean="propbankArgumentFeature" />
+		<ref bean="propbankAvgArgumentFeature" />
+		<ref bean="smartPropbankFallbackAvgArgumentFeature" />
+		
+		 -->
 		
 		<!-- full feature set 
 		<ref bean="a1Feature" />

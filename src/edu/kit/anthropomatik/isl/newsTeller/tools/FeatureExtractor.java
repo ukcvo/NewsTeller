@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
@@ -31,7 +32,10 @@ import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.XRFFLoader;
 import weka.core.converters.XRFFSaver;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 
 /**
  * Extract features for all the benchmark events and store them in WEKA format for classifier training.
@@ -49,6 +53,8 @@ public class FeatureExtractor {
 	
 	private List<UsabilityFeature> features;
 	
+	private String inputFileName;
+	
 	private String outputFileName;
 	
 	private KnowledgeStoreAdapter ksAdapter;
@@ -59,6 +65,8 @@ public class FeatureExtractor {
 	
 	private boolean doKeepOnlyListedReasons;
 	
+	private boolean doFiltering;
+	
 	private Set<UsabilityRatingReason> reasonsToKeep;
 	
 	public void setFeatures(List<UsabilityFeature> features) {
@@ -67,6 +75,10 @@ public class FeatureExtractor {
 	
 	public void setOutputFileName(String outputFileName) {
 		this.outputFileName = outputFileName;
+	}
+	
+	public void setInputFileName(String inputFileName) {
+		this.inputFileName = inputFileName;
 	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
@@ -83,6 +95,10 @@ public class FeatureExtractor {
 	
 	public void setDoKeepOnlyListedReasons(boolean doKeepOnlyListedReasons) {
 		this.doKeepOnlyListedReasons = doKeepOnlyListedReasons;
+	}
+	
+	public void setDoFiltering(boolean doFiltering) {
+		this.doFiltering = doFiltering;
 	}
 	
 	public void setReasonsToKeep(Set<Integer> reasonsToKeep) {
@@ -130,6 +146,21 @@ public class FeatureExtractor {
 		Instances dataSet = new Instances("usabilityTest", attributes, numberOfExpectedExamples);
 		dataSet.setClass(dataSet.attribute(Util.ATTRIBUTE_USABLE));
 		return dataSet;
+	}
+	
+	private Instances loadDataSet(String fileName) {
+		Instances result = null;
+		try {
+			XRFFLoader loader = new XRFFLoader();
+			loader.setFile(new File(inputFileName));
+			result = loader.getDataSet();
+		} catch (IOException e) {
+			if (log.isErrorEnabled())
+				log.error("Could not load features from file");
+			if (log.isDebugEnabled())
+				log.debug("I/O exception", e);
+		}
+		return result;
 	}
 	
 	private void writeDataSet(Instances dataSet) {
@@ -200,10 +231,9 @@ public class FeatureExtractor {
 
 		
 	}
-	
-	public void run() {
-		this.ksAdapter.openConnection();
-		
+
+	// region createFromScratch
+	private void createFromScratch() {
 		Instances dataSet = createDataSetSkeleton();
 		
 		ExecutorService threadPool = Executors.newFixedThreadPool(ksAdapter.getMaxNumberOfConnections());
@@ -268,6 +298,74 @@ public class FeatureExtractor {
 			log.info("collected all results");
 		
 		writeDataSet(dataSet);
+	}
+	// endregion
+	
+	private void filterExistingDataSet() {
+		
+		try {
+			Instances dataSet = loadDataSet(this.inputFileName);
+			
+			// first filter instances
+			if (this.doKeepOnlyListedReasons) {
+				Instances filtered = new Instances(dataSet, 0);
+				for (Instance instance : dataSet) {
+					boolean shouldKeep = false;
+					for (UsabilityRatingReason r : this.reasonsToKeep) {
+						if (instance.value(dataSet.attribute(Util.ATTRIBUTE_REASON + r.toString())) 
+								== dataSet.classAttribute().indexOfValue(Util.LABEL_TRUE)) {
+							shouldKeep = true;
+							break;
+						}
+					}
+					if (shouldKeep)
+						filtered.add(instance);
+				}
+				dataSet = filtered;
+			}
+			
+			// then filter attributes
+			List<Integer> attributesToKeep = new ArrayList<Integer>();
+			
+			for (UsabilityFeature f : this.features) {
+				attributesToKeep.add(dataSet.attribute(f.getName()).index() + 1);
+			}
+			attributesToKeep.add(dataSet.classIndex() + 1); // always keep class obviously
+			
+			if (this.doAddEventInformation) {
+				attributesToKeep.add(dataSet.attribute(Util.ATTRIBUTE_FILE).index() + 1);
+				attributesToKeep.add(dataSet.attribute(Util.ATTRIBUTE_URI).index() + 1);
+			}
+			
+			if (this.doAddReasonInformation) {
+				for (UsabilityRatingReason r : UsabilityRatingReason.values())
+					attributesToKeep.add(dataSet.attribute(Util.ATTRIBUTE_REASON + r.toString()).index() + 1);
+			}
+			
+			Remove removeFilter = new Remove();
+			removeFilter.setAttributeIndices(StringUtils.collectionToCommaDelimitedString(attributesToKeep));
+			removeFilter.setInvertSelection(true);
+			removeFilter.setInputFormat(dataSet);
+			dataSet = Filter.useFilter(dataSet, removeFilter);
+			
+			writeDataSet(dataSet);
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("filtering somehow failed!");
+			if (log.isDebugEnabled())
+				log.debug("filtering exception", e);
+		}
+		
+	}
+	
+	public void run() {
+		this.ksAdapter.openConnection();
+		
+		if (this.doFiltering)
+			filterExistingDataSet();
+		else
+			createFromScratch();
 				
 		this.ksAdapter.closeConnection();
 	}

@@ -184,6 +184,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.benchmark.FilteringBenchmark">
 		<constructor-arg name="instancesFileName"
 			value="resources/benchmark/dataSet.xrff" />
+			<constructor-arg name="configFileName" value="resources/benchmark/Scope 0.csv" />
 
 		<property name="analysisFilter" ref="dummyFilter" />
 
@@ -223,18 +224,37 @@
 			</list>
 		</property>
 
-		<property name="classifierFilter" ref="reasonFilter" />
+		<property name="classifierFilter" ref="dummyFilter" />
 
 		<property name="classifiers">
 			<map>
 				
+				<entry key="optimized" value-ref="optimized" />
+				<!-- 
+				<entry key="feat06" value-ref="randomForestB" />
+				<entry key="feat10" value-ref="randomForestC" />
+				<entry key="feat15" value-ref="randomForestD" />
+				<entry key="feat20" value-ref="randomForestE" />
+				 -->
+				<!-- 
+				<entry key="adaBoostTree" value-ref="adaBoost3" />
+				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
+				<entry key="decisionTree" value-ref="decisionTree" />
+				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
+				<entry key="decisionTreeUnpruned" value-ref="decisionTree3" />
+				<entry key="naiveBayes" value-ref="naiveBayes" />
 				<entry key="randomForest100" value-ref="randomForest" />
+				<entry key="randomForest20" value-ref="randomForest2" />
+				<entry key="ripper" value-ref="ripper" />
+				
+				 -->
 				
 				<!-- 
 				<entry key="randomForest20" value-ref="randomForest2" />
 				<entry key="oneR" value-ref="oneRClassifier" />
 				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
 				<entry key="decisionTree" value-ref="decisionTree" />
+				<entry key="randomForest100" value-ref="randomForest" />
 				
 				 -->
 				
@@ -450,31 +470,38 @@
 			<map>
 				<entry key="2" value-ref="classifier2" />
 				<entry key="3" value-ref="classifier3" />
+				<entry key="13" value-ref="classifier13" />
+				<!-- 
 				<entry key="4" value-ref="classifier4" />
 				<entry key="5" value-ref="classifier5" />
-				<entry key="6" value-ref="classifier6" />
 				<entry key="7" value-ref="classifier7" />
 				<entry key="8" value-ref="classifier8" />
 				<entry key="9" value-ref="classifier9" />
+				
+				<entry key="6" value-ref="classifier6" />
 				<entry key="10" value-ref="classifier10" />
-				<entry key="13" value-ref="classifier13" />
+				
+				 -->
 			</map>
 		</property>
  
  		<property name="reasonFilter" ref="reasonFilter" />
  
 		
-		<property name="outputMisclassified" value="true" />
+		<property name="outputMisclassified" value="false" />
+		<property name="outputMisclassifiedReasons" value="true" />
 		<property name="useCostSensitiveWrapper" value="true" />
+		<property name="useIndividualCostMatrices" value="false" />
 		<property name="useBaggingWrapper" value="false" />
+		<property name="storeFilteringResults" value="true" />
 
 		<property name="doFeatureAnalysis" value="false" />
-		<property name="doCrossValidation" value="false" />
+		<property name="doCrossValidation" value="true" />
 		<property name="doLeaveOneOut" value="false" />
 		<property name="doEasyEnsemble" value="false" />
 		<property name="doBalanceCascade" value="false" />
 		<property name="doLearningCurve" value="false" />
-		<property name="doOverallCrossvalidation" value="true" />
+		<property name="doOverallCrossvalidation" value="false" />
 
 		<property name="outputFileName" value="evaluation.csv" />
 		<property name="numberOfEnsembleMembers" value="10" />

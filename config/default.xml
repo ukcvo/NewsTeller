@@ -100,14 +100,18 @@
 	<bean id="featureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.FeatureExtractor">
 		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter"/>
+		<property name="inputFileName" value="resources/benchmark/dataSet_ALL.xrff" />
 		<property name="outputFileName" value="resources/benchmark/dataSet.xrff"/>
 		<property name="features" ref="activeFeatureList"/>
-		<property name="doAddEventInformation" value="false"/>
+		<property name="doAddEventInformation" value="true"/>
 		<property name="doAddReasonInformation" value="true"/>
 		<property name="doKeepOnlyListedReasons" value="false"/>
+		<property name="doFiltering" value="false" />
 		<property name="reasonsToKeep">
 			<set>
 				<value>1</value>
+				<value>2</value>
+				<value>3</value>
 				<value>13</value>
 			</set>
 		</property>
@@ -117,13 +121,34 @@
 		<constructor-arg value="resources/benchmark/dataSet.xrff"/>
 		<property name="classifiers">
 			<list>
-				<bean class="weka.classifiers.rules.ZeroR"/>
+				<bean class="weka.classifiers.meta.MetaCost">
+					<property name="options">
+						<array>
+							<value>-cost-matrix</value>
+							<value>"[0.0 3.0; 1.0 0.0]"</value>	<!-- the cost matrix (row-wise): [TP FN; FP TN] -->
+						</array>
+					</property>
+					<property name="classifier">
+						<bean class="weka.classifiers.trees.RandomForest">
+							<property name="numExecutionSlots" value="10" />
+							<property name="maxDepth" value="20" />
+							<property name="numFeatures" value="15" />
+							<property name="numTrees" value="50" />
+							<property name="breakTiesRandomly" value="false" />
+						</bean>
+					</property>
+				</bean>
 			</list>
 		</property>
 		<property name="fileNames">
 			<list>
-				<value>resources/baseline.model</value>
+				<value>resources/filtering.model</value>
 			</list>
+		</property>
+		<property name="filter">
+			<bean class="weka.filters.unsupervised.attribute.Remove">
+				<property name="attributeIndices" value="" />
+			</bean>
 		</property>
 	</bean>
 
