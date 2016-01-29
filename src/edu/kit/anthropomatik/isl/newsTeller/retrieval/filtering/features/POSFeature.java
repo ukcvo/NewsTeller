@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
@@ -20,7 +21,10 @@ public class POSFeature extends UsabilityFeature {
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 
-		List<String> mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), 
+		List<String> mentionURIs = new ArrayList<String>();
+		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION, eventURI));
+		if (mentionURIs.isEmpty())
+			mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), 
 				Util.VARIABLE_MENTION, false);
 		
 		double result = 0;

@@ -45,7 +45,10 @@ public class EntityMentionSurroundingsFeature extends UsabilityFeature {
 			entityMentions.add(mentions);
 		}
 
-		List<String> mentionURIs = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION);
+		List<String> mentionURIs = new ArrayList<String>();
+		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION, eventURI));
+		if (mentionURIs.isEmpty())
+			mentionURIs = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION);
 		for (String mentionURI : mentionURIs) {
 			KSMention sentenceMention = ksAdapter.retrieveKSMentionFromMentionURI(mentionURI, true);
 			

@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -51,7 +52,10 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 
-		List<String> mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION, false);
+		List<String> mentionURIs = new ArrayList<String>();
+		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION, eventURI));
+		if (mentionURIs.isEmpty())
+			mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION, false);
 
 		boolean hasA0 = ksAdapter.runSingleVariableDoubleQuerySingleResult(a0Query.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_NUMBER) > 0;
 		boolean hasA1 = ksAdapter.runSingleVariableDoubleQuerySingleResult(a1Query.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_NUMBER) > 0;

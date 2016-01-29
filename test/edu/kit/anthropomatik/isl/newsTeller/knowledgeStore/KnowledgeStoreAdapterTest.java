@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.LogManager;
 
 import org.junit.After;
@@ -163,5 +165,41 @@ public class KnowledgeStoreAdapterTest {
 			expected.add(new KSMention(uri));
 		List<KSMention> retrieved = ksAdapter.getAllEventMentions("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup");
 		assertTrue(retrieved.equals(expected));
+	}
+	
+	@Test
+	public void shouldFillBufferAndRetrieveResult() {
+		Set<String> uris = new HashSet<String>();
+		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
+		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19");
+		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev20");
+		ksAdapter.runKeyValueQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", "test-relation", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, uris);
+		Set<String> expected = new HashSet<String>();
+		expected.add("http://dbpedia.org/resource/Vicente_Fox");
+		expected.add("http://dbpedia.org/resource/Fox_Broadcasting_Company");
+		Set<String> result = ksAdapter.getBufferedValues("test-relation", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
+		assertTrue(expected.equals(result));
+	}
+	
+	@Test
+	public void shouldFillBufferAndReturnEmptySetDueToRelationName() {
+		Set<String> uris = new HashSet<String>();
+		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
+		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19");
+		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev20");
+		ksAdapter.runKeyValueQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", "test-relation", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, uris);
+		Set<String> result = ksAdapter.getBufferedValues("other-relation", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
+		assertTrue(result.isEmpty());
+	}
+	
+	@Test
+	public void shouldFillBufferAndReturnEmptySetDueToKey() {
+		Set<String> uris = new HashSet<String>();
+		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
+		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19");
+		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev20");
+		ksAdapter.runKeyValueQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", "test-relation", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, uris);
+		Set<String> result = ksAdapter.getBufferedValues("test-relation", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev17");
+		assertTrue(result.isEmpty());
 	}
 }

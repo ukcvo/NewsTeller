@@ -50,7 +50,10 @@ public class ConstituentOverlapFeature extends UsabilityFeature {
 			constituentMentions.addAll(mentions);
 		}
 		
-		List<String> mentionURIs = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION);
+		List<String> mentionURIs = new ArrayList<String>();
+		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION, eventURI));
+		if (mentionURIs.isEmpty())
+			mentionURIs = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION);
 		for (String mentionURI : mentionURIs) {
 			List<KSMention> toCheckForOverlap = new ArrayList<KSMention>();
 			toCheckForOverlap.add(new KSMention(mentionURI));

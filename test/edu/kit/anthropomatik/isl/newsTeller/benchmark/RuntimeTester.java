@@ -75,6 +75,8 @@ public class RuntimeTester {
 
 	private boolean doClassifierTest;
 
+	private boolean doBulkSparqlTest;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 
 	private Map<String, String> sparqlSearchQueries;
@@ -154,6 +156,11 @@ public class RuntimeTester {
 		this.doClassifierTest = doClassifierTest;
 	}
 
+	public void setDoBulkSparqlTest(boolean doBulkSparqlTest) {
+		this.doBulkSparqlTest = doBulkSparqlTest;
+	}
+	
+	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
@@ -570,6 +577,52 @@ public class RuntimeTester {
 	}
 	// endregion
 
+	// region bulkSparqlTest
+	private void bulkSparqlTest() {
+		String sequentialQuery = "SELECT ?entity WHERE { <*e*> gaf:denotedBy ?entity }";//"SELECT ?entity WHERE { <*e*> sem:hasActor|sem:hasPlace ?entity}";
+		String bulkQuery = "SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event gaf:denotedBy ?entity }";//"SELECT ?entity WHERE { VALUES ?event { *e* } . ?event sem:hasActor|sem:hasPlace ?entity}";
+		
+		
+		long sequentialTime = System.currentTimeMillis();
+		for (String uri : this.eventURIs) {
+			String query = sequentialQuery.replace("*e*", uri);
+			ksAdapter.runSingleVariableStringQuery(query, Util.VARIABLE_ENTITY);
+		}
+		sequentialTime = System.currentTimeMillis() - sequentialTime;
+		if (log.isInfoEnabled())
+			log.info(String.format("sequential sparql: total %d ms, per event %d ms", sequentialTime, sequentialTime / this.eventURIs.size()));
+		
+		long bulkTimeManual = System.currentTimeMillis();
+		int maxLength = 6700;
+		List<String> queries = new ArrayList<String>();
+		StringBuilder sb = new StringBuilder();
+		for (String uri : this.eventURIs) {
+			String s = String.format("<%s> ", uri);
+			if (sb.length() + s.length() + bulkQuery.length() > maxLength) {
+				queries.add(bulkQuery.replace("*keys*", sb.toString().trim()));
+				sb = new StringBuilder();
+			}
+			sb.append(s);
+		}
+		queries.add(bulkQuery.replace("*keys*", sb.toString().trim()));
+		
+		for (String query : queries)
+			ksAdapter.runSingleVariableStringQuery(query, Util.VARIABLE_ENTITY);
+		bulkTimeManual = System.currentTimeMillis() - bulkTimeManual;
+		
+		if (log.isInfoEnabled())
+			log.info(String.format("manual bulk sparql (%d queries): total %d ms, per event %d ms", queries.size(), bulkTimeManual, bulkTimeManual / this.eventURIs.size()));
+		
+		long bulkTimeKSA = System.currentTimeMillis();
+		ksAdapter.runKeyValueQuery(bulkQuery, "test", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
+		bulkTimeKSA = System.currentTimeMillis() - bulkTimeKSA;
+		
+		if (log.isInfoEnabled())
+			log.info(String.format("KSA bulk sparql: total %d ms, per event %d ms", bulkTimeKSA, bulkTimeKSA / this.eventURIs.size()));
+		
+	}
+	// endregion
+	
 	public void run() {
 		this.ksAdapter.openConnection();
 
@@ -597,7 +650,9 @@ public class RuntimeTester {
 			ksDownloadTest();
 		if (this.doClassifierTest)
 			classifierTest();
-
+		if (this.doBulkSparqlTest)
+			bulkSparqlTest();
+		
 		sequentialSearcher.shutDown();
 		parallelSearcher.shutDown();
 		sequentialFilter.shutDown();

@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.classifiers.Classifier;
@@ -33,6 +34,12 @@ public class SequentialEventFilter implements IEventFilter {
 	
 	private List<UsabilityFeature> features;
 	
+	private KnowledgeStoreAdapter ksAdapter;
+	
+	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
+		this.ksAdapter = ksAdapter;
+	}
+	
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
 	}
@@ -53,6 +60,13 @@ public class SequentialEventFilter implements IEventFilter {
 	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery) {
 		
 		Set<NewsEvent> result = new HashSet<NewsEvent>();
+		
+		Set<String> eventURIs = new HashSet<String>();
+		for (NewsEvent e : events)
+			eventURIs.add(e.getEventURI());
+		
+		ksAdapter.runKeyValueQuery("SELECT ?event ?mention WHERE { VALUES ?event { *keys* } . ?event gaf:denotedBy ?mention }", 
+				Util.RELATION_NAME_MENTION, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
 		
 		for (NewsEvent event : events) {
 			double[] values = new double[features.size() + 1];

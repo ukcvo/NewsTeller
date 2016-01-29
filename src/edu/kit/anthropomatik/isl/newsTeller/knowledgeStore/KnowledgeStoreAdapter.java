@@ -32,6 +32,8 @@ public class KnowledgeStoreAdapter {
 	
 	private static Log log = LogFactory.getLog(KnowledgeStoreAdapter.class);
 	
+	private static final int MAXIMUM_QUERY_LENGTH = 6700;
+	
 	private String serverURL;
 	
 	private int timeoutMsec;
@@ -49,6 +51,8 @@ public class KnowledgeStoreAdapter {
 	private ConcurrentMap<String, String> resourceCache;
 	
 	private ConcurrentMap<String, List<KSMention>> eventMentionCache;
+	
+	private ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache; // relationship-id --> key --> values
 	
 	public void setServerURL(String serverURL) {
 		this.serverURL = serverURL;
@@ -75,6 +79,7 @@ public class KnowledgeStoreAdapter {
 		this.getEventFromMentionTemplate = Util.readStringFromFile(getEventFromMentionFileName);
 		this.resourceCache = new ConcurrentHashMap<String, String>();
 		this.eventMentionCache = new ConcurrentHashMap<String, List<KSMention>>();
+		this.sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	}
 	
 	/**
@@ -111,6 +116,87 @@ public class KnowledgeStoreAdapter {
 		}
 		
 	}
+	
+	//region filling the buffer
+	
+	/**
+	 * Runs a key-value query. 
+	 * Inserts the keyValues into the template, fires the query and stores the resulting key-value pairs in the internal cache.
+	 */
+	public void runKeyValueQuery(String sparqlQueryTemplate, String relationName, String variableNameKey, 
+									String variableNameValue, Set<String> keyValues) {
+		
+		if (!isConnectionOpen) {
+			if (log.isWarnEnabled())
+				log.warn("Trying to access KnowledgeStore without having an open connection. Request ignored."); 
+			return;
+		}
+		
+		try {
+			ConcurrentMap<String, Set<String>> relationMap = new ConcurrentHashMap<String, Set<String>>();
+			
+			List<String> queries = new ArrayList<String>();
+			StringBuilder sb = new StringBuilder();
+			for (String uri : keyValues) {
+				String s = String.format("<%s> ", uri);
+				if (sb.length() + s.length() + sparqlQueryTemplate.length() > MAXIMUM_QUERY_LENGTH) {
+					queries.add(sparqlQueryTemplate.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
+					sb = new StringBuilder();
+				}
+				sb.append(s);
+			}
+			queries.add(sparqlQueryTemplate.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
+			
+			for (String query : queries) {
+				Session session = this.knowledgeStore.newSession();
+				Stream<BindingSet> stream = session.sparql(query).timeout((long) this.timeoutMsec).execTuples();
+				List<BindingSet> tuples = stream.toList();
+				stream.close();
+				session.close();
+				for (BindingSet tuple : tuples) {
+					String key = tuple.getValue(variableNameKey).toString();
+					String value = tuple.getValue(variableNameValue).toString();
+					if (value.startsWith("\""))
+						value = value.substring(1, value.lastIndexOf('"'));
+					Set<String> values = relationMap.containsKey(key) ? relationMap.get(key) : new HashSet<String>();
+					values.add(value);
+					relationMap.put(key, values);
+				}
+			}
+			
+			this.sparqlCache.put(relationName, relationMap);
+			
+		} catch (Exception e) {
+			if(log.isErrorEnabled())
+				log.error(String.format("Query execution failed. Query: '%s' Key: '%s' Value: %s", 
+							sparqlQueryTemplate, variableNameKey, variableNameValue));
+			if(log.isDebugEnabled())
+					log.debug("Query execution exception", e);
+		}
+	}
+	
+	//endregion
+	
+	//region accessing the buffer
+	/**
+	 * Retrieves the values from the internal buffer, given the name of the key-value relation and the key.
+	 */
+	public Set<String> getBufferedValues(String relationName, String key) {
+		
+		if (!this.sparqlCache.containsKey(relationName)) {
+			if (log.isErrorEnabled())
+				log.error(String.format("unknown relationName '%s'. Returning empty set.", relationName));
+			return new HashSet<String>();
+		}
+		ConcurrentMap<String, Set<String>> relationMap = this.sparqlCache.get(relationName);
+		if (!relationMap.containsKey(key)) {
+			if (log.isErrorEnabled())
+				log.error(String.format("relation '%s' does not contain key '%s'. Returning empty set.", relationName, key));
+			return new HashSet<String>();
+		}
+		return relationMap.get(key);
+	}
+	//endregion
 	
 	//region String query
 	/**
@@ -306,7 +392,11 @@ public class KnowledgeStoreAdapter {
 	public Set<String> retrieveOriginalTexts(String eventURI) {
 		Set<String> originalTexts = new HashSet<String>();
 		
-		List<String> mentionURIs = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, eventURI), 
+		List<String> mentionURIs;
+		if (this.sparqlCache.containsKey(Util.RELATION_NAME_MENTION) && this.sparqlCache.get(Util.RELATION_NAME_MENTION).containsKey(eventURI))
+			mentionURIs = new ArrayList<String>(this.sparqlCache.get(Util.RELATION_NAME_MENTION).get(eventURI));
+		else
+		 mentionURIs = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, eventURI), 
 				Util.VARIABLE_MENTION);
 		
 		for (String mentionURI : mentionURIs) {
@@ -354,7 +444,10 @@ public class KnowledgeStoreAdapter {
 	public List<String> retrievePhrasesFromEntity(String entityURI, boolean wholeSentence) {
 		List<String> result = new ArrayList<String>();
 		
-		List<String> mentions = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, entityURI), 
+		List<String> mentions;
+		if (this.sparqlCache.containsKey(Util.RELATION_NAME_MENTION) && this.sparqlCache.get(Util.RELATION_NAME_MENTION).containsKey(entityURI))
+			mentions = new ArrayList<String>(this.sparqlCache.get(Util.RELATION_NAME_MENTION).get(entityURI));
+		else mentions = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, entityURI), 
 																		Util.VARIABLE_MENTION);
 
 		if (mentions.isEmpty()) {

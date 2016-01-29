@@ -47,6 +47,7 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter">
 		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
 		<property name="features" ref="activeFeatureList" />
+		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
 	<bean id="filter2b"
@@ -171,11 +172,13 @@
 		<property name="doSequentialSearcherTest" value="false" />
 		<property name="doParallelSearcherTest" value="false" />
 		<property name="doParallelSparqlTest" value="false" />
-		<property name="doSequentialFilterTest" value="true" />
-		<property name="doParallelFilterTest" value="true" />
+		<property name="doSequentialFilterTest" value="false" />
+		<property name="doParallelFilterTest" value="false" />
 		<property name="doFeatureTest" value="false" />
 		<property name="doDownloadTest" value="false" />
 		<property name="doClassifierTest" value="false" />
+		<property name="doBulkSparqlTest" value="true"/>
+
 
 		<property name="maxNumberOfEvents" value="100" />
 		<property name="numberOfRepetitions" value="5" />
@@ -515,7 +518,7 @@
 		<property name="doBalanceCascade" value="false" />
 		<property name="doLearningCurve" value="false" />
 		<property name="doOverallCrossvalidation" value="false" />
-
+		
 		<property name="outputFileName" value="evaluation.csv" />
 		<property name="numberOfEnsembleMembers" value="10" />
 	</bean>

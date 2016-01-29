@@ -50,6 +50,7 @@ public class Util {
 	public static final String PLACEHOLDER_MENTION = "*m*";
 	public static final String PLACEHOLDER_ENTITY = "*x*";
 	public static final String PLACEHOLDER_LINK = "*l*";
+	public static final String PLACEHOLDER_KEYS = "*keys*";
 
 	public static final String VARIABLE_EVENT = "event";
 	public static final String VARIABLE_NUMBER = "number";
@@ -110,6 +111,8 @@ public class Util {
 	public static final String KEYWORD_REGEX_LETTERS = "(\\\\w)*";
 	public static final String KEYWORD_REGEX_LETTERS_JAVA = "(\\w)*";
 
+	public static final String RELATION_NAME_MENTION = "event-mention";
+	
 	// private constructor to prevent instantiation
 	private Util() {
 	}
