@@ -1,5 +1,6 @@
-SELECT ?mention
+SELECT ?event ?mention
 WHERE
 {
-    <*e*> gaf:denotedBy ?mention
+    VALUES ?event { *keys* } .
+    ?event gaf:denotedBy ?mention
 }

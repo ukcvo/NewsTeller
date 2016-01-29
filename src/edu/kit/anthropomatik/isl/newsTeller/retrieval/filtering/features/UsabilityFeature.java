@@ -1,6 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.List;
+import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
@@ -18,6 +19,8 @@ public abstract class UsabilityFeature {
 	
 	protected String sparqlQuery;
 	
+	protected String sparqlQueryName;
+	
 	protected KnowledgeStoreAdapter ksAdapter;
 	
 	public void setName(String name) {
@@ -34,10 +37,16 @@ public abstract class UsabilityFeature {
 	
 	public UsabilityFeature(String queryFileName) {
 		this.sparqlQuery = Util.readStringFromFile(queryFileName);
+		this.sparqlQueryName = Util.queryNameFromFileName(queryFileName);
 	}
 	
 	/**
 	 * Get the feature value for the given event; may also make use of the given keyword list (note: not all features do so!).
 	 */
 	public abstract double getValue(String eventURI, List<Keyword> keywords);
+	
+	/**
+	 * Run all the bulk queries against the KnowledgeStore in order to be prepared for later retrieval.
+	 */
+	public abstract void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords);
 }

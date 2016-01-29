@@ -39,7 +39,7 @@ public class PropbankNeedsArgumentFeature extends UsabilityFeature {
 		boolean eventNeedsArg = true;
 		
 		List<String> mentionURIs = new ArrayList<String>();
-		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION, eventURI));
+		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI));
 		if (mentionURIs.isEmpty())
 			mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION, false);
 

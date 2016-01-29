@@ -1,7 +1,8 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -15,7 +16,11 @@ public class ActorPositionFeature extends UsabilityFeature {
 	
 	private String mentionQuery;
 	
+	private String mentionQueryName;
+	
 	private String labelQuery;
+	
+	private String labelQueryName;
 	
 	public void setDirectionToLookAt(int directionToLookAt) {
 		this.directionToLookAt = directionToLookAt;
@@ -25,6 +30,8 @@ public class ActorPositionFeature extends UsabilityFeature {
 		super(queryFileName);
 		this.mentionQuery = Util.readStringFromFile(mentionQueryFileName);
 		this.labelQuery = Util.readStringFromFile(labelQueryFileName);
+		this.mentionQueryName = Util.queryNameFromFileName(mentionQueryFileName);
+		this.labelQueryName = Util.queryNameFromFileName(labelQueryFileName);
 	}
 
 	@Override
@@ -32,16 +39,12 @@ public class ActorPositionFeature extends UsabilityFeature {
 		
 		double result = 0;
 		
-		List<String> mentionURIs = new ArrayList<String>();
-		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION, eventURI));
-		if (mentionURIs.isEmpty())
-			mentionURIs = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), 
-				Util.VARIABLE_MENTION, false);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, eventURI);
 		
-		List<String> actors = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_ENTITY);
-		List<List<String>> actorLabels = new ArrayList<List<String>>();
+		Set<String> actors = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, eventURI);
+		Set<Set<String>> actorLabels = new HashSet<Set<String>>();
 		for (String actor : actors) {
-			actorLabels.add(ksAdapter.runSingleVariableStringQuery(labelQuery.replace(Util.PLACEHOLDER_ENTITY, actor), Util.VARIABLE_LABEL));
+			actorLabels.add(ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.labelQueryName, actor));
 		}
 				
 		for (String mentionURI : mentionURIs) {
@@ -58,7 +61,7 @@ public class ActorPositionFeature extends UsabilityFeature {
 			
 			double mentionResult = 0;
 			
-			for (List<String> actor : actorLabels) {
+			for (Set<String> actor : actorLabels) {
 				
 				double actorResult = 0;
 				for (String label : actor) {
@@ -76,6 +79,17 @@ public class ActorPositionFeature extends UsabilityFeature {
 		result /= mentionURIs.size();
 		
 		return result;
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		ksAdapter.runKeyValueQuery(mentionQuery, Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, Util.VARIABLE_EVENT, 
+				Util.VARIABLE_MENTION, eventURIs);
+		ksAdapter.runKeyValueQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, 
+				Util.VARIABLE_ENTITY, eventURIs);
+		Set<String> actors = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName);
+		ksAdapter.runKeyValueQuery(labelQuery, Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.labelQueryName, 
+				Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, actors);
 	}
 
 	

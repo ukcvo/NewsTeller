@@ -1,5 +1,6 @@
-SELECT ?label
+SELECT ?entity ?label
 WHERE
 {
-    <*x*> skos:prefLabel ?label .
+    VALUES ?entity { *keys* } .
+    ?entity skos:prefLabel ?label .
 }

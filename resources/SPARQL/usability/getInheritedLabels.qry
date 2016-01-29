@@ -1,11 +1,12 @@
-SELECT DISTINCT ?label
+SELECT ?entity ?label
 WHERE
 {
-    <*x*> rdf:type ?entity.
-    ?entity rdf:type* ?class .
+    VALUES ?entity { *keys* } .
+    ?entity rdf:type ?parent.
+    ?parent rdf:type* ?class .
     GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> 
     {
-        ?entity rdfs:label ?label .
+        ?parent rdfs:label ?label .
         ?class rdfs:label ?class_label .
         FILTER(REGEX(STR(?class_label),"*k*", "i")) #case-insensitive matching
     }

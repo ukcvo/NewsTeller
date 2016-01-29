@@ -1,7 +1,8 @@
-SELECT DISTINCT ?entity
+SELECT ?event ?entity
 WHERE
 {
-    <*e*> sem:hasActor|sem:hasPlace ?entity .
+    VALUES ?event { *keys* } .
+    ?event sem:hasActor|sem:hasPlace ?entity .
     ?entity rdf:type* ?class .
     GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> # use dbpedia to get stable entities
     {

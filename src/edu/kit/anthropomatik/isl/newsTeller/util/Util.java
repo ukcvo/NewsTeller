@@ -111,8 +111,11 @@ public class Util {
 	public static final String KEYWORD_REGEX_LETTERS = "(\\\\w)*";
 	public static final String KEYWORD_REGEX_LETTERS_JAVA = "(\\w)*";
 
-	public static final String RELATION_NAME_MENTION = "event-mention";
-	
+	public static final String RELATION_NAME_EVENT_MENTION = "event-mention-";
+	public static final String RELATION_NAME_EVENT_CONSTITUENT = "event-constituent-";
+	public static final String RELATION_NAME_CONSTITUENT_LABEL = "actor-label-";
+	public static final String RELATION_NAME_CONSTITUENT_MENTION = "constituent-mention-";
+		
 	// private constructor to prevent instantiation
 	private Util() {
 	}
@@ -533,6 +536,13 @@ public class Util {
 			result = result.replace(c, "\\" + c);
 		
 		return result;
+	}
+	
+	/**
+	 * Abbreviates the full path of a query filename to just the file name itself.
+	 */
+	public static String queryNameFromFileName(String queryFileName) {
+		return queryFileName.substring(queryFileName.lastIndexOf('/'), queryFileName.lastIndexOf('.'));
 	}
 	// endregion
 }

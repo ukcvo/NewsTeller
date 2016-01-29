@@ -66,7 +66,7 @@ public class SequentialEventFilter implements IEventFilter {
 			eventURIs.add(e.getEventURI());
 		
 		ksAdapter.runKeyValueQuery("SELECT ?event ?mention WHERE { VALUES ?event { *keys* } . ?event gaf:denotedBy ?mention }", 
-				Util.RELATION_NAME_MENTION, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
+				Util.RELATION_NAME_EVENT_MENTION, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
 		
 		for (NewsEvent event : events) {
 			double[] values = new double[features.size() + 1];

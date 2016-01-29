@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -195,6 +196,23 @@ public class KnowledgeStoreAdapter {
 			return new HashSet<String>();
 		}
 		return relationMap.get(key);
+	}
+	
+	/**
+	 * Retrieves all the values associated with the given relation. Used for stacked bulk queries.
+	 */
+	public Set<String> getAllRelationValues(String relationName) {
+		if (!this.sparqlCache.containsKey(relationName)) {
+			if (log.isErrorEnabled())
+				log.error(String.format("unknown relationName '%s'. Returning empty set.", relationName));
+			return new HashSet<String>();
+		}
+		
+		Collection<Set<String>> allSets = this.sparqlCache.get(relationName).values();
+		Set<String> result = new HashSet<String>();
+		for (Set<String> set : allSets)
+			result.addAll(set);
+		return result;
 	}
 	//endregion
 	
@@ -393,8 +411,8 @@ public class KnowledgeStoreAdapter {
 		Set<String> originalTexts = new HashSet<String>();
 		
 		List<String> mentionURIs;
-		if (this.sparqlCache.containsKey(Util.RELATION_NAME_MENTION) && this.sparqlCache.get(Util.RELATION_NAME_MENTION).containsKey(eventURI))
-			mentionURIs = new ArrayList<String>(this.sparqlCache.get(Util.RELATION_NAME_MENTION).get(eventURI));
+		if (this.sparqlCache.containsKey(Util.RELATION_NAME_EVENT_MENTION) && this.sparqlCache.get(Util.RELATION_NAME_EVENT_MENTION).containsKey(eventURI))
+			mentionURIs = new ArrayList<String>(this.sparqlCache.get(Util.RELATION_NAME_EVENT_MENTION).get(eventURI));
 		else
 		 mentionURIs = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, eventURI), 
 				Util.VARIABLE_MENTION);
@@ -445,8 +463,8 @@ public class KnowledgeStoreAdapter {
 		List<String> result = new ArrayList<String>();
 		
 		List<String> mentions;
-		if (this.sparqlCache.containsKey(Util.RELATION_NAME_MENTION) && this.sparqlCache.get(Util.RELATION_NAME_MENTION).containsKey(entityURI))
-			mentions = new ArrayList<String>(this.sparqlCache.get(Util.RELATION_NAME_MENTION).get(entityURI));
+		if (this.sparqlCache.containsKey(Util.RELATION_NAME_EVENT_MENTION) && this.sparqlCache.get(Util.RELATION_NAME_EVENT_MENTION).containsKey(entityURI))
+			mentions = new ArrayList<String>(this.sparqlCache.get(Util.RELATION_NAME_EVENT_MENTION).get(entityURI));
 		else mentions = runSingleVariableStringQuery(getMentionFromEventTemplate.replace(Util.PLACEHOLDER_EVENT, entityURI), 
 																		Util.VARIABLE_MENTION);
 

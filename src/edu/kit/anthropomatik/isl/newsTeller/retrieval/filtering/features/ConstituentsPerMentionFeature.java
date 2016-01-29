@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
@@ -11,6 +12,8 @@ public class ConstituentsPerMentionFeature extends UsabilityFeature {
 
 	private String mentionQuery;
 
+	private String mentionQueryName;
+	
 	public static final int OPERATION_TYPE_AVG = 0;
 	public static final int OPERATION_TYPE_MAX = 1;
 	public static final int OPERATION_TYPE_MIN = 2;
@@ -26,6 +29,7 @@ public class ConstituentsPerMentionFeature extends UsabilityFeature {
 	public ConstituentsPerMentionFeature(String queryFileName, String mentionQueryFileName) {
 		super(queryFileName);
 		this.mentionQuery = Util.readStringFromFile(mentionQueryFileName);
+		this.mentionQueryName = Util.queryNameFromFileName(mentionQueryFileName);
 	}
 
 	@Override
@@ -33,10 +37,11 @@ public class ConstituentsPerMentionFeature extends UsabilityFeature {
 
 		double result = (this.operationType == OPERATION_TYPE_MIN) ? Double.POSITIVE_INFINITY : 0;
 
-		List<String> constituents = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_ENTITY);
+		Set<String> constituents = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, eventURI);
 		List<List<KSMention>> constituentMentions = new ArrayList<List<KSMention>>();
 		for (String constituent : constituents) {
-			List<String> mentionURIs = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, constituent), Util.VARIABLE_MENTION);
+			Set<String> mentionURIs = 
+					ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_MENTION + this.sparqlQueryName + this.mentionQueryName, constituent);
 			List<KSMention> mentions = new ArrayList<KSMention>();
 			for (String mentionURI : mentionURIs) {
 				mentions.add(new KSMention(mentionURI));
@@ -44,10 +49,8 @@ public class ConstituentsPerMentionFeature extends UsabilityFeature {
 			constituentMentions.add(mentions);
 		}
 
-		List<String> mentionURIs = new ArrayList<String>();
-		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION, eventURI));
-		if (mentionURIs.isEmpty())
-			mentionURIs = ksAdapter.runSingleVariableStringQuery(mentionQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, eventURI);
+		
 		for (String mentionURI : mentionURIs) {
 			KSMention sentenceMention = ksAdapter.retrieveKSMentionFromMentionURI(mentionURI, true);
 
@@ -92,6 +95,14 @@ public class ConstituentsPerMentionFeature extends UsabilityFeature {
 		}
 
 		return result;
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		ksAdapter.runKeyValueQuery(mentionQuery, Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
+		ksAdapter.runKeyValueQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
+		Set<String> constituents = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT);
+		ksAdapter.runKeyValueQuery(mentionQuery, Util.RELATION_NAME_CONSTITUENT_MENTION + this.sparqlQueryName + this.mentionQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, constituents);
 	}
 
 }

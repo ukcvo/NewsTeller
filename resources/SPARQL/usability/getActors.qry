@@ -1,5 +1,6 @@
-SELECT ?entity
+SELECT ?event ?entity
 WHERE
 {
-    <*e*> sem:hasActor ?entity .
+    VALUES ?event { *keys* } .
+    ?event sem:hasActor ?entity .
 }

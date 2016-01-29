@@ -3,6 +3,8 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
@@ -17,7 +19,11 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 
 	private String directLabelQuery;
 	
+	private String directLabelQueryName;
+	
 	private String inheritedLabelQuery;
+	
+	private String inheritedLabelQueryName;
 	
 	private boolean splitLabels;
 	
@@ -36,18 +42,17 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 		List<List<List<String>>> result = new ArrayList<List<List<String>>>();
 		
 		for (Keyword keyword : keywords) {
-			List<String> entities = ksAdapter.runSingleVariableStringQuery(
-					sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()),
-					Util.VARIABLE_ENTITY);
+			Set<String> entities = 
+					ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName + keyword.getWord(), eventURI);
 			
 			for (String entity : entities) {
-				List<String> labels = ksAdapter.runSingleVariableStringQuery(
-						directLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
-						Util.VARIABLE_LABEL);
+				Set<String> labels = ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName 
+						+ this.directLabelQueryName + keyword.getWord(), entity);
+						
 				if (labels.isEmpty() && !inheritedLabelQuery.isEmpty())	// no direct DBpedia labels --> look at parent concepts
-					labels = ksAdapter.runSingleVariableStringQuery(
-							inheritedLabelQuery.replace(Util.PLACEHOLDER_ENTITY, entity).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()),
-							Util.VARIABLE_LABEL); 
+					labels = ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.inheritedLabelQueryName 
+							+ keyword.getWord(), entity);
+					
 				// if there is no dbpedia label, then labels will be empty!
 				
 				List<List<String>> list = new ArrayList<List<String>>();
@@ -74,6 +79,19 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		for (Keyword keyword : keywords) {
+			ksAdapter.runKeyValueQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
+					Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName + keyword.getWord(), Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
+			Set<String> entities = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName + keyword.getWord());
+			ksAdapter.runKeyValueQuery(directLabelQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
+					Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.directLabelQueryName + keyword.getWord(), Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, entities);
+			ksAdapter.runKeyValueQuery(inheritedLabelQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
+					Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.inheritedLabelQueryName + keyword.getWord(), Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, entities);
+		}
 	}
 
 }
