@@ -15,6 +15,10 @@
 		<prop key="numFeatures">8</prop>
 	</util:properties>
 
+	<bean id="testFilter" class="weka.filters.unsupervised.attribute.Remove">
+		<property name="attributeIndices" value="23,24,25" />
+	</bean>
+	
 	<!-- final classifier filters -->
 	<bean id="filter2" class="weka.filters.unsupervised.attribute.Remove">
 		<property name="attributeIndices" value="3,7,8,9" />

@@ -79,6 +79,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 			}
 			
 			Instance example = new DenseInstance(1.0, values);
+			example.setDataset(header);
 			
 			map.putIfAbsent(event, example);
 		}

@@ -45,13 +45,13 @@
 
 	<bean id="filter2a"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter">
-		<constructor-arg name="classifierFileName" value="resources/baseline.model" />
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
 		<property name="features" ref="activeFeatureList" />
 	</bean>
 
 	<bean id="filter2b"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
-		<constructor-arg name="classifierFileName" value="resources/baseline.model" />
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
 		<property name="features" ref="activeFeatureList" />
 		<property name="nThreads" value="100" />
 	</bean>
@@ -60,6 +60,9 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RuntimeTester">
 		<constructor-arg name="configFileName"
 			value="resources/benchmark/Scope 0.csv" />
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
+		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSet.xrff" />
+			
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="stemmedKeywords">
 			<set>
@@ -143,6 +146,9 @@
 
 		<property name="threadNumbers">
 			<list>
+				<value>100</value>
+				
+				<!-- 
 				<value>1</value>
 				<value>2</value>
 				<value>5</value>
@@ -153,6 +159,7 @@
 				<value>250</value>
 				<value>500</value>
 				<value>1000</value>
+				 -->
 			</list>
 		</property>
 
@@ -164,10 +171,13 @@
 		<property name="doSequentialSearcherTest" value="false" />
 		<property name="doParallelSearcherTest" value="false" />
 		<property name="doParallelSparqlTest" value="false" />
-		<property name="doSequentialFilterTest" value="false" />
-		<property name="doParallelFilterTest" value="false" />
-		<property name="doFeatureTest" value="true" />
+		<property name="doSequentialFilterTest" value="true" />
+		<property name="doParallelFilterTest" value="true" />
+		<property name="doFeatureTest" value="false" />
+		<property name="doDownloadTest" value="false" />
+		<property name="doClassifierTest" value="false" />
 
+		<property name="maxNumberOfEvents" value="100" />
 		<property name="numberOfRepetitions" value="5" />
 
 	</bean>
@@ -228,8 +238,12 @@
 
 		<property name="classifiers">
 			<map>
-				
 				<entry key="optimized" value-ref="optimized" />
+				
+				<!-- 
+				<entry key="randomForest100" value-ref="randomForest" />
+				
+				 -->
 				<!-- 
 				<entry key="feat06" value-ref="randomForestB" />
 				<entry key="feat10" value-ref="randomForestC" />
@@ -243,7 +257,6 @@
 				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
 				<entry key="decisionTreeUnpruned" value-ref="decisionTree3" />
 				<entry key="naiveBayes" value-ref="naiveBayes" />
-				<entry key="randomForest100" value-ref="randomForest" />
 				<entry key="randomForest20" value-ref="randomForest2" />
 				<entry key="ripper" value-ref="ripper" />
 				

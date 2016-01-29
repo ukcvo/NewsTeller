@@ -70,7 +70,8 @@ public class EventRetriever {
 		//region time logging
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();
-			log.debug(String.format("find events: % d ms", l - old));
+			log.debug(String.format("search for events: % d ms", l - old));
+			log.debug(String.format("found %d events", events.size()));
 			old = l;
 		}
 		//endregion
@@ -79,6 +80,7 @@ public class EventRetriever {
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();
 			log.debug(String.format("filter events: % d ms", l - old));
+			log.debug(String.format("keeping %d of %d events", events.size(), filteredEvents.size()));
 			old = l;
 		}
 		//endregion

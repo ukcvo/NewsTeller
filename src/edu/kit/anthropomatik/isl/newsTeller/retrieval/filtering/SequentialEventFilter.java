@@ -63,8 +63,8 @@ public class SequentialEventFilter implements IEventFilter {
 			}
 			
 			Instance example = new DenseInstance(1.0, values);
+			example.setDataset(header);
 			
-			//TODO: feature preprocessing (binning etc)
 			boolean isUsable;
 			try {
 				double label = classifier.classifyInstance(example);
@@ -72,6 +72,8 @@ public class SequentialEventFilter implements IEventFilter {
 			} catch (Exception e) {
 				if (log.isWarnEnabled())
 					log.warn(String.format("Could not classify event, setting classification to false: %s", event.toVerboseString()));
+				if (log.isDebugEnabled())
+					log.debug("classification problem", e);
 				isUsable = false;
 			}
 			

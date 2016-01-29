@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.benchmark;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,8 @@ import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -31,6 +34,14 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import eu.fbk.knowledgestore.KnowledgeStore;
 import eu.fbk.knowledgestore.Session;
 import eu.fbk.knowledgestore.client.Client;
+import eu.fbk.knowledgestore.data.Record;
+import eu.fbk.knowledgestore.data.Stream;
+import eu.fbk.knowledgestore.vocabulary.KS;
+import weka.classifiers.Classifier;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.SerializationHelper;
+import weka.core.converters.XRFFLoader;
 
 /**
  * Tests regarding different runtime behaviors.
@@ -41,120 +52,138 @@ import eu.fbk.knowledgestore.client.Client;
 public class RuntimeTester {
 
 	private static Log log = LogFactory.getLog(RuntimeTester.class);
-	
+
 	private boolean doKSAccessTests;
-	
+
 	private boolean doSparqlSearchTests;
-	
+
 	private boolean doSparqlFeatureTests;
-	
+
 	private boolean doSequentialSearcherTest;
-	
+
 	private boolean doParallelSearcherTest;
-	
+
 	private boolean doParallelSparqlTest;
-	
+
 	private boolean doSequentialFilterTest;
-	
+
 	private boolean doParallelFilterTest;
-	
+
 	private boolean doFeatureTest;
-	
+
+	private boolean doDownloadTest;
+
+	private boolean doClassifierTest;
+
 	private KnowledgeStoreAdapter ksAdapter;
-	
+
 	private Map<String, String> sparqlSearchQueries;
-	
+
 	private Map<String, String> sparqlFeatureQueries;
-	
+
 	private Set<String> stemmedKeywords;
-	
+
 	private Set<String> eventURIs;
-	
+
 	private Map<List<Keyword>, Set<NewsEvent>> keywordsToEventsMap;
-	
+
 	private EventSearcher sequentialSearcher;
-	
+
 	private EventSearcher parallelSearcher;
-	
+
 	private SequentialEventFilter sequentialFilter;
-	
+
 	private ParallelEventFilter parallelFilter;
-	
+
 	private List<Integer> threadNumbers;
-	
+
 	private Set<List<Keyword>> keywords;
-	
+
 	private int numberOfRepetitions;
-	
+
 	private List<UsabilityFeature> features;
-	
-	//region setters
+
+	private int maxNumberOfEvents;
+
+	private Instances dataSet;
+
+	private Classifier classifier;
+
+	// region setters
 	public void setDoKSAccessTests(boolean doKSAccessTests) {
 		this.doKSAccessTests = doKSAccessTests;
 	}
-		
+
 	public void setDoSparqlSearchTests(boolean doSparqlSearchTests) {
 		this.doSparqlSearchTests = doSparqlSearchTests;
 	}
-	
+
 	public void setDoSparqlFeatureTests(boolean doSparqlFeatureTests) {
 		this.doSparqlFeatureTests = doSparqlFeatureTests;
 	}
-	
+
 	public void setDoSequentialSearcherTest(boolean doSequentialSearcherTest) {
 		this.doSequentialSearcherTest = doSequentialSearcherTest;
 	}
-	
+
 	public void setDoParallelSearcherTest(boolean doParallelSearcherTest) {
 		this.doParallelSearcherTest = doParallelSearcherTest;
 	}
-	
+
 	public void setDoParallelSparqlTest(boolean doParallelSparqlTest) {
 		this.doParallelSparqlTest = doParallelSparqlTest;
 	}
-	
+
 	public void setDoSequentialFilterTest(boolean doSequentialFilterTest) {
 		this.doSequentialFilterTest = doSequentialFilterTest;
 	}
-	
+
 	public void setDoParallelFilterTest(boolean doParallelFilterTest) {
 		this.doParallelFilterTest = doParallelFilterTest;
 	}
-	
+
 	public void setDoFeatureTest(boolean doFeatureTest) {
 		this.doFeatureTest = doFeatureTest;
 	}
-	
+
+	public void setDoDownloadTest(boolean doDownloadTest) {
+		this.doDownloadTest = doDownloadTest;
+	}
+
+	public void setDoClassifierTest(boolean doClassifierTest) {
+		this.doClassifierTest = doClassifierTest;
+	}
+
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
-	
+
 	public void setSparqlSearchQueries(Set<String> fileNames) {
 		this.sparqlSearchQueries = new HashMap<String, String>();
 		for (String s : fileNames) {
 			sparqlSearchQueries.put(s, Util.readStringFromFile(s));
 		}
 	}
-	
+
 	public void setSparqlFeatureQueries(Set<String> fileNames) {
 		this.sparqlFeatureQueries = new HashMap<String, String>();
 		for (String s : fileNames) {
 			sparqlFeatureQueries.put(s, Util.readStringFromFile(s));
 		}
 	}
-	
+
 	public void setStemmedKeywords(Set<String> stemmedKeywords) {
 		this.stemmedKeywords = stemmedKeywords;
 	}
-	
+
 	public void setSequentialSearcher(EventSearcher sequentialSearcher) {
 		this.sequentialSearcher = sequentialSearcher;
 	}
-	
+
 	public void setParallelSearcher(EventSearcher parallelSearcher) {
 		this.parallelSearcher = parallelSearcher;
 	}
-	
+
 	public void setSequentialFilter(SequentialEventFilter sequentialFilter) {
 		this.sequentialFilter = sequentialFilter;
 	}
@@ -162,28 +191,33 @@ public class RuntimeTester {
 	public void setParallelFilter(ParallelEventFilter parallelFilter) {
 		this.parallelFilter = parallelFilter;
 	}
-	
+
 	public void setThreadNumbers(List<Integer> threadNumbers) {
 		this.threadNumbers = threadNumbers;
 	}
-	
+
 	public void setNumberOfRepetitions(int numberOfRepetitions) {
 		this.numberOfRepetitions = numberOfRepetitions;
 	}
-	
+
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
 	}
-	//endregion
-	
-	public RuntimeTester(String configFileName) {
-		
-		Map<String,List<Keyword>> benchmarkConfig = Util.readBenchmarkConfigFile(configFileName);
+
+	public void setMaxNumberOfEvents(int maxNumberOfEvents) {
+		this.maxNumberOfEvents = maxNumberOfEvents;
+	}
+	// endregion
+
+	public RuntimeTester(String configFileName, String dataSetFileName, String classifierFileName) {
+
+		// handle benchmark files
+		Map<String, List<Keyword>> benchmarkConfig = Util.readBenchmarkConfigFile(configFileName);
 		this.keywords = new HashSet<List<Keyword>>();
 		for (List<Keyword> queryKeywords : benchmarkConfig.values()) {
 			this.keywords.add(queryKeywords);
 		}
-		
+
 		this.eventURIs = new HashSet<String>();
 		this.keywordsToEventsMap = new HashMap<List<Keyword>, Set<NewsEvent>>();
 		Set<String> fileNames = benchmarkConfig.keySet();
@@ -194,21 +228,43 @@ public class RuntimeTester {
 				this.eventURIs.add(e.getEventURI());
 				events.add(new NewsEvent(e.getEventURI()));
 			}
-			this.keywordsToEventsMap.put(benchmarkConfig.get(f), events);	
+			this.keywordsToEventsMap.put(benchmarkConfig.get(f), events);
+		}
+
+		// read data set
+		try {
+			XRFFLoader loader = new XRFFLoader();
+			loader.setSource(new File(dataSetFileName));
+			this.dataSet = loader.getDataSet();
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't read data set");
+			if (log.isDebugEnabled())
+				log.debug("Can't read data set", e);
+		}
+
+		// read classifier
+		try {
+			Object[] input = SerializationHelper.readAll(classifierFileName);
+			this.classifier = (Classifier) input[0];
+		} catch (Exception e) {
+			if (log.isFatalEnabled())
+				log.fatal(String.format("Can't read classifier from file: '%s'", classifierFileName));
+			if (log.isDebugEnabled())
+				log.debug("can't read classifier from file", e);
 		}
 	}
-	
-	//region ksAccessTests
+
+	// region ksAccessTests
 	private void ksAccessTests() {
 		long averageClientOpenTime = 0;
 		long averageClientClosingTime = 0;
 		long averageSessionOpenTime = 0;
 		long averageSessionClosingTime = 0;
-		
+
 		for (int i = 0; i < this.numberOfRepetitions; i++) {
 			long t1 = System.currentTimeMillis();
-			KnowledgeStore ks = Client.builder("http://knowledgestore2.fbk.eu/nwr/wikinews").compressionEnabled(true).maxConnections(2)
-									.validateServer(false).connectionTimeout(10000).build();
+			KnowledgeStore ks = Client.builder("http://knowledgestore2.fbk.eu/nwr/wikinews").compressionEnabled(true).maxConnections(2).validateServer(false).connectionTimeout(10000).build();
 			long t2 = System.currentTimeMillis();
 			averageClientOpenTime += (t2 - t1);
 			t1 = System.currentTimeMillis();
@@ -218,10 +274,9 @@ public class RuntimeTester {
 		}
 		averageClientOpenTime /= this.numberOfRepetitions;
 		averageClientClosingTime /= this.numberOfRepetitions;
-		
-		KnowledgeStore ks = Client.builder("http://knowledgestore2.fbk.eu/nwr/wikinews").compressionEnabled(true).maxConnections(2)
-				.validateServer(false).connectionTimeout(10000).build();
-		
+
+		KnowledgeStore ks = Client.builder("http://knowledgestore2.fbk.eu/nwr/wikinews").compressionEnabled(true).maxConnections(2).validateServer(false).connectionTimeout(10000).build();
+
 		for (int i = 0; i < this.numberOfRepetitions; i++) {
 			long t1 = System.currentTimeMillis();
 			Session s = ks.newSession();
@@ -235,20 +290,20 @@ public class RuntimeTester {
 		averageSessionOpenTime /= this.numberOfRepetitions;
 		averageSessionClosingTime /= this.numberOfRepetitions;
 		ks.close();
-		
+
 		if (log.isInfoEnabled()) {
 			log.info(String.format("average client opening time: %d ms", averageClientOpenTime));
 			log.info(String.format("average client closing time: %d ms", averageClientClosingTime));
 			log.info(String.format("average session opening time: %d ms", averageSessionOpenTime));
 			log.info(String.format("average session closing time: %d ms", averageSessionClosingTime));
 		}
-		
+
 	}
-	//endregion
-	
-	//region sparqlSearchTests
+	// endregion
+
+	// region sparqlSearchTests
 	private void sparqlSearchTests() {
-		
+
 		for (Map.Entry<String, String> entry : sparqlSearchQueries.entrySet()) {
 			String fileName = entry.getKey();
 			String query = entry.getValue();
@@ -261,23 +316,23 @@ public class RuntimeTester {
 					long t1 = System.currentTimeMillis();
 					ksAdapter.runSingleVariableStringQuery(modifiedQuery, Util.VARIABLE_EVENT);
 					long t2 = System.currentTimeMillis();
-					averageQueryTime += (t2-t1);
+					averageQueryTime += (t2 - t1);
 				}
 			}
 			averageQueryTime /= this.numberOfRepetitions;
 			averageQueryTime /= this.stemmedKeywords.size();
-			
+
 			if (log.isInfoEnabled())
 				log.info(String.format("%s: %d ms", fileName, averageQueryTime));
 		}
 
 	}
-	//endregion
-	
-	//region sparqlFeatureTests
+	// endregion
+
+	// region sparqlFeatureTests
 	private void sparqlFeatureTests() {
-		
-		for(Map.Entry<String, String> entry : sparqlFeatureQueries.entrySet()) {
+
+		for (Map.Entry<String, String> entry : sparqlFeatureQueries.entrySet()) {
 			String fileName = entry.getKey();
 			String query = entry.getValue();
 			long averageQueryTime = 0;
@@ -289,15 +344,15 @@ public class RuntimeTester {
 				averageQueryTime += (t2 - t1);
 			}
 			averageQueryTime /= this.eventURIs.size();
-			
+
 			if (log.isInfoEnabled())
 				log.info(String.format("%s: %d ms", fileName, averageQueryTime));
 		}
-		
+
 	}
-	//endregion
-	
-	//region evaluateFinder
+	// endregion
+
+	// region evaluateFinder
 	private void evaluateSearcher(EventSearcher searcher, String searcherName) {
 		long averageFindingTime = 0;
 		DummyUserModel um = new DummyUserModel();
@@ -312,25 +367,25 @@ public class RuntimeTester {
 		averageFindingTime /= this.numberOfRepetitions;
 		averageFindingTime /= this.keywords.size();
 		if (log.isInfoEnabled())
-			log.info(String.format("%s: %d ms",searcherName, averageFindingTime));
+			log.info(String.format("%s: %d ms", searcherName, averageFindingTime));
 	}
-	//endregion
-	
-	//region parallelSparqlTest
+	// endregion
+
+	// region parallelSparqlTest
 	private class ParallelSparqlTestWorker implements Runnable {
 
 		private KnowledgeStore ks;
-		
+
 		private String query;
-		
+
 		private String name;
-		
+
 		public ParallelSparqlTestWorker(KnowledgeStore ks, String query, String name) {
 			this.ks = ks;
 			this.query = query;
 			this.name = name;
 		}
-		
+
 		public void run() {
 			Session s = ks.newSession();
 			try {
@@ -343,15 +398,14 @@ public class RuntimeTester {
 			}
 			s.close();
 		}
-		
+
 	}
-	
+
 	private void parallelSparqlTest() {
-		KnowledgeStore ks = Client.builder("http://knowledgestore2.fbk.eu/nwr/wikinews").compressionEnabled(true).maxConnections(10)
-				.validateServer(false).connectionTimeout(10000).build();
+		KnowledgeStore ks = Client.builder("http://knowledgestore2.fbk.eu/nwr/wikinews").compressionEnabled(true).maxConnections(10).validateServer(false).connectionTimeout(10000).build();
 		ExecutorService threadPool = Executors.newFixedThreadPool(10);
 		List<Future<?>> futures = new ArrayList<Future<?>>();
-		
+
 		for (Map.Entry<String, String> entry : sparqlSearchQueries.entrySet()) {
 			futures.add(threadPool.submit(new ParallelSparqlTestWorker(ks, entry.getValue().replace(Util.PLACEHOLDER_KEYWORD, "Real Madrid"), entry.getKey())));
 		}
@@ -363,59 +417,65 @@ public class RuntimeTester {
 			}
 		}
 		threadPool.shutdown();
-		
+
 		for (Map.Entry<String, String> entry : sparqlSearchQueries.entrySet()) {
 			(new ParallelSparqlTestWorker(ks, entry.getValue().replace(Util.PLACEHOLDER_KEYWORD, "Real Madrid"), entry.getKey() + " seq")).run();
 		}
 		ks.close();
 	}
-	//endregion
-	
-	//region FilterTest
-	private void testFilter(IEventFilter filter, String filterName) {
+	// endregion
+
+	// region FilterTest
+	private void testFilter(IEventFilter filter, String filterName, int maxNumberOfEvents) {
+
+		if (maxNumberOfEvents == 0)
+			maxNumberOfEvents = this.eventURIs.size();
 		long totalTime = 0;
 		long averageTimePerEvent = 0;
-		
+		int i = 0;
 		long t1 = System.currentTimeMillis();
 		for (Map.Entry<List<Keyword>, Set<NewsEvent>> entry : this.keywordsToEventsMap.entrySet()) {
-			filter.filterEvents(entry.getValue(), entry.getKey());	
+			filter.filterEvents(entry.getValue(), entry.getKey());
+			i += entry.getValue().size();
+			if (i >= maxNumberOfEvents)
+				break;
 		}
 		long t2 = System.currentTimeMillis();
-		
+
 		totalTime = t2 - t1;
-		
-		averageTimePerEvent = totalTime / this.eventURIs.size();
-		
+
+		averageTimePerEvent = totalTime / maxNumberOfEvents;
+
 		if (log.isInfoEnabled())
 			log.info(String.format("%s - total: %d ms, per event: %d ms", filterName, totalTime, averageTimePerEvent));
-		
+
 	}
-		
+
 	private void parallelFilterTest() {
-		
+
 		for (int nThreads : threadNumbers) {
 			parallelFilter.shutDown();
 			parallelFilter.setNThreads(nThreads);
 			ksAdapter.closeConnection();
 			ksAdapter.setMaxNumberOfConnections(nThreads);
 			ksAdapter.openConnection();
-			testFilter(parallelFilter, String.format("%d thread filter", nThreads));
+			testFilter(parallelFilter, String.format("%d thread filter", nThreads), this.maxNumberOfEvents);
 		}
-		
+
 	}
-	//endregion
-	
-	//region featureTest
+	// endregion
+
+	// region featureTest
 	private void featureTest() {
-		
+
 		for (UsabilityFeature feature : this.features) {
 			long avgQueryTime = 0;
 			int i = 0;
 			for (Map.Entry<List<Keyword>, Set<NewsEvent>> entry : this.keywordsToEventsMap.entrySet()) {
-				
+
 				List<Keyword> keywords = entry.getKey();
 				Set<NewsEvent> events = entry.getValue();
-				
+
 				for (NewsEvent event : events) {
 					String uri = event.getEventURI();
 					long t1 = System.currentTimeMillis();
@@ -428,16 +488,91 @@ public class RuntimeTester {
 					break;
 			}
 			avgQueryTime /= i;
-			
+
 			if (log.isInfoEnabled())
 				log.info(String.format("%s: %d ms", feature.getName(), avgQueryTime));
 		}
 	}
-	//endregion
-	
+	// endregion
+
+	// region ksDownloadTest
+	private void ksDownloadTest() {
+
+		try {
+			KnowledgeStore ks = Client.builder("http://knowledgestore2.fbk.eu/nwr/wikinews").compressionEnabled(true).maxConnections(2).validateServer(false).connectionTimeout(10000).build();
+			Session session = ks.newSession();
+
+			List<URI> urisToCheck = new ArrayList<URI>();
+			int j = 0;
+			for (String uri : this.eventURIs) {
+				urisToCheck.add(new URIImpl(uri.substring(0, uri.indexOf("#"))));
+				j++;
+				if (j >= 100)
+					break;
+			}
+			// standard way
+			long standardTime = System.currentTimeMillis();
+			List<String> standardResult = new ArrayList<String>();
+			for (URI uri : urisToCheck) {
+				String s = session.download(uri).timeout(10000L).exec().writeToString();
+				standardResult.add(s);
+			}
+			standardTime = System.currentTimeMillis() - standardTime;
+			if (log.isInfoEnabled())
+				log.info(String.format("individual via download: %d ms", standardTime));
+
+			// batch way
+			long batchTime = System.currentTimeMillis();
+			List<String> batchResult = new ArrayList<String>();
+			Stream<Record> stream = session.retrieve(KS.RESOURCE).ids(urisToCheck).timeout(10000L).exec();
+			List<Record> records = stream.toList();
+			stream.close();
+
+			for (Record r : records) {
+				String s = r.toString();
+				batchResult.add(s);
+			}
+			batchTime = System.currentTimeMillis() - batchTime;
+			if (log.isInfoEnabled()) {
+				log.info(String.format("batch via retrieve: %d ms", batchTime));
+				log.info(batchResult.get(0));
+			}
+
+		} catch (Exception e) {
+			if (log.isInfoEnabled())
+				log.info("error", e);
+		}
+
+	}
+	// endregion
+
+	// region classifierTest
+	private void classifierTest() {
+
+		try {
+			Instances filtered = new Instances(this.dataSet, 0);
+			long totalTime = System.currentTimeMillis();
+			for (Instance instance : this.dataSet) {
+				double label = this.classifier.classifyInstance(instance);
+				boolean isUsable = (label == dataSet.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.LABEL_TRUE));
+				if (isUsable)
+					filtered.add(instance);
+			}
+			totalTime = System.currentTimeMillis() - totalTime;
+			long perInstance = totalTime / this.dataSet.numInstances();
+			if (log.isInfoEnabled()) 
+				log.info(String.format("filtering: total %d ms, per event %d ms", totalTime, perInstance));
+				
+			
+		} catch (Exception e) {
+			log.error("exception", e);
+		}
+	}
+	// endregion
+
 	public void run() {
 		this.ksAdapter.openConnection();
-		
+
 		if (this.doKSAccessTests)
 			ksAccessTests();
 		if (this.doSparqlSearchTests)
@@ -451,21 +586,25 @@ public class RuntimeTester {
 		if (this.doParallelSparqlTest)
 			parallelSparqlTest();
 		if (this.doSequentialFilterTest) {
-			testFilter(sequentialFilter, "sequential filter");
+			testFilter(sequentialFilter, "sequential filter", this.maxNumberOfEvents);
 		}
 		if (this.doParallelFilterTest) {
 			parallelFilterTest();
 		}
 		if (this.doFeatureTest)
 			featureTest();
-		
+		if (this.doDownloadTest)
+			ksDownloadTest();
+		if (this.doClassifierTest)
+			classifierTest();
+
 		sequentialSearcher.shutDown();
 		parallelSearcher.shutDown();
 		sequentialFilter.shutDown();
 		parallelFilter.shutDown();
 		this.ksAdapter.closeConnection();
 	}
-	
+
 	public static void main(String[] args) {
 		System.setProperty("java.util.logging.config.file", "./config/logging-benchmark.properties");
 		try {
@@ -478,7 +617,7 @@ public class RuntimeTester {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/benchmark.xml");
 		RuntimeTester test = (RuntimeTester) context.getBean("runtimeTester");
 		((AbstractApplicationContext) context).close();
-		
+
 		test.run();
 	}
 }
