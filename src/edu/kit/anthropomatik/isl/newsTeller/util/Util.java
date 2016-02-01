@@ -118,6 +118,7 @@ public class Util {
 	public static final String RELATION_NAME_CONSTITUENT_LABEL = "constituent-label-";
 	public static final String RELATION_NAME_CONSTITUENT_MENTION = "constituent-mention-";
 	public static final String RELATION_NAME_MENTION_PROPERTY = "mention-property-";
+	public static final String RELATION_NAME_RESOURCE_TEXT = "resource-text-";
 		
 	// private constructor to prevent instantiation
 	private Util() {
@@ -559,6 +560,23 @@ public class Util {
 			result = result.substring(result.lastIndexOf('/') + 1);
 		if (result.contains("."))
 			result = result.substring(0, result.indexOf('.'));
+		return result;
+	}
+	
+	/**
+	 * Get the resourceURI from the mentionURI by simple string manipulation.
+	 */
+	public static String resourceURIFromMentionURI(String mentionURI) {
+		return mentionURI.substring(0, mentionURI.indexOf("#"));
+	}
+	
+	/**
+	 * Convert a set of mentionURIs into a set of corresponding resourceURIs.
+	 */
+	public static Set<String> resourceURIsFromMentionURIs(Set<String> mentionURIs) {
+		Set<String> result = new HashSet<String>();
+		for (String mentionURI : mentionURIs)
+			result.add(resourceURIFromMentionURI(mentionURI));
 		return result;
 	}
 	// endregion

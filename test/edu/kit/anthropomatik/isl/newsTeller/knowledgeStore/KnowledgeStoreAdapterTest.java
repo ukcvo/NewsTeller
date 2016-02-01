@@ -160,10 +160,10 @@ public class KnowledgeStoreAdapterTest {
 	@Test
 	public void shouldReturnAllEventMentions() {
 		List<String> mentionURIs = Util.readStringListFromFile("resources/test/eventList.txt");
-		List<KSMention> expected = new ArrayList<KSMention>();
+		Set<KSMention> expected = new HashSet<KSMention>();
 		for (String uri : mentionURIs)
 			expected.add(new KSMention(uri));
-		List<KSMention> retrieved = ksAdapter.getAllEventMentions("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup");
+		Set<KSMention> retrieved = ksAdapter.getAllEventMentions("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup");
 		assertTrue(retrieved.equals(expected));
 	}
 	

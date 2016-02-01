@@ -49,4 +49,9 @@ public abstract class UsabilityFeature {
 	 * Run all the bulk queries against the KnowledgeStore in order to be prepared for later retrieval.
 	 */
 	public abstract void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords);
+	
+	/**
+	 * Returns the mention properties being used by this feature for central bulk aggregation.
+	 */
+	public abstract Set<String> getRequiredMentionProperties();
 }

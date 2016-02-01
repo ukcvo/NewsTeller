@@ -30,7 +30,8 @@
 	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
 		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
 		<property name="features" ref="activeFeatureList" />
-		<property name="nThreads" value="100" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="numThreads" value="1000" />
 	</bean>
 
 	<bean id="relevanceScorer"

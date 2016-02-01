@@ -1,7 +1,9 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -68,6 +70,17 @@ public class SequentialEventFilter implements IEventFilter {
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
+		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs);
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION);
+		
+		Set<String> mentionProperties = new HashSet<String>();
+		for (UsabilityFeature feature : this.features) {
+			mentionProperties.addAll(feature.getRequiredMentionProperties());
+		}
+		
+		ksAdapter.runKeyValueMentionPropertyQuery(mentionProperties, Util.RELATION_NAME_MENTION_PROPERTY, mentionURIs);
+		ksAdapter.runKeyValueResourceTextQuery(Util.resourceURIsFromMentionURIs(mentionURIs));
+		
 		for (UsabilityFeature feature : this.features) {
 			long t1 = System.currentTimeMillis();
 			feature.runBulkQueries(eventURIs, userQuery);
@@ -80,12 +93,19 @@ public class SequentialEventFilter implements IEventFilter {
 			log.info(String.format("bulk queries: %d ms", t));
 		t = System.currentTimeMillis();
 		
+		Map<UsabilityFeature, Long> featureRuntime = new HashMap<UsabilityFeature, Long>();
+		for (UsabilityFeature f : this.features)
+			featureRuntime.put(f, 0L);
+		
 		for (NewsEvent event : events) {
 			double[] values = new double[features.size() + 1];
 			
 			for (int i = 0; i < features.size(); i++) {
+				long tFeature = System.currentTimeMillis();
 				UsabilityFeature f = features.get(i);
 				values[i] = f.getValue(event.getEventURI(), userQuery);
+				tFeature = System.currentTimeMillis() - tFeature;
+				featureRuntime.put(f, featureRuntime.get(f) + tFeature);
 			}
 			
 			Instance example = new DenseInstance(1.0, values);
@@ -110,6 +130,11 @@ public class SequentialEventFilter implements IEventFilter {
 		t = System.currentTimeMillis() - t;
 		if (log.isInfoEnabled())
 			log.info(String.format("feature extraction & classification: %d ms", t));
+		
+//		for (UsabilityFeature f : features) {
+//			if (log.isInfoEnabled())
+//				log.info(String.format("%s: %d ms", f.getName(), featureRuntime.get(f)));
+//		}
 		
 		return result;
 	}

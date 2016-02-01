@@ -5,6 +5,7 @@ import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
+import jersey.repackaged.com.google.common.collect.Sets;
 
 /**
  * Counts average number of results for a given property.
@@ -26,10 +27,10 @@ public class MentionPropertyFeature extends UsabilityFeature {
 		
 		double result = 0;
 		
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
 		
 		for (String mentionURI : mentionURIs) {
-			Set<String> propertyValues = ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + propertyURI, mentionURI);
+			Set<String> propertyValues = ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION_PROPERTY + propertyURI, mentionURI);
 			result += propertyValues.size();
 		}
 		result = result / mentionURIs.size();
@@ -39,10 +40,12 @@ public class MentionPropertyFeature extends UsabilityFeature {
 
 	@Override
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, Util.VARIABLE_EVENT, 
-				Util.VARIABLE_MENTION, eventURIs);
-		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName);
-		ksAdapter.runKeyValueMentionPropertyQuery(propertyURI, Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName, mentionURIs);
+		// nothing to do
+	}
+
+	@Override
+	public Set<String> getRequiredMentionProperties() {
+		return Sets.newHashSet(propertyURI);
 	}
 
 }

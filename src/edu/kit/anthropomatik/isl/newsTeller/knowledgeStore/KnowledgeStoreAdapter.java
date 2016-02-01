@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -64,14 +65,12 @@ public class KnowledgeStoreAdapter {
 
 	private ConcurrentMap<String, String> resourceCache;
 
-	private ConcurrentMap<String, List<KSMention>> eventMentionCache;
+	private ConcurrentMap<String, Set<KSMention>> eventMentionCache;
 
-	private ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache; // relationship-id
-																					// -->
-																					// key
-																					// -->
-																					// values
+	private ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache; // relationship-id --> key --> values
 
+	private ConcurrentMap<String, KSMention> sentenceMentionCache;
+	
 	private ExecutorService threadPool;
 
 	public void setServerURL(String serverURL) {
@@ -90,6 +89,10 @@ public class KnowledgeStoreAdapter {
 		return this.maxNumberOfConnections;
 	}
 
+	public String getMentionFromEventTemplateName() {
+		return this.getMentionFromEventTemplateName;
+	}
+	
 	public boolean isConnectionOpen() {
 		return isConnectionOpen;
 	}
@@ -98,8 +101,9 @@ public class KnowledgeStoreAdapter {
 		this.getMentionFromEventTemplate = Util.readStringFromFile(getMentionFromEventFileName);
 		this.getEventFromMentionTemplate = Util.readStringFromFile(getEventFromMentionFileName);
 		this.resourceCache = new ConcurrentHashMap<String, String>();
-		this.eventMentionCache = new ConcurrentHashMap<String, List<KSMention>>();
+		this.eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 		this.sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		this.sentenceMentionCache = new ConcurrentHashMap<String, KSMention>();
 		this.getMentionFromEventTemplateName = Util.queryNameFromFileName(getMentionFromEventFileName);
 		this.getEventFromMentionTemplateName = Util.queryNameFromFileName(getEventFromMentionFileName);
 	}
@@ -147,6 +151,8 @@ public class KnowledgeStoreAdapter {
 	 */
 	public void flushBuffer() {
 		this.sparqlCache.clear();
+		this.sentenceMentionCache.clear();
+		this.eventMentionCache.clear();
 	}
 
 	/**
@@ -201,6 +207,13 @@ public class KnowledgeStoreAdapter {
 
 	}
 
+	/**
+	 * Store all mentions of the given events in the internal map.
+	 */
+	public void runKeyValueMentionFromEventQuery(Set<String> eventURIs) {
+		runKeyValueSparqlQuery(getMentionFromEventTemplate, Util.RELATION_NAME_EVENT_MENTION, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
+	}
+	
 	/**
 	 * Runs a key-value SPARQL query. Inserts the keyValues into the template, fires
 	 * the query and stores the resulting key-value pairs in the internal cache.
@@ -348,6 +361,64 @@ public class KnowledgeStoreAdapter {
 			this.sparqlCache.put(relationName + propertyURI, propertyMap.get(propertyURI));
 		}
 		
+	}
+	
+	private class ResourceTextWorker implements Runnable {
+
+		private String resourceURI;
+		private ConcurrentMap<String, Set<String>> relationMap;
+		
+		public ResourceTextWorker(String resourceURI, ConcurrentMap<String, Set<String>> relationMap) {
+			this.resourceURI = resourceURI;
+			this.relationMap = relationMap;
+		}
+		
+		@Override
+		public void run() {
+			Set<String> result = new HashSet<String>();
+			try {
+				Session session = knowledgeStore.newSession();
+				result.add(session.download(new URIImpl(resourceURI)).timeout((long) timeoutMsec).exec().writeToString());
+				session.close();
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error(String.format("Could not retrieve resource, returning empty String. URI: '%s'", resourceURI));
+				if (log.isDebugEnabled())
+					log.debug("Resource download failed", e);
+			}
+			relationMap.putIfAbsent(resourceURI, result);
+		}
+		
+		
+	}
+	
+	/**
+	 * Collects the texts for the given resourceURIs.
+	 */
+	public void runKeyValueResourceTextQuery(Set<String> resourceURIs) {
+		
+		if (this.sparqlCache.containsKey(Util.RELATION_NAME_RESOURCE_TEXT))
+			return; // don't do double work
+		
+		ConcurrentMap<String, Set<String>> relationMap = new ConcurrentHashMap<String, Set<String>>();
+		List<Future<?>> futures = new ArrayList<Future<?>>();
+		for (String resourceURI : resourceURIs) {
+			ResourceTextWorker w = new ResourceTextWorker(resourceURI, relationMap);
+			futures.add(this.submit(w));
+		}
+		
+		for (Future<?> f : futures) {
+			try {
+				f.get();
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("thread execution somehow failed!");
+				if (log.isDebugEnabled())
+					log.debug("thread execution exception", e);
+			}
+		}
+		
+		this.sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, relationMap);
 	}
 	// endregion
 
@@ -592,11 +663,12 @@ public class KnowledgeStoreAdapter {
 	public Set<String> retrieveOriginalTexts(String eventURI) {
 		Set<String> originalTexts = new HashSet<String>();
 
-		Set<String> mentionURIs = getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + getMentionFromEventTemplateName, eventURI);
-
+		Set<String> mentionURIs = getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
+		
 		for (String mentionURI : mentionURIs) {
-			String resourceURI = mentionURI.substring(0, mentionURI.indexOf("#"));
-			String originalText = getOriginalText(resourceURI);
+			String resourceURI = Util.resourceURIFromMentionURI(mentionURI);
+			String originalText = getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_TEXT, resourceURI);
+//					getOriginalText(resourceURI);
 			if (!originalText.isEmpty())
 				originalTexts.add(originalText);
 		}
@@ -620,7 +692,8 @@ public class KnowledgeStoreAdapter {
 		KSMention mention = retrieveKSMentionFromMentionURI(mentionURI, wholeSentence);
 
 		// get original text
-		String originalText = getOriginalText(mention.getResourceURI());
+		String originalText = getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_TEXT, mention.getResourceURI());
+//				getOriginalText(mention.getResourceURI());
 		if (originalText.isEmpty())
 			return "";
 
@@ -641,7 +714,7 @@ public class KnowledgeStoreAdapter {
 	public List<String> retrievePhrasesFromEntity(String entityURI, boolean wholeSentence) {
 		List<String> result = new ArrayList<String>();
 
-		Set<String> mentions = getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + getMentionFromEventTemplateName, entityURI);
+		Set<String> mentions = getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, entityURI);
 		if (mentions.isEmpty())
 			mentions = getBufferedValues(Util.RELATION_NAME_CONSTITUENT_MENTION + getMentionFromEventTemplateName, entityURI);
 
@@ -671,8 +744,12 @@ public class KnowledgeStoreAdapter {
 		int endIdx = Integer.parseInt(mentionURI.substring(mentionURI.indexOf(",", mentionURI.indexOf("=")) + 1));
 
 		if (wholeSentence) {
+			if (this.sentenceMentionCache.containsKey(mentionURI))
+				return this.sentenceMentionCache.get(mentionURI); // grab from cache if possible;
+			
 			// search for sentence boundaries using a very simple heuristic
-			String originalText = getOriginalText(resourceURI);
+			String originalText = getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_TEXT, resourceURI);
+					//getOriginalText(resourceURI);
 			if (originalText.isEmpty()) {
 				if (log.isWarnEnabled())
 					log.warn(String.format("empty original text, cannot find sentence boundaries for mention '%s'", mentionURI));
@@ -687,6 +764,8 @@ public class KnowledgeStoreAdapter {
 
 			while ((endIdx < originalText.length()) && (!sentenceDelimiters.contains(originalText.charAt(endIdx - 1))))
 				endIdx++;
+			
+			this.sentenceMentionCache.putIfAbsent(mentionURI, new KSMention(resourceURI, startIdx, endIdx));
 		}
 
 		return new KSMention(resourceURI, startIdx, endIdx);
@@ -778,41 +857,90 @@ public class KnowledgeStoreAdapter {
 			return "";
 	}
 
+	private class EventMentionWorker implements Runnable {
+
+		private Set<URI> uriSet;
+		
+		public EventMentionWorker(Set<URI> uriSet) {
+			this.uriSet = uriSet;
+		}
+		
+		@Override
+		public void run() {
+			Session session = knowledgeStore.newSession();
+			try {
+				Stream<Record> stream = session.retrieve(KS.RESOURCE).ids(uriSet).timeout((long) timeoutMsec).exec();
+				List<Record> records = stream.toList();
+				stream.close();
+				
+				for (Record r : records) {
+					String key = r.getID().toString();
+					List<String> stringValues = r.get(new URIImpl("http://dkm.fbk.eu/ontologies/knowledgestore#hasMention"), String.class);
+					Set<KSMention> values = new HashSet<KSMention>();
+					for (String s : stringValues)
+						values.add(new KSMention(s));
+					eventMentionCache.putIfAbsent(key, values);
+				}
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("Cannot retrieve mentions from resources.");
+				if (log.isDebugEnabled())
+					log.debug("Cannot retrieve mentions from resources.", e);
+			}
+			session.close();
+		}
+		
+	}
+	
+	/**
+	 * Store all mentions of events mentioned in the given resourceURIs in the internal cache.
+	 */
+	public void retrieveAllEventMentions(Set<String> resourceURIs) {
+		
+		List<Set<URI>> queryURISets = new ArrayList<Set<URI>>();
+		Set<URI> currentSet = new HashSet<URI>();
+		int currentLength = 0;
+		for (String resourceURI : resourceURIs) {
+			if (currentLength + resourceURI.length() > 6000) {
+				queryURISets.add(currentSet);
+				currentSet = new HashSet<URI>();
+				currentLength = 0;
+			}
+			currentSet.add(new URIImpl(resourceURI));
+			currentLength += resourceURI.length();
+		}
+		queryURISets.add(currentSet);
+
+		Session session = knowledgeStore.newSession();
+		List<Future<?>> futures = new ArrayList<Future<?>>();
+		for (Set<URI> uriSet : queryURISets) {
+			EventMentionWorker w = new EventMentionWorker(uriSet);
+			futures.add(this.submit(w));
+		}
+		
+		for (Future<?> f : futures) {
+			try {
+				f.get();
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("thread execution somehow failed!");
+				if (log.isDebugEnabled())
+					log.debug("thread execution exception", e);
+			} 
+		}
+		
+		session.close();
+	}
+	
 	/**
 	 * Takes the given resourceURI and returns all mentions of this resource
 	 * that link to an event.
 	 */
-	public List<KSMention> getAllEventMentions(String resourceURI) {
+	public Set<KSMention> getAllEventMentions(String resourceURI) {
 
 		if (this.eventMentionCache.containsKey(resourceURI))
 			return this.eventMentionCache.get(resourceURI);
-
-		List<KSMention> result = new ArrayList<KSMention>();
-
-		try {
-			Session session = knowledgeStore.newSession();
-			Stream<Record> stream = session.retrieve(KS.RESOURCE).ids(new URIImpl(resourceURI)).timeout((long) this.timeoutMsec).exec();
-			List<Record> records = stream.toList();
-			stream.close();
-			session.close();
-
-			for (Record r : records) {
-				List<String> mentionURIs = r.get(new URIImpl("http://dkm.fbk.eu/ontologies/knowledgestore#hasMention"), String.class);
-
-				for (String mentionURI : mentionURIs) {
-					String event = runSingleVariableStringQuerySingleResult(this.getEventFromMentionTemplate.replace(Util.PLACEHOLDER_MENTION, mentionURI), Util.VARIABLE_EVENT);
-					if (!event.isEmpty())
-						result.add(new KSMention(mentionURI));
-				}
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		this.eventMentionCache.putIfAbsent(resourceURI, result);
-
-		return result;
+		return new HashSet<KSMention>();
 	}
 
 	// endregion

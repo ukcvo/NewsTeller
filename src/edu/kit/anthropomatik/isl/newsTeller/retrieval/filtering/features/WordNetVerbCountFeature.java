@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -92,6 +93,11 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
 		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_LABEL + sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_LABEL, 
 				eventURIs);
+	}
+
+	@Override
+	public Set<String> getRequiredMentionProperties() {
+		return new HashSet<String>();
 	}
 
 }

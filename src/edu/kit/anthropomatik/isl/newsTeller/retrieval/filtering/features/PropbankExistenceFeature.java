@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Sets;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import edu.kit.anthropomatik.isl.newsTeller.util.propbank.PropbankFrames;
@@ -29,15 +31,15 @@ public class PropbankExistenceFeature extends UsabilityFeature {
 
 		double result = 0;
 		
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
 		
 		for (String mentionURI : mentionURIs) {
 			
 			double mentionResult = 0;
 			
 			List<String> rolesetIds = ksAdapter.getMentionProperty(mentionURI, propertyURI);
-			String pos = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + Util.MENTION_PROPERTY_POS, mentionURI);
-			String pred = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + Util.MENTION_PROPERTY_PRED, mentionURI);
+			String pos = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + Util.MENTION_PROPERTY_POS, mentionURI);
+			String pred = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + Util.MENTION_PROPERTY_PRED, mentionURI);
 			
 			String suffix;
 			switch (pos) {
@@ -67,13 +69,12 @@ public class PropbankExistenceFeature extends UsabilityFeature {
 
 	@Override
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, Util.VARIABLE_EVENT, 
-				Util.VARIABLE_MENTION, eventURIs);
-		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName);
-		Set<String> propertyURIs = new HashSet<String>();
-		propertyURIs.add(Util.MENTION_PROPERTY_POS);
-		propertyURIs.add(Util.MENTION_PROPERTY_PRED);
-		ksAdapter.runKeyValueMentionPropertyQuery(propertyURIs, Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName, mentionURIs);
+		// nothing to do
+	}
+
+	@Override
+	public Set<String> getRequiredMentionProperties() {
+		return Sets.newHashSet(Util.MENTION_PROPERTY_POS, Util.MENTION_PROPERTY_PRED);
 	}
 
 }

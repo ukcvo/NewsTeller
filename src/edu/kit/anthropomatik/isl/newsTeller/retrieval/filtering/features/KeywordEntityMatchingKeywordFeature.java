@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +45,11 @@ public class KeywordEntityMatchingKeywordFeature extends UsabilityFeature {
 			ksAdapter.runKeyValueSparqlQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
 					Util.RELATION_NAME_EVENT_LABEL + sparqlQueryName + keyword.getWord(), Util.VARIABLE_EVENT, Util.VARIABLE_LABEL, eventURIs);
 		}
+	}
+
+	@Override
+	public Set<String> getRequiredMentionProperties() {
+		return new HashSet<String>();
 	}
 
 }

@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -85,7 +86,6 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 
 	@Override
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		super.runBulkQueries(eventURIs, keywords);
 		for (Keyword keyword : keywords) {
 			ksAdapter.runKeyValueSparqlQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
 					Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName + keyword.getWord(), Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);

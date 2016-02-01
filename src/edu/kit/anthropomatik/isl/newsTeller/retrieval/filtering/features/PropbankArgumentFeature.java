@@ -9,6 +9,7 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import edu.kit.anthropomatik.isl.newsTeller.util.propbank.PropbankArgument;
 import edu.kit.anthropomatik.isl.newsTeller.util.propbank.PropbankFrames;
 import edu.kit.anthropomatik.isl.newsTeller.util.propbank.PropbankRoleset;
+import jersey.repackaged.com.google.common.collect.Sets;
 
 public class PropbankArgumentFeature extends UsabilityFeature {
 
@@ -61,7 +62,7 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
 		
 		boolean hasA0 = Util.parseXMLDoubleFromSet(ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_NUMBER + a0QueryName, eventURI)) > 0;
 		boolean hasA1 = Util.parseXMLDoubleFromSet(ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_NUMBER + a1QueryName, eventURI)) > 0;
@@ -79,7 +80,7 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 			double averageMentionFraction = 0;
 
 			String pos = 
-					ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + Util.MENTION_PROPERTY_POS, mentionURI);
+					ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + Util.MENTION_PROPERTY_POS, mentionURI);
 
 			String suffix;
 			switch (pos) {
@@ -98,7 +99,7 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 				break;
 			}
 
-			Set<String> rolesetIds = ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + propertyURI, mentionURI);
+			Set<String> rolesetIds = ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION_PROPERTY  + propertyURI, mentionURI);
 
 			if (suffix.equals(PropbankFrames.SUFFIX_NOUN) && this.doUseVerbAsFallback) {
 				boolean useFallback = true;
@@ -110,7 +111,7 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 				}
 				if (useFallback) {
 					rolesetIds = 
-							ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + Util.MENTION_PROPERTY_PROPBANK, mentionURI);
+							ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION_PROPERTY + Util.MENTION_PROPERTY_PROPBANK, mentionURI);
 					suffix = PropbankFrames.SUFFIX_VERB;
 				}
 
@@ -189,18 +190,15 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 
 	@Override
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
 		ksAdapter.runKeyValueSparqlQuery(a0Query, Util.RELATION_NAME_EVENT_NUMBER + a0QueryName, Util.VARIABLE_EVENT, Util.VARIABLE_NUMBER, eventURIs);
 		ksAdapter.runKeyValueSparqlQuery(a1Query, Util.RELATION_NAME_EVENT_NUMBER + a1QueryName, Util.VARIABLE_EVENT, Util.VARIABLE_NUMBER, eventURIs);
 		ksAdapter.runKeyValueSparqlQuery(a2Query, Util.RELATION_NAME_EVENT_NUMBER + a2QueryName, Util.VARIABLE_EVENT, Util.VARIABLE_NUMBER, eventURIs);
 		ksAdapter.runKeyValueSparqlQuery(locQuery, Util.RELATION_NAME_EVENT_NUMBER + locQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_NUMBER, eventURIs);
-		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName);
-		Set<String> propertyURIs = new HashSet<String>();
-		propertyURIs.add(Util.MENTION_PROPERTY_POS);
-		propertyURIs.add(propertyURI);
-		propertyURIs.add(Util.MENTION_PROPERTY_PROPBANK);
-		propertyURIs.add(Util.MENTION_PROPERTY_NOMBANK);
-		ksAdapter.runKeyValueMentionPropertyQuery(propertyURIs, Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName, mentionURIs);
+	}
+
+	@Override
+	public Set<String> getRequiredMentionProperties() {
+		return Sets.newHashSet(Util.MENTION_PROPERTY_POS, Util.MENTION_PROPERTY_PROPBANK, Util.MENTION_PROPERTY_NOMBANK, propertyURI);
 	}
 
 }

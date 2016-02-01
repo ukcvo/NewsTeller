@@ -92,8 +92,8 @@ public abstract class FullTextFeature extends UsabilityFeature {
 	}
 	
 	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		// TODO Auto-generated method stub
+	public Set<String> getRequiredMentionProperties() {
+		return new HashSet<String>();
 	}
 	
 	/**

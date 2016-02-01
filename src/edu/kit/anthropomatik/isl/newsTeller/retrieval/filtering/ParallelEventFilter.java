@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.apache.commons.logging.Log;
@@ -34,12 +38,18 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 	
 	private KnowledgeStoreAdapter ksAdapter;
 	
+	private ExecutorService threadPool;
+	
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
 	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
+	}
+	
+	public void setNumThreads(int numThreads) {
+		this.threadPool = Executors.newFixedThreadPool(numThreads);
 	}
 	
 	public ParallelEventFilter(String classifierFileName) {
@@ -53,6 +63,25 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 			if (log.isDebugEnabled())
 				log.debug("can't read classifier from file", e);
 		}
+	}
+	
+	private class FeatureWorker implements Callable<Double> {
+
+		private UsabilityFeature feature;
+		private String eventURI;
+		private List<Keyword> keywords;
+		
+		public FeatureWorker(UsabilityFeature feature, String eventURI, List<Keyword> keywords) {
+			this.feature = feature;
+			this.eventURI = eventURI;
+			this.keywords = keywords;
+		}
+		
+		@Override
+		public Double call() {
+			return feature.getValue(eventURI, keywords);
+		}
+		
 	}
 	
 	private class EventWorker implements Runnable {
@@ -72,15 +101,29 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 		public void run() {
 			double[] values = new double[features.size() + 1];
 			
+			List<Future<?>> futures = new ArrayList<Future<?>>();
 			for (int i = 0; i < features.size(); i++) {
-				UsabilityFeature f = features.get(i);
-				values[i] = f.getValue(event.getEventURI(), userQuery);
+				//UsabilityFeature f = features.get(i);
+				FeatureWorker w = new FeatureWorker(features.get(i), event.getEventURI(), userQuery);
+				futures.add(threadPool.submit(w));
+				// values[i] = f.getValue(event.getEventURI(), userQuery);
+			}
+			
+			for (int i = 0; i < futures.size(); i++) {
+				try {
+					values[i] = (double) futures.get(i).get();
+				} catch (Exception e) {
+					if (log.isErrorEnabled())
+						log.error("thread execution somehow failed!");
+					if (log.isDebugEnabled())
+						log.debug("thread execution exception", e);
+				} 
 			}
 			
 			Instance example = new DenseInstance(1.0, values);
 			example.setDataset(header);
 			
-			map.putIfAbsent(event, example);
+			this.map.putIfAbsent(event, example);
 		}
 		
 	}
@@ -109,11 +152,33 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 		
 		Set<NewsEvent> result = new HashSet<NewsEvent>();
 		
+		long t = System.currentTimeMillis();
 		Set<String> eventURIs = new HashSet<String>();
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
-		long t = System.currentTimeMillis();
+		long t1 = System.currentTimeMillis();
+		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs);
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION);
+		if (log.isInfoEnabled())
+			log.info(String.format("get mentions: %d ms", System.currentTimeMillis() - t1));
+		
+		t1 = System.currentTimeMillis();
+		Set<String> mentionProperties = new HashSet<String>();
+		for (UsabilityFeature feature : this.features) {
+			mentionProperties.addAll(feature.getRequiredMentionProperties());
+		}
+		
+		ksAdapter.runKeyValueMentionPropertyQuery(mentionProperties, Util.RELATION_NAME_MENTION_PROPERTY, mentionURIs);
+		if (log.isInfoEnabled())
+			log.info(String.format("get mention properties: %d ms", System.currentTimeMillis() - t1));
+		
+		t1 = System.currentTimeMillis();
+		ksAdapter.runKeyValueResourceTextQuery(Util.resourceURIsFromMentionURIs(mentionURIs));
+		if (log.isInfoEnabled())
+			log.info(String.format("get texts: %d ms", System.currentTimeMillis() - t1));
+		
+		t1 = System.currentTimeMillis();
 		// sequential bulk retrieval
 //		for (UsabilityFeature feature : this.features)
 //			feature.runBulkQueries(eventURIs, userQuery);
@@ -133,8 +198,10 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 					log.debug("thread execution exception", e);
 			}
 		}
-		
 		t = System.currentTimeMillis() - t;
+		if (log.isInfoEnabled())
+			log.info(String.format("feature bulk: %d ms", System.currentTimeMillis() - t1));
+		
 		if (log.isInfoEnabled())
 			log.info(String.format("bulk retrieval: %d ms", t));
 		t = System.currentTimeMillis();
@@ -146,7 +213,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 		// parallel feature extraction
 		for (NewsEvent e : events) {
 			EventWorker w = new EventWorker(e, userQuery, resultMap);
-			futures.add(ksAdapter.submit(w));
+			futures.add(threadPool.submit(w));//ksAdapter.submit(w));
 		}
 		
 		for (Future<?> f : futures) {
@@ -190,7 +257,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 	}
 
 	public void shutDown() {
-		// nothing to do
+		this.threadPool.shutdown();
 	}
 
 }

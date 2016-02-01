@@ -32,7 +32,7 @@ public class MentionComparisonFeature extends UsabilityFeature {
 
 		double result = 0;
 
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
 		List<KSMention> mentions = new ArrayList<KSMention>();
 		List<KSMention> mentionSentences = new ArrayList<KSMention>();
 		List<Set<String>> mentionSentenceStrings = new ArrayList<Set<String>>();
@@ -87,7 +87,12 @@ public class MentionComparisonFeature extends UsabilityFeature {
 
 	@Override
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
+		// nothing to do
+	}
+
+	@Override
+	public Set<String> getRequiredMentionProperties() {
+		return new HashSet<String>();
 	}
 
 }

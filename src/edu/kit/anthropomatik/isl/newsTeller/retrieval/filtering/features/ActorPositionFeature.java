@@ -6,6 +6,7 @@ import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
+import jersey.repackaged.com.google.common.collect.Sets;
 
 public class ActorPositionFeature extends UsabilityFeature {
 
@@ -39,7 +40,7 @@ public class ActorPositionFeature extends UsabilityFeature {
 		
 		double result = 0;
 		
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
 		
 		Set<String> actors = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, eventURI);
 		Set<Set<String>> actorLabels = new HashSet<Set<String>>();
@@ -49,8 +50,7 @@ public class ActorPositionFeature extends UsabilityFeature {
 				
 		for (String mentionURI : mentionURIs) {
 			String sentence = ksAdapter.retrieveSentenceFromMention(mentionURI);
-			String eventLabel = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + this.mentionQueryName 
-																	+ Util.MENTION_PROPERTY_ANCHOR_OF, mentionURI);
+			String eventLabel = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + Util.MENTION_PROPERTY_ANCHOR_OF, mentionURI);
 			
 			String[] sentenceParts = sentence.split(eventLabel);
 			
@@ -84,16 +84,16 @@ public class ActorPositionFeature extends UsabilityFeature {
 
 	@Override
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(mentionQuery, Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, Util.VARIABLE_EVENT, 
-				Util.VARIABLE_MENTION, eventURIs);
 		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, 
 				Util.VARIABLE_ENTITY, eventURIs);
 		Set<String> actors = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName);
 		ksAdapter.runKeyValueSparqlQuery(labelQuery, Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.labelQueryName, 
 				Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, actors);
-		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName);
-		ksAdapter.runKeyValueMentionPropertyQuery(Util.MENTION_PROPERTY_ANCHOR_OF, 
-				Util.RELATION_NAME_MENTION_PROPERTY + this.mentionQueryName, mentionURIs);
+	}
+
+	@Override
+	public Set<String> getRequiredMentionProperties() {
+		return Sets.newHashSet(Util.MENTION_PROPERTY_ANCHOR_OF);
 	}
 
 	

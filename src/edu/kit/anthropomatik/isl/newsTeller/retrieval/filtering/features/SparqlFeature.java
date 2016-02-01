@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,6 +39,11 @@ public class SparqlFeature extends UsabilityFeature {
 			ksAdapter.runKeyValueSparqlQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
 					Util.RELATION_NAME_EVENT_NUMBER + sparqlQueryName + keyword.getWord(), Util.VARIABLE_EVENT, Util.VARIABLE_NUMBER, eventURIs);
 		}
+	}
+
+	@Override
+	public Set<String> getRequiredMentionProperties() {
+		return new HashSet<String>();
 	}
 
 }
