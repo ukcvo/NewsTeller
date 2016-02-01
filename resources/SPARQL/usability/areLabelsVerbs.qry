@@ -1,5 +1,6 @@
-SELECT ?label
+SELECT ?event ?label
 WHERE
 {
-    <*e*> rdfs:label ?label
+    VALUES ?event { *keys* } .
+    ?event rdfs:label ?label
 }

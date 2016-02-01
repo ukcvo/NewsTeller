@@ -1,6 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,16 +38,14 @@ public class PropbankNeedsArgumentFeature extends UsabilityFeature {
 		
 		boolean eventNeedsArg = true;
 		
-		List<String> mentionURIs = new ArrayList<String>();
-		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI));
-		if (mentionURIs.isEmpty())
-			mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION, false);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, eventURI);
 
 		for (String mentionURI : mentionURIs) {
 			
 			boolean mentionNeedsArg = false;
 			
-			String pos = ksAdapter.getUniqueMentionProperty(mentionURI, Util.MENTION_PROPERTY_POS);
+			String pos = 
+					ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + Util.MENTION_PROPERTY_POS, mentionURI);
 
 			String suffix;
 			switch (pos) {
@@ -62,7 +60,7 @@ public class PropbankNeedsArgumentFeature extends UsabilityFeature {
 				break;
 			}
 			
-			List<String> rolesetIds = ksAdapter.getMentionProperty(mentionURI, propertyURI);
+			Set<String> rolesetIds = ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + propertyURI, mentionURI);
 
 			for (String roleset : rolesetIds) {
 				
@@ -94,6 +92,17 @@ public class PropbankNeedsArgumentFeature extends UsabilityFeature {
 		}
 		
 		return eventNeedsArg ? 1.0 : 0.0;
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_MENTION + sparqlQuery, Util.VARIABLE_EVENT, 
+				Util.VARIABLE_MENTION, eventURIs);
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQuery);
+		Set<String> propertyURIs = new HashSet<String>();
+		propertyURIs.add(Util.MENTION_PROPERTY_POS);
+		propertyURIs.add(propertyURI);
+		ksAdapter.runKeyValueMentionPropertyQuery(propertyURIs, Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName, mentionURIs);
 	}
 
 }

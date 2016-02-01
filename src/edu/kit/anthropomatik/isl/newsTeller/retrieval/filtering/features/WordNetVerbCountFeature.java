@@ -1,6 +1,8 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -70,7 +72,7 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
-		List<String> labels = this.ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_LABEL);
+		Set<String> labels = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_LABEL + sparqlQueryName, eventURI);
 
 		if (labels.isEmpty()) {
 			if (log.isWarnEnabled())
@@ -84,6 +86,12 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 		}
 
 		return sum / labels.size();
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_LABEL + sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_LABEL, 
+				eventURIs);
 	}
 
 }

@@ -1,5 +1,7 @@
-SELECT (COUNT(?mention) AS ?number)
+SELECT ?event (COUNT(?mention) AS ?number)
 WHERE
 {
-    <*e*> gaf:denotedBy ?mention
+    VALUES ?event { *keys* } .
+    ?event gaf:denotedBy ?mention
 }
+GROUP BY ?event

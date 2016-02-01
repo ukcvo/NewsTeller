@@ -1,5 +1,7 @@
-SELECT (COUNT(?place) AS ?number)
+SELECT ?event (COUNT(?place) AS ?number)
 WHERE
 {
-    <*e*> sem:hasPlace ?place
+    VALUES ?event { *keys* } .
+    ?event sem:hasPlace ?place
 }
+GROUP BY ?event

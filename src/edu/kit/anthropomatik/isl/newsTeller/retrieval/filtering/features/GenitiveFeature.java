@@ -1,6 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.List;
+import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -15,9 +16,12 @@ public class GenitiveFeature extends UsabilityFeature {
 
 	private String labelQuery;
 	
+	private String labelQueryName;
+	
 	public GenitiveFeature(String queryFileName, String labelQueryFileName) {
 		super(queryFileName);
 		this.labelQuery = Util.readStringFromFile(labelQueryFileName);
+		this.labelQueryName = Util.queryNameFromFileName(labelQueryFileName);
 	}
 
 	@Override
@@ -25,9 +29,9 @@ public class GenitiveFeature extends UsabilityFeature {
 		
 		double result = 0;
 		
-		List<String> entities = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_ENTITY);
+		Set<String> entities = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, eventURI);
 		for (String entity : entities) {
-			List<String> labels = ksAdapter.runSingleVariableStringQuery(labelQuery.replace(Util.PLACEHOLDER_ENTITY, entity), Util.VARIABLE_LABEL);
+			Set<String> labels = ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.labelQueryName, entity);
 			for (String label : labels) {
 				if (label.endsWith("'s") || label.endsWith("s'")) {
 					result++;
@@ -38,6 +42,13 @@ public class GenitiveFeature extends UsabilityFeature {
 		result /= entities.size();
 		
 		return result;
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
+		Set<String> entities = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + sparqlQueryName);
+		ksAdapter.runKeyValueSparqlQuery(labelQuery, Util.RELATION_NAME_CONSTITUENT_LABEL + sparqlQueryName + labelQueryName, Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, entities);
 	}
 
 }

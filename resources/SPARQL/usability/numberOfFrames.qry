@@ -1,6 +1,8 @@
-SELECT (COUNT(?frame) AS ?number)
+SELECT ?event (COUNT(?frame) AS ?number)
 WHERE
 {
-    <*e*> ?link ?frame .
+    VALUES ?event { *keys* } .
+    ?event ?link ?frame .
     ?frame rdfs:isDefinedBy <http://www.newsreader-project.eu/ontologies/framenet/>
 }
+GROUP BY ?event

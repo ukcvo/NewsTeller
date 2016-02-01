@@ -99,10 +99,10 @@ public class ConstituentsPerMentionFeature extends UsabilityFeature {
 
 	@Override
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueQuery(mentionQuery, Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
-		ksAdapter.runKeyValueQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
-		Set<String> constituents = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT);
-		ksAdapter.runKeyValueQuery(mentionQuery, Util.RELATION_NAME_CONSTITUENT_MENTION + this.sparqlQueryName + this.mentionQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, constituents);
+		ksAdapter.runKeyValueSparqlQuery(mentionQuery, Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
+		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
+		Set<String> constituents = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName);
+		ksAdapter.runKeyValueSparqlQuery(mentionQuery, Util.RELATION_NAME_CONSTITUENT_MENTION + this.sparqlQueryName + this.mentionQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, constituents);
 	}
 
 }

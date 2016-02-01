@@ -91,6 +91,11 @@ public abstract class FullTextFeature extends UsabilityFeature {
 		return averageAppearance;
 	}
 	
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		// TODO Auto-generated method stub
+	}
+	
 	/**
 	 * Finds the labels to check. Outermost list is for different keywords, middle-layer list is for different labels, innermost list is for label parts.
 	 */

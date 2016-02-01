@@ -1,6 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.List;
+import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -24,10 +25,19 @@ public class SparqlFeature extends UsabilityFeature {
 		double weightSum = 0;
 		for (Keyword keyword : keywords) {
 			weightSum += keyword.getWeight();
-			sum += this.ksAdapter.runSingleVariableDoubleQuerySingleResult(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI).replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), Util.VARIABLE_NUMBER);
+			sum += Util.parseXMLDoubleFromSet(ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_NUMBER + sparqlQueryName + keyword.getWord(), 
+												eventURI));
 		}
 		double result = sum / weightSum;
 		return result;
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		for (Keyword keyword : keywords) {
+			ksAdapter.runKeyValueSparqlQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
+					Util.RELATION_NAME_EVENT_NUMBER + sparqlQueryName + keyword.getWord(), Util.VARIABLE_EVENT, Util.VARIABLE_NUMBER, eventURIs);
+		}
 	}
 
 }

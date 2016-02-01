@@ -113,8 +113,11 @@ public class Util {
 
 	public static final String RELATION_NAME_EVENT_MENTION = "event-mention-";
 	public static final String RELATION_NAME_EVENT_CONSTITUENT = "event-constituent-";
-	public static final String RELATION_NAME_CONSTITUENT_LABEL = "actor-label-";
+	public static final String RELATION_NAME_EVENT_LABEL = "event-label-";
+	public static final String RELATION_NAME_EVENT_NUMBER = "event-number-";
+	public static final String RELATION_NAME_CONSTITUENT_LABEL = "constituent-label-";
 	public static final String RELATION_NAME_CONSTITUENT_MENTION = "constituent-mention-";
+	public static final String RELATION_NAME_MENTION_PROPERTY = "mention-property-";
 		
 	// private constructor to prevent instantiation
 	private Util() {
@@ -484,6 +487,15 @@ public class Util {
 	}
 
 	/**
+	 * Parses the first string from the given set, returns 0 for empty set.
+	 */
+	public static double parseXMLDoubleFromSet(Set<String> strings) {
+		for (String str : strings)
+			return parseXMLDouble(str);
+		return 0; // return 0 for empty set
+	}
+	
+	/**
 	 * Calculate the average value of the given collection. Returns NaN for
 	 * empty collection.
 	 */
@@ -542,7 +554,12 @@ public class Util {
 	 * Abbreviates the full path of a query filename to just the file name itself.
 	 */
 	public static String queryNameFromFileName(String queryFileName) {
-		return queryFileName.substring(queryFileName.lastIndexOf('/'), queryFileName.lastIndexOf('.'));
+		String result = queryFileName;
+		if (result.contains("/"))
+			result = result.substring(result.lastIndexOf('/') + 1);
+		if (result.contains("."))
+			result = result.substring(0, result.indexOf('.'));
+		return result;
 	}
 	// endregion
 }

@@ -35,6 +35,8 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 		super(queryFileName);
 		this.directLabelQuery = Util.readStringFromFile(directLabelQueryFileName);
 		this.inheritedLabelQuery = Util.readStringFromFile(inheritedLabelQueryFileName);
+		this.directLabelQueryName = Util.queryNameFromFileName(directLabelQueryFileName);
+		this.inheritedLabelQueryName = Util.queryNameFromFileName(inheritedLabelQueryFileName);
 	}
 	
 	@Override
@@ -83,14 +85,17 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 
 	@Override
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		super.runBulkQueries(eventURIs, keywords);
 		for (Keyword keyword : keywords) {
-			ksAdapter.runKeyValueQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
+			ksAdapter.runKeyValueSparqlQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
 					Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName + keyword.getWord(), Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
 			Set<String> entities = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName + keyword.getWord());
-			ksAdapter.runKeyValueQuery(directLabelQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
-					Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.directLabelQueryName + keyword.getWord(), Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, entities);
-			ksAdapter.runKeyValueQuery(inheritedLabelQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
-					Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.inheritedLabelQueryName + keyword.getWord(), Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, entities);
+			if (!directLabelQuery.isEmpty())
+				ksAdapter.runKeyValueSparqlQuery(directLabelQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
+						Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.directLabelQueryName + keyword.getWord(), Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, entities);
+			if (!inheritedLabelQuery.isEmpty())
+				ksAdapter.runKeyValueSparqlQuery(inheritedLabelQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
+						Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.inheritedLabelQueryName + keyword.getWord(), Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, entities);
 		}
 	}
 

@@ -1,11 +1,13 @@
-SELECT (AVG(?count) AS ?number)
+SELECT ?event (AVG(?count) AS ?number)
 WHERE
 {
-    SELECT (COUNT(?link) AS ?count)
+    SELECT ?event (COUNT(?link) AS ?count)
     WHERE
     {
-        <*e*> sem:hasPlace ?entity .
+        VALUES ?event { *keys* } .
+        ?event sem:hasPlace ?entity .
         OPTIONAL { ?entity ?link <http://dbpedia.org/ontology/Place> }
     }
-    GROUP BY ?entity
+    GROUP BY ?entity ?event
 }
+GROUP BY ?event

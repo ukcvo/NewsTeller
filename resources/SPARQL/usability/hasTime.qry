@@ -1,5 +1,7 @@
-SELECT (COUNT(?time) AS ?number)
+SELECT ?event (COUNT(?time) AS ?number)
 WHERE
 {
-    <*e*> sem:hasTime ?time
+    VALUES ?event { *keys* } .
+    ?event sem:hasTime ?time
 }
+GROUP BY ?event

@@ -32,10 +32,7 @@ public class MentionComparisonFeature extends UsabilityFeature {
 
 		double result = 0;
 
-		List<String> mentionURIs = new ArrayList<String>();
-		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI));
-		if (mentionURIs.isEmpty())
-			mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), Util.VARIABLE_MENTION);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, eventURI);
 		List<KSMention> mentions = new ArrayList<KSMention>();
 		List<KSMention> mentionSentences = new ArrayList<KSMention>();
 		List<Set<String>> mentionSentenceStrings = new ArrayList<Set<String>>();
@@ -86,6 +83,11 @@ public class MentionComparisonFeature extends UsabilityFeature {
 		result /= (0.5 * mentionURIs.size() * (mentionURIs.size() - 1));
 
 		return result;
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
 	}
 
 }

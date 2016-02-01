@@ -1,15 +1,17 @@
-SELECT (MAX(?count) AS ?number)
+SELECT ?event (MAX(?count) AS ?number)
 WHERE
 {
-    SELECT (COUNT(?label) AS ?count)
+    SELECT ?event (COUNT(?label) AS ?count)
     WHERE
     {
-        <*e*> sem:hasActor ?entity .
+        VALUES ?event { *keys* } .
+        ?event sem:hasActor ?entity .
         OPTIONAL 
         {
             ?entity skos:prefLabel ?label .
             FILTER(REGEX(STR(?label),"[0-9]", "i"))
         }
     }
-    GROUP BY ?entity
+    GROUP BY ?entity ?event
 }
+GROUP BY ?event

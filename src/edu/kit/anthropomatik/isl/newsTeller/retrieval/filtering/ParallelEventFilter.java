@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.apache.commons.logging.Log;
@@ -15,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.classifiers.Classifier;
@@ -33,14 +32,14 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 	
 	private List<UsabilityFeature> features;
 	
-	private ExecutorService threadPool;
+	private KnowledgeStoreAdapter ksAdapter;
 	
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
 	}
 	
-	public void setNThreads(int nThreads) {
-		this.threadPool = Executors.newFixedThreadPool(nThreads);
+	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
+		this.ksAdapter = ksAdapter;
 	}
 	
 	public ParallelEventFilter(String classifierFileName) {
@@ -86,17 +85,42 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 		
 	}
 	
+	private class BulkQueryWorker implements Runnable {
+		
+		private UsabilityFeature feature;
+		private Set<String> eventURIs;
+		private List<Keyword> keywords;
+		
+		public BulkQueryWorker(UsabilityFeature feature, Set<String> eventURIs, List<Keyword> keywords) {
+			this.feature = feature;
+			this.eventURIs = eventURIs;
+			this.keywords = keywords;
+		}
+
+		@Override
+		public void run() {
+			feature.runBulkQueries(eventURIs, keywords);
+		}
+	}
+	
 	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery) {
+		
+		ksAdapter.flushBuffer();
 		
 		Set<NewsEvent> result = new HashSet<NewsEvent>();
 		
-		List<Future<?>> futures = new ArrayList<Future<?>>();
-		ConcurrentMap<NewsEvent, Instance> resultMap = new ConcurrentHashMap<NewsEvent, Instance>();
+		Set<String> eventURIs = new HashSet<String>();
+		for (NewsEvent e : events)
+			eventURIs.add(e.getEventURI());
 		
-		// parallel feature extraction
-		for (NewsEvent e : events) {
-			EventWorker w = new EventWorker(e, userQuery, resultMap);
-			futures.add(threadPool.submit(w));
+		long t = System.currentTimeMillis();
+		// sequential bulk retrieval
+//		for (UsabilityFeature feature : this.features)
+//			feature.runBulkQueries(eventURIs, userQuery);
+		List<Future<?>> futures = new ArrayList<Future<?>>();
+		for (UsabilityFeature feature : this.features) {
+			BulkQueryWorker w = new BulkQueryWorker(feature, eventURIs, userQuery);
+			futures.add(ksAdapter.submit(w));
 		}
 		
 		for (Future<?> f : futures) {
@@ -109,6 +133,37 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 					log.debug("thread execution exception", e);
 			}
 		}
+		
+		t = System.currentTimeMillis() - t;
+		if (log.isInfoEnabled())
+			log.info(String.format("bulk retrieval: %d ms", t));
+		t = System.currentTimeMillis();
+		
+		// parallel feature extraction (parallel on events)
+		futures = new ArrayList<Future<?>>();
+		ConcurrentMap<NewsEvent, Instance> resultMap = new ConcurrentHashMap<NewsEvent, Instance>();
+		
+		// parallel feature extraction
+		for (NewsEvent e : events) {
+			EventWorker w = new EventWorker(e, userQuery, resultMap);
+			futures.add(ksAdapter.submit(w));
+		}
+		
+		for (Future<?> f : futures) {
+			try {
+				f.get();
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("thread execution somehow failed!");
+				if (log.isDebugEnabled())
+					log.debug("thread execution exception", e);
+			}
+		}
+		
+		t = System.currentTimeMillis() - t;
+		if (log.isInfoEnabled())
+			log.info(String.format("feature extraction: %d ms", t));
+		t = System.currentTimeMillis();
 		
 		// sequential classification
 		for (NewsEvent event : events) {
@@ -126,11 +181,16 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 				result.add(event);
 		}
 		
+		t = System.currentTimeMillis() - t;
+		if (log.isInfoEnabled())
+			log.info(String.format("classification: %d ms", t));
+		
+		
 		return result;
 	}
 
 	public void shutDown() {
-		this.threadPool.shutdown();
+		// nothing to do
 	}
 
 }

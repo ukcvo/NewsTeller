@@ -1,5 +1,7 @@
-SELECT (COUNT(?actor) AS ?number)
+SELECT ?event (COUNT(?actor) AS ?number)
 WHERE
 {
-    <*e*> propbank:A1 ?actor
+    VALUES ?event { *keys* } .
+    ?event propbank:A1 ?actor
 }
+GROUP BY ?event

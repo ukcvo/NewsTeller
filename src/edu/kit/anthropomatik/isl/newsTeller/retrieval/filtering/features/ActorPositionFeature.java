@@ -49,7 +49,8 @@ public class ActorPositionFeature extends UsabilityFeature {
 				
 		for (String mentionURI : mentionURIs) {
 			String sentence = ksAdapter.retrieveSentenceFromMention(mentionURI);
-			String eventLabel = ksAdapter.getUniqueMentionProperty(mentionURI, Util.MENTION_PROPERTY_ANCHOR_OF);
+			String eventLabel = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + this.mentionQueryName 
+																	+ Util.MENTION_PROPERTY_ANCHOR_OF, mentionURI);
 			
 			String[] sentenceParts = sentence.split(eventLabel);
 			
@@ -83,13 +84,16 @@ public class ActorPositionFeature extends UsabilityFeature {
 
 	@Override
 	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueQuery(mentionQuery, Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, Util.VARIABLE_EVENT, 
+		ksAdapter.runKeyValueSparqlQuery(mentionQuery, Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName, Util.VARIABLE_EVENT, 
 				Util.VARIABLE_MENTION, eventURIs);
-		ksAdapter.runKeyValueQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, 
+		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, 
 				Util.VARIABLE_ENTITY, eventURIs);
 		Set<String> actors = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName);
-		ksAdapter.runKeyValueQuery(labelQuery, Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.labelQueryName, 
+		ksAdapter.runKeyValueSparqlQuery(labelQuery, Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.labelQueryName, 
 				Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, actors);
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION + this.mentionQueryName);
+		ksAdapter.runKeyValueMentionPropertyQuery(Util.MENTION_PROPERTY_ANCHOR_OF, 
+				Util.RELATION_NAME_MENTION_PROPERTY + this.mentionQueryName, mentionURIs);
 	}
 
 	

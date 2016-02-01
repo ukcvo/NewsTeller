@@ -1,7 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -26,19 +26,23 @@ public class MentionPropertyFeature extends UsabilityFeature {
 		
 		double result = 0;
 		
-		List<String> mentionURIs = new ArrayList<String>();
-		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI));
-		if (mentionURIs.isEmpty())
-			mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), 
-				Util.VARIABLE_MENTION, false);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, eventURI);
 		
 		for (String mentionURI : mentionURIs) {
-			List<String> propertyValues = ksAdapter.getMentionProperty(mentionURI, propertyURI); //TODO: use Record.count instead? --> faster?
+			Set<String> propertyValues = ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + propertyURI, mentionURI);
 			result += propertyValues.size();
 		}
 		result = result / mentionURIs.size();
 		
 		return result;
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, Util.VARIABLE_EVENT, 
+				Util.VARIABLE_MENTION, eventURIs);
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName);
+		ksAdapter.runKeyValueMentionPropertyQuery(propertyURI, Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName, mentionURIs);
 	}
 
 }

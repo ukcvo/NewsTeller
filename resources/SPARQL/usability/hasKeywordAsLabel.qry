@@ -1,10 +1,11 @@
-SELECT (COUNT(?label) AS ?number)
+SELECT ?event (COUNT(?label) AS ?number)
 WHERE
 {
-    { <*e*> rdfs:label ?label }
+    VALUES ?event { *keys* } .
+    { ?event rdfs:label ?label }
     UNION
     { 
-        <*e*> sem:hasActor|sem:hasPlace ?entity.
+        ?event sem:hasActor|sem:hasPlace ?entity.
         ?entity rdf:type* ?class .
         GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en>
         {
@@ -13,3 +14,4 @@ WHERE
     }
     FILTER(REGEX(STR(?label),"*k*", "i"))
 }
+GROUP BY ?event

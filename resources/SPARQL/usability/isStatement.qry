@@ -1,5 +1,7 @@
-SELECT (COUNT(?link) AS ?number)
+SELECT ?event (COUNT(?link) AS ?number)
 WHERE
 {
-    <*e*> ?link <http://www.newsreader-project.eu/ontologies/framenet/Statement>
+    VALUES ?event { *keys* } .
+    ?event ?link <http://www.newsreader-project.eu/ontologies/framenet/Statement>
 }
+GROUP BY ?event

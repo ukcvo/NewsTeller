@@ -59,14 +59,26 @@ public class SequentialEventFilter implements IEventFilter {
 	
 	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery) {
 		
+		ksAdapter.flushBuffer();
+		
 		Set<NewsEvent> result = new HashSet<NewsEvent>();
 		
+		long t = System.currentTimeMillis();
 		Set<String> eventURIs = new HashSet<String>();
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
-		ksAdapter.runKeyValueQuery("SELECT ?event ?mention WHERE { VALUES ?event { *keys* } . ?event gaf:denotedBy ?mention }", 
-				Util.RELATION_NAME_EVENT_MENTION, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
+		for (UsabilityFeature feature : this.features) {
+			long t1 = System.currentTimeMillis();
+			feature.runBulkQueries(eventURIs, userQuery);
+			t1 = System.currentTimeMillis() - t1;
+//			if (log.isInfoEnabled())
+//				log.info(String.format("%s: %d ms", feature.getName(), t1));
+		}
+		t = System.currentTimeMillis() - t;
+		if (log.isInfoEnabled())
+			log.info(String.format("bulk queries: %d ms", t));
+		t = System.currentTimeMillis();
 		
 		for (NewsEvent event : events) {
 			double[] values = new double[features.size() + 1];
@@ -94,6 +106,10 @@ public class SequentialEventFilter implements IEventFilter {
 			if (isUsable)
 				result.add(event);
 		}
+		
+		t = System.currentTimeMillis() - t;
+		if (log.isInfoEnabled())
+			log.info(String.format("feature extraction & classification: %d ms", t));
 		
 		return result;
 	}

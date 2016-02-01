@@ -1,5 +1,6 @@
-SELECT (COUNT(?label) AS ?number)
+SELECT ?event (COUNT(?label) AS ?number)
 WHERE
 {
-    <*e*> rdfs:label ?label
+    VALUES ?event { *keys* } .
+    ?event rdfs:label ?label
 }

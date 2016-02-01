@@ -1,7 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -21,21 +21,26 @@ public class POSFeature extends UsabilityFeature {
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 
-		List<String> mentionURIs = new ArrayList<String>();
-		mentionURIs.addAll(ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI));
-		if (mentionURIs.isEmpty())
-			mentionURIs = ksAdapter.runSingleVariableStringQuery(sparqlQuery.replace(Util.PLACEHOLDER_EVENT, eventURI), 
-				Util.VARIABLE_MENTION, false);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, eventURI);
 		
 		double result = 0;
 		for (String mentionURI : mentionURIs) {
-			String posTag = ksAdapter.getUniqueMentionProperty(mentionURI, Util.MENTION_PROPERTY_POS);
+			String posTag = 
+					ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName + Util.MENTION_PROPERTY_POS, mentionURI);
 			if (posTag.equals(Util.MENTION_PROPERTY_POS_VERB))
 				result++;
 		}
 		result = result / mentionURIs.size();
 		
 		return result;
+	}
+
+	@Override
+	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
+		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName, Util.VARIABLE_EVENT, 
+				Util.VARIABLE_MENTION, eventURIs);
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION + sparqlQueryName);
+		ksAdapter.runKeyValueMentionPropertyQuery(Util.MENTION_PROPERTY_POS, Util.RELATION_NAME_MENTION_PROPERTY + sparqlQueryName, mentionURIs);
 	}
 
 }

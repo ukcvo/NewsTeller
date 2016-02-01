@@ -1,5 +1,7 @@
-SELECT (COUNT(?link) AS ?number)
+SELECT ?event (COUNT(?link) AS ?number)
 WHERE
 {
-    <*e*> ?link ?label 
+    VALUES ?event { *keys* } .
+    ?event ?link ?label 
 }
+GROUP BY ?event

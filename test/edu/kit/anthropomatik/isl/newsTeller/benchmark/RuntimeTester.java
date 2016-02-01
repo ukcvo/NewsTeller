@@ -77,6 +77,8 @@ public class RuntimeTester {
 
 	private boolean doBulkSparqlTest;
 	
+	private boolean doBulkMentionTest;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 
 	private Map<String, String> sparqlSearchQueries;
@@ -96,8 +98,6 @@ public class RuntimeTester {
 	private SequentialEventFilter sequentialFilter;
 
 	private ParallelEventFilter parallelFilter;
-
-	private List<Integer> threadNumbers;
 
 	private Set<List<Keyword>> keywords;
 
@@ -160,6 +160,9 @@ public class RuntimeTester {
 		this.doBulkSparqlTest = doBulkSparqlTest;
 	}
 	
+	public void setDoBulkMentionTest(boolean doBulkMentionTest) {
+		this.doBulkMentionTest = doBulkMentionTest;
+	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
@@ -199,10 +202,6 @@ public class RuntimeTester {
 		this.parallelFilter = parallelFilter;
 	}
 
-	public void setThreadNumbers(List<Integer> threadNumbers) {
-		this.threadNumbers = threadNumbers;
-	}
-
 	public void setNumberOfRepetitions(int numberOfRepetitions) {
 		this.numberOfRepetitions = numberOfRepetitions;
 	}
@@ -214,6 +213,7 @@ public class RuntimeTester {
 	public void setMaxNumberOfEvents(int maxNumberOfEvents) {
 		this.maxNumberOfEvents = maxNumberOfEvents;
 	}
+	
 	// endregion
 
 	public RuntimeTester(String configFileName, String dataSetFileName, String classifierFileName) {
@@ -457,19 +457,6 @@ public class RuntimeTester {
 			log.info(String.format("%s - total: %d ms, per event: %d ms", filterName, totalTime, averageTimePerEvent));
 
 	}
-
-	private void parallelFilterTest() {
-
-		for (int nThreads : threadNumbers) {
-			parallelFilter.shutDown();
-			parallelFilter.setNThreads(nThreads);
-			ksAdapter.closeConnection();
-			ksAdapter.setMaxNumberOfConnections(nThreads);
-			ksAdapter.openConnection();
-			testFilter(parallelFilter, String.format("%d thread filter", nThreads), this.maxNumberOfEvents);
-		}
-
-	}
 	// endregion
 
 	// region featureTest
@@ -579,9 +566,8 @@ public class RuntimeTester {
 
 	// region bulkSparqlTest
 	private void bulkSparqlTest() {
-		String sequentialQuery = "SELECT ?entity WHERE { <*e*> gaf:denotedBy ?entity }";//"SELECT ?entity WHERE { <*e*> sem:hasActor|sem:hasPlace ?entity}";
-		String bulkQuery = "SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event gaf:denotedBy ?entity }";//"SELECT ?entity WHERE { VALUES ?event { *e* } . ?event sem:hasActor|sem:hasPlace ?entity}";
-		
+		String sequentialQuery = "SELECT ?entity WHERE { <*e*> propbank:A1 ?entity}";
+		String bulkQuery = "SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event propbank:A1 ?entity}";
 		
 		long sequentialTime = System.currentTimeMillis();
 		for (String uri : this.eventURIs) {
@@ -614,12 +600,82 @@ public class RuntimeTester {
 			log.info(String.format("manual bulk sparql (%d queries): total %d ms, per event %d ms", queries.size(), bulkTimeManual, bulkTimeManual / this.eventURIs.size()));
 		
 		long bulkTimeKSA = System.currentTimeMillis();
-		ksAdapter.runKeyValueQuery(bulkQuery, "test", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
+		ksAdapter.runKeyValueSparqlQuery(bulkQuery, "test", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
 		bulkTimeKSA = System.currentTimeMillis() - bulkTimeKSA;
 		
 		if (log.isInfoEnabled())
 			log.info(String.format("KSA bulk sparql: total %d ms, per event %d ms", bulkTimeKSA, bulkTimeKSA / this.eventURIs.size()));
 		
+	}
+	// endregion
+	
+	// region bulkMentionTest
+	private void bulkMentionTest() {
+		
+		long t = System.currentTimeMillis();
+		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?mention WHERE { VALUES ?event { *keys* } . ?event gaf:denotedBy ?mention}", "test", "event", "mention", this.eventURIs);
+		if (log.isInfoEnabled())
+			log.info(String.format("query time: %d ms", System.currentTimeMillis() - t));
+		
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues("test");
+		
+		String propertyURI = Util.MENTION_PROPERTY_POS;
+		
+		/*
+		long sequentialTime = System.currentTimeMillis();
+		Map<String,List<String>> seqMap = new HashMap<String, List<String>>();
+		for (String mentionURI : mentionURIs) {
+			seqMap.put(mentionURI, ksAdapter.getMentionProperty(mentionURI, propertyURI));
+		}
+		sequentialTime = System.currentTimeMillis() - sequentialTime;
+		if (log.isInfoEnabled())
+			log.info(String.format("sequential property retrieval: %d ms", sequentialTime));
+		*/
+		long bulkTime = System.currentTimeMillis();
+		
+		try {
+			List<Set<URI>> uris = new ArrayList<Set<URI>>();
+			Set<URI> currentSet = new HashSet<URI>();
+			int currentLength = 0;
+			for (String mentionURI : mentionURIs) {
+				if (currentLength + mentionURI.length() > 6000) {
+					uris.add(currentSet);
+					currentSet = new HashSet<URI>();
+					currentLength = 0;
+				}
+				currentSet.add(new URIImpl(mentionURI));
+				currentLength += mentionURI.length();
+			}
+			uris.add(currentSet);
+				
+			Map<String, List<String>> bulkMap = new HashMap<String, List<String>>();
+			KnowledgeStore ks = Client.builder("http://knowledgestore2.fbk.eu/nwr/wikinews").compressionEnabled(true).maxConnections(2).validateServer(false).connectionTimeout(10000).build();
+			Session session = ks.newSession();
+			
+			for (Set<URI> uriSet : uris) {
+				Stream<Record> stream = session.retrieve(KS.MENTION).ids(uriSet).timeout(10000L).exec();
+				List<Record> records = stream.toList();
+				stream.close();
+				
+				for (Record r : records) {
+					String key = r.getID().toString();
+					List<String> values = r.get(new URIImpl(propertyURI), String.class);
+					bulkMap.put(key, values);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		bulkTime = System.currentTimeMillis() - bulkTime;
+		if (log.isInfoEnabled())
+			log.info(String.format("bulk property retrieval: %d ms", bulkTime));
+		
+		long KSAtime = System.currentTimeMillis();
+		ksAdapter.runKeyValueMentionPropertyQuery(propertyURI, "bla", mentionURIs);
+		KSAtime = System.currentTimeMillis() - KSAtime;
+		if (log.isInfoEnabled())
+			log.info(String.format("KSA property retrieval: %d ms", KSAtime));
 	}
 	// endregion
 	
@@ -642,7 +698,7 @@ public class RuntimeTester {
 			testFilter(sequentialFilter, "sequential filter", this.maxNumberOfEvents);
 		}
 		if (this.doParallelFilterTest) {
-			parallelFilterTest();
+			testFilter(parallelFilter, "parallel filter", this.maxNumberOfEvents);
 		}
 		if (this.doFeatureTest)
 			featureTest();
@@ -652,6 +708,8 @@ public class RuntimeTester {
 			classifierTest();
 		if (this.doBulkSparqlTest)
 			bulkSparqlTest();
+		if (this.doBulkMentionTest)
+			bulkMentionTest();
 		
 		sequentialSearcher.shutDown();
 		parallelSearcher.shutDown();
