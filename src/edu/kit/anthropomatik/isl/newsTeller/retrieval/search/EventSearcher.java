@@ -27,20 +27,20 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class EventSearcher {
 
-	private class QueryWorker implements Callable<List<NewsEvent>> {
-
-		private String query;
-		
-		public QueryWorker(String query) {
-			this.query = query;
-		}
-		
-		public List<NewsEvent> call() throws Exception {
-			List<NewsEvent> result = ksAdapter.runSingleVariableEventQuery(query, Util.VARIABLE_EVENT);
-			return result;
-		}
-		
-	}
+//	private class QueryWorker implements Callable<List<NewsEvent>> {
+//
+//		private String query;
+//		
+//		public QueryWorker(String query) {
+//			this.query = query;
+//		}
+//		
+//		public List<NewsEvent> call() throws Exception {
+//			List<NewsEvent> result = ksAdapter.runSingleVariableEventQuery(query, Util.VARIABLE_EVENT);
+//			return result;
+//		}
+//		
+//	}
 	
 	private static Log log = LogFactory.getLog(EventSearcher.class);
 
@@ -49,14 +49,10 @@ public class EventSearcher {
 
 	private ExecutorService threadPool;
 	
-	private List<String> userQuerySPARQLTemplates; // SPARQL queries based on user query keyword
-
-	@SuppressWarnings("unused")
-	private List<String> userInterestSPARQLTemplates; // SPARQL queries based on user interests keyword
-
-	@SuppressWarnings("unused")
-	private List<String> previousEventSPARQLTemplates; // SPARQL queries based on conversation history event
-
+	private String standardSparqlQuery;
+	
+	private String fallbackSparqlQuery;
+	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
@@ -68,70 +64,9 @@ public class EventSearcher {
 			this.threadPool = Executors.newFixedThreadPool(nThreads);
 	}
 
-	public EventSearcher(String userQueryConfigFileName, String userInterestConfigFileName, String previousEventConfigFileName) {
-		this.userQuerySPARQLTemplates = Util.readQueriesFromConfigFile(userQueryConfigFileName);
-		this.userInterestSPARQLTemplates = Util.readQueriesFromConfigFile(userInterestConfigFileName);
-		this.previousEventSPARQLTemplates = Util.readQueriesFromConfigFile(previousEventConfigFileName);
-	}
-
-	// use keywords from user query to find events
-	private Set<NewsEvent> processUserQuery(List<Keyword> userQuery) {
-		if (log.isTraceEnabled())
-			log.trace(String.format("processUserQuery(userQuery = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
-
-		Set<NewsEvent> events = new HashSet<NewsEvent>();
-
-		for (Keyword keyword : userQuery)
-			Util.stemKeyword(keyword);
-		
-		List<Future<List<NewsEvent>>> futures = new ArrayList<Future<List<NewsEvent>>>();
-		for (String sparqlQuery : userQuerySPARQLTemplates) {
-			// TODO: generalize to multiple keywords (Scope 3)
-			String keywordRegex = userQuery.get(0).getStemmedRegex();
-			
-			QueryWorker w = new QueryWorker(sparqlQuery.replace("*k*", keywordRegex));
-			futures.add(threadPool.submit(w));
-		}
-		
-		for (Future<List<NewsEvent>> f : futures) {
-			try {
-				f.get();
-			} catch (Exception e) {
-				if (log.isErrorEnabled())
-					log.error("thread execution somehow failed!");
-				if (log.isDebugEnabled())
-					log.debug("thread execution exception", e);
-			} 
-		}
-		
-		for (Future<List<NewsEvent>> f : futures) {
-			try {
-				events.addAll(f.get());
-			} catch (Exception e) {
-				if (log.isErrorEnabled())
-					log.error("thread execution somehow failed!");
-				if (log.isDebugEnabled())
-					log.debug("thread execution exception", e);
-			} 
-		}
-
-		return events;
-	}
-
-	// use keywords from user interests to find events
-	private Set<NewsEvent> processUserInterests(List<Keyword> userInterests) {
-		if (log.isTraceEnabled())
-			log.trace(String.format("processUserInterests(userInterests = <%s>)", StringUtils.collectionToCommaDelimitedString(userInterests)));
-		// TODO: implement (Scope 4)
-		return new HashSet<NewsEvent>();
-	}
-
-	// use events from previous conversation cycles to find events
-	private Set<NewsEvent> processConversationHistory(List<ConversationCycle> conversationHistory) {
-		if (log.isTraceEnabled())
-			log.trace(String.format("processConversationHistory(conversationHistory = <%s>)", StringUtils.collectionToCommaDelimitedString(conversationHistory)));
-		// TODO: implement (Scope 7)
-		return new HashSet<NewsEvent>();
+	public EventSearcher(String standardSparqlQueryFileName, String fallbackSparqlQueryFileName) {
+		this.standardSparqlQuery = Util.readStringFromFile(standardSparqlQueryFileName);
+		this.fallbackSparqlQuery = Util.readStringFromFile(fallbackSparqlQueryFileName);
 	}
 
 	/**
@@ -143,10 +78,51 @@ public class EventSearcher {
 
 		Set<NewsEvent> events = new HashSet<NewsEvent>();
 		
-		if (userQuery != null && !userQuery.isEmpty()) //TODO: temporary fix, remove in Scope 3
-			events.addAll(processUserQuery(userQuery));
-		events.addAll(processUserInterests(userModel.getInterests()));
-		events.addAll(processConversationHistory(userModel.getHistory()));
+		for (Keyword keyword : userQuery) {
+			Util.stemKeyword(keyword);
+			String keywordRegex = keyword.getStemmedRegex();
+			String bifContainsString = keyword.getBifContainsString();
+			events.addAll(ksAdapter.runSingleVariableEventQuery(
+					standardSparqlQuery.replace(Util.PLACEHOLDER_BIF_CONTAINS, bifContainsString).replace(Util.PLACEHOLDER_KEYWORD, keywordRegex), 
+					Util.VARIABLE_EVENT, 5000L));
+			if (events.isEmpty())
+				events.addAll(ksAdapter.runSingleVariableEventQuery(
+						fallbackSparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keywordRegex), Util.VARIABLE_EVENT, 5000L));
+		}
+			
+		
+//		List<Future<List<NewsEvent>>> futures = new ArrayList<Future<List<NewsEvent>>>();
+		
+		
+//		for (String sparqlQuery : userQuerySPARQLTemplates) {
+//			// TODO: generalize to multiple keywords (Scope 3)
+//			String keywordRegex = userQuery.get(0).getStemmedRegex();
+//			
+//			QueryWorker w = new QueryWorker(sparqlQuery.replace("*k*", keywordRegex));
+//			futures.add(threadPool.submit(w));
+//		}
+//		
+//		for (Future<List<NewsEvent>> f : futures) {
+//			try {
+//				f.get();
+//			} catch (Exception e) {
+//				if (log.isErrorEnabled())
+//					log.error("thread execution somehow failed!");
+//				if (log.isDebugEnabled())
+//					log.debug("thread execution exception", e);
+//			} 
+//		}
+//		
+//		for (Future<List<NewsEvent>> f : futures) {
+//			try {
+//				events.addAll(f.get());
+//			} catch (Exception e) {
+//				if (log.isErrorEnabled())
+//					log.error("thread execution somehow failed!");
+//				if (log.isDebugEnabled())
+//					log.debug("thread execution exception", e);
+//			} 
+//		}
 		
 		return events;
 	}

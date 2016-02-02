@@ -16,6 +16,8 @@ public class Keyword {
 	
 	private String stemmedRegex;
 	
+	private String bifContainsString;
+	
 	private double weight;
 
 	public String getWord() {
@@ -49,7 +51,15 @@ public class Keyword {
 	public void setWordRegex(String wordRegex) {
 		this.wordRegex = wordRegex;
 	}
-	
+
+	public String getBifContainsString() {
+		return bifContainsString;
+	}
+
+	public void setBifContainsString(String bifContainsString) {
+		this.bifContainsString = bifContainsString;
+	}
+
 	public Keyword() {
 		this.word = "";
 		this.weight = 1.0;

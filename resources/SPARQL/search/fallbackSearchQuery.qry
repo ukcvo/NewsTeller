@@ -1,0 +1,20 @@
+SELECT ?event
+WHERE 
+{
+    ?event rdf:type sem:Event .
+    { 
+        ?event rdfs:label ?label .
+    } 
+    UNION 
+    {
+        ?event sem:hasActor|sem:hasPlace ?entity .
+        ?entity rdf:type* ?class .
+        GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> # use dbpedia to get stable entities
+        {
+        ?class rdfs:label ?label .
+        } 
+    }
+    FILTER(REGEX(STR(?label),"*k*", "i")) #case-insensitive matching
+}
+GROUP BY ?event
+ORDER BY ?event

@@ -19,26 +19,16 @@
 		<property name="maxNumberOfConnections" value="100" />
 	</bean>
 
-	<bean id="searcher1"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
-		<constructor-arg name="userQueryConfigFileName"
-			value="config/SPARQL/search_userQuery_Scope1.txt" />
-		<constructor-arg name="userInterestConfigFileName"
-			value="config/SPARQL/search_userInterest_Scope1.txt" />
-		<constructor-arg name="previousEventConfigFileName"
-			value="config/SPARQL/search_previousEvent_Scope1.txt" />
+	<bean id="searcher1" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
+		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
+		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="nThreads" value="1" />
 	</bean>
 
-	<bean id="searcher2"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
-		<constructor-arg name="userQueryConfigFileName"
-			value="config/SPARQL/search_userQuery_Scope1.txt" />
-		<constructor-arg name="userInterestConfigFileName"
-			value="config/SPARQL/search_userInterest_Scope1.txt" />
-		<constructor-arg name="previousEventConfigFileName"
-			value="config/SPARQL/search_previousEvent_Scope1.txt" />
+	<bean id="searcher2" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
+		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
+		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="nThreads" value="0" />
 	</bean>
@@ -151,11 +141,11 @@
 		<property name="doKSAccessTests" value="false" />
 		<property name="doSparqlSearchTests" value="false" />
 		<property name="doSparqlFeatureTests" value="false" />
-		<property name="doSequentialSearcherTest" value="false" />
+		<property name="doSequentialSearcherTest" value="true" />
 		<property name="doParallelSearcherTest" value="false" />
 		<property name="doParallelSparqlTest" value="false" />
 		<property name="doSequentialFilterTest" value="false" />
-		<property name="doParallelFilterTest" value="true" />
+		<property name="doParallelFilterTest" value="false" />
 		<property name="doFeatureTest" value="false" />
 		<property name="doDownloadTest" value="false" />
 		<property name="doClassifierTest" value="false" />
@@ -164,7 +154,7 @@
 
 
 		<property name="maxNumberOfEvents" value="100" />
-		<property name="numberOfRepetitions" value="5" />
+		<property name="numberOfRepetitions" value="1" />
 
 	</bean>
 

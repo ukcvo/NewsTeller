@@ -51,6 +51,7 @@ public class Util {
 	public static final String PLACEHOLDER_ENTITY = "*x*";
 	public static final String PLACEHOLDER_LINK = "*l*";
 	public static final String PLACEHOLDER_KEYS = "*keys*";
+	public static final String PLACEHOLDER_BIF_CONTAINS = "*b*";
 
 	public static final String VARIABLE_EVENT = "event";
 	public static final String VARIABLE_NUMBER = "number";
@@ -521,21 +522,33 @@ public class Util {
 		keyword.setStem(stemmedKeyword);
 
 		String[] tokens = stemmedKeyword.split(" ");
-		StringBuilder builder = new StringBuilder();
-		builder.append(KEYWORD_REGEX_PREFIX);
+		StringBuilder regexBuilder = new StringBuilder();
+		StringBuilder bifBuilder = new StringBuilder();
+		regexBuilder.append(KEYWORD_REGEX_PREFIX);
+		bifBuilder.append("\"");
 		for (int i = 0; i < tokens.length; i++) {
-			String token = tokens[i];
-			if (token.endsWith("i"))
-				token = token.substring(0, token.length() - 1) + "(i|y)";
-			builder.append(token);
-			builder.append(KEYWORD_REGEX_LETTERS);
-			if (i < tokens.length - 1)
-				builder.append(" ");
+			String regexToken = tokens[i];
+			String bifToken = tokens[i];
+			if (regexToken.endsWith("i")) {
+				regexToken = regexToken.substring(0, regexToken.length() - 1) + "(i|y)";
+				bifToken = bifToken.substring(0, bifToken.length() - 1);
+			}
+			regexBuilder.append(regexToken);
+			regexBuilder.append(KEYWORD_REGEX_LETTERS);
+			bifBuilder.append(bifToken);
+			bifBuilder.append("*\"");
+			if (i < tokens.length - 1) {
+				regexBuilder.append(" ");
+				bifBuilder.append(" and \"");
+			}
+				
 		}
-		builder.append(KEYWORD_REGEX_SUFFIX);
-		String stemmedRegex = builder.toString();
+		regexBuilder.append(KEYWORD_REGEX_SUFFIX);
+		String stemmedRegex = regexBuilder.toString();
 		keyword.setStemmedRegex(stemmedRegex);
 		keyword.setWordRegex(KEYWORD_REGEX_PREFIX_JAVA + keyword.getWord().toLowerCase() + KEYWORD_REGEX_SUFFIX_JAVA);
+		String bifContainsString = bifBuilder.toString();
+		keyword.setBifContainsString(bifContainsString);
 	}
 	
 	/**

@@ -20,36 +20,24 @@
 
 	<bean id="searcher0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
-		<constructor-arg name="userQueryConfigFileName"
-			value="config/SPARQL/search_userQuery_Scope0.txt" />
-		<constructor-arg name="userInterestConfigFileName"
-			value="config/SPARQL/search_userInterest_Scope0.txt" />
-		<constructor-arg name="previousEventConfigFileName"
-			value="config/SPARQL/search_previousEvent_Scope0.txt" />
+		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
+		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="nThreads" value="1" />
 	</bean>
 
 	<bean id="searcher1"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
-		<constructor-arg name="userQueryConfigFileName"
-			value="config/SPARQL/search_userQuery_Scope1.txt" />
-		<constructor-arg name="userInterestConfigFileName"
-			value="config/SPARQL/search_userInterest_Scope1.txt" />
-		<constructor-arg name="previousEventConfigFileName"
-			value="config/SPARQL/search_previousEvent_Scope1.txt" />
+		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
+		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="nThreads" value="1" />
 	</bean>
 
 	<bean id="searcher2"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
-		<constructor-arg name="userQueryConfigFileName"
-			value="config/SPARQL/search_userQuery_Scope1.txt" />
-		<constructor-arg name="userInterestConfigFileName"
-			value="config/SPARQL/search_userInterest_Scope1.txt" />
-		<constructor-arg name="previousEventConfigFileName"
-			value="config/SPARQL/search_previousEvent_Scope1.txt" />
+		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
+		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="nThreads" value="0" />
 	</bean>
