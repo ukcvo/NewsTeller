@@ -27,7 +27,7 @@ public class MentionPropertyFeature extends UsabilityFeature {
 		
 		double result = 0;
 		
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", keywords.get(0).getWord()), eventURI);
 		
 		for (String mentionURI : mentionURIs) {
 			Set<String> propertyValues = ksAdapter.getBufferedValues(Util.RELATION_NAME_MENTION_PROPERTY + propertyURI, mentionURI);

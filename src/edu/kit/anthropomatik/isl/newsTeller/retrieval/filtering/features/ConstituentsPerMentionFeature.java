@@ -45,7 +45,7 @@ public class ConstituentsPerMentionFeature extends UsabilityFeature {
 			constituentMentions.add(mentions);
 		}
 
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", arbitraryKeyword), eventURI);
 		
 		for (String mentionURI : mentionURIs) {
 			KSMention sentenceMention = ksAdapter.retrieveKSMentionFromMentionURI(mentionURI, true);

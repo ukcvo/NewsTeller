@@ -600,7 +600,7 @@ public class RuntimeTester {
 			log.info(String.format("manual bulk sparql (%d queries): total %d ms, per event %d ms", queries.size(), bulkTimeManual, bulkTimeManual / this.eventURIs.size()));
 		
 		long bulkTimeKSA = System.currentTimeMillis();
-		ksAdapter.runKeyValueSparqlQuery(bulkQuery, "test", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
+		//ksAdapter.runKeyValueSparqlQuery(bulkQuery, "test", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
 		bulkTimeKSA = System.currentTimeMillis() - bulkTimeKSA;
 		
 		if (log.isInfoEnabled())
@@ -613,7 +613,7 @@ public class RuntimeTester {
 	private void bulkMentionTest() {
 		
 		long t = System.currentTimeMillis();
-		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?mention WHERE { VALUES ?event { *keys* } . ?event gaf:denotedBy ?mention}", "test", "event", "mention", this.eventURIs);
+		//ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?mention WHERE { VALUES ?event { *keys* } . ?event gaf:denotedBy ?mention}", "test", "event", "mention", this.eventURIs);
 		if (log.isInfoEnabled())
 			log.info(String.format("query time: %d ms", System.currentTimeMillis() - t));
 		
@@ -672,7 +672,7 @@ public class RuntimeTester {
 			log.info(String.format("bulk property retrieval: %d ms", bulkTime));
 		
 		long KSAtime = System.currentTimeMillis();
-		ksAdapter.runKeyValueMentionPropertyQuery(propertyURI, "bla", mentionURIs);
+		//ksAdapter.runKeyValueMentionPropertyQuery(propertyURI, "bla", mentionURIs);
 		KSAtime = System.currentTimeMillis() - KSAtime;
 		if (log.isInfoEnabled())
 			log.info(String.format("KSA property retrieval: %d ms", KSAtime));

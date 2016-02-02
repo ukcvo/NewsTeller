@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
@@ -172,7 +174,7 @@ public class KnowledgeStoreAdapterTest {
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev20");
-		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", "test-relation", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, uris);
+		//ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", "test-relation", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, uris);
 		Set<String> expected = new HashSet<String>();
 		expected.add("http://dbpedia.org/resource/Vicente_Fox");
 		expected.add("http://dbpedia.org/resource/Fox_Broadcasting_Company");
@@ -186,7 +188,9 @@ public class KnowledgeStoreAdapterTest {
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev20");
-		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", "test-relation", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, uris);
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(new Keyword("test"));
+		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", uris, keywords);
 		Set<String> result = ksAdapter.getBufferedValues("other-relation", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
 		assertTrue(result.isEmpty());
 	}
@@ -197,8 +201,10 @@ public class KnowledgeStoreAdapterTest {
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev20");
-		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", "test-relation", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, uris);
-		Set<String> result = ksAdapter.getBufferedValues("test-relation", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev17");
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(new Keyword("test"));
+		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", uris, keywords);
+		Set<String> result = ksAdapter.getBufferedValues("event-entity-test", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev17");
 		assertTrue(result.isEmpty());
 	}
 }

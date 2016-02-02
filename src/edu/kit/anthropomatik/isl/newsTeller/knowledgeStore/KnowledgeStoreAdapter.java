@@ -56,8 +56,6 @@ public class KnowledgeStoreAdapter {
 
 	private String getMentionFromEventTemplate;
 
-	private ConcurrentMap<String, String> resourceCache;
-
 	private ConcurrentMap<String, Set<KSMention>> eventMentionCache;
 
 	private ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache; // relationship-id --> key --> values
@@ -88,7 +86,6 @@ public class KnowledgeStoreAdapter {
 
 	public KnowledgeStoreAdapter(String getMentionFromEventFileName, String getEventFromMentionFileName) {
 		this.getMentionFromEventTemplate = Util.readStringFromFile(getMentionFromEventFileName);
-		this.resourceCache = new ConcurrentHashMap<String, String>();
 		this.eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 		this.sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		this.sentenceMentionCache = new ConcurrentHashMap<String, KSMention>();
@@ -154,15 +151,18 @@ public class KnowledgeStoreAdapter {
 	private class KeyValueWorker implements Runnable {
 
 		private String query;
-		private String variableNameKey;
-		private String variableNameValue;
-		private ConcurrentMap<String, Set<String>> relationMap;
-
-		public KeyValueWorker(String query, String variableNameKey, String variableNameValue, ConcurrentMap<String, Set<String>> relationMap) {
+		private String keyVariable;
+		private List<String> valueVariables;
+		private ConcurrentMap<String, ConcurrentMap<String, Set<String>>> relationMaps;
+		private Keyword keyword;
+		
+		public KeyValueWorker(String query, String keyVariable, List<String> valueVariables, Keyword keyword,
+				ConcurrentMap<String, ConcurrentMap<String, Set<String>>> relationMaps) {
 			this.query = query;
-			this.variableNameKey = variableNameKey;
-			this.variableNameValue = variableNameValue;
-			this.relationMap = relationMap;
+			this.keyVariable = keyVariable;
+			this.valueVariables = valueVariables;
+			this.keyword = keyword;
+			this.relationMaps = relationMaps;
 		}
 
 		@Override
@@ -174,21 +174,28 @@ public class KnowledgeStoreAdapter {
 				stream.close();
 				session.close();
 				for (BindingSet tuple : tuples) {
-					String key = tuple.getValue(variableNameKey).toString();
-					String value = tuple.getValue(variableNameValue).toString();
-					if (value.startsWith("\""))
-						value = value.substring(1, value.lastIndexOf('"'));
-					Set<String> values = relationMap.containsKey(key) ? relationMap.get(key) : new HashSet<String>();
-					values.add(value);
-					relationMap.putIfAbsent(key, values);
+					String key = tuple.getValue(keyVariable).toString();
+					for (String valueVariable : valueVariables) {
+						ConcurrentMap<String, Set<String>> relationMap = 
+								relationMaps.get(Util.getRelationName(keyVariable, valueVariable, keyword.getWord()));
+						Set<String> values = relationMap.containsKey(key) ? relationMap.get(key) : new HashSet<String>();
+						
+						if (tuple.hasBinding(valueVariable)) { //ignore the variable if there is no binding - i.e. store an empty set
+							String value = tuple.getValue(valueVariable).toString();
+							if (value.startsWith("\""))
+								value = value.substring(1, value.lastIndexOf('"'));
+							values.add(value);
+						} 
+						
+						relationMap.put(key, values);
+					}
 				}
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
-					log.error(String.format("Query execution failed. Query: '%s' Key: '%s' Value: '%s'", query, variableNameKey, variableNameValue));
+					log.error(String.format("Query execution failed. Query: '%s'", query));
 				if (log.isDebugEnabled())
 					log.debug("Query execution exception", e);
 			}
-
 		}
 
 	}
@@ -196,10 +203,14 @@ public class KnowledgeStoreAdapter {
 	/**
 	 * Store all mentions of the given events in the internal map.
 	 */
-	public void runKeyValueMentionFromEventQuery(Set<String> eventURIs) {
-		runKeyValueSparqlQuery(getMentionFromEventTemplate, Util.RELATION_NAME_EVENT_MENTION, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
+	public void runKeyValueMentionFromEventQuery(Set<String> eventURIs, List<Keyword> keywords) {
+		runKeyValueSparqlQuery(getMentionFromEventTemplate, eventURIs, keywords);
 	}
 	
+	/**
+	 * Runs a key-value SPARQL query. Inserts the keyValues into the template (for each keyword), fires
+	 * the query and stores the resulting key-value pairs in the internal cache.
+	 */
 	public void runKeyValueSparqlQuery(String sparqlQueryTemplate, Set<String> keyValues, List<Keyword> keywords) {
 		// region sanity check
 		if (!isConnectionOpen) {
@@ -240,7 +251,7 @@ public class KnowledgeStoreAdapter {
 		while (matcherAS.find())
 			valueVariables.add(matcherAS.group(1));
 		
-		
+		// TODO: parallelize for multiple keywords if necessary
 		for (Keyword keyword : keywords) {
 			String queryWithKeyword = sparqlQueryTemplate.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex());
 			
@@ -259,115 +270,67 @@ public class KnowledgeStoreAdapter {
 				sb.append(s);
 			}
 			queries.add(queryWithKeyword.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
-			Session session = knowledgeStore.newSession();
+			
+			List<Future<?>> futures = new ArrayList<Future<?>>();
 			
 			for (String query : queries) {
+				KeyValueWorker w = new KeyValueWorker(query, keyVariable, valueVariables, keyword, relationMaps);
+				futures.add(this.submit(w));
+			}
+			
+			for (Future<?> f : futures) {
 				try {
-					Stream<BindingSet> stream = session.sparql(query).timeout((long) timeoutMsec).execTuples();
-					List<BindingSet> tuples = stream.toList();
-					stream.close();
-					for (BindingSet tuple : tuples) {
-						String key = tuple.getValue(keyVariable).toString();
-						for (String valueVariable : valueVariables) {
-							ConcurrentMap<String, Set<String>> relationMap = 
-									relationMaps.get(Util.getRelationName(keyVariable, valueVariable, keyword.getWord()));
-							Set<String> values = relationMap.containsKey(key) ? relationMap.get(key) : new HashSet<String>();
-							
-							if (tuple.hasBinding(valueVariable)) { //ignore the variable if there is no binding - i.e. store an empty set
-								String value = tuple.getValue(valueVariable).toString();
-								if (value.startsWith("\""))
-									value = value.substring(1, value.lastIndexOf('"'));
-								values.add(value);
-							} 
-							
-							relationMap.put(key, values);
-						}
-					}
+					f.get();
 				} catch (Exception e) {
 					if (log.isErrorEnabled())
-						log.error(String.format("Query execution failed. Query: '%s'", query));
+						log.error("thread execution somehow failed!");
 					if (log.isDebugEnabled())
-						log.debug("Query execution exception", e);
+						log.debug("thread execution exception", e);
 				}
 			}
-			session.close();
 			
 			this.sparqlCache.putAll(relationMaps);
 		}
 	}
 	
-	/**
-	 * Runs a key-value SPARQL query. Inserts the keyValues into the template, fires
-	 * the query and stores the resulting key-value pairs in the internal cache.
-	 */
-	public void runKeyValueSparqlQuery(String sparqlQueryTemplate, String relationName, String variableNameKey, String variableNameValue, Set<String> keyValues) {
+	private class MentionPropertyWorker implements Runnable {
 
-		if (!isConnectionOpen) {
-			if (log.isWarnEnabled())
-				log.warn("Trying to access KnowledgeStore without having an open connection. Request ignored.");
-			return;
+		private Set<URI> uriSet;
+		private Set<String> propertyURIs;
+		private ConcurrentMap<String, ConcurrentMap<String, Set<String>>> propertyMap;
+		
+		public MentionPropertyWorker(Set<URI> uriSet, Set<String> propertyURIs, ConcurrentMap<String, ConcurrentMap<String, Set<String>>> propertyMap) {
+			this.uriSet = uriSet;
+			this.propertyURIs = propertyURIs;
+			this.propertyMap = propertyMap;
 		}
-		if (sparqlQueryTemplate.isEmpty()) {
-			if (log.isWarnEnabled())
-				log.warn("Empty query template. Request ignored.");
-			return;
-		}
-		if (keyValues.isEmpty()) {
-			if (log.isWarnEnabled())
-				log.warn("Empty set of keyValues. Request ignored.");
-			return;
-		}
-
-		if (this.sparqlCache.containsKey(relationName))
-			return; // don't do work twice
-
-		ConcurrentMap<String, Set<String>> relationMap = new ConcurrentHashMap<String, Set<String>>();
-
-		List<String> queries = new ArrayList<String>();
-		StringBuilder sb = new StringBuilder();
-		for (String uri : keyValues) {
-			String s = String.format("<%s> ", uri);
-			if (sb.length() + s.length() + sparqlQueryTemplate.length() > MAXIMUM_QUERY_LENGTH) {
-				queries.add(sparqlQueryTemplate.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
-				sb = new StringBuilder();
-			}
-			sb.append(s);
-		}
-		queries.add(sparqlQueryTemplate.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
-
-		List<Future<?>> futures = new ArrayList<Future<?>>();
-		for (String query : queries) {
-			KeyValueWorker w = new KeyValueWorker(query, variableNameKey, variableNameValue, relationMap);
-			futures.add(threadPool.submit(w));
-		}
-
-		for (Future<?> f : futures) {
+		
+		@Override
+		public void run() {
 			try {
-				f.get();
+				Session session = knowledgeStore.newSession();
+				Stream<Record> stream = session.retrieve(KS.MENTION).ids(uriSet).timeout(10000L).exec();
+				List<Record> records = stream.toList();
+				stream.close();
+				
+				for (Record r : records) {
+					String key = r.getID().toString();
+					for (String propertyURI : propertyURIs) {
+						Set<String> values = new HashSet<String>(r.get(new URIImpl(propertyURI), String.class));
+						propertyMap.get(propertyURI).put(key, values);
+					}
+					
+				}
+				session.close();
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
-					log.error("thread execution somehow failed!");
+					log.error(String.format("Mention property access failed. Property: '%s'", 
+							StringUtils.collectionToCommaDelimitedString(propertyURIs)));
 				if (log.isDebugEnabled())
-					log.debug("thread execution exception", e);
+					log.debug("Mention property access exception", e);
 			}
 		}
-
-		for (String key : keyValues) {
-			if (!relationMap.containsKey(key))
-				relationMap.put(key, new HashSet<String>()); // fill up with empty sets
-		}
-
-		this.sparqlCache.put(relationName, relationMap);
-
-	}
-
-	/**
-	 * Runs a key-value mentionProperty query for a single property. Stores the resulting mentionURI-propertyValue pairs in the internal cache.
-	 */
-	public void runKeyValueMentionPropertyQuery(String propertyURI, String relationName, Set<String> mentionURIs) {
-		Set<String> propertyURIs = new HashSet<String>();
-		propertyURIs.add(propertyURI);
-		runKeyValueMentionPropertyQuery(propertyURIs, relationName, mentionURIs);
+		
 	}
 	
 	/**
@@ -415,31 +378,23 @@ public class KnowledgeStoreAdapter {
 		}
 		queryURISets.add(currentSet);
 
-		Session session = knowledgeStore.newSession();
+		List<Future<?>> futures = new ArrayList<Future<?>>();
+		
 		for (Set<URI> uriSet : queryURISets) {
-			try {
-				Stream<Record> stream = session.retrieve(KS.MENTION).ids(uriSet).timeout(10000L).exec();
-				List<Record> records = stream.toList();
-				stream.close();
-				
-				for (Record r : records) {
-					String key = r.getID().toString();
-					for (String propertyURI : propertyURIs) {
-						Set<String> values = new HashSet<String>(r.get(new URIImpl(propertyURI), String.class));
-						propertyMap.get(propertyURI).put(key, values);
-					}
-					
-				}
-			} catch (Exception e) {
-				if (log.isErrorEnabled())
-					log.error(String.format("Mention property access failed. Property: '%s'", 
-							StringUtils.collectionToCommaDelimitedString(queryURISets)));
-				if (log.isDebugEnabled())
-					log.debug("Mention property access exception", e);
-			}
+			MentionPropertyWorker w = new MentionPropertyWorker(uriSet, propertyURIs, propertyMap);
+			futures.add(this.submit(w));
 		}
 		
-		session.close();
+		for (Future<?> f : futures) {
+			try {
+				f.get();
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("thread execution somehow failed!");
+				if (log.isDebugEnabled())
+					log.debug("thread execution exception", e);
+			}
+		}
 		
 		for (String propertyURI : propertyURIs) {
 			this.sparqlCache.put(relationName + propertyURI, propertyMap.get(propertyURI));
@@ -719,40 +674,19 @@ public class KnowledgeStoreAdapter {
 	// endregion
 
 	// region retrieve text
-	// get the news story text - either from the cache or by looking it up
-	private String getOriginalText(String resourceURI) {
-		String result = "";
-		if (resourceCache.containsKey(resourceURI))
-			result = resourceCache.get(resourceURI);
-		else {
-			try {
-				Session session = this.knowledgeStore.newSession();
-				result = session.download(new URIImpl(resourceURI)).timeout((long) this.timeoutMsec).exec().writeToString();
-				session.close();
-				resourceCache.putIfAbsent(resourceURI, result);
-			} catch (Exception e) {
-				if (log.isErrorEnabled())
-					log.error(String.format("Could not retrieve resource, returning empty String. URI: '%s'", resourceURI));
-				if (log.isDebugEnabled())
-					log.debug("Resource download failed", e);
-			}
-		}
-
-		return result;
-	}
 
 	/**
 	 * Returns a list of all news stories in which the given event is mentioned.
 	 */
-	public Set<String> retrieveOriginalTexts(String eventURI) {
+	public Set<String> retrieveOriginalTexts(String eventURI, String dummyKeyword) {
 		Set<String> originalTexts = new HashSet<String>();
 
-		Set<String> mentionURIs = getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
+		Set<String> mentionURIs = getBufferedValues(Util.getRelationName("event", "mention", dummyKeyword), eventURI);
 		
 		for (String mentionURI : mentionURIs) {
 			String resourceURI = Util.resourceURIFromMentionURI(mentionURI);
 			String originalText = getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_TEXT, resourceURI);
-//					getOriginalText(resourceURI);
+
 			if (!originalText.isEmpty())
 				originalTexts.add(originalText);
 		}
@@ -798,9 +732,9 @@ public class KnowledgeStoreAdapter {
 	public List<String> retrievePhrasesFromEntity(String entityURI, boolean wholeSentence, String dummyKeyword) {
 		List<String> result = new ArrayList<String>();
 
-		Set<String> mentions = getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, entityURI);
+		Set<String> mentions = getBufferedValues(Util.getRelationName("event", "mention", dummyKeyword), entityURI);
 		if (mentions.isEmpty())
-			mentions = getBufferedValues(Util.getRelationName("entity", "entityMention", dummyKeyword), entityURI);
+			mentions = getBufferedValues(Util.getRelationName("entity", "mention", dummyKeyword), entityURI);
 
 		if (mentions.isEmpty()) {
 			if (log.isErrorEnabled())

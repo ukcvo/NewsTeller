@@ -45,7 +45,7 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 
 		String arbitraryKeyword = keywords.get(0).getWord();
 		
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", arbitraryKeyword), eventURI);
 		
 		boolean hasA0 = Util.parseXMLDouble(ksAdapter.getFirstBufferedValue(Util.getRelationName("event", "a0", arbitraryKeyword), eventURI)) > 0;
 		boolean hasA1 = Util.parseXMLDouble(ksAdapter.getFirstBufferedValue(Util.getRelationName("event", "a1", arbitraryKeyword), eventURI)) > 0;

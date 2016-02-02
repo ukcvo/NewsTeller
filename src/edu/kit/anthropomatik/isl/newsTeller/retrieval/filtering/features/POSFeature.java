@@ -23,7 +23,7 @@ public class POSFeature extends UsabilityFeature {
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", keywords.get(0).getWord()), eventURI);
 		
 		double result = 0;
 		for (String mentionURI : mentionURIs) {

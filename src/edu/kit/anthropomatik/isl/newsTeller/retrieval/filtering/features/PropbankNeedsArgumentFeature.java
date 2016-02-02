@@ -39,7 +39,7 @@ public class PropbankNeedsArgumentFeature extends UsabilityFeature {
 		
 		boolean eventNeedsArg = true;
 		
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", keywords.get(0).getWord()), eventURI);
 
 		for (String mentionURI : mentionURIs) {
 			

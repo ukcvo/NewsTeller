@@ -30,7 +30,7 @@ public class ActorPositionFeature extends UsabilityFeature {
 		
 		String arbitraryKeyword = keywords.get(0).getWord();
 		
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", arbitraryKeyword), eventURI);
 		
 		Set<String> actors = ksAdapter.getBufferedValues(Util.getRelationName("event", "actor", arbitraryKeyword), eventURI);
 		Set<Set<String>> actorLabels = new HashSet<Set<String>>();

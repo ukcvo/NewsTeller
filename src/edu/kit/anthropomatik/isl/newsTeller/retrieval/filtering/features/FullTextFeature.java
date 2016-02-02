@@ -59,6 +59,7 @@ public abstract class FullTextFeature extends UsabilityFeature {
 	}
 
 	// entityLabels: keyword-dbPediaLabels-labelParts
+	// TODO: parallelize if really needed
 	private List<Double> checkLabels(List<List<List<String>>> entityLabels, Set<String> originalTexts) {
 		List<Double> result = new ArrayList<Double>();
 		
@@ -85,7 +86,7 @@ public abstract class FullTextFeature extends UsabilityFeature {
 		if (this.doOnlyUseSentence)
 			originalTexts = new HashSet<String>(ksAdapter.retrieveSentencesfromEvent(eventURI, arbitraryKeyword)); //use only sentence
 		else
-			originalTexts = ksAdapter.retrieveOriginalTexts(eventURI); //use complete text
+			originalTexts = ksAdapter.retrieveOriginalTexts(eventURI, arbitraryKeyword); //use complete text
 		List<Double> appearances = checkLabels(labels, originalTexts);
 		double averageAppearance = appearances.isEmpty() ? 1.0 : Util.averageFromCollection(appearances);
 		

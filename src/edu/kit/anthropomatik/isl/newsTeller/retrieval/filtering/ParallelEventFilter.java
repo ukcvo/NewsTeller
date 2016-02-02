@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -116,10 +115,8 @@ public class ParallelEventFilter implements IEventFilter {
 			
 			List<Future<?>> futures = new ArrayList<Future<?>>();
 			for (int i = 0; i < features.size(); i++) {
-				//UsabilityFeature f = features.get(i);
 				FeatureWorker w = new FeatureWorker(features.get(i), event.getEventURI(), userQuery);
 				futures.add(threadPool.submit(w));
-				// values[i] = f.getValue(event.getEventURI(), userQuery);
 			}
 			
 			for (int i = 0; i < futures.size(); i++) {
@@ -141,24 +138,6 @@ public class ParallelEventFilter implements IEventFilter {
 		
 	}
 	
-	private class BulkQueryWorker implements Runnable {
-		
-		private UsabilityFeature feature;
-		private Set<String> eventURIs;
-		private List<Keyword> keywords;
-		
-		public BulkQueryWorker(UsabilityFeature feature, Set<String> eventURIs, List<Keyword> keywords) {
-			this.feature = feature;
-			this.eventURIs = eventURIs;
-			this.keywords = keywords;
-		}
-
-		@Override
-		public void run() {
-		//	feature.runBulkQueries(eventURIs, keywords);
-		}
-	}
-	
 	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery) {
 		
 		ksAdapter.flushBuffer();
@@ -170,63 +149,119 @@ public class ParallelEventFilter implements IEventFilter {
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
-		long t1 = System.currentTimeMillis();
-		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs);
-		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION);
-		if (log.isInfoEnabled())
-			log.info(String.format("get mentions: %d ms", System.currentTimeMillis() - t1));
+		List<Future<?>> futures = new ArrayList<Future<?>>();
 		
-		t1 = System.currentTimeMillis();
-		Set<String> mentionProperties = new HashSet<String>();
-		for (UsabilityFeature feature : this.features) {
-			mentionProperties.addAll(feature.getRequiredMentionProperties());
+		// task 1: get all mentions and based on that both the resources and the mention properties
+		futures.add(ksAdapter.submit(new Runnable() {
+			
+			@Override
+			public void run() {
+				ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, userQuery);
+				Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord()));
+				
+				List<Future<?>> futures = new ArrayList<Future<?>>();
+				
+				futures.add(ksAdapter.submit(new Runnable() {
+					
+					@Override
+					public void run() {
+						Set<String> mentionProperties = new HashSet<String>();
+						for (UsabilityFeature feature : features) {
+							mentionProperties.addAll(feature.getRequiredMentionProperties());
+						}
+						ksAdapter.runKeyValueMentionPropertyQuery(mentionProperties, Util.RELATION_NAME_MENTION_PROPERTY, mentionURIs);
+					}
+				}));
+				
+				futures.add(ksAdapter.submit(new Runnable() {
+					
+					@Override
+					public void run() {
+						ksAdapter.runKeyValueResourceTextQuery(Util.resourceURIsFromMentionURIs(mentionURIs));
+					}
+				}));
+				
+				for (Future<?> f : futures) {
+					try {
+						f.get();
+					} catch (Exception e) {
+						if (log.isErrorEnabled())
+							log.error("thread execution somehow failed!");
+						if (log.isDebugEnabled())
+							log.debug("thread execution exception", e);
+					}
+				}
+			}
+		}));
+		
+		// task 2: get the event statistics
+		futures.add(ksAdapter.submit(new Runnable() {
+			
+			@Override
+			public void run() {
+				ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
+			}
+		}));
+		
+		// task 3: get the event constituents and based on that the entity properties and entity mentions
+		futures.add(ksAdapter.submit(new Runnable() {
+			
+			@Override
+			public void run() {
+				ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
+				Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", userQuery.get(0).getWord()));
+				
+				List<Future<?>> futures = new ArrayList<Future<?>>();
+				
+				futures.add(ksAdapter.submit(new Runnable() {
+					
+					@Override
+					public void run() {
+						ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
+					}
+				}));
+				
+				futures.add(ksAdapter.submit(new Runnable() {
+					
+					@Override
+					public void run() {
+						ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
+					}
+				}));
+				
+				for (Future<?> f : futures) {
+					try {
+						f.get();
+					} catch (Exception e) {
+						if (log.isErrorEnabled())
+							log.error("thread execution somehow failed!");
+						if (log.isDebugEnabled())
+							log.debug("thread execution exception", e);
+					}
+				}
+			}
+		}));
+		
+		// wait until everything is done
+		for (Future<?> f : futures) {
+			try {
+				f.get();
+			} catch (Exception e) {
+				if (log.isErrorEnabled())
+					log.error("thread execution somehow failed!");
+				if (log.isDebugEnabled())
+					log.debug("thread execution exception", e);
+			}
 		}
 		
-		ksAdapter.runKeyValueMentionPropertyQuery(mentionProperties, Util.RELATION_NAME_MENTION_PROPERTY, mentionURIs);
-		if (log.isInfoEnabled())
-			log.info(String.format("get mention properties: %d ms", System.currentTimeMillis() - t1));
-		
-		t1 = System.currentTimeMillis();
-		ksAdapter.runKeyValueResourceTextQuery(Util.resourceURIsFromMentionURIs(mentionURIs));
-		if (log.isInfoEnabled())
-			log.info(String.format("get texts: %d ms", System.currentTimeMillis() - t1));
-		
-		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
-		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
-		// TODO: move into constant!
-		Set<String> entities = ksAdapter.getAllRelationValues("event-entity-" + userQuery.get(0).getWord());
-		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
-		ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
-//		t1 = System.currentTimeMillis();
-		// sequential bulk retrieval
-//		for (UsabilityFeature feature : this.features)
-//			feature.runBulkQueries(eventURIs, userQuery);
-		List<Future<?>> futures = new ArrayList<Future<?>>();
-//		for (UsabilityFeature feature : this.features) {
-//			BulkQueryWorker w = new BulkQueryWorker(feature, eventURIs, userQuery);
-//			futures.add(ksAdapter.submit(w));
-//		}
-		
-//		for (Future<?> f : futures) {
-//			try {
-//				f.get();
-//			} catch (Exception e) {
-//				if (log.isErrorEnabled())
-//					log.error("thread execution somehow failed!");
-//				if (log.isDebugEnabled())
-//					log.debug("thread execution exception", e);
-//			}
-//		}
 		t = System.currentTimeMillis() - t;
-//		if (log.isInfoEnabled())
-//			log.info(String.format("feature bulk: %d ms", System.currentTimeMillis() - t1));
-		
 		if (log.isInfoEnabled())
 			log.info(String.format("bulk retrieval: %d ms", t));
 		t = System.currentTimeMillis();
 		
+		
 		// parallel feature extraction (parallel on events)
-		futures = new ArrayList<Future<?>>();
+		futures.clear();
 		ConcurrentMap<NewsEvent, Instance> resultMap = new ConcurrentHashMap<NewsEvent, Instance>();
 		
 		// parallel feature extraction

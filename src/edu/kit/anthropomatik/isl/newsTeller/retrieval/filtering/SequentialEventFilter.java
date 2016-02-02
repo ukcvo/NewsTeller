@@ -83,8 +83,8 @@ public class SequentialEventFilter implements IEventFilter {
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
-		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs);
-		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_MENTION);
+		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, userQuery);
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord()));
 		
 		Set<String> mentionProperties = new HashSet<String>();
 		for (UsabilityFeature feature : this.features) {
@@ -96,17 +96,11 @@ public class SequentialEventFilter implements IEventFilter {
 		
 		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
 		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
-		// TODO: move into constant!
+
 		Set<String> entities = ksAdapter.getAllRelationValues("event-entity-" + userQuery.get(0).getWord());
 		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
 		ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
-//		for (UsabilityFeature feature : this.features) {
-//			long t1 = System.currentTimeMillis();
-//			feature.runBulkQueries(eventURIs, userQuery);
-//			t1 = System.currentTimeMillis() - t1;
-////			if (log.isInfoEnabled())
-////				log.info(String.format("%s: %d ms", feature.getName(), t1));
-//		}
+		
 		t = System.currentTimeMillis() - t;
 		if (log.isInfoEnabled())
 			log.info(String.format("bulk queries: %d ms", t));
@@ -150,10 +144,10 @@ public class SequentialEventFilter implements IEventFilter {
 		if (log.isInfoEnabled())
 			log.info(String.format("feature extraction & classification: %d ms", t));
 		
-//		for (UsabilityFeature f : features) {
-//			if (log.isInfoEnabled())
-//				log.info(String.format("%s: %d ms", f.getName(), featureRuntime.get(f)));
-//		}
+		for (UsabilityFeature f : features) {
+			if (log.isInfoEnabled())
+				log.info(String.format("%s: %d ms", f.getName(), featureRuntime.get(f)));
+		}
 		
 		return result;
 	}
