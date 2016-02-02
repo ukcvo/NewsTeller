@@ -1,7 +1,0 @@
-SELECT ?event (COUNT(?actor) AS ?number)
-WHERE
-{
-    VALUES ?event { *keys* } .
-    ?event sem:hasActor ?actor
-}
-GROUP BY ?event

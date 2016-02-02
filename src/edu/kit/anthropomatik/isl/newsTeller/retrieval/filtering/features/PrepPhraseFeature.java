@@ -11,31 +11,26 @@ public class PrepPhraseFeature extends UsabilityFeature {
 
 	private List<String> prepositions;
 	
-	private String labelQuery;
-	
-	private String labelQueryName;
-	
 	private boolean doSearchInsidePhrase;
 	
 	public void setDoSearchInsidePhrase(boolean doSearchInsidePhrase) {
 		this.doSearchInsidePhrase = doSearchInsidePhrase;
 	}
 		
-	public PrepPhraseFeature(String queryFileName, String labelQueryFileName, String prepositionFileName) {
-		super(queryFileName);
+	public PrepPhraseFeature(String prepositionFileName) {
+		super();
 		this.prepositions = Util.readStringListFromFile(prepositionFileName);
-		this.labelQuery = Util.readStringFromFile(labelQueryFileName);
-		this.labelQueryName = Util.queryNameFromFileName(labelQueryFileName);
 	}
 
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 		double result = 0;
+		String arbitraryKeyword = keywords.get(0).getWord();
 		
-		Set<String> actors = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + sparqlQueryName, eventURI);
+		Set<String> actors = ksAdapter.getBufferedValues(Util.getRelationName("event", "actor", arbitraryKeyword), eventURI);
 		for (String actor : actors) {
 			
-			Set<String> labels = ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_LABEL + sparqlQueryName + labelQueryName, actor);
+			Set<String> labels = ksAdapter.getBufferedValues(Util.getRelationName("entity", "entityPrefLabel", arbitraryKeyword), actor);
 			
 			double actorResult = 0;
 			for (String label : labels) {
@@ -57,16 +52,7 @@ public class PrepPhraseFeature extends UsabilityFeature {
 		
 		return result;
 	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + sparqlQueryName, Util.VARIABLE_EVENT, 
-				Util.VARIABLE_ENTITY, eventURIs);
-		Set<String> constituents = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + sparqlQueryName);
-		ksAdapter.runKeyValueSparqlQuery(labelQuery, Util.RELATION_NAME_CONSTITUENT_LABEL + sparqlQueryName + labelQueryName, Util.VARIABLE_ENTITY, 
-				Util.VARIABLE_LABEL, constituents);
-	}
-
+	
 	@Override
 	public Set<String> getRequiredMentionProperties() {
 		return new HashSet<String>();

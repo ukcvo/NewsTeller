@@ -3,17 +3,16 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,10 +22,10 @@ import org.openrdf.query.BindingSet;
 import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import eu.fbk.knowledgestore.KnowledgeStore;
-import eu.fbk.knowledgestore.OperationException;
 import eu.fbk.knowledgestore.Session;
 import eu.fbk.knowledgestore.client.Client;
 import eu.fbk.knowledgestore.data.Record;
@@ -57,12 +56,6 @@ public class KnowledgeStoreAdapter {
 
 	private String getMentionFromEventTemplate;
 
-	private String getMentionFromEventTemplateName;
-
-	private String getEventFromMentionTemplate;
-
-	private String getEventFromMentionTemplateName;
-
 	private ConcurrentMap<String, String> resourceCache;
 
 	private ConcurrentMap<String, Set<KSMention>> eventMentionCache;
@@ -89,23 +82,16 @@ public class KnowledgeStoreAdapter {
 		return this.maxNumberOfConnections;
 	}
 
-	public String getMentionFromEventTemplateName() {
-		return this.getMentionFromEventTemplateName;
-	}
-	
 	public boolean isConnectionOpen() {
 		return isConnectionOpen;
 	}
 
 	public KnowledgeStoreAdapter(String getMentionFromEventFileName, String getEventFromMentionFileName) {
 		this.getMentionFromEventTemplate = Util.readStringFromFile(getMentionFromEventFileName);
-		this.getEventFromMentionTemplate = Util.readStringFromFile(getEventFromMentionFileName);
 		this.resourceCache = new ConcurrentHashMap<String, String>();
 		this.eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 		this.sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		this.sentenceMentionCache = new ConcurrentHashMap<String, KSMention>();
-		this.getMentionFromEventTemplateName = Util.queryNameFromFileName(getMentionFromEventFileName);
-		this.getEventFromMentionTemplateName = Util.queryNameFromFileName(getEventFromMentionFileName);
 	}
 
 	/**
@@ -212,6 +198,102 @@ public class KnowledgeStoreAdapter {
 	 */
 	public void runKeyValueMentionFromEventQuery(Set<String> eventURIs) {
 		runKeyValueSparqlQuery(getMentionFromEventTemplate, Util.RELATION_NAME_EVENT_MENTION, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, eventURIs);
+	}
+	
+	public void runKeyValueSparqlQuery(String sparqlQueryTemplate, Set<String> keyValues, List<Keyword> keywords) {
+		// region sanity check
+		if (!isConnectionOpen) {
+			if (log.isWarnEnabled())
+				log.warn("Trying to access KnowledgeStore without having an open connection. Request ignored.");
+			return;
+		}
+		if (sparqlQueryTemplate.isEmpty()) {
+			if (log.isWarnEnabled())
+				log.warn("Empty query template. Request ignored.");
+			return;
+		}
+		if (keyValues.isEmpty()) {
+			if (log.isWarnEnabled())
+				log.warn("Empty set of keyValues. Request ignored.");
+			return;
+		}
+		// endregion
+		
+		// automatically extract the variables from the query header
+		String queryHeader = sparqlQueryTemplate.substring(0, sparqlQueryTemplate.indexOf("WHERE"));
+		Pattern variablePattern = Pattern.compile("([a-z]|SELECT)\\s\\?(\\w*)\\s");
+		Pattern variablePatternAS = Pattern.compile("AS\\s\\?(\\w*)\\)");
+		Matcher matcher = variablePattern.matcher(queryHeader);
+		Matcher matcherAS = variablePatternAS.matcher(queryHeader);
+		String keyVariable = null;
+		List<String> valueVariables = new ArrayList<String>();
+		if (matcher.find()) {
+			do {
+				String variable = matcher.group(2);
+				if (keyVariable == null)
+					keyVariable = variable;
+				else
+					valueVariables.add(variable);			
+			} while (matcher.find(matcher.start(2)));
+		}
+		
+		while (matcherAS.find())
+			valueVariables.add(matcherAS.group(1));
+		
+		
+		for (Keyword keyword : keywords) {
+			String queryWithKeyword = sparqlQueryTemplate.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex());
+			
+			ConcurrentMap<String, ConcurrentMap<String, Set<String>>> relationMaps = new ConcurrentHashMap<String, ConcurrentMap<String,Set<String>>>();
+			for (String valueVariable : valueVariables)
+				relationMaps.putIfAbsent(Util.getRelationName(keyVariable, valueVariable, keyword.getWord()), new ConcurrentHashMap<String, Set<String>>());
+			
+			List<String> queries = new ArrayList<String>();
+			StringBuilder sb = new StringBuilder();
+			for (String uri : keyValues) {
+				String s = String.format("<%s> ", uri);
+				if (sb.length() + s.length() + queryWithKeyword.length() > MAXIMUM_QUERY_LENGTH) {
+					queries.add(queryWithKeyword.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
+					sb = new StringBuilder();
+				}
+				sb.append(s);
+			}
+			queries.add(queryWithKeyword.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
+			Session session = knowledgeStore.newSession();
+			
+			for (String query : queries) {
+				try {
+					Stream<BindingSet> stream = session.sparql(query).timeout((long) timeoutMsec).execTuples();
+					List<BindingSet> tuples = stream.toList();
+					stream.close();
+					for (BindingSet tuple : tuples) {
+						String key = tuple.getValue(keyVariable).toString();
+						for (String valueVariable : valueVariables) {
+							ConcurrentMap<String, Set<String>> relationMap = 
+									relationMaps.get(Util.getRelationName(keyVariable, valueVariable, keyword.getWord()));
+							Set<String> values = relationMap.containsKey(key) ? relationMap.get(key) : new HashSet<String>();
+							
+							if (tuple.hasBinding(valueVariable)) { //ignore the variable if there is no binding - i.e. store an empty set
+								String value = tuple.getValue(valueVariable).toString();
+								if (value.startsWith("\""))
+									value = value.substring(1, value.lastIndexOf('"'));
+								values.add(value);
+							} 
+							
+							relationMap.put(key, values);
+						}
+					}
+				} catch (Exception e) {
+					if (log.isErrorEnabled())
+						log.error(String.format("Query execution failed. Query: '%s'", query));
+					if (log.isDebugEnabled())
+						log.debug("Query execution exception", e);
+				}
+			}
+			session.close();
+			
+			this.sparqlCache.putAll(relationMaps);
+		}
 	}
 	
 	/**
@@ -356,7 +438,9 @@ public class KnowledgeStoreAdapter {
 					log.debug("Mention property access exception", e);
 			}
 		}
-
+		
+		session.close();
+		
 		for (String propertyURI : propertyURIs) {
 			this.sparqlCache.put(relationName + propertyURI, propertyMap.get(propertyURI));
 		}
@@ -703,20 +787,20 @@ public class KnowledgeStoreAdapter {
 	/**
 	 * Returns the phrases of the mentions of the given entity.
 	 */
-	public List<String> retrievePhrasesFromEntity(String entityURI) {
-		return retrievePhrasesFromEntity(entityURI, false);
+	public List<String> retrievePhrasesFromEntity(String entityURI, String dummyKeyword) {
+		return retrievePhrasesFromEntity(entityURI, false, dummyKeyword);
 	}
 
 	/**
 	 * Returns the phrases of the mentions of the given entity. If wholeSentence
 	 * is set, returns whole sentences.
 	 */
-	public List<String> retrievePhrasesFromEntity(String entityURI, boolean wholeSentence) {
+	public List<String> retrievePhrasesFromEntity(String entityURI, boolean wholeSentence, String dummyKeyword) {
 		List<String> result = new ArrayList<String>();
 
 		Set<String> mentions = getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, entityURI);
 		if (mentions.isEmpty())
-			mentions = getBufferedValues(Util.RELATION_NAME_CONSTITUENT_MENTION + getMentionFromEventTemplateName, entityURI);
+			mentions = getBufferedValues(Util.getRelationName("entity", "entityMention", dummyKeyword), entityURI);
 
 		if (mentions.isEmpty()) {
 			if (log.isErrorEnabled())
@@ -782,8 +866,8 @@ public class KnowledgeStoreAdapter {
 	 * Given the eventURI, picks the first mention and extracts the surrounding
 	 * sentence from the original resource.
 	 */
-	public String retrieveSentencefromEvent(String eventURI) {
-		List<String> results = retrieveSentencesfromEvent(eventURI);
+	public String retrieveSentencefromEvent(String eventURI, String dummyKeyword) {
+		List<String> results = retrieveSentencesfromEvent(eventURI, dummyKeyword);
 		if (results.isEmpty())
 			return "";
 		else
@@ -794,8 +878,8 @@ public class KnowledgeStoreAdapter {
 	 * Given the eventURI, returns a list of all sentences mentioning this
 	 * event.
 	 */
-	public List<String> retrieveSentencesfromEvent(String eventURI) {
-		return retrievePhrasesFromEntity(eventURI, true);
+	public List<String> retrieveSentencesfromEvent(String eventURI, String dummyKeyword) {
+		return retrievePhrasesFromEntity(eventURI, true, dummyKeyword);
 	}
 	// endregion
 

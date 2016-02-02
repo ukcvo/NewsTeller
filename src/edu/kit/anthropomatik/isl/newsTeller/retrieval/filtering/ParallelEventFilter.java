@@ -28,7 +28,7 @@ import weka.core.SerializationHelper;
 
 public class ParallelEventFilter implements IEventFilter {
 
-private static Log log = LogFactory.getLog(SequentialEventFilter.class);
+	private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 	
 	private Classifier classifier;
 	
@@ -39,6 +39,14 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	private ExecutorService threadPool;
+	
+	private String eventStatisticsQuery;
+	
+	private String eventConstituentsQuery;
+	
+	private String entityPropertiesQuery;
+	
+	private String entityMentionsQuery;
 	
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
@@ -52,7 +60,8 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 		this.threadPool = Executors.newFixedThreadPool(numThreads);
 	}
 	
-	public ParallelEventFilter(String classifierFileName) {
+	public ParallelEventFilter(String classifierFileName, String eventStatisticsQueryFileName, String eventConstituentsQueryFileName,
+			String entityPropertiesQueryFileName, String entityMentionsQueryFileName) {
 		try {
 			Object[] input = SerializationHelper.readAll(classifierFileName);
 			this.classifier = (Classifier) input[0];
@@ -63,6 +72,10 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 			if (log.isDebugEnabled())
 				log.debug("can't read classifier from file", e);
 		}
+		this.eventStatisticsQuery = Util.readStringFromFile(eventStatisticsQueryFileName);
+		this.eventConstituentsQuery = Util.readStringFromFile(eventConstituentsQueryFileName);
+		this.entityPropertiesQuery = Util.readStringFromFile(entityPropertiesQueryFileName);
+		this.entityMentionsQuery = Util.readStringFromFile(entityMentionsQueryFileName);
 	}
 	
 	private class FeatureWorker implements Callable<Double> {
@@ -142,7 +155,7 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 
 		@Override
 		public void run() {
-			feature.runBulkQueries(eventURIs, keywords);
+		//	feature.runBulkQueries(eventURIs, keywords);
 		}
 	}
 	
@@ -178,29 +191,35 @@ private static Log log = LogFactory.getLog(SequentialEventFilter.class);
 		if (log.isInfoEnabled())
 			log.info(String.format("get texts: %d ms", System.currentTimeMillis() - t1));
 		
-		t1 = System.currentTimeMillis();
+		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
+		// TODO: move into constant!
+		Set<String> entities = ksAdapter.getAllRelationValues("event-entity-" + userQuery.get(0).getWord());
+		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
+//		t1 = System.currentTimeMillis();
 		// sequential bulk retrieval
 //		for (UsabilityFeature feature : this.features)
 //			feature.runBulkQueries(eventURIs, userQuery);
 		List<Future<?>> futures = new ArrayList<Future<?>>();
-		for (UsabilityFeature feature : this.features) {
-			BulkQueryWorker w = new BulkQueryWorker(feature, eventURIs, userQuery);
-			futures.add(ksAdapter.submit(w));
-		}
+//		for (UsabilityFeature feature : this.features) {
+//			BulkQueryWorker w = new BulkQueryWorker(feature, eventURIs, userQuery);
+//			futures.add(ksAdapter.submit(w));
+//		}
 		
-		for (Future<?> f : futures) {
-			try {
-				f.get();
-			} catch (Exception e) {
-				if (log.isErrorEnabled())
-					log.error("thread execution somehow failed!");
-				if (log.isDebugEnabled())
-					log.debug("thread execution exception", e);
-			}
-		}
+//		for (Future<?> f : futures) {
+//			try {
+//				f.get();
+//			} catch (Exception e) {
+//				if (log.isErrorEnabled())
+//					log.error("thread execution somehow failed!");
+//				if (log.isDebugEnabled())
+//					log.debug("thread execution exception", e);
+//			}
+//		}
 		t = System.currentTimeMillis() - t;
-		if (log.isInfoEnabled())
-			log.info(String.format("feature bulk: %d ms", System.currentTimeMillis() - t1));
+//		if (log.isInfoEnabled())
+//			log.info(String.format("feature bulk: %d ms", System.currentTimeMillis() - t1));
 		
 		if (log.isInfoEnabled())
 			log.info(String.format("bulk retrieval: %d ms", t));

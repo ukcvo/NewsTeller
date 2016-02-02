@@ -1,5 +1,0 @@
-SELECT (COUNT(?actor) AS ?number)
-WHERE
-{
-    <*e*> propbank:*l* ?actor
-}

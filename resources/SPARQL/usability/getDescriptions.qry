@@ -1,9 +1,0 @@
-SELECT ?entity ?label
-WHERE
-{
-    VALUES ?entity { *keys* } .
-    GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> # use dbpedia to get stable entities
-    {
-        ?entity rdfs:comment ?label .
-    }
-}

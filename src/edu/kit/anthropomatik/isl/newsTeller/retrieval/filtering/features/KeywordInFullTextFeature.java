@@ -2,8 +2,6 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
@@ -29,8 +27,8 @@ public class KeywordInFullTextFeature extends FullTextFeature {
 		this.useStem = useStem;
 	}
 
-	public KeywordInFullTextFeature(String queryFileName) {
-		super(queryFileName);
+	public KeywordInFullTextFeature() {
+		super();
 	}
 
 	@Override
@@ -55,11 +53,6 @@ public class KeywordInFullTextFeature extends FullTextFeature {
 		}
 		
 		return result;
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		// nothing to do...
 	}
 
 }

@@ -1,7 +1,0 @@
-SELECT ?event (COUNT(?link) AS ?number)
-WHERE
-{
-    VALUES ?event { *keys* } .
-    ?event ?link ?label 
-}
-GROUP BY ?event

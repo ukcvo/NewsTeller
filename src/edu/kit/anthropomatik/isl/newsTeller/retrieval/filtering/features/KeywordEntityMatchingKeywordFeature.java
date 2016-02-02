@@ -15,8 +15,8 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class KeywordEntityMatchingKeywordFeature extends UsabilityFeature {
 
-	public KeywordEntityMatchingKeywordFeature(String queryFileName) {
-		super(queryFileName);
+	public KeywordEntityMatchingKeywordFeature() {
+		super();
 	}
 
 	@Override
@@ -25,7 +25,10 @@ public class KeywordEntityMatchingKeywordFeature extends UsabilityFeature {
 		double result = 0;
 		
 		for (Keyword keyword : keywords) {
-			Set<String> keywordEntityLabels = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_LABEL + sparqlQueryName + keyword.getWord(), eventURI);
+			Set<String> entities = ksAdapter.getBufferedValues(Util.getRelationName("event", "keywordEntity", keyword.getWord()), eventURI);
+			Set<String> keywordEntityLabels =  new HashSet<String>();
+			for (String entity : entities)
+				ksAdapter.getBufferedValues(Util.getRelationName("entity", "matchingEntityLabel", keyword.getWord()), entity);
 					
 			for (String label : keywordEntityLabels) {
 				if (label.toLowerCase().matches(keyword.getWordRegex())) {
@@ -37,14 +40,6 @@ public class KeywordEntityMatchingKeywordFeature extends UsabilityFeature {
 		result /= keywords.size();
 		
 		return result;
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		for (Keyword keyword : keywords) {
-			ksAdapter.runKeyValueSparqlQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
-					Util.RELATION_NAME_EVENT_LABEL + sparqlQueryName + keyword.getWord(), Util.VARIABLE_EVENT, Util.VARIABLE_LABEL, eventURIs);
-		}
 	}
 
 	@Override

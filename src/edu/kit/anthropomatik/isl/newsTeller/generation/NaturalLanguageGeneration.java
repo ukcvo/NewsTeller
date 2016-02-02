@@ -3,16 +3,13 @@ package edu.kit.anthropomatik.isl.newsTeller.generation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
-import simplenlg.features.Feature;
-import simplenlg.features.Tense;
 import simplenlg.framework.CoordinatedPhraseElement;
 import simplenlg.framework.NLGFactory;
 import simplenlg.lexicon.Lexicon;
@@ -96,7 +93,7 @@ public class NaturalLanguageGeneration extends SummaryCreator {
 	}
 	
 	@Override
-	public String createSummary(NewsEvent event) {
+	public String createSummary(NewsEvent event, List<Keyword> keywords) {
 		
 //		String a1 = "Barack Obama";
 //		String verb = "elect";

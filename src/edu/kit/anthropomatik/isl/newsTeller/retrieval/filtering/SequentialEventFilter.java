@@ -38,6 +38,14 @@ public class SequentialEventFilter implements IEventFilter {
 	
 	private KnowledgeStoreAdapter ksAdapter;
 	
+	private String eventStatisticsQuery;
+	
+	private String eventConstituentsQuery;
+	
+	private String entityPropertiesQuery;
+	
+	private String entityMentionsQuery;
+	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
@@ -46,7 +54,8 @@ public class SequentialEventFilter implements IEventFilter {
 		this.features = features;
 	}
 	
-	public SequentialEventFilter(String classifierFileName) {
+	public SequentialEventFilter(String classifierFileName, String eventStatisticsQueryFileName, String eventConstituentsQueryFileName,
+									String entityPropertiesQueryFileName, String entityMentionsQueryFileName) {
 		try {
 			Object[] input = SerializationHelper.readAll(classifierFileName);
 			this.classifier = (Classifier) input[0];
@@ -57,6 +66,10 @@ public class SequentialEventFilter implements IEventFilter {
 			if (log.isDebugEnabled())
 				log.debug("can't read classifier from file", e);
 		}
+		this.eventStatisticsQuery = Util.readStringFromFile(eventStatisticsQueryFileName);
+		this.eventConstituentsQuery = Util.readStringFromFile(eventConstituentsQueryFileName);
+		this.entityPropertiesQuery = Util.readStringFromFile(entityPropertiesQueryFileName);
+		this.entityMentionsQuery = Util.readStringFromFile(entityMentionsQueryFileName);
 	}
 	
 	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery) {
@@ -81,13 +94,19 @@ public class SequentialEventFilter implements IEventFilter {
 		ksAdapter.runKeyValueMentionPropertyQuery(mentionProperties, Util.RELATION_NAME_MENTION_PROPERTY, mentionURIs);
 		ksAdapter.runKeyValueResourceTextQuery(Util.resourceURIsFromMentionURIs(mentionURIs));
 		
-		for (UsabilityFeature feature : this.features) {
-			long t1 = System.currentTimeMillis();
-			feature.runBulkQueries(eventURIs, userQuery);
-			t1 = System.currentTimeMillis() - t1;
-//			if (log.isInfoEnabled())
-//				log.info(String.format("%s: %d ms", feature.getName(), t1));
-		}
+		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
+		// TODO: move into constant!
+		Set<String> entities = ksAdapter.getAllRelationValues("event-entity-" + userQuery.get(0).getWord());
+		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
+//		for (UsabilityFeature feature : this.features) {
+//			long t1 = System.currentTimeMillis();
+//			feature.runBulkQueries(eventURIs, userQuery);
+//			t1 = System.currentTimeMillis() - t1;
+////			if (log.isInfoEnabled())
+////				log.info(String.format("%s: %d ms", feature.getName(), t1));
+//		}
 		t = System.currentTimeMillis() - t;
 		if (log.isInfoEnabled())
 			log.info(String.format("bulk queries: %d ms", t));

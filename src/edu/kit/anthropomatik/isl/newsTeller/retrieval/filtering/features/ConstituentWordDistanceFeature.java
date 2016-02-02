@@ -17,10 +17,6 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class ConstituentWordDistanceFeature extends UsabilityFeature {
 
-	private String mentionQuery;
-	
-	private String mentionQueryName;
-	
 	public static final int OPERATION_TYPE_AVG = 0;
 	public static final int OPERATION_TYPE_MIN = 1;
 	public static final int OPERATION_TYPE_MAX = 2;
@@ -37,22 +33,21 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 		this.normalize = normalize;
 	}
 	
-	public ConstituentWordDistanceFeature(String queryFileName, String mentionQueryFileName) {
-		super(queryFileName);
-		this.mentionQuery = Util.readStringFromFile(mentionQueryFileName);
-		this.mentionQueryName = Util.queryNameFromFileName(mentionQueryFileName);
+	public ConstituentWordDistanceFeature() {
+		super();
 	}
 
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 		
 		double result = (this.operationType == OPERATION_TYPE_MIN) ? Double.POSITIVE_INFINITY : 0;
+		String arbitraryKeyword = keywords.get(0).getWord();
 		
-		Set<String> constituents = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, eventURI);
+		Set<String> constituents = ksAdapter.getBufferedValues(Util.getRelationName("event", "entity", arbitraryKeyword), eventURI);
 		List<KSMention> constituentMentions = new ArrayList<KSMention>();
 		for (String constituent : constituents) {
 			Set<String> mentionURIs =  
-					ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_MENTION + this.sparqlQueryName + this.mentionQueryName, constituent);
+					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
 			List<KSMention> mentions = new ArrayList<KSMention>();
 			for (String mentionURI : mentionURIs) {
 				boolean shouldAdd = true;
@@ -161,13 +156,6 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 			result = -1;
 		
 		return result;
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
-		Set<String> constituents = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName);
-		ksAdapter.runKeyValueSparqlQuery(mentionQuery, Util.RELATION_NAME_CONSTITUENT_MENTION + this.sparqlQueryName + this.mentionQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, constituents);
 	}
 
 	@Override

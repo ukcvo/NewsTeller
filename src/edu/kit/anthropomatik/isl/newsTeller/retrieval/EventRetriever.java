@@ -112,7 +112,6 @@ public class EventRetriever {
 	}
 	
 	public void shutDown() {
-		this.eventSearcher.shutDown();
 		this.eventFilter.shutDown();
 	}
 }

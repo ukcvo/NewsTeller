@@ -26,8 +26,8 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 
 	private Dictionary dict = null;
 
-	public WordNetVerbCountFeature(String queryFileName) {
-		super(queryFileName);
+	public WordNetVerbCountFeature() {
+		super();
 		try {
 			this.dict = Dictionary.getDefaultResourceInstance();
 		} catch (JWNLException e) {
@@ -73,7 +73,8 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
-		Set<String> labels = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_LABEL + sparqlQueryName, eventURI);
+		String arbitraryKeyword = keywords.get(0).getWord();
+		Set<String> labels = ksAdapter.getBufferedValues(Util.getRelationName("event", "eventLabel", arbitraryKeyword), eventURI);
 
 		if (labels.isEmpty()) {
 			if (log.isWarnEnabled())
@@ -87,12 +88,6 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 		}
 
 		return sum / labels.size();
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_LABEL + sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_LABEL, 
-				eventURIs);
 	}
 
 	@Override

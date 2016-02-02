@@ -76,7 +76,7 @@ public class NewsTeller {
 			ksAdapter.openConnection();
 		
 		NewsEvent selectedEvent = retriever.retrieveEvent(userQuery, userModel);
-		String summary = generator.summarizeEvent(selectedEvent);
+		String summary = generator.summarizeEvent(selectedEvent, userQuery);
 		
 		return summary;
 	}

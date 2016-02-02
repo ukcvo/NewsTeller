@@ -2,7 +2,6 @@ package edu.kit.anthropomatik.isl.newsTeller.knowledgeStore;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -89,7 +88,7 @@ public class KnowledgeStoreAdapterTest {
 	@Test
 	public void shouldReturnCorrectSentenceForSingleMentionEvent() {
 		String expectedResult = "The stars accused of swearing before the watershed include Snoop Dogg, Madonna, Johnny Borrell (Razorlight) and Billie-Joe Armstrong (Green Day).";
-		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev41");
+		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev41", null);
 		assertTrue(expectedResult.equals(retrievedSentence));
 	}
 	
@@ -98,7 +97,7 @@ public class KnowledgeStoreAdapterTest {
 		List<String> expectedResults = 
 				Arrays.asList(	"Instead, Kucinich is going to focus on his re-election bid to the United States House of Representatives because he is facing four other candidates in the Democratic primary for Ohio's 10th congressional district and has received criticism for spending more time on running for President than on the district which he has represented for the past 12 years.",
 								"This was his second run for the presidency, his first was the 2004 presidential election.");
-		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22");
+		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", null);
 		assertTrue(expectedResults.contains(retrievedSentence));
 	}
 	
@@ -108,7 +107,7 @@ public class KnowledgeStoreAdapterTest {
 				Arrays.asList(	"This was his second run for the presidency, his first was the 2004 presidential election.",
 								"Instead, Kucinich is going to focus on his re-election bid to the United States House of Representatives because he is facing four other candidates in the Democratic primary for Ohio's 10th congressional district and has received criticism for spending more time on running for President than on the district which he has represented for the past 12 years."
 								);
-		List<String> retrievedSentences = ksAdapter.retrieveSentencesfromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22");
+		List<String> retrievedSentences = ksAdapter.retrieveSentencesfromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", null);
 		assertTrue(expectedResults.equals(retrievedSentences));
 	}
 	
@@ -129,7 +128,7 @@ public class KnowledgeStoreAdapterTest {
 	@Test
 	public void shouldReturnCorrectPhraseFromEntity() {
 		String expectedResult = "videos uploaded by their users";
-		List<String> retrievedSentences = ksAdapter.retrievePhrasesFromEntity("http://www.newsreader-project.eu/data/wikinews/non-entities/videos+uploaded+by+their+users");
+		List<String> retrievedSentences = ksAdapter.retrievePhrasesFromEntity("http://www.newsreader-project.eu/data/wikinews/non-entities/videos+uploaded+by+their+users", "upload");
 		assertTrue(retrievedSentences.size() == 1 && retrievedSentences.contains(expectedResult));
 	}
 	

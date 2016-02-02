@@ -592,5 +592,12 @@ public class Util {
 			result.add(resourceURIFromMentionURI(mentionURI));
 		return result;
 	}
+	
+	/**
+	 * Constructs a relation name for the given key, value, and keyword.
+	 */
+	public static String getRelationName(String key, String value, String keyword) {
+		return String.format("%s-%s-%s", key, value, keyword);
+	}
 	// endregion
 }

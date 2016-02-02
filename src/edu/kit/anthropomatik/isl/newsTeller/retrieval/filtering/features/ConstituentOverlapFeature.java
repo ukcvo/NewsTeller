@@ -17,25 +17,20 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class ConstituentOverlapFeature extends UsabilityFeature {
 
-	private String mentionQuery;
-	
-	private String mentionQueryName;
-	
-	public ConstituentOverlapFeature(String queryFileName, String mentionQueryFileName) {
-		super(queryFileName);
-		this.mentionQuery = Util.readStringFromFile(mentionQueryFileName);
-		this.mentionQueryName = Util.queryNameFromFileName(mentionQueryFileName);
+	public ConstituentOverlapFeature() {
+		super();
 	}
 
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 		
 		double result = 0;
+		String arbitraryKeyword = keywords.get(0).getWord();
 		
-		Set<String> constituents = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, eventURI);
+		Set<String> constituents = ksAdapter.getBufferedValues(Util.getRelationName("event", "entity", arbitraryKeyword), eventURI);
 		Set<KSMention> constituentMentions = new HashSet<KSMention>();
 		for (String constituent : constituents) {
-			Set<String> mentionURIs =  ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_MENTION + this.sparqlQueryName + this.mentionQueryName, constituent);
+			Set<String> mentionURIs =  ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
 			List<KSMention> mentions = new ArrayList<KSMention>();
 			for (String mentionURI : mentionURIs) {
 				boolean shouldAdd = true;
@@ -77,13 +72,6 @@ public class ConstituentOverlapFeature extends UsabilityFeature {
 		}
 		
 		return result;
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
-		Set<String> constituents = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName);
-		ksAdapter.runKeyValueSparqlQuery(mentionQuery, Util.RELATION_NAME_CONSTITUENT_MENTION + this.sparqlQueryName + this.mentionQueryName, Util.VARIABLE_EVENT, Util.VARIABLE_MENTION, constituents);
 	}
 
 	@Override

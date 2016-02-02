@@ -2,7 +2,6 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,26 +17,32 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 
-	private String directLabelQuery;
+	private String entityType;
 	
-	private String directLabelQueryName;
+	private String directLabelType;
 	
-	private String inheritedLabelQuery;
-	
-	private String inheritedLabelQueryName;
+	private String indirectLabelType;
 	
 	private boolean splitLabels;
 	
+	public void setEntityType(String entityType) {
+		this.entityType = entityType;
+	}
+
+	public void setDirectLabelType(String directLabelType) {
+		this.directLabelType = directLabelType;
+	}
+
+	public void setIndirectLabelType(String indirectLabelType) {
+		this.indirectLabelType = indirectLabelType;
+	}
+
 	public void setSplitLabels(boolean splitLabels) {
 		this.splitLabels = splitLabels;
 	}
 	
-	public DBPediaLabelInFullTextFeature(String queryFileName, String directLabelQueryFileName, String inheritedLabelQueryFileName) {
-		super(queryFileName);
-		this.directLabelQuery = Util.readStringFromFile(directLabelQueryFileName);
-		this.inheritedLabelQuery = Util.readStringFromFile(inheritedLabelQueryFileName);
-		this.directLabelQueryName = Util.queryNameFromFileName(directLabelQueryFileName);
-		this.inheritedLabelQueryName = Util.queryNameFromFileName(inheritedLabelQueryFileName);
+	public DBPediaLabelInFullTextFeature() {
+		super();
 	}
 	
 	@Override
@@ -46,15 +51,13 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 		
 		for (Keyword keyword : keywords) {
 			Set<String> entities = 
-					ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName + keyword.getWord(), eventURI);
+					ksAdapter.getBufferedValues(Util.getRelationName("event", this.entityType, keyword.getWord()), eventURI);
 			
 			for (String entity : entities) {
-				Set<String> labels = ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName 
-						+ this.directLabelQueryName + keyword.getWord(), entity);
+				Set<String> labels = ksAdapter.getBufferedValues(Util.getRelationName("entity", directLabelType, keyword.getWord()), entity);
 						
-				if (labels.isEmpty() && !inheritedLabelQuery.isEmpty())	// no direct DBpedia labels --> look at parent concepts
-					labels = ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.inheritedLabelQueryName 
-							+ keyword.getWord(), entity);
+				if (labels.isEmpty() && !indirectLabelType.isEmpty())	// no direct DBpedia labels --> look at parent concepts
+					labels = ksAdapter.getBufferedValues(Util.getRelationName("entity", indirectLabelType, keyword.getWord()), entity);
 					
 				// if there is no dbpedia label, then labels will be empty!
 				
@@ -83,20 +86,4 @@ public class DBPediaLabelInFullTextFeature extends FullTextFeature {
 		
 		return result;
 	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		for (Keyword keyword : keywords) {
-			ksAdapter.runKeyValueSparqlQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
-					Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName + keyword.getWord(), Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, eventURIs);
-			Set<String> entities = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName + keyword.getWord());
-			if (!directLabelQuery.isEmpty())
-				ksAdapter.runKeyValueSparqlQuery(directLabelQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
-						Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.directLabelQueryName + keyword.getWord(), Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, entities);
-			if (!inheritedLabelQuery.isEmpty())
-				ksAdapter.runKeyValueSparqlQuery(inheritedLabelQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
-						Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.inheritedLabelQueryName + keyword.getWord(), Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, entities);
-		}
-	}
-
 }

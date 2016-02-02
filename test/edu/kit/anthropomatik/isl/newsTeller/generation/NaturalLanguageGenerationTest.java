@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.generation;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.logging.LogManager;
 
 import org.junit.After;
@@ -12,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -47,7 +49,7 @@ public class NaturalLanguageGenerationTest {
 
 	@Test
 	public void shouldReturnEmptyEventResponse() {
-		String result = this.nlg.summarizeEvent(new NewsEvent("null"));
+		String result = this.nlg.summarizeEvent(new NewsEvent("null"), new ArrayList<Keyword>());
 		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 

@@ -1,0 +1,6 @@
+SELECT ?entity ?mention
+WHERE
+{
+	VALUES ?entity { *keys* } .
+	?entity gaf:denotedBy ?entityMention
+}

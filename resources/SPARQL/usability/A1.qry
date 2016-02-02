@@ -1,7 +1,0 @@
-SELECT ?event (COUNT(?actor) AS ?number)
-WHERE
-{
-    VALUES ?event { *keys* } .
-    ?event propbank:A1 ?actor
-}
-GROUP BY ?event

@@ -23,7 +23,6 @@
 		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
 		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="nThreads" value="1" />
 	</bean>
 
 	<bean id="searcher1"
@@ -31,7 +30,6 @@
 		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
 		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="nThreads" value="1" />
 	</bean>
 
 	<bean id="searcher2"
@@ -39,7 +37,6 @@
 		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
 		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="nThreads" value="0" />
 	</bean>
 
 	<bean id="filter0"
@@ -48,16 +45,25 @@
 
 	<bean id="filter2a"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter">
-		<constructor-arg name="classifierFileName" value="resources/baseline.model" />
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/usability/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
+		<constructor-arg name="entityMentionsQueryFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="features" ref="activeFeatureList" />
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
 	<bean id="filter2b"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
-		<constructor-arg name="classifierFileName" value="resources/baseline.model" />
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/usability/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
+		<constructor-arg name="entityMentionsQueryFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="features" ref="activeFeatureList" />
-		<property name="nThreads" value="100" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="numThreads" value="1000" />
 	</bean>
 
 	<bean id="relevanceScorer0"

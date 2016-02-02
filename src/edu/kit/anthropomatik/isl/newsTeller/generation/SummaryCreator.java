@@ -1,8 +1,11 @@
 package edu.kit.anthropomatik.isl.newsTeller.generation;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -25,12 +28,12 @@ public abstract class SummaryCreator {
 	} 
 	
 	// 
-	protected abstract String createSummary(NewsEvent event);
+	protected abstract String createSummary(NewsEvent event, List<Keyword> keywords);
 	
 	/**
 	 * Summarize the given event.
 	 */
-	public String summarizeEvent(NewsEvent event) {
+	public String summarizeEvent(NewsEvent event, List<Keyword> keywords) {
 		
 		String result;
 		
@@ -42,7 +45,7 @@ public abstract class SummaryCreator {
 			if (log.isTraceEnabled())
 				log.trace(String.format("summarizeEvent(event = %s)", event.toVerboseString()));
 			
-			result = createSummary(event);
+			result = createSummary(event, keywords);
 			if (result.isEmpty())
 				result = Util.EMPTY_EVENT_RESPONSE;
 		}

@@ -15,8 +15,14 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class SparqlFeature extends UsabilityFeature {
 
-	public SparqlFeature(String queryFileName) {
-		super(queryFileName);
+	private String valueName;
+	
+	public void setValueName(String valueName) {
+		this.valueName = valueName;
+	}
+	
+	public SparqlFeature() {
+		super();
 	}
 
 	@Override
@@ -26,19 +32,10 @@ public class SparqlFeature extends UsabilityFeature {
 		double weightSum = 0;
 		for (Keyword keyword : keywords) {
 			weightSum += keyword.getWeight();
-			sum += Util.parseXMLDoubleFromSet(ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_NUMBER + sparqlQueryName + keyword.getWord(), 
-												eventURI));
+			sum += Util.parseXMLDoubleFromSet(ksAdapter.getBufferedValues(Util.getRelationName("event", valueName, keyword.getWord()), eventURI));
 		}
 		double result = sum / weightSum;
 		return result;
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		for (Keyword keyword : keywords) {
-			ksAdapter.runKeyValueSparqlQuery(sparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex()), 
-					Util.RELATION_NAME_EVENT_NUMBER + sparqlQueryName + keyword.getWord(), Util.VARIABLE_EVENT, Util.VARIABLE_NUMBER, eventURIs);
-		}
 	}
 
 	@Override

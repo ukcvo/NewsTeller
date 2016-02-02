@@ -1,6 +1,0 @@
-SELECT ?event ?label
-WHERE
-{
-    VALUES ?event { *keys* } .
-    ?event rdfs:label ?label
-}

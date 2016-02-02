@@ -17,8 +17,8 @@ public class MentionPropertyFeature extends UsabilityFeature {
 
 	private String propertyURI;
 	
-	public MentionPropertyFeature(String queryFileName, String propertyURI) {
-		super(queryFileName);
+	public MentionPropertyFeature(String propertyURI) {
+		super();
 		this.propertyURI = propertyURI;
 	}
 
@@ -36,11 +36,6 @@ public class MentionPropertyFeature extends UsabilityFeature {
 		result = result / mentionURIs.size();
 		
 		return result;
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		// nothing to do
 	}
 
 	@Override

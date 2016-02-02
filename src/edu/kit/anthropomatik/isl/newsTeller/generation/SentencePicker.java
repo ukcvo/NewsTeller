@@ -1,5 +1,8 @@
 package edu.kit.anthropomatik.isl.newsTeller.generation;
 
+import java.util.List;
+
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 
@@ -18,9 +21,9 @@ public class SentencePicker extends SummaryCreator {
 	}
 	
 	@Override
-	public String createSummary(NewsEvent event) {
+	public String createSummary(NewsEvent event, List<Keyword> keywords) {
 		
-		String result = ksAdapter.retrieveSentencefromEvent(event.getEventURI());
+		String result = ksAdapter.retrieveSentencefromEvent(event.getEventURI(), keywords.get(0).getWord());
 		return result;
 	}
 

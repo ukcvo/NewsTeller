@@ -1,6 +1,5 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,8 +26,8 @@ public class PropbankNeedsArgumentFeature extends UsabilityFeature {
 	public static final String ARGUMENT_A2 = "2";
 	public static final String ARGUMENT_LOC = "m";
 		
-	public PropbankNeedsArgumentFeature(String queryFileName, String propertyURI, String argument, String propbankFolderName) {
-		super(queryFileName);
+	public PropbankNeedsArgumentFeature(String propertyURI, String argument, String propbankFolderName) {
+		super();
 		this.propertyURI = propertyURI;
 		this.argument = argument;
 		this.isLocation = argument.equalsIgnoreCase(ARGUMENT_LOC);
@@ -94,11 +93,6 @@ public class PropbankNeedsArgumentFeature extends UsabilityFeature {
 		}
 		
 		return eventNeedsArg ? 1.0 : 0.0;
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		// nothing to do
 	}
 
 	@Override

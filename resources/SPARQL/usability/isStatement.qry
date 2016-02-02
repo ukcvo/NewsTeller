@@ -1,7 +1,0 @@
-SELECT ?event (COUNT(?link) AS ?number)
-WHERE
-{
-    VALUES ?event { *keys* } .
-    ?event ?link <http://www.newsreader-project.eu/ontologies/framenet/Statement>
-}
-GROUP BY ?event

@@ -1,6 +1,0 @@
-SELECT ?event (COUNT(?label) AS ?number)
-WHERE
-{
-    VALUES ?event { *keys* } .
-    ?event rdfs:label ?label
-}

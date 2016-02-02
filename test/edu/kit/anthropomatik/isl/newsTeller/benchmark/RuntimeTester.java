@@ -711,8 +711,6 @@ public class RuntimeTester {
 		if (this.doBulkMentionTest)
 			bulkMentionTest();
 		
-		sequentialSearcher.shutDown();
-		parallelSearcher.shutDown();
 		sequentialFilter.shutDown();
 		parallelFilter.shutDown();
 		this.ksAdapter.closeConnection();

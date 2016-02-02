@@ -1,7 +1,0 @@
-SELECT ?event (COUNT(?place) AS ?number)
-WHERE
-{
-    VALUES ?event { *keys* } .
-    ?event sem:hasPlace ?place
-}
-GROUP BY ?event

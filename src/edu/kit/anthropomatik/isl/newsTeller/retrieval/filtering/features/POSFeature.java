@@ -16,8 +16,8 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
  */
 public class POSFeature extends UsabilityFeature {
 
-	public POSFeature(String queryFileName) {
-		super(queryFileName);
+	public POSFeature() {
+		super();
 	}
 
 	@Override
@@ -35,11 +35,6 @@ public class POSFeature extends UsabilityFeature {
 		result = result / mentionURIs.size();
 		
 		return result;
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		// nothing to do
 	}
 
 	@Override

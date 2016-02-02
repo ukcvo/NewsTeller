@@ -15,24 +15,12 @@ public class ActorPositionFeature extends UsabilityFeature {
 	
 	private int directionToLookAt;
 	
-	private String mentionQuery;
-	
-	private String mentionQueryName;
-	
-	private String labelQuery;
-	
-	private String labelQueryName;
-	
 	public void setDirectionToLookAt(int directionToLookAt) {
 		this.directionToLookAt = directionToLookAt;
 	}
 	
-	public ActorPositionFeature(String queryFileName, String mentionQueryFileName, String labelQueryFileName) {
-		super(queryFileName);
-		this.mentionQuery = Util.readStringFromFile(mentionQueryFileName);
-		this.labelQuery = Util.readStringFromFile(labelQueryFileName);
-		this.mentionQueryName = Util.queryNameFromFileName(mentionQueryFileName);
-		this.labelQueryName = Util.queryNameFromFileName(labelQueryFileName);
+	public ActorPositionFeature() {
+		super();
 	}
 
 	@Override
@@ -40,12 +28,14 @@ public class ActorPositionFeature extends UsabilityFeature {
 		
 		double result = 0;
 		
+		String arbitraryKeyword = keywords.get(0).getWord();
+		
 		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_MENTION, eventURI);
 		
-		Set<String> actors = ksAdapter.getBufferedValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, eventURI);
+		Set<String> actors = ksAdapter.getBufferedValues(Util.getRelationName("event", "actor", arbitraryKeyword), eventURI);
 		Set<Set<String>> actorLabels = new HashSet<Set<String>>();
 		for (String actor : actors) {
-			actorLabels.add(ksAdapter.getBufferedValues(Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.labelQueryName, actor));
+			actorLabels.add(ksAdapter.getBufferedValues(Util.getRelationName("entity", "entityPrefLabel", arbitraryKeyword), actor));
 		}
 				
 		for (String mentionURI : mentionURIs) {
@@ -80,15 +70,6 @@ public class ActorPositionFeature extends UsabilityFeature {
 		result /= mentionURIs.size();
 		
 		return result;
-	}
-
-	@Override
-	public void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords) {
-		ksAdapter.runKeyValueSparqlQuery(sparqlQuery, Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName, Util.VARIABLE_EVENT, 
-				Util.VARIABLE_ENTITY, eventURIs);
-		Set<String> actors = ksAdapter.getAllRelationValues(Util.RELATION_NAME_EVENT_CONSTITUENT + this.sparqlQueryName);
-		ksAdapter.runKeyValueSparqlQuery(labelQuery, Util.RELATION_NAME_CONSTITUENT_LABEL + this.sparqlQueryName + this.labelQueryName, 
-				Util.VARIABLE_ENTITY, Util.VARIABLE_LABEL, actors);
 	}
 
 	@Override

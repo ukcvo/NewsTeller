@@ -1,0 +1,15 @@
+SELECT ?event ?eventLabel ?actor ?entity ?keywordEntity
+WHERE
+{
+	VALUES ?event { *keys* } .
+	{ ?event rdfs:label ?eventLabel } UNION
+	{ ?event sem:hasActor ?actor } UNION
+	{ ?event sem:hasActor|sem:hasPlace ?entity } UNION
+	{ ?event sem:hasActor|sem:hasPlace ?keywordEntity .
+	?keywordEntity rdf:type* ?class .
+	GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en>
+	{
+		?class rdfs:label ?keyEntLabel.
+		FILTER(REGEX(STR(?keyEntLabel),"*k*", "i"))
+	}}    
+}

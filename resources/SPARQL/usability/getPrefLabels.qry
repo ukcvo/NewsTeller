@@ -1,6 +1,0 @@
-SELECT ?entity ?label
-WHERE
-{
-    VALUES ?entity { *keys* } .
-    ?entity skos:prefLabel ?label .
-}

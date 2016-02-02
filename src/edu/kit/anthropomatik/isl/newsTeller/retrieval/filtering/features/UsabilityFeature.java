@@ -5,7 +5,6 @@ import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
-import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
  * Represents one feature used for usability classification.
@@ -16,10 +15,6 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 public abstract class UsabilityFeature {
 
 	private String name;
-	
-	protected String sparqlQuery;
-	
-	protected String sparqlQueryName;
 	
 	protected KnowledgeStoreAdapter ksAdapter;
 	
@@ -35,20 +30,13 @@ public abstract class UsabilityFeature {
 		this.ksAdapter = ksAdapter;
 	}
 	
-	public UsabilityFeature(String queryFileName) {
-		this.sparqlQuery = Util.readStringFromFile(queryFileName);
-		this.sparqlQueryName = Util.queryNameFromFileName(queryFileName);
+	public UsabilityFeature() {
 	}
 	
 	/**
 	 * Get the feature value for the given event; may also make use of the given keyword list (note: not all features do so!).
 	 */
 	public abstract double getValue(String eventURI, List<Keyword> keywords);
-	
-	/**
-	 * Run all the bulk queries against the KnowledgeStore in order to be prepared for later retrieval.
-	 */
-	public abstract void runBulkQueries(Set<String> eventURIs, List<Keyword> keywords);
 	
 	/**
 	 * Returns the mention properties being used by this feature for central bulk aggregation.

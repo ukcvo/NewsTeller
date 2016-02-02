@@ -28,8 +28,8 @@ public abstract class FullTextFeature extends UsabilityFeature {
 		this.doUseContainsInsteadOfRegex = doUseContainsInsteadOfRegex;
 	}
 	
-	public FullTextFeature(String queryFileName) {
-		super(queryFileName);
+	public FullTextFeature() {
+		super();
 	}
 
 	private double checkLabel(List<String> labelParts, Set<String> originalTexts) {
@@ -80,9 +80,10 @@ public abstract class FullTextFeature extends UsabilityFeature {
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 		List<List<List<String>>> labels = getLabels(eventURI, keywords);
+		String arbitraryKeyword = keywords.get(0).getWord();
 		Set<String> originalTexts;
 		if (this.doOnlyUseSentence)
-			originalTexts = new HashSet<String>(ksAdapter.retrieveSentencesfromEvent(eventURI)); //use only sentence
+			originalTexts = new HashSet<String>(ksAdapter.retrieveSentencesfromEvent(eventURI, arbitraryKeyword)); //use only sentence
 		else
 			originalTexts = ksAdapter.retrieveOriginalTexts(eventURI); //use complete text
 		List<Double> appearances = checkLabels(labels, originalTexts);
