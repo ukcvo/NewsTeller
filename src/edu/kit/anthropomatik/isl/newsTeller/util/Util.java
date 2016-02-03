@@ -482,6 +482,8 @@ public class Util {
 			Collections.sort(fileNames);
 			
 			for (String fileName : fileNames) {
+				out.write(" ");
+				out.endRecord();
 				out.write(fileName);
 				out.endRecord();
 				

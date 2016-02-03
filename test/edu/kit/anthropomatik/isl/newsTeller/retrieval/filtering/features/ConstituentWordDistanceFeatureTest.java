@@ -2,9 +2,13 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.LogManager;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,19 +16,23 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import com.google.common.collect.Sets;
+
+import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class ConstituentWordDistanceFeatureTest {
 
-	private ConstituentWordDistanceFeature avgFeature;
 	private ConstituentWordDistanceFeature minFeature;
-	private ConstituentWordDistanceFeature maxFeature;
-	private ConstituentWordDistanceFeature normFeature;
-	
-	
+		
 	private KnowledgeStoreAdapter ksAdapter;
 
+	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
+	private static List<Keyword> keywords = new ArrayList<Keyword>();
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
@@ -33,100 +41,48 @@ public class ConstituentWordDistanceFeatureTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		ConcurrentMap<String, Set<String>> eventMentionMap = new ConcurrentHashMap<String, Set<String>>();
+		eventMentionMap.put("event-1", Sets.newHashSet("mention-1#char=14,18"));
+		eventMentionMap.put("event-2", Sets.newHashSet("mention-2#char=14,18"));
+		ConcurrentMap<String, Set<String>> eventEntityMap = new ConcurrentHashMap<String, Set<String>>();
+		eventEntityMap.put("event-1", Sets.newHashSet("actor-1a", "actor-1b"));
+		eventEntityMap.put("event-2", Sets.newHashSet("actor-2a", "actor-2b"));
+		ConcurrentMap<String, Set<String>> entityMentionMap = new ConcurrentHashMap<String, Set<String>>();
+		entityMentionMap.put("actor-1a", Sets.newHashSet("mention-1#char=0,4"));
+		entityMentionMap.put("actor-1b", Sets.newHashSet("mention-1#char=19,23"));
+		entityMentionMap.put("actor-2a", Sets.newHashSet("mention-2#char=0,4"));
+		entityMentionMap.put("actor-2b", Sets.newHashSet("mention-2#char=24,27"));
+		ConcurrentMap<String, Set<String>> resourceTextMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceTextMap.put("mention-1", Sets.newHashSet("One two three four five six seven."));
+		resourceTextMap.put("mention-2", Sets.newHashSet("One two three four five six seven."));
+		
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), eventMentionMap);
+		sparqlCache.put(Util.getRelationName("event", "entity", "keyword"), eventEntityMap);
+		sparqlCache.put(Util.getRelationName("entity", "mention", "keyword"), entityMentionMap);
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
+		
+		keywords.add(new Keyword("keyword"));
 	}
 
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		avgFeature = (ConstituentWordDistanceFeature) context.getBean("avgWordDistanceFeature");
 		minFeature = (ConstituentWordDistanceFeature) context.getBean("minWordDistanceFeature");
-		maxFeature = (ConstituentWordDistanceFeature) context.getBean("maxWordDistanceFeature");
-		normFeature = (ConstituentWordDistanceFeature) context.getBean("avgNormalizedWordDistanceFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
-		ksAdapter.openConnection();
+		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
 	}
 
-	@After
-	public void tearDown() {
-		ksAdapter.closeConnection();
-	}
-
-	@Test
-	public void shouldReturnZeroAvg() {
-		double value = avgFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev32", null);
-		assertTrue(value == 0.0);
-	}
-	
 	@Test
 	public void shouldReturnZeroMin() {
-		double value = minFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev32", null);
+		double value = minFeature.getValue("event-1", keywords);
 		assertTrue(value == 0.0);
-	}
-	
-	@Test
-	public void shouldReturnZeroMax() {
-		double value = maxFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev32", null);
-		assertTrue(value == 0.0);
-	}
-	
-	@Test
-	public void shouldReturnZeroNorm() {
-		double value = normFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev32", null);
-		assertTrue(value == 0.0);
-	}
-	
-	@Test
-	public void shouldReturnOneAvg() {
-		double value = avgFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev48", null);
-		assertTrue(value == 1.0);
 	}
 	
 	@Test
 	public void shouldReturnOneMin() {
-		double value = minFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev48", null);
+		double value = minFeature.getValue("event-2", keywords);
 		assertTrue(value == 1.0);
-	}
-	
-	@Test
-	public void shouldReturnOneMax() {
-		double value = maxFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev48", null);
-		assertTrue(value == 1.0);
-	}
-	
-	@Test
-	public void shouldReturnZeroPointZeroFourNorm() {
-		double value = normFeature.getValue("http://en.wikinews.org/wiki/Council_of_Australian_Governments_agree_on_reduced_environmental_regulation#ev48", null);
-		assertTrue(Math.abs(value - 0.041666666666666664) < Util.EPSILON);
-	}
-	
-	@Test
-	public void shouldReturnTwoThirdsAvg() {
-		double value = avgFeature.getValue("http://en.wikinews.org/wiki/EU_adopts_renewable_energy_measures#ev96", null);
-		assertTrue(Math.abs(value - (2.0/3)) < Util.EPSILON);
-	}
-	
-	@Test
-	public void shouldReturnZeroMinEU() {
-		double value = minFeature.getValue("http://en.wikinews.org/wiki/EU_adopts_renewable_energy_measures#ev96", null);
-		assertTrue(value == 0.0);
-	}
-	
-	@Test
-	public void shouldReturnTwoMax() {
-		double value = maxFeature.getValue("http://en.wikinews.org/wiki/EU_adopts_renewable_energy_measures#ev96", null);
-		assertTrue(value == 2.0);
-	}
-	
-	@Test
-	public void shouldReturnZeroPointZeroSixNorm() {
-		double value = normFeature.getValue("http://en.wikinews.org/wiki/EU_adopts_renewable_energy_measures#ev96", null);
-		assertTrue(Math.abs(value - 0.06060606060606061) < Util.EPSILON);
-	}
-	
-	@Test
-	public void shouldReturnNegativeOneMin() {
-		double value = minFeature.getValue("http://en.wikinews.org/wiki/Wikinews_interviews_Pa%c3%bal_M._Velazco_about_new_yellow-shouldered_bat_species#ev155", null);
-		assertTrue(value == -1);
 	}
 }

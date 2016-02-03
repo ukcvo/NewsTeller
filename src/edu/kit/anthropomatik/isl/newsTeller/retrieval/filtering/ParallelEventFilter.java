@@ -122,6 +122,7 @@ public class ParallelEventFilter implements IEventFilter {
 			for (int i = 0; i < futures.size(); i++) {
 				try {
 					values[i] = (double) futures.get(i).get();
+					event.addUsabilityFeatureValue(features.get(i).getName(), values[i]);
 				} catch (Exception e) {
 					if (log.isErrorEnabled())
 						log.error("thread execution somehow failed!");
@@ -287,11 +288,14 @@ public class ParallelEventFilter implements IEventFilter {
 		t = System.currentTimeMillis();
 		
 		// sequential classification
+		int idxOfPositiveClass = header.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.LABEL_TRUE);
 		for (NewsEvent event : events) {
 			boolean isUsable;
 			try {
 				double label = classifier.classifyInstance(resultMap.get(event));
-				isUsable = (label == header.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.LABEL_TRUE));
+				isUsable = (label == idxOfPositiveClass);
+				double probabilityOfUsable = classifier.distributionForInstance(resultMap.get(event))[idxOfPositiveClass];
+				event.setUsabilityProbability(probabilityOfUsable);
 			} catch (Exception e) {
 				if (log.isWarnEnabled())
 					log.warn(String.format("Could not classify event, setting classification to false: %s", event.toVerboseString()));

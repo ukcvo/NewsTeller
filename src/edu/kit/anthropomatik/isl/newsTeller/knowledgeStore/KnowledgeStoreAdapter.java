@@ -156,6 +156,15 @@ public class KnowledgeStoreAdapter {
 	public Future<?> submit(Runnable task) {
 		return this.threadPool.submit(task);
 	}
+	
+	/**
+	 * Used for unit tests to provide some cached values without running costly bulk-queries. Copies the given contents into the local cache.
+	 */
+	public void manuallyFillCaches(ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache, 
+									ConcurrentMap<String, Set<KSMention>> eventMentionCache) {
+		this.sparqlCache.putAll(sparqlCache);
+		this.eventMentionCache.putAll(eventMentionCache);
+	}
 
 	// region filling the buffer
 

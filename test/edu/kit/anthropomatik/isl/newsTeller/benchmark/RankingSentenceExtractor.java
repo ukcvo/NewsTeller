@@ -63,7 +63,7 @@ public class RankingSentenceExtractor {
 			
 			Map<BenchmarkEvent, List<String>> localOutputMap = new HashMap<BenchmarkEvent, List<String>>();
 			String filePath = entry.getKey();
-			String fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+			String fileName = filePath.substring(filePath.lastIndexOf('/') + 1).toLowerCase();
 			
 			List<Keyword> keywords = entry.getValue();
 			Set<String> eventURIs = new HashSet<String>();

@@ -110,6 +110,8 @@ public class SequentialEventFilter implements IEventFilter {
 		for (UsabilityFeature f : this.features)
 			featureRuntime.put(f, 0L);
 		
+		int idxOfPositiveClass = header.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.LABEL_TRUE);
+		
 		for (NewsEvent event : events) {
 			double[] values = new double[features.size() + 1];
 			
@@ -119,6 +121,7 @@ public class SequentialEventFilter implements IEventFilter {
 				values[i] = f.getValue(event.getEventURI(), userQuery);
 				tFeature = System.currentTimeMillis() - tFeature;
 				featureRuntime.put(f, featureRuntime.get(f) + tFeature);
+				event.addUsabilityFeatureValue(f.getName(), values[i]);
 			}
 			
 			Instance example = new DenseInstance(1.0, values);
@@ -127,7 +130,9 @@ public class SequentialEventFilter implements IEventFilter {
 			boolean isUsable;
 			try {
 				double label = classifier.classifyInstance(example);
-				isUsable = (label == header.attribute(Util.ATTRIBUTE_USABLE).indexOfValue(Util.LABEL_TRUE));
+				isUsable = (label == idxOfPositiveClass);
+				double probabilityOfUsable = classifier.distributionForInstance(example)[idxOfPositiveClass];
+				event.setUsabilityProbability(probabilityOfUsable);
 			} catch (Exception e) {
 				if (log.isWarnEnabled())
 					log.warn(String.format("Could not classify event, setting classification to false: %s", event.toVerboseString()));

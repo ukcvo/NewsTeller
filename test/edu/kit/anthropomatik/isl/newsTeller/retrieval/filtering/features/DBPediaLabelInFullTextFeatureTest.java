@@ -4,9 +4,11 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.LogManager;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,6 +16,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import com.google.common.collect.Sets;
+
+import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -24,6 +29,10 @@ public class DBPediaLabelInFullTextFeatureTest {
 	private DBPediaLabelInFullTextFeature keywordFeature;
 	private KnowledgeStoreAdapter ksAdapter;
 
+	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
+	private static List<Keyword> keywords = new ArrayList<Keyword>();
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
@@ -32,64 +41,68 @@ public class DBPediaLabelInFullTextFeatureTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		ConcurrentMap<String, Set<String>> eventMentionMap = new ConcurrentHashMap<String, Set<String>>();
+		eventMentionMap.put("event-1", Sets.newHashSet("mention-1#char=14,18"));
+		eventMentionMap.put("event-2", Sets.newHashSet("mention-2#char=14,18"));
+		ConcurrentMap<String, Set<String>> eventEntityMap = new ConcurrentHashMap<String, Set<String>>();
+		eventEntityMap.put("event-1", Sets.newHashSet("actor-1a", "actor-1b"));
+		eventEntityMap.put("event-2", Sets.newHashSet("actor-2a", "actor-2b"));
+		ConcurrentMap<String, Set<String>> entityKeyEntityMap = new ConcurrentHashMap<String, Set<String>>();
+		entityKeyEntityMap.put("event-1", Sets.newHashSet("actor-1a"));
+		entityKeyEntityMap.put("event-2", Sets.newHashSet("actor-2a"));
+		ConcurrentMap<String, Set<String>> entityLabelMap = new ConcurrentHashMap<String, Set<String>>();
+		entityLabelMap.put("actor-1a", Sets.newHashSet("One", "Eins"));
+		entityLabelMap.put("actor-1b", Sets.newHashSet("2"));
+		entityLabelMap.put("actor-2a", Sets.newHashSet("1"));
+		entityLabelMap.put("actor-2b", Sets.newHashSet("2"));
+		ConcurrentMap<String, Set<String>> resourceTextMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceTextMap.put("mention-1", Sets.newHashSet("One two three four five six seven."));
+		resourceTextMap.put("mention-2", Sets.newHashSet("One two three four five six seven."));
+		
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), eventMentionMap);
+		sparqlCache.put(Util.getRelationName("event", "entity", "keyword"), eventEntityMap);
+		sparqlCache.put(Util.getRelationName("event", "keywordEntity", "keyword"), entityKeyEntityMap);
+		sparqlCache.put(Util.getRelationName("entity", "entityLabel", "keyword"), entityLabelMap);
+		sparqlCache.put(Util.getRelationName("entity", "inheritedLabel", "keyword"), new ConcurrentHashMap<String, Set<String>>());
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
+		
+		Keyword k = new Keyword("keyword");
+		Util.stemKeyword(k);
+		keywords.add(k);
 	}
 
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
 		feature = (DBPediaLabelInFullTextFeature) context.getBean("appearLabelsInTextFeature");
-		keywordFeature = (DBPediaLabelInFullTextFeature) context.getBean("appearKeywordLabelsInTextFeature");
+		keywordFeature = (DBPediaLabelInFullTextFeature) context.getBean("appearKeywordLabelsInSentenceFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
-		ksAdapter.openConnection();
-	}
-
-	@After
-	public void tearDown() {
-		ksAdapter.closeConnection();
+		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
 	}
 
 	@Test
-	public void ShouldReturnZero() {
-		Keyword k = new Keyword("Michael Jackson");
-		Util.stemKeyword(k);
-		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(k);
-
-		double value = feature.getValue("http://en.wikinews.org/wiki/'Buried'_video_surfaces_of_police_making_mass_arrests_during_the_Republican_National_Convention#ev62", keywords);
-		assertTrue(value == 0.0);
+	public void ShouldReturnZeroPointFive() {
+		double value = feature.getValue("event-1", keywords);
+		assertTrue(value == 0.5);
 	}
 
 	@Test
 	public void ShouldReturnOneForKeyword() {
-		Keyword k = new Keyword("Flying disc");
-		Util.stemKeyword(k);
-		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(k);
-
-		double value = keywordFeature.getValue("http://en.wikinews.org/wiki/Walter_Frederick_Morrison,_inventor_of_frisbee,_dies_at_age_90#ev30", keywords);
+		double value = keywordFeature.getValue("event-1", keywords);
 		assertTrue(value == 1.0);
 	}
 
 	@Test
-	public void ShouldReturnZeroPointFour() {
-		Keyword k = new Keyword("comedy");
-		Util.stemKeyword(k);
-		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(k);
-
-		double value = feature.getValue("http://en.wikinews.org/wiki/US_nuclear_security_director_asked_to_resign#ev10", keywords);
-		assertTrue(Math.abs(value - 0.4) < Util.EPSILON);
+	public void ShouldReturnZero() {
+		double value = feature.getValue("event-2", keywords);
+		assertTrue(value == 0.0);
 	}
 
 	@Test
 	public void ShouldReturnZeroForKeyword() {
-		Keyword k = new Keyword("actor");
-		Util.stemKeyword(k);
-		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(k);
-
-		double value = keywordFeature.getValue("http://en.wikinews.org/wiki/US_nuclear_security_director_asked_to_resign#ev10", keywords);
+		double value = keywordFeature.getValue("event-2", keywords);
 		assertTrue(value == 0.0);
 	}
 

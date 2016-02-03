@@ -28,7 +28,7 @@ public class KeywordEntityMatchingKeywordFeature extends UsabilityFeature {
 			Set<String> entities = ksAdapter.getBufferedValues(Util.getRelationName("event", "keywordEntity", keyword.getWord()), eventURI);
 			Set<String> keywordEntityLabels =  new HashSet<String>();
 			for (String entity : entities)
-				ksAdapter.getBufferedValues(Util.getRelationName("entity", "matchingEntityLabel", keyword.getWord()), entity);
+				keywordEntityLabels.addAll(ksAdapter.getBufferedValues(Util.getRelationName("entity", "matchingEntityLabel", keyword.getWord()), entity));
 					
 			for (String label : keywordEntityLabels) {
 				if (label.toLowerCase().matches(keyword.getWordRegex())) {

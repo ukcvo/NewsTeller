@@ -1,7 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Represents a news event being processed by the NewsTeller. Includes the event URI and scoring information.
@@ -14,40 +14,68 @@ public class NewsEvent implements Comparable<NewsEvent>{
 	// URI of the event - identifies the event unambiguously
 	private String eventURI;
 
-	// scorings with respect to relevance of the event
-	List<Scoring> relevanceScorings;
+	// values for the usability features
+	private ConcurrentMap<String, Double> usabilityFeatureValues;
 	
-	double totalRelevanceScore;
+	// probability that this event is usable -- as judged by the classifier based on the usability features
+	private double usabilityProbability;
 
+	// values for the relevance ranking features
+	private ConcurrentMap<String, Double> relevanceFeatureValues;
+	
+	// relevance as predicted by the regression based on the relevance ranking features
+	private double expectedRelevance;
+	
 	//region getters & setters
 	public String getEventURI() {
 		return eventURI;
 	}
 
-	public List<Scoring> getRelevanceScorings() {
-		return relevanceScorings;
+	public double getUsabilityProbability() {
+		return usabilityProbability;
 	}
 
-	public void addRelevanceScoring(Scoring relevanceScoring) {
-		relevanceScorings.add(relevanceScoring);
+	public void setUsabilityProbability(double usabilityProbability) {
+		this.usabilityProbability = usabilityProbability;
+	}
+
+	public double getExpectedRelevance() {
+		return expectedRelevance;
+	}
+
+	public void setExpectedRelevance(double expectedRelevance) {
+		this.expectedRelevance = expectedRelevance;
 	}
 	
-	public double getTotalRelevanceScore() {
-		return totalRelevanceScore;
-	}
-
-	public void setTotalRelevanceScore(double totalRelevanceScore) {
-		this.totalRelevanceScore = totalRelevanceScore;
+	/**
+	 * Instead of returning the raw value used for the internal regression, return the score projected to the scale used to label the data.
+	 */
+	public double getExpectedRelevanceScoring() {
+		return Math.log(expectedRelevance + 1) / Math.log(2);
 	}
 	//endregion
-	
-	public NewsEvent(String eventURI, List<Scoring> relevanceScorings) {
+
+	public NewsEvent(String eventURI) {
 		this.eventURI = eventURI;
-		this.relevanceScorings = relevanceScorings;
-		this.totalRelevanceScore = Double.NaN; // encodes that there is no total score, yet
+		this.usabilityFeatureValues = new ConcurrentHashMap<String, Double>();
+		this.relevanceFeatureValues = new ConcurrentHashMap<String, Double>();
 	}
 	
-	public NewsEvent(String eventURI) { this(eventURI, new ArrayList<Scoring>());}
+	public void addUsabilityFeatureValue(String featureName, Double featureValue) {
+		this.usabilityFeatureValues.putIfAbsent(featureName, featureValue);
+	}
+	
+	public double getUsabilityFeatureValue(String featureName) {
+		return this.usabilityFeatureValues.getOrDefault(featureName, Double.NaN);
+	}
+	
+	public void addRelevanceFeatureValue(String featureName, Double featureValue) {
+		this.relevanceFeatureValues.putIfAbsent(featureName, featureValue);
+	}
+	
+	public double getRelevanceFeatureValue(String featureName) {
+		return this.relevanceFeatureValues.getOrDefault(featureName, Double.NaN);
+	}
 	
 	@Override
 	public String toString() {
@@ -55,7 +83,7 @@ public class NewsEvent implements Comparable<NewsEvent>{
 	}
 	
 	public String toVerboseString() {
-		return String.format("[%s|%f]", eventURI, totalRelevanceScore);
+		return String.format("[%s|%.2f|.2f]", eventURI, usabilityProbability, expectedRelevance);
 	}
 	
 	@Override
@@ -69,9 +97,9 @@ public class NewsEvent implements Comparable<NewsEvent>{
     }
 
 	public int compareTo(NewsEvent o) {
-		if (this.totalRelevanceScore > o.getTotalRelevanceScore())
+		if (this.expectedRelevance > o.getExpectedRelevance())
 			return -1;
-		else if (this.totalRelevanceScore < o.getTotalRelevanceScore())
+		else if (this.expectedRelevance < o.getExpectedRelevance())
 			return 1;
 		else
 			return 0;
