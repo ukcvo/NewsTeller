@@ -17,18 +17,21 @@
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="10000" />
 		<property name="maxNumberOfConnections" value="100" />
+		<property name="useStanford" value="true" />
 	</bean>
 
 	<bean id="searcher1" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
 		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
 		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="maxNumberOfEvents" value="10000" />
 	</bean>
 
 	<bean id="searcher2" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
 		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
 		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="maxNumberOfEvents" value="10000" />
 	</bean>
 
 	<bean id="filter2a"
@@ -128,8 +131,8 @@
 		<property name="doSequentialSearcherTest" value="false" />
 		<property name="doParallelSearcherTest" value="false" />
 		<property name="doParallelSparqlTest" value="false" />
-		<property name="doSequentialFilterTest" value="true" />
-		<property name="doParallelFilterTest" value="false" />
+		<property name="doSequentialFilterTest" value="false" />
+		<property name="doParallelFilterTest" value="true" />
 		<property name="doFeatureTest" value="false" />
 		<property name="doDownloadTest" value="false" />
 		<property name="doClassifierTest" value="false" />
@@ -137,7 +140,7 @@
 		<property name="doBulkMentionTest" value="false"/>
 
 
-		<property name="maxNumberOfEvents" value="100" />
+		<property name="maxNumberOfEvents" value="0" />
 		<property name="numberOfRepetitions" value="1" />
 
 	</bean>
@@ -200,133 +203,6 @@
 			<map>
 				<entry key="optimized" value-ref="optimized" />
 				
-				<!-- 
-				<entry key="randomForest100" value-ref="randomForest" />
-				
-				 -->
-				<!-- 
-				<entry key="feat06" value-ref="randomForestB" />
-				<entry key="feat10" value-ref="randomForestC" />
-				<entry key="feat15" value-ref="randomForestD" />
-				<entry key="feat20" value-ref="randomForestE" />
-				 -->
-				<!-- 
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				<entry key="decisionTree" value-ref="decisionTree" />
-				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
-				<entry key="decisionTreeUnpruned" value-ref="decisionTree3" />
-				<entry key="naiveBayes" value-ref="naiveBayes" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				<entry key="ripper" value-ref="ripper" />
-				
-				 -->
-				
-				<!-- 
-				<entry key="randomForest20" value-ref="randomForest2" />
-				<entry key="oneR" value-ref="oneRClassifier" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				<entry key="decisionTree" value-ref="decisionTree" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				
-				 -->
-				
-				
-				<!-- NO_EVENT
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				<entry key="bayesNetAnnealing" value-ref="bayesNet2" />
-				<entry key="kNN" value-ref="kNN" />
-				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				 -->
-				
-				<!-- KEYWORD_ENTITY_CATEGORIZATION
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				<entry key="kNN" value-ref="kNN" />
-				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				 -->
-				
-				<!-- MISSING_OBJECT / MISSING_LOCATION
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				<entry key="cart" value-ref="cart" />
-				<entry key="cartOneSE" value-ref="cart2" />
-				<entry key="decisionTree" value-ref="decisionTree" />
-				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				<entry key="RBF" value-ref="RBF" />
-				<entry key="ripper" value-ref="ripper" />
-				 -->
-				
-				<!-- OVERLAPPING_CONSTITUENTS
-				<entry key="oneR" value-ref="oneRClassifier" />
-				 -->
-				
-				<!-- EVENT_MERGE
-				<entry key="bayesNetAnnealing" value-ref="bayesNet2" />
-				<entry key="cart" value-ref="cart" />
-				<entry key="decisionTree" value-ref="decisionTree" />
-				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
-				<entry key="MLP" value-ref="MLP" />
-				<entry key="MLPClassifier" value-ref="MLPClassifier" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				 -->
-				
-				<!-- MISSING_SUBJECT
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				 -->
-				
-				<!-- BROKEN_CONSTITUENT
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="decisionTable" value-ref="decisionTable" />
-				<entry key="decisionTableKNN" value-ref="decisionTable2" />
-				<entry key="MLPClassifier" value-ref="MLPClassifier" />
-				<entry key="RBF" value-ref="RBF" />
-				<entry key="ripper" value-ref="ripper" />
-				 -->
-				 
-				<!-- WRONG_PARSE
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				<entry key="logistic" value-ref="logistic" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				<entry key="RBF" value-ref="RBF" />
-				<entry key="svmLogistic" value-ref="svm2" />
-				 -->
-				
-				<!-- OTHER_ENTITY_CATEGORIZATION
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				<entry key="cart" value-ref="cart" />
-				<entry key="cartOneSE" value-ref="cart2" />
-				<entry key="decisionTreeUnpruned" value-ref="decisionTree3" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				<entry key="RBF" value-ref="RBF" />
-				 -->
-				
-				<!-- KEYWORD_REGEX_MISMATCH
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				<entry key="decisionTable" value-ref="decisionTable" />
-				<entry key="decisionTableKNN" value-ref="decisionTable2" />
-				<entry key="kNN" value-ref="kNN" />
-				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
-				<entry key="MLP" value-ref="MLP" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				<entry key="RBF" value-ref="RBF" />
-				 -->
 				
 				<!--  full set
 				<entry key="adaBoost" value-ref="adaBoost" />
@@ -360,58 +236,6 @@
 				<entry key="svmComplexity2" value-ref="svm3" />
 				<entry key="svmLogistic" value-ref="svm2" />
 				 -->
-				
-
-				<!--
-				<entry key="naiveBayes" value-ref="naiveBayes" />
-				<entry key="naiveBayesKernel" value-ref="naiveBayes2" />
-				<entry key="bayesNet" value-ref="bayesNet" />
-				<entry key="logistic" value-ref="logistic" />
-				<entry key="MLPValidationSet" value-ref="MLP2" />
-				<entry key="svm" value-ref="svm" />
-				<entry key="svmLogistic" value-ref="svm2" />
-				<entry key="svmComplexity2" value-ref="svm3" />
-				<entry key="kNN" value-ref="kNN" />
-				<entry key="kNNDistanceWeighting" value-ref="kNN2" />
-				<entry key="decisionTable" value-ref="decisionTable" />
-				<entry key="decisionTableKNN" value-ref="decisionTable2" />
-				<entry key="ripper" value-ref="ripper" />
-				<entry key="ripperUnpruned" value-ref="ripper2" />
-				<entry key="decisionTree" value-ref="decisionTree" />
-				<entry key="decisionTreeReducedErrorPruning" value-ref="decisionTree2" />
-				<entry key="decisionTreeUnpruned" value-ref="decisionTree3" />
-				<entry key="cart" value-ref="cart" />
-				<entry key="cartOneSE" value-ref="cart2" />
-				<entry key="randomForest100" value-ref="randomForest" />
-				<entry key="randomForest20" value-ref="randomForest2" />
-				<entry key="bayesNetAnnealing" value-ref="bayesNet2" />
-				<entry key="MLP" value-ref="MLP" />
-				<entry key="MLPValidationSetDecay" value-ref="MLP3" />
-				<entry key="adaBoost" value-ref="adaBoost" />
-				<entry key="adaBoostResample" value-ref="adaBoost2" />
-				<entry key="adaBoostTree" value-ref="adaBoost3" />
-				<entry key="adaBoostTreeResample" value-ref="adaBoost4" />
-				<entry key="svmLogistic" value-ref="svm2" />
-				<entry key="svmComplexity2" value-ref="svm3" />
-				<entry key="cartOneSE" value-ref="cart2" />
-				
-				<entry key="optimizedRandomForest" value-ref="optimizedRandomForest" />
-				
-				<entry key="MLPSeed0" value-ref="MLP4" />
-				<entry key="MLPSeed1" value-ref="MLP5" />
-				<entry key="MLPSeed2" value-ref="MLP6" />
-				<entry key="MLPSeed3" value-ref="MLP7" />
-				<entry key="MLPSeed4" value-ref="MLP8" />
-				<entry key="MLPSeed5" value-ref="MLP9" />
-				<entry key="MLPSeed6" value-ref="MLP10" />
-				<entry key="MLPSeed7" value-ref="MLP11" />
-				<entry key="MLPSeed8" value-ref="MLP12" />
-				<entry key="MLPSeed9" value-ref="MLP13" />
-				
-				<entry key="MLPClassifier" value-ref="MLPClassifier" />
-				<entry key="RBF" value-ref="RBF" />
-				
-				-->
 			</map>
 		</property>
 
@@ -427,12 +251,6 @@
 				<value>80</value>
 				<value>90</value>
 				<value>100</value>
-
-				<!-- <value>5</value> <value>10</value> <value>15</value> <value>20</value> 
-					<value>25</value> <value>30</value> <value>35</value> <value>40</value> <value>45</value> 
-					<value>50</value> <value>55</value> <value>60</value> <value>65</value> <value>70</value> 
-					<value>75</value> <value>80</value> <value>85</value> <value>90</value> <value>95</value> 
-					<value>100</value> -->
 			</list>
 		</property>
 
@@ -444,17 +262,13 @@
 				<entry key="2" value-ref="classifier2" />
 				<entry key="3" value-ref="classifier3" />
 				<entry key="13" value-ref="classifier13" />
-				<!-- 
 				<entry key="4" value-ref="classifier4" />
 				<entry key="5" value-ref="classifier5" />
 				<entry key="7" value-ref="classifier7" />
 				<entry key="8" value-ref="classifier8" />
 				<entry key="9" value-ref="classifier9" />
-				
 				<entry key="6" value-ref="classifier6" />
 				<entry key="10" value-ref="classifier10" />
-				
-				 -->
 			</map>
 		</property>
  
@@ -478,6 +292,12 @@
 		
 		<property name="outputFileName" value="evaluation.csv" />
 		<property name="numberOfEnsembleMembers" value="10" />
+	</bean>
+
+	<bean id="rankingSentenceExtractor" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RankingSentenceExtractor">
+		<property name="outputFileName" value="out/ranking.csv" />
+		<property name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv" />
+		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
 </beans>

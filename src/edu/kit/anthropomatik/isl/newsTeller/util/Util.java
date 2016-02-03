@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -222,11 +223,18 @@ public class Util {
 	// endregion
 
 	// region reading/writing csv files
+	
 	/**
-	 * Reads a benchmark query csv file and returns a mapping from URI to
-	 * Double.
+	 * Reads a benchmark query csv file and returns a mapping of its content. Uses comma (',') as delimiter.
 	 */
 	public static Map<BenchmarkEvent, GroundTruth> readBenchmarkQueryFromFile(String fileName) {
+		return readBenchmarkQueryFromFile(fileName, ',');
+	}
+	
+	/**
+	 * Reads a benchmark query csv file and returns a mapping of its content. Uses the specified delimiter.
+	 */
+	public static Map<BenchmarkEvent, GroundTruth> readBenchmarkQueryFromFile(String fileName, char delimiter) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("readBenchmarkQueryFromFile(fileName = '%s')", fileName));
 
@@ -234,6 +242,7 @@ public class Util {
 
 		try {
 			CsvReader in = new CsvReader(fileName);
+			in.setDelimiter(delimiter);
 			in.setTextQualifier('"');
 			in.setUseTextQualifier(true);
 			in.readHeaders();
@@ -460,6 +469,44 @@ public class Util {
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
 				log.error("could not write benchmark");
+			if (log.isDebugEnabled())
+				log.debug("cannnot write file", e);
+		}
+	}
+	
+	public static void writeRankingSentencesToCsv(String outputFileName, Map<String, Map<BenchmarkEvent, List<String>>> outputMap) {
+		try {
+			CsvWriter out = new CsvWriter(new FileWriter(outputFileName, false), ';');
+
+			List<String> fileNames = new ArrayList<String>(outputMap.keySet());
+			Collections.sort(fileNames);
+			
+			for (String fileName : fileNames) {
+				out.write(fileName);
+				out.endRecord();
+				
+				Map<BenchmarkEvent, List<String>> content = outputMap.get(fileName);
+				for (Map.Entry<BenchmarkEvent, List<String>> entry : content.entrySet()) {
+					String eventURI = entry.getKey().getEventURI();
+					out.write(eventURI);
+					List<String> sentences = entry.getValue();
+					boolean isFirst = true;
+					for (String s : sentences) {
+						if (!isFirst)
+							out.write(" ");
+						out.write(s);
+						out.endRecord();
+						if (isFirst)
+							isFirst = false;
+					}
+				}
+			}
+
+			out.close();
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("could not write ranking sentences");
 			if (log.isDebugEnabled())
 				log.debug("cannnot write file", e);
 		}

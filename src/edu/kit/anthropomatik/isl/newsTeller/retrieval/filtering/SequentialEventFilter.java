@@ -144,10 +144,10 @@ public class SequentialEventFilter implements IEventFilter {
 		if (log.isInfoEnabled())
 			log.info(String.format("feature extraction & classification: %d ms", t));
 		
-		for (UsabilityFeature f : features) {
-			if (log.isInfoEnabled())
-				log.info(String.format("%s: %d ms", f.getName(), featureRuntime.get(f)));
-		}
+//		for (UsabilityFeature f : features) {
+//			if (log.isInfoEnabled())
+//				log.info(String.format("%s: %d ms", f.getName(), featureRuntime.get(f)));
+//		}
 		
 		return result;
 	}

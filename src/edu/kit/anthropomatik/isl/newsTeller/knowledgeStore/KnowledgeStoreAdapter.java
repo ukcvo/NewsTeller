@@ -25,6 +25,8 @@ import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
+import edu.stanford.nlp.simple.Document;
+import edu.stanford.nlp.simple.Sentence;
 import eu.fbk.knowledgestore.KnowledgeStore;
 import eu.fbk.knowledgestore.Session;
 import eu.fbk.knowledgestore.client.Client;
@@ -50,6 +52,8 @@ public class KnowledgeStoreAdapter {
 
 	private int maxNumberOfConnections;
 
+	private boolean useStanford;
+	
 	private boolean isConnectionOpen = false;
 
 	private KnowledgeStore knowledgeStore;
@@ -61,6 +65,8 @@ public class KnowledgeStoreAdapter {
 	private ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache; // relationship-id --> key --> values
 
 	private ConcurrentMap<String, KSMention> sentenceMentionCache;
+	
+	private ConcurrentMap<String, List<Sentence>> stanfordSentenceCache;
 	
 	private ExecutorService threadPool;
 
@@ -80,6 +86,10 @@ public class KnowledgeStoreAdapter {
 		return this.maxNumberOfConnections;
 	}
 
+	public void setUseStanford(boolean useStanford) {
+		this.useStanford = useStanford;
+	}
+	
 	public boolean isConnectionOpen() {
 		return isConnectionOpen;
 	}
@@ -89,6 +99,7 @@ public class KnowledgeStoreAdapter {
 		this.eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 		this.sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		this.sentenceMentionCache = new ConcurrentHashMap<String, KSMention>();
+		this.stanfordSentenceCache = new ConcurrentHashMap<String, List<Sentence>>();
 	}
 
 	/**
@@ -136,6 +147,7 @@ public class KnowledgeStoreAdapter {
 		this.sparqlCache.clear();
 		this.sentenceMentionCache.clear();
 		this.eventMentionCache.clear();
+		this.stanfordSentenceCache.clear();
 	}
 
 	/**
@@ -147,6 +159,7 @@ public class KnowledgeStoreAdapter {
 
 	// region filling the buffer
 
+	// region sparql
 	// takes care of the individual bulk queries
 	private class KeyValueWorker implements Runnable {
 
@@ -292,7 +305,9 @@ public class KnowledgeStoreAdapter {
 			this.sparqlCache.putAll(relationMaps);
 		}
 	}
+	// endregion
 	
+	// region mention property
 	private class MentionPropertyWorker implements Runnable {
 
 		private Set<URI> uriSet;
@@ -401,6 +416,9 @@ public class KnowledgeStoreAdapter {
 		}
 		
 	}
+	// endregion
+	
+	// region resource text
 	
 	private class ResourceTextWorker implements Runnable {
 
@@ -459,6 +477,8 @@ public class KnowledgeStoreAdapter {
 		
 		this.sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, relationMap);
 	}
+	// endregion
+	
 	// endregion
 
 	// region accessing the buffer
@@ -711,7 +731,6 @@ public class KnowledgeStoreAdapter {
 
 		// get original text
 		String originalText = getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_TEXT, mention.getResourceURI());
-//				getOriginalText(mention.getResourceURI());
 		if (originalText.isEmpty())
 			return "";
 
@@ -774,7 +793,7 @@ public class KnowledgeStoreAdapter {
 				return new KSMention(mentionURI);
 			}
 			List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
-			List<Character> skipChars = Arrays.asList(' ', '\n', '\t');
+			List<Character> skipChars = Arrays.asList(' ', '\n', '\t', '\"');
 			while ((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx - 1))))
 				startIdx--;
 			while (skipChars.contains(originalText.charAt(startIdx)))
@@ -782,6 +801,25 @@ public class KnowledgeStoreAdapter {
 
 			while ((endIdx < originalText.length()) && (!sentenceDelimiters.contains(originalText.charAt(endIdx - 1))))
 				endIdx++;
+			
+			if (this.useStanford) {
+				String guessedSentence = originalText.substring(startIdx, endIdx);
+				Document doc = new Document(originalText);
+				List<Sentence> sentences;
+				if(this.stanfordSentenceCache.containsKey(resourceURI))
+					sentences = this.stanfordSentenceCache.get(resourceURI);
+				else {
+					sentences = doc.sentences();
+					this.stanfordSentenceCache.putIfAbsent(resourceURI, sentences);
+				}
+				for (Sentence sent : sentences) {
+					if (sent.text().toLowerCase().contains(guessedSentence.toLowerCase())) {
+						startIdx = originalText.indexOf(sent.text());
+						endIdx = startIdx + sent.text().length();
+						break;
+					}
+				}
+			}
 			
 			this.sentenceMentionCache.putIfAbsent(mentionURI, new KSMention(resourceURI, startIdx, endIdx));
 		}

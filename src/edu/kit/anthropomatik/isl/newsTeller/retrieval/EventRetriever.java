@@ -10,8 +10,7 @@ import org.springframework.util.StringUtils;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.EventRanker;
-import edu.kit.anthropomatik.isl.newsTeller.retrieval.scoring.RelevanceScorer;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.IEventRanker;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
@@ -30,9 +29,7 @@ public class EventRetriever {
 	
 	private IEventFilter eventFilter;
 	
-	private RelevanceScorer relevanceScorer;
-	
-	private EventRanker eventRanker;
+	private IEventRanker eventRanker;
 
 	private EventSelector eventSelector;
 	
@@ -45,11 +42,7 @@ public class EventRetriever {
 		this.eventFilter = eventFilter;
 	}
 	
-	public void setRelevanceScorer(RelevanceScorer relevanceScorer) {
-		this.relevanceScorer = relevanceScorer;
-	}
-
-	public void setEventRanker(EventRanker eventRanker) {
+	public void setEventRanker(IEventRanker eventRanker) {
 		this.eventRanker = eventRanker;
 	}
 	
@@ -84,19 +77,11 @@ public class EventRetriever {
 			old = l;
 		}
 		//endregion
-		relevanceScorer.scoreEvents(filteredEvents, userQuery, userModel);
+		List<NewsEvent> rankedEvents = eventRanker.rankEvents(filteredEvents);
 		//region time logging
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();
-			log.debug(String.format("relevance scoring: % d ms", l - old));
-			old = l;
-		}
-		//endregion
-		List<NewsEvent> rankedEvents = eventRanker.getRankedEvents(filteredEvents);
-		//region time logging
-		if (log.isDebugEnabled()) {
-			long l = System.currentTimeMillis();
-			log.debug(String.format("rank events: % d ms", l - old));
+			log.debug(String.format("relevance ranking: % d ms", l - old));
 			old = l;
 		}
 		//endregion
