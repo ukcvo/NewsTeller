@@ -18,11 +18,11 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class NewsTellerTest {
 
-	NewsTeller newsTellerScope0;
-	NewsTeller newsTellerScope1;
+	private NewsTeller newsTellerScope0;
+	private NewsTeller newsTellerScope2;
 	
 	@BeforeClass
-	public static void setUpBeforeClass() {
+	public static void setUpBeforeClass() throws Exception {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
@@ -35,17 +35,16 @@ public class NewsTellerTest {
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
 		newsTellerScope0 = (NewsTeller) context.getBean("newsTeller0");
-		((AbstractApplicationContext) context).close();
-		
-		context = new FileSystemXmlApplicationContext("config/test.xml");
-		newsTellerScope1 = (NewsTeller) context.getBean("newsTeller1");
+		newsTellerScope2 = (NewsTeller) context.getBean("newsTeller2");
 		((AbstractApplicationContext) context).close();
 	}
 
 	//region Scope 0
 	@Test
 	public void shouldReturnDummySummary() {
-		assertTrue(newsTellerScope0.getNews(null).equals(Util.EMPTY_EVENT_RESPONSE));
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(new Keyword("artificial intelligence"));
+		assertTrue(newsTellerScope0.getNews(keywords).equals("dummySummary"));
 	}
 	//endregion
 	
@@ -54,7 +53,7 @@ public class NewsTellerTest {
 	public void shouldReturnExtractedSentence() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial intelligence"));
-		String result = newsTellerScope1.getNews(keywords);
+		String result = newsTellerScope2.getNews(keywords);
 		assertTrue(!result.isEmpty() && !result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 	
@@ -62,7 +61,7 @@ public class NewsTellerTest {
 	public void shouldReturnEmptyEventResponse() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial brain"));
-		String result = newsTellerScope1.getNews(keywords);
+		String result = newsTellerScope2.getNews(keywords);
 		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 	

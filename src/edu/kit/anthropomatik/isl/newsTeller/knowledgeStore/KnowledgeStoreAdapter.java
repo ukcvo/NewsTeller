@@ -60,6 +60,8 @@ public class KnowledgeStoreAdapter {
 
 	private String getMentionFromEventTemplate;
 
+	private String getEventFromMentionTemplate;
+	
 	private ConcurrentMap<String, Set<KSMention>> eventMentionCache;
 
 	private ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache; // relationship-id --> key --> values
@@ -96,6 +98,7 @@ public class KnowledgeStoreAdapter {
 
 	public KnowledgeStoreAdapter(String getMentionFromEventFileName, String getEventFromMentionFileName) {
 		this.getMentionFromEventTemplate = Util.readStringFromFile(getMentionFromEventFileName);
+		this.getEventFromMentionTemplate = Util.readStringFromFile(getEventFromMentionFileName);
 		this.eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 		this.sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		this.sentenceMentionCache = new ConcurrentHashMap<String, KSMention>();
@@ -504,8 +507,8 @@ public class KnowledgeStoreAdapter {
 		}
 		ConcurrentMap<String, Set<String>> relationMap = this.sparqlCache.get(relationName);
 		if (!relationMap.containsKey(key)) {
-			if (log.isWarnEnabled())
-				log.warn(String.format("relation '%s' does not contain key '%s'. Returning empty set.", relationName, key));
+			if (log.isDebugEnabled())
+				log.debug(String.format("relation '%s' does not contain key '%s'. Returning empty set.", relationName, key));
 			return new HashSet<String>();
 		}
 		return relationMap.get(key);
@@ -932,18 +935,28 @@ public class KnowledgeStoreAdapter {
 		
 		@Override
 		public void run() {
-			Session session = knowledgeStore.newSession();
+			List<Keyword> keywords = new ArrayList<Keyword>();
+			Keyword k = new Keyword("keyword");
+			Util.stemKeyword(k);
+			keywords.add(k);
+			
 			try {
+				Session session = knowledgeStore.newSession();
 				Stream<Record> stream = session.retrieve(KS.RESOURCE).ids(uriSet).timeout((long) timeoutMsec).exec();
 				List<Record> records = stream.toList();
 				stream.close();
+				session.close();
 				
 				for (Record r : records) {
 					String key = r.getID().toString();
-					List<String> stringValues = r.get(new URIImpl("http://dkm.fbk.eu/ontologies/knowledgestore#hasMention"), String.class);
+					Set<String> stringValues = new HashSet<String>(r.get(new URIImpl("http://dkm.fbk.eu/ontologies/knowledgestore#hasMention"), String.class));
+					runKeyValueSparqlQuery(getEventFromMentionTemplate, stringValues, keywords);
+					
 					Set<KSMention> values = new HashSet<KSMention>();
-					for (String s : stringValues)
-						values.add(new KSMention(s));
+					for (String s : stringValues) {
+						if (!getBufferedValues(Util.getRelationName("mention", "event", "keyword"), s).isEmpty())
+							values.add(new KSMention(s));
+					}	
 					eventMentionCache.putIfAbsent(key, values);
 				}
 			} catch (Exception e) {
@@ -952,9 +965,7 @@ public class KnowledgeStoreAdapter {
 				if (log.isDebugEnabled())
 					log.debug("Cannot retrieve mentions from resources.", e);
 			}
-			session.close();
 		}
-		
 	}
 	
 	/**
@@ -976,7 +987,6 @@ public class KnowledgeStoreAdapter {
 		}
 		queryURISets.add(currentSet);
 
-		Session session = knowledgeStore.newSession();
 		List<Future<?>> futures = new ArrayList<Future<?>>();
 		for (Set<URI> uriSet : queryURISets) {
 			EventMentionWorker w = new EventMentionWorker(uriSet);
@@ -993,8 +1003,6 @@ public class KnowledgeStoreAdapter {
 					log.debug("thread execution exception", e);
 			} 
 		}
-		
-		session.close();
 	}
 	
 	/**

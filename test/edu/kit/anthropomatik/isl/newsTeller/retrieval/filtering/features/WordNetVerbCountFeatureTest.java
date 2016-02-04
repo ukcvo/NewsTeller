@@ -2,9 +2,13 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.LogManager;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,6 +16,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import com.google.common.collect.Sets;
+
+import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
+import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
@@ -19,6 +27,10 @@ public class WordNetVerbCountFeatureTest {
 
 	private WordNetVerbCountFeature feature;
 	private KnowledgeStoreAdapter ksAdapter;
+	
+	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
+	private static List<Keyword> keywords = new ArrayList<Keyword>();
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -28,6 +40,17 @@ public class WordNetVerbCountFeatureTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		ConcurrentMap<String, Set<String>> eventLabelMap = new ConcurrentHashMap<String, Set<String>>();
+		eventLabelMap.put("event-1", Sets.newHashSet("persuade"));
+		eventLabelMap.put("event-2", Sets.newHashSet("spokesman"));
+		eventLabelMap.put("event-3", Sets.newHashSet("challenge"));
+				
+		sparqlCache.put(Util.getRelationName("event", "eventLabel", "keyword"), eventLabelMap);
+				
+		Keyword k = new Keyword("keyword");
+		Util.stemKeyword(k);
+		keywords.add(k);
 	}
 
 	@Before
@@ -36,29 +59,24 @@ public class WordNetVerbCountFeatureTest {
 		feature = (WordNetVerbCountFeature) context.getBean("wordnetFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
-		ksAdapter.openConnection();
-	}
-
-	@After
-	public void tearDown() {
-		ksAdapter.closeConnection();
+		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
 	}
 	
 	@Test
 	public void shouldReturnOne() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Pranab_and_Oli_discuss_Nepal_peace_talks#ev34", null);
+		double value = feature.getValue("event-1", keywords);
 		assertTrue(value == 1.0);
 	}
 	
 	@Test
 	public void shouldReturnZero() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Two_boys_dead_after_their_father_throws_them_off_hotel_balcony#ev33", null);
+		double value = feature.getValue("event-2", keywords);
 		assertTrue(value == 0.0);
 	}
 	
 	@Test
 	public void shouldReturnAboutZeroPointFourFive() {
-		double value = feature.getValue("http://en.wikinews.org/wiki/Nick_Smith_responds_to_claims_he_is_New_Zealand's_worst_behaved_politician#ev33", null);
+		double value = feature.getValue("event-3", keywords);
 		assertTrue(Math.abs(value - 0.4444444444) < Util.EPSILON);
 	}
 

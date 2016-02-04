@@ -125,4 +125,9 @@ public class KSMention implements Comparable<KSMention> {
 			return 1;
 		return -1;
 	}
+	
+	@Override
+	public int hashCode() {
+		return this.toString().hashCode();
+	}
 }

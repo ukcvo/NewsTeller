@@ -96,7 +96,7 @@
 	<bean id="retriever2"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
 		<property name="eventSearcher" ref="searcher1" />
-		<property name="eventFilter" ref="filter0" />
+		<property name="eventFilter" ref="filter2b" />
 		<property name="eventRanker" ref="ranker0" />
 		<property name="eventSelector" ref="selector0" />
 	</bean>
@@ -128,15 +128,6 @@
 		<property name="userModel" ref="userModel0" />
 		<property name="retriever" ref="retriever0" />
 		<property name="generator" ref="generator0" />
-		<property name="ksAdapter" ref="ksAdapter" />
-	</bean>
-
-	<bean id="newsTeller1"
-		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
-		<constructor-arg value="./config/logging-test.properties" />
-		<property name="userModel" ref="userModel0" />
-		<property name="retriever" ref="retriever1" />
-		<property name="generator" ref="generator1" />
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 

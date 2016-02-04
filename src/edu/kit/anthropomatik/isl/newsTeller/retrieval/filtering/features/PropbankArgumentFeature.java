@@ -129,7 +129,7 @@ public class PropbankArgumentFeature extends UsabilityFeature {
 							needed++;
 							if (hasA2)
 								fulfilled++;
-						} else if (argument.getN().equals("m") && argument.getF().equalsIgnoreCase("loc")) {
+						} else if (argument.getN().equalsIgnoreCase("m") && argument.getF().equalsIgnoreCase("loc")) {
 							needed++;
 							if (hasLoc)
 								fulfilled++;

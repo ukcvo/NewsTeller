@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.LogManager;
 
 import org.junit.After;
@@ -16,6 +18,8 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+
+import com.google.common.collect.Sets;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
@@ -90,7 +94,14 @@ public class KnowledgeStoreAdapterTest {
 	@Test
 	public void shouldReturnCorrectSentenceForSingleMentionEvent() {
 		String expectedResult = "The stars accused of swearing before the watershed include Snoop Dogg, Madonna, Johnny Borrell (Razorlight) and Billie-Joe Armstrong (Green Day).";
-		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev41", null);
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev41", 
+				Sets.newHashSet("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#char=841,848"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC"));
+		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev41", "keyword");
 		assertTrue(expectedResult.equals(retrievedSentence));
 	}
 	
@@ -99,23 +110,38 @@ public class KnowledgeStoreAdapterTest {
 		List<String> expectedResults = 
 				Arrays.asList(	"Instead, Kucinich is going to focus on his re-election bid to the United States House of Representatives because he is facing four other candidates in the Democratic primary for Ohio's 10th congressional district and has received criticism for spending more time on running for President than on the district which he has represented for the past 12 years.",
 								"This was his second run for the presidency, his first was the 2004 presidential election.");
-		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", null);
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", 
+				Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=829,836", "http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=1013,1016"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race"));
+		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", "keyword");
 		assertTrue(expectedResults.contains(retrievedSentence));
 	}
 	
 	@Test
 	public void shouldReturnAllSentencesForMultipleMentionEvent() {
-		List<String> expectedResults = 
-				Arrays.asList(	"This was his second run for the presidency, his first was the 2004 presidential election.",
+		Set<String> expectedResults = 
+				Sets.newHashSet( "This was his second run for the presidency, his first was the 2004 presidential election.",
 								"Instead, Kucinich is going to focus on his re-election bid to the United States House of Representatives because he is facing four other candidates in the Democratic primary for Ohio's 10th congressional district and has received criticism for spending more time on running for President than on the district which he has represented for the past 12 years."
 								);
-		List<String> retrievedSentences = ksAdapter.retrieveSentencesfromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", null);
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", 
+				Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=829,836", "http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=1013,1016"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race"));
+		Set<String> retrievedSentences = new HashSet<String>(ksAdapter.retrieveSentencesfromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", "keyword"));
 		assertTrue(expectedResults.equals(retrievedSentences));
 	}
 	
 	@Test
 	public void shouldReturnCorrectSentenceForMention() {
 		String expectedResult = "This was his second run for the presidency, his first was the 2004 presidential election.";
+		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race"));
 		String retrievedSentence = ksAdapter.retrieveSentenceFromMention("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=1013,1016");
 		assertTrue(expectedResult.equals(retrievedSentence));
 	}
@@ -123,6 +149,7 @@ public class KnowledgeStoreAdapterTest {
 	@Test
 	public void shouldReturnCorrectPhraseFromMention() {
 		String expectedResult = "videos uploaded by their users";
+		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Movie_'The_Assassination_of_Jesse_James'_leaked_on_the_internet"));
 		String retrievedSentence = ksAdapter.retrievePhraseFromMention("http://en.wikinews.org/wiki/Movie_'The_Assassination_of_Jesse_James'_leaked_on_the_internet#char=352,382");
 		assertTrue(expectedResult.equals(retrievedSentence));
 	}
@@ -130,6 +157,13 @@ public class KnowledgeStoreAdapterTest {
 	@Test
 	public void shouldReturnCorrectPhraseFromEntity() {
 		String expectedResult = "videos uploaded by their users";
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("http://www.newsreader-project.eu/data/wikinews/non-entities/videos+uploaded+by+their+users", 
+				Sets.newHashSet("http://en.wikinews.org/wiki/Movie_'The_Assassination_of_Jesse_James'_leaked_on_the_internet#char=352,382"));
+		sparqlCache.put(Util.getRelationName("entity", "mention", "upload"), mentionMap);
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Movie_'The_Assassination_of_Jesse_James'_leaked_on_the_internet"));
 		List<String> retrievedSentences = ksAdapter.retrievePhrasesFromEntity("http://www.newsreader-project.eu/data/wikinews/non-entities/videos+uploaded+by+their+users", "upload");
 		assertTrue(retrievedSentences.size() == 1 && retrievedSentences.contains(expectedResult));
 	}
@@ -164,7 +198,9 @@ public class KnowledgeStoreAdapterTest {
 		Set<KSMention> expected = new HashSet<KSMention>();
 		for (String uri : mentionURIs)
 			expected.add(new KSMention(uri));
+		ksAdapter.retrieveAllEventMentions(Sets.newHashSet("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup"));
 		Set<KSMention> retrieved = ksAdapter.getAllEventMentions("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup");
+		
 		assertTrue(retrieved.equals(expected));
 	}
 	
@@ -174,11 +210,16 @@ public class KnowledgeStoreAdapterTest {
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev20");
-		//ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", "test-relation", Util.VARIABLE_EVENT, Util.VARIABLE_ENTITY, uris);
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		Keyword k = new Keyword("keyword");
+		Util.stemKeyword(k);
+		keywords.add(k);
+		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", 
+				uris, keywords);
 		Set<String> expected = new HashSet<String>();
 		expected.add("http://dbpedia.org/resource/Vicente_Fox");
 		expected.add("http://dbpedia.org/resource/Fox_Broadcasting_Company");
-		Set<String> result = ksAdapter.getBufferedValues("test-relation", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
+		Set<String> result = ksAdapter.getBufferedValues("event-entity-keyword", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
 		assertTrue(expected.equals(result));
 	}
 	
@@ -189,7 +230,9 @@ public class KnowledgeStoreAdapterTest {
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev20");
 		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(new Keyword("test"));
+		Keyword k = new Keyword("test");
+		Util.stemKeyword(k);
+		keywords.add(k);
 		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", uris, keywords);
 		Set<String> result = ksAdapter.getBufferedValues("other-relation", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev18");
 		assertTrue(result.isEmpty());
@@ -202,7 +245,9 @@ public class KnowledgeStoreAdapterTest {
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev19");
 		uris.add("http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev20");
 		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(new Keyword("test"));
+		Keyword k = new Keyword("test");
+		Util.stemKeyword(k);
+		keywords.add(k);
 		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", uris, keywords);
 		Set<String> result = ksAdapter.getBufferedValues("event-entity-test", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev17");
 		assertTrue(result.isEmpty());

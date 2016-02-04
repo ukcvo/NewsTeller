@@ -2,10 +2,13 @@ package edu.kit.anthropomatik.isl.newsTeller.generation;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.LogManager;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +16,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import com.google.common.collect.Sets;
+
+import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
@@ -23,6 +29,10 @@ public class SentencePickerTest {
 	private SummaryCreator sentencePicker;
 	private KnowledgeStoreAdapter ksAdapter;
 	
+	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
+	private static List<Keyword> keywords = new ArrayList<Keyword>();
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		System.setProperty("java.util.logging.config.file", "./config/logging-test.properties");
@@ -31,6 +41,18 @@ public class SentencePickerTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		ConcurrentMap<String, Set<String>> eventMentionMap = new ConcurrentHashMap<String, Set<String>>();
+		eventMentionMap.put("event-1", Sets.newHashSet("mention-1#char=3,5"));
+		ConcurrentMap<String, Set<String>> resourceTextMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceTextMap.put("mention-1", Sets.newHashSet("Aa Bb cC."));
+				
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), eventMentionMap);
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
+		
+		Keyword k = new Keyword("keyword");
+		Util.stemKeyword(k);
+		keywords.add(k);
 	}
 
 	@Before
@@ -39,30 +61,24 @@ public class SentencePickerTest {
 		sentencePicker = (SummaryCreator) context.getBean("generator1");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
-		ksAdapter.openConnection();
-	}
-
-	@After
-	public void tearDown() {
-		ksAdapter.closeConnection();
+		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
 	}
 	
 	@Test
 	public void shouldReturnEmptyEventResponseBecauseOfNullEvent() {
-		String result = sentencePicker.summarizeEvent(null, null);
+		String result = sentencePicker.summarizeEvent(null, keywords);
 		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 
 	@Test
 	public void shouldReturnEmptyEventResponseBecauseOfNonexistentEvent() {
-		String result = sentencePicker.summarizeEvent(new NewsEvent("http://en.wikinews.org/wiki/Non_existing_text#ev999"), null);
+		String result = sentencePicker.summarizeEvent(new NewsEvent("http://en.wikinews.org/wiki/Non_existing_text#ev999"), keywords);
 		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 	
 	@Test
 	public void shouldReturnRegularResponse() {
-		String result = sentencePicker.summarizeEvent(new NewsEvent("http://en.wikinews.org/wiki/Journals_tackle_scientific_fraud#ev34"), 
-				Arrays.asList(new Keyword("science")));
+		String result = sentencePicker.summarizeEvent(new NewsEvent("event-1"), keywords);
 		assertTrue(!result.isEmpty() && !result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 }
