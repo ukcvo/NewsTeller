@@ -488,10 +488,13 @@ public class Util {
 				out.endRecord();
 				
 				Map<BenchmarkEvent, List<String>> content = outputMap.get(fileName);
-				for (Map.Entry<BenchmarkEvent, List<String>> entry : content.entrySet()) {
-					String eventURI = entry.getKey().getEventURI();
+				List<BenchmarkEvent> sortedEvents = new ArrayList<BenchmarkEvent>(content.keySet());
+				Collections.sort(sortedEvents);
+				
+				for (BenchmarkEvent event : sortedEvents) {
+					String eventURI = event.getEventURI();
 					out.write(eventURI);
-					List<String> sentences = entry.getValue();
+					List<String> sentences = content.get(event);
 					boolean isFirst = true;
 					for (String s : sentences) {
 						if (!isFirst)

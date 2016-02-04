@@ -1,5 +1,5 @@
-URI;usabilityRating;relevanceRank;reason_1;reason_2;reason_3;reason_4;reason_5;reason_6
-http://en.wikinews.org/wiki/Africa-Europe_summit_opens_with_pledges_of_equal_partnership#ev60;1.0;1;1
-http://en.wikinews.org/wiki/Pope_Benedict_visits_Cuba_urging_openness,_religious_freedom#ev89;0.0;25;7;3
-http://en.wikinews.org/wiki/Rage_Against_The_Machine_top_UK_singles_chart#ev36;0.0;25;8
-http://en.wikinews.org/wiki/Gaza_Strip_aid_ship_departs_Greece,_diverts_to_Egypt#ev20;1.0;1;1
+"URI";"usabilityRating";"relevanceRank";"reason_1";"reason_2"
+"http://en.wikinews.org/wiki/Africa-Europe_summit_opens_with_pledges_of_equal_partnership#ev60";"1.0";0;1;
+"http://en.wikinews.org/wiki/Gaza_Strip_aid_ship_departs_Greece,_diverts_to_Egypt#ev20";"1.0";2;1;
+"http://en.wikinews.org/wiki/Pope_Benedict_visits_Cuba_urging_openness,_religious_freedom#ev89";"0.0";0;7;3
+"http://en.wikinews.org/wiki/Rage_Against_The_Machine_top_UK_singles_chart#ev36";"0.0";1;8;

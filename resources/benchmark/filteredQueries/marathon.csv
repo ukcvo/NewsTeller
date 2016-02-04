@@ -1,5 +1,5 @@
-URI;usabilityRating;relevanceRank;reason_1;reason_2;reason_3;reason_4;reason_5;reason_6
-http://en.wikinews.org/wiki/Paula_Radcliffe_makes_comeback_and_wins_New_York_City_marathon#ev55;1.0;1;1
-http://en.wikinews.org/wiki/Kenya's_Cheruiyot_and_Russia's_Grigoryeva_capture_Boston_Marathon_crowns#ev60;1.0;1;1
-http://en.wikinews.org/wiki/Ryan_Giggs_named_BBC_Sports_Personality_of_the_Year#ev48;1.0;1;1
-"http://en.wikinews.org/wiki/Disdery_Hombo_&amp;_Tatyana_Perepelkina_win_the_2008_Taipei_International_Express_Marathon#ev28";1.0;1;1
+"URI";"usabilityRating";"relevanceRank";"reason_1"
+"http://en.wikinews.org/wiki/Disdery_Hombo_&amp;_Tatyana_Perepelkina_win_the_2008_Taipei_International_Express_Marathon#ev28";"1.0";0;1
+"http://en.wikinews.org/wiki/Kenya's_Cheruiyot_and_Russia's_Grigoryeva_capture_Boston_Marathon_crowns#ev60";"1.0";0;1
+"http://en.wikinews.org/wiki/Paula_Radcliffe_makes_comeback_and_wins_New_York_City_marathon#ev55";"1.0";3;1
+"http://en.wikinews.org/wiki/Ryan_Giggs_named_BBC_Sports_Personality_of_the_Year#ev48";"1.0";1;1

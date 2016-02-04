@@ -6,7 +6,7 @@ package edu.kit.anthropomatik.isl.newsTeller.data.benchmark;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class BenchmarkEvent {
+public class BenchmarkEvent implements Comparable<BenchmarkEvent> {
 
 	private String fileName;
 	
@@ -39,4 +39,9 @@ public class BenchmarkEvent {
     public int hashCode() {
         return this.toString().hashCode();
     }
+
+	@Override
+	public int compareTo(BenchmarkEvent arg0) {
+		return this.toString().compareTo(arg0.toString());
+	}
 }

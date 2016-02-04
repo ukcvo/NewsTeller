@@ -1,8 +1,8 @@
-URI;usabilityRating;relevanceRank;reason_1;reason_2;reason_3;reason_4;reason_5;reason_6
-http://en.wikinews.org/wiki/Earthquake_reported_near_Rome's_coast,_no_damage_caused#ev20;0.0;199;8
-http://en.wikinews.org/wiki/Vanstone_quits_Australian_politics,_to_receive_posting_in_Rome#ev53;0.0;199;9
-http://en.wikinews.org/wiki/Doubts_on_yesterday's_Italian_Lotto_and_Superenalotto_drawing#ev37;0.0;199;8
-http://en.wikinews.org/wiki/Crucifix_in_Northern_Italy_collapses,_crushing_man_to_death#ev79;0.0;199;9;4
-http://en.wikinews.org/wiki/Hundred_of_thousands_march_in_Rome_to_demand_freedom_for_kidnapped_reporter#ev8;1.0;1;1
-http://en.wikinews.org/wiki/2007_Twenty20_World_Championship:_West_Indies_vs_Bangladesh#ev51;0.0;199;13
-http://en.wikinews.org/wiki/Earthquake_reported_near_Rome's_coast,_no_damage_caused#ev6;0.0;199;2
+"URI";"usabilityRating";"relevanceRank";"reason_1";"reason_2"
+"http://en.wikinews.org/wiki/2007_Twenty20_World_Championship:_West_Indies_vs_Bangladesh#ev51";"0.0";0;13;
+"http://en.wikinews.org/wiki/Crucifix_in_Northern_Italy_collapses,_crushing_man_to_death#ev79";"0.0";2;9;4
+"http://en.wikinews.org/wiki/Doubts_on_yesterday's_Italian_Lotto_and_Superenalotto_drawing#ev37";"0.0";0;8;
+"http://en.wikinews.org/wiki/Earthquake_reported_near_Rome's_coast,_no_damage_caused#ev20";"0.0";1;8;
+"http://en.wikinews.org/wiki/Earthquake_reported_near_Rome's_coast,_no_damage_caused#ev6";"0.0";1;2;
+"http://en.wikinews.org/wiki/Hundred_of_thousands_march_in_Rome_to_demand_freedom_for_kidnapped_reporter#ev8";"1.0";3;1;
+"http://en.wikinews.org/wiki/Vanstone_quits_Australian_politics,_to_receive_posting_in_Rome#ev53";"0.0";1;9;

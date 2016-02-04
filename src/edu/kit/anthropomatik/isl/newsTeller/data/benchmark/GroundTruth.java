@@ -24,6 +24,13 @@ public class GroundTruth {
 		return relevanceRank;
 	}
 	
+	/**
+	 * Returns (2^relevanceRank - 1) which will be used as target value for regression.
+	 */
+	public double getRegressionRelevanceValue() {
+		return (Math.pow(2, this.relevanceRank) - 1.0);
+	}
+	
 	public Set<UsabilityRatingReason> getReasons() {
 		return reasons;
 	}
