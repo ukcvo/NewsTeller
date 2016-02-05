@@ -88,6 +88,7 @@ public class Util {
 	public static final String ATTRIBUTE_URI = "eventURI";
 	public static final String ATTRIBUTE_FILE = "fileName";
 	public static final String ATTRIBUTE_REASON = "reason_";
+	public static final String ATTRIBUTE_RELEVANCE = "relevance";
 	
 	public static final String MENTION_PROPERTY_POS = "http://dkm.fbk.eu/ontologies/newsreader#pos";
 	public static final String MENTION_PROPERTY_POS_VERB = "http://dkm.fbk.eu/ontologies/newsreader#pos_verb";
@@ -247,6 +248,13 @@ public class Util {
 			in.setUseTextQualifier(true);
 			in.readHeaders();
 
+			if (in.getHeaderCount() < 2) {
+				in.close();
+				char otherDelimiter = (delimiter == ',') ? ';' : ',';
+				// TODO dirty hack, might produce infinite loop! --> remove
+				return readBenchmarkQueryFromFile(fileName, otherDelimiter);
+			}
+			
 			while (in.readRecord()) {
 				try {
 					String eventURI = in.get(Util.COLUMN_NAME_URI);

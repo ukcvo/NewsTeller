@@ -6,7 +6,8 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<import resource="usabilityFeatures.xml" />
-
+	<import resource="rankingFeatures.xml" />
+	
 	<bean id="ksAdapter"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
 		<constructor-arg name="getMentionFromEventFileName"

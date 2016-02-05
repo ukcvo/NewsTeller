@@ -6,7 +6,8 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<import resource="usabilityFeatures.xml" />
-
+	<import resource="rankingFeatures.xml" />
+	
 	<bean id="ksAdapter"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
 		<constructor-arg name="getMentionFromEventFileName"
@@ -74,7 +75,7 @@
 		<property name="newsTeller" ref="newsTeller" />
 	</bean>
 
-	<bean id="featureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.FeatureExtractor">
+	<bean id="usabilityFeatureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.UsabilityFeatureExtractor">
 		<constructor-arg value="resources/benchmark/Scope 0.csv"/>
 		<property name="ksAdapter" ref="ksAdapter"/>
 		<property name="inputFileName" value="resources/benchmark/dataSet_FINAL.xrff" />
@@ -122,6 +123,13 @@
 				<value>resources/filtering.model</value>
 			</list>
 		</property>
+	</bean>
+
+	<bean id="rankingFeatureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.RankingFeatureExtractor">
+		<constructor-arg value="resources/benchmark/rankingFilteredQueries.csv"/>
+		<property name="ksAdapter" ref="ksAdapter"/>
+		<property name="outputFileName" value="resources/benchmark/dataSetRanking.xrff"/>
+		<property name="features" ref="rankingFeatureList"/>
 	</bean>
 
 </beans>

@@ -6,6 +6,7 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<import resource="usabilityFeatures.xml" />
+	<import resource="rankingFeatures.xml" />
 	<import resource="weka.xml" />
 
 	<bean id="ksAdapter"
@@ -296,8 +297,9 @@
 
 	<bean id="rankingSentenceExtractor" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RankingSentenceExtractor">
 		<property name="outputFileName" value="out/ranking.csv" />
-		<property name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv" />
+		<property name="configFileName" value="resources/benchmark/rankingFilteredQueriesMultipleKeywordsOnly.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="delimiter" value="," />
 	</bean>
 
 </beans>

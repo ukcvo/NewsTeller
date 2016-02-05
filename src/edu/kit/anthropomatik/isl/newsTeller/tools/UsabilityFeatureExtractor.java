@@ -43,9 +43,9 @@ import weka.filters.unsupervised.attribute.Remove;
  * @author Lucas Bechberger (ukcvo@student.kit.edu, bechberger@fbk.eu)
  *
  */
-public class FeatureExtractor {
+public class UsabilityFeatureExtractor {
 
-	private static Log log = LogFactory.getLog(FeatureExtractor.class);
+	private static Log log = LogFactory.getLog(UsabilityFeatureExtractor.class);
 	
 	private Map<String, List<Keyword>> benchmarkKeywords;	// file and corresponding keyword list
 	
@@ -107,7 +107,7 @@ public class FeatureExtractor {
 			this.reasonsToKeep.add(UsabilityRatingReason.fromInteger(i));
 	}
 	
-	public FeatureExtractor(String configFileName) {
+	public UsabilityFeatureExtractor(String configFileName) {
 		this.benchmarkKeywords = Util.readBenchmarkConfigFile(configFileName);
 		this.benchmark = new HashMap<BenchmarkEvent, GroundTruth>();
 
@@ -121,7 +121,6 @@ public class FeatureExtractor {
 		ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 		
 		for (UsabilityFeature feature : this.features) {
-			// TODO: check for numeric vs. nominal & deal w/ it (FastVector labels = new FastVector(); Attribute attr= new Attribute(name,labels);)
 			Attribute attr = new Attribute(feature.getName());
 			attributes.add(attr);
 		}
@@ -374,13 +373,13 @@ public class FeatureExtractor {
 		System.setProperty("java.util.logging.config.file", "./config/logging.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(FeatureExtractor.class);
+			log = LogFactory.getLog(UsabilityFeatureExtractor.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/default.xml");
-		FeatureExtractor extractor = (FeatureExtractor) context.getBean("featureExtractor");
+		UsabilityFeatureExtractor extractor = (UsabilityFeatureExtractor) context.getBean("usabilityFeatureExtractor");
 		((AbstractApplicationContext) context).close();
 		
 		extractor.run();

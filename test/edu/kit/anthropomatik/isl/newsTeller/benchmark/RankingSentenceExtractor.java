@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.benchmark;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +35,8 @@ public class RankingSentenceExtractor {
 	
 	private String outputFileName;
 	
+	private char delimiter;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	public void setConfigFileName(String configFileName) {
@@ -42,6 +45,10 @@ public class RankingSentenceExtractor {
 	
 	public void setOutputFileName(String outputFileName) {
 		this.outputFileName = outputFileName;
+	}
+	
+	public void setDelimiter(char delimiter) {
+		this.delimiter = delimiter;
 	}
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
@@ -68,19 +75,25 @@ public class RankingSentenceExtractor {
 			List<Keyword> keywords = entry.getValue();
 			Set<String> eventURIs = new HashSet<String>();
 			
-			Map<BenchmarkEvent, GroundTruth> fileMap = Util.readBenchmarkQueryFromFile(filePath, ';');
+			Map<BenchmarkEvent, GroundTruth> fileMap = Util.readBenchmarkQueryFromFile(filePath, this.delimiter);
 			for (BenchmarkEvent event : fileMap.keySet())  
 				eventURIs.add(event.getEventURI());
 			
 			// retrieve the original texts for the events
 			ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, keywords);
-			Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(
-											Util.getRelationName("event", "mention", keywords.get(0).getWord())));
-			ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
+			for (Keyword k : keywords) {
+				Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(
+						Util.getRelationName("event", "mention", k.getWord())));
+				ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
+
+			}
 			
 			for (BenchmarkEvent event : fileMap.keySet()) {
-				List<String> sentences = ksAdapter.retrieveSentencesfromEvent(event.getEventURI(), keywords.get(0).getWord());
-				localOutputMap.put(event, sentences);
+				Set<String> sentences = new HashSet<String>();
+				for (Keyword k : keywords) 
+					sentences.addAll(ksAdapter.retrieveSentencesfromEvent(event.getEventURI(), k.getWord()));
+				
+				localOutputMap.put(event, new ArrayList<String>(sentences));
 			}
 			outputMap.put(fileName, localOutputMap);
 			
