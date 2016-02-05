@@ -1,4 +1,4 @@
-SELECT ?event (COUNT(?a0) AS ?a0) (COUNT(?a1) AS ?a1) (COUNT(?a2) AS ?a2) (COUNT(?place) AS ?place) (COUNT(?mention) AS ?numberOfMentions) (COUNT(DISTINCT ?entity) AS ?keywordEntities)
+SELECT ?event (COUNT(?a0) AS ?a0) (COUNT(?a1) AS ?a1) (COUNT(?a2) AS ?a2) (COUNT(?place) AS ?place) (COUNT(?mention) AS ?numberOfMentions) (COUNT(DISTINCT ?entity) AS ?numberOfKeywordEntities)
 WHERE
 {
 	VALUES ?event { *keys* } .

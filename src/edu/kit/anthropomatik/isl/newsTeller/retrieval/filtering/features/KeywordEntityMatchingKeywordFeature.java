@@ -25,6 +25,7 @@ public class KeywordEntityMatchingKeywordFeature extends UsabilityFeature {
 		double result = 0;
 		
 		for (Keyword keyword : keywords) {
+			double keywordResult = 0;
 			Set<String> entities = ksAdapter.getBufferedValues(Util.getRelationName("event", "keywordEntity", keyword.getWord()), eventURI);
 			Set<String> keywordEntityLabels =  new HashSet<String>();
 			for (String entity : entities)
@@ -32,12 +33,12 @@ public class KeywordEntityMatchingKeywordFeature extends UsabilityFeature {
 					
 			for (String label : keywordEntityLabels) {
 				if (label.toLowerCase().matches(keyword.getWordRegex())) {
-					result++;
+					keywordResult++;
 					break;
 				}
 			}
+			result = Math.max(result, keywordResult);
 		}
-		result /= keywords.size();
 		
 		return result;
 	}

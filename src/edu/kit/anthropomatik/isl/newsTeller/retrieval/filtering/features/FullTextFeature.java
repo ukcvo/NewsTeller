@@ -20,12 +20,18 @@ public abstract class FullTextFeature extends UsabilityFeature {
 	
 	protected boolean doUseContainsInsteadOfRegex;
 	
+	private boolean usesKeyword;
+	
 	public void setDoOnlyUseSentence(boolean doOnlyUseSentence) {
 		this.doOnlyUseSentence = doOnlyUseSentence;
 	}
 	
 	public void setDoUseContainsInsteadOfRegex(boolean doUseContainsInsteadOfRegex) {
 		this.doUseContainsInsteadOfRegex = doUseContainsInsteadOfRegex;
+	}
+	
+	public void setUsesKeyword(boolean usesKeyword) {
+		this.usesKeyword = usesKeyword;
 	}
 	
 	public FullTextFeature() {
@@ -88,7 +94,15 @@ public abstract class FullTextFeature extends UsabilityFeature {
 		else
 			originalTexts = ksAdapter.retrieveOriginalTexts(eventURI, arbitraryKeyword); //use complete text
 		List<Double> appearances = checkLabels(labels, originalTexts);
-		double averageAppearance = appearances.isEmpty() ? 1.0 : Util.averageFromCollection(appearances);
+		double averageAppearance;
+		if (appearances.isEmpty())
+			averageAppearance = 1.0;
+		else {
+			if (this.usesKeyword)
+				averageAppearance = Util.maxFromCollection(appearances);
+			else
+				averageAppearance = Util.averageFromCollection(appearances);
+		}
 		
 		return averageAppearance;
 	}

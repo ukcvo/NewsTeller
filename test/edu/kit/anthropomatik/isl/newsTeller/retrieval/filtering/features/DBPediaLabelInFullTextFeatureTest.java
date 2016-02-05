@@ -32,6 +32,7 @@ public class DBPediaLabelInFullTextFeatureTest {
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 	private static List<Keyword> keywords = new ArrayList<Keyword>();
+	private static List<Keyword> twoKeywords = new ArrayList<Keyword>();
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -48,9 +49,11 @@ public class DBPediaLabelInFullTextFeatureTest {
 		ConcurrentMap<String, Set<String>> eventEntityMap = new ConcurrentHashMap<String, Set<String>>();
 		eventEntityMap.put("event-1", Sets.newHashSet("actor-1a", "actor-1b"));
 		eventEntityMap.put("event-2", Sets.newHashSet("actor-2a", "actor-2b"));
-		ConcurrentMap<String, Set<String>> entityKeyEntityMap = new ConcurrentHashMap<String, Set<String>>();
-		entityKeyEntityMap.put("event-1", Sets.newHashSet("actor-1a"));
-		entityKeyEntityMap.put("event-2", Sets.newHashSet("actor-2a"));
+		ConcurrentMap<String, Set<String>> eventKeyEntityMap = new ConcurrentHashMap<String, Set<String>>();
+		eventKeyEntityMap.put("event-1", Sets.newHashSet("actor-1a"));
+		eventKeyEntityMap.put("event-2", Sets.newHashSet("actor-2a"));
+		ConcurrentMap<String, Set<String>> eventKeyEntityMap2 = new ConcurrentHashMap<String, Set<String>>();
+		eventKeyEntityMap2.put("event-1", Sets.newHashSet("actor-1b"));
 		ConcurrentMap<String, Set<String>> entityLabelMap = new ConcurrentHashMap<String, Set<String>>();
 		entityLabelMap.put("actor-1a", Sets.newHashSet("One", "Eins"));
 		entityLabelMap.put("actor-1b", Sets.newHashSet("2"));
@@ -62,14 +65,21 @@ public class DBPediaLabelInFullTextFeatureTest {
 		
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), eventMentionMap);
 		sparqlCache.put(Util.getRelationName("event", "entity", "keyword"), eventEntityMap);
-		sparqlCache.put(Util.getRelationName("event", "keywordEntity", "keyword"), entityKeyEntityMap);
+		sparqlCache.put(Util.getRelationName("event", "keywordEntity", "keyword"), eventKeyEntityMap);
+		sparqlCache.put(Util.getRelationName("event", "keywordEntity", "other"), eventKeyEntityMap2);
 		sparqlCache.put(Util.getRelationName("entity", "entityLabel", "keyword"), entityLabelMap);
+		sparqlCache.put(Util.getRelationName("entity", "entityLabel", "other"), entityLabelMap);
 		sparqlCache.put(Util.getRelationName("entity", "inheritedLabel", "keyword"), new ConcurrentHashMap<String, Set<String>>());
+		sparqlCache.put(Util.getRelationName("entity", "inheritedLabel", "other"), new ConcurrentHashMap<String, Set<String>>());
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
 		
 		Keyword k = new Keyword("keyword");
 		Util.stemKeyword(k);
 		keywords.add(k);
+		twoKeywords.add(k);
+		Keyword k2 = new Keyword("other");
+		Util.stemKeyword(k2);
+		twoKeywords.add(k2);
 	}
 
 	@Before
@@ -91,6 +101,12 @@ public class DBPediaLabelInFullTextFeatureTest {
 	@Test
 	public void ShouldReturnOneForKeyword() {
 		double value = keywordFeature.getValue("event-1", keywords);
+		assertTrue(value == 1.0);
+	}
+	
+	@Test
+	public void ShouldReturnOneForMultipleKeywords() {
+		double value = keywordFeature.getValue("event-1", twoKeywords);
 		assertTrue(value == 1.0);
 	}
 

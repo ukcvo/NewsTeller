@@ -27,11 +27,13 @@ public class SparqlFeatureTest {
 
 	private KnowledgeStoreAdapter ksAdapter;
 	
-	private SparqlFeature feature;
+	private SparqlFeature a1Feature;
+	private SparqlFeature keyEntFeature;
 	
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 	private static List<Keyword> keywords = new ArrayList<Keyword>();
+	private static List<Keyword> twoKeywords = new ArrayList<Keyword>();
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -45,33 +47,72 @@ public class SparqlFeatureTest {
 		ConcurrentMap<String, Set<String>> eventA1Map = new ConcurrentHashMap<String, Set<String>>();
 		eventA1Map.put("event-1", Sets.newHashSet("0"));
 		eventA1Map.put("event-2", Sets.newHashSet("1"));
-				
+		
+		ConcurrentMap<String, Set<String>> eventKeyEntMap = new ConcurrentHashMap<String, Set<String>>();
+		eventKeyEntMap.put("event-1", Sets.newHashSet("0"));
+		eventKeyEntMap.put("event-2", Sets.newHashSet("1"));
+		ConcurrentMap<String, Set<String>> eventKeyEntMap2 = new ConcurrentHashMap<String, Set<String>>();
+		eventKeyEntMap2.put("event-1", Sets.newHashSet("0"));
+		eventKeyEntMap2.put("event-2", Sets.newHashSet("0"));
+		
+		
 		sparqlCache.put(Util.getRelationName("event", "a1", "keyword"), eventA1Map);
-				
+		sparqlCache.put(Util.getRelationName("event", "numberOfKeywordEntities", "keyword"), eventKeyEntMap);
+		sparqlCache.put(Util.getRelationName("event", "numberOfKeywordEntities", "other"), eventKeyEntMap2);
+		
+		
 		Keyword k = new Keyword("keyword");
 		Util.stemKeyword(k);
 		keywords.add(k);
+		twoKeywords.add(k);
+		Keyword k2 = new Keyword("other");
+		Util.stemKeyword(k2);
+		twoKeywords.add(k2);
 	}
 
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		feature = (SparqlFeature) context.getBean("a1Feature");
+		a1Feature = (SparqlFeature) context.getBean("a1Feature");
+		keyEntFeature = (SparqlFeature) context.getBean("hasDBpediaEntitiesFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
 	}
 	
 	@Test
-	public void shouldReturnZero() {
-		double result = feature.getValue("event-1", keywords);
+	public void shouldReturnZeroA1() {
+		double result = a1Feature.getValue("event-1", keywords);
 		assertTrue(result == 0.0);
 	}
 	
 	@Test
-	public void shouldReturnOne() {
-		double result = feature.getValue("event-2", keywords);
+	public void shouldReturnOneA1() {
+		double result = a1Feature.getValue("event-2", keywords);
 		assertTrue(result == 1.0);
 	}
 
+	@Test
+	public void shouldReturnZeroKeyEnt() {
+		double result = keyEntFeature.getValue("event-1", keywords);
+		assertTrue(result == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnOneKeyEnt() {
+		double result = keyEntFeature.getValue("event-2", keywords);
+		assertTrue(result == 1.0);
+	}
+	
+	@Test
+	public void shouldReturnZeroKeyEntMultipleKeywords() {
+		double result = keyEntFeature.getValue("event-1", twoKeywords);
+		assertTrue(result == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnOneKeyEntMultipleKeywords() {
+		double result = keyEntFeature.getValue("event-2", twoKeywords);
+		assertTrue(result == 1.0);
+	}
 }

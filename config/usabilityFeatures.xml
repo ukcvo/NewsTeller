@@ -69,6 +69,7 @@
 		<property name="entityType" value="keywordEntity" />
 		<property name="directLabelType" value="entityLabel" />
 		<property name="indirectLabelType" value="inheritedLabel" />
+		<property name="usesKeyword" value="true" />
 	</bean>
 	
 	<bean id="appearKeywordLabelsInSentenceFeature"
@@ -80,6 +81,7 @@
 		<property name="entityType" value="keywordEntity" />
 		<property name="directLabelType" value="entityLabel" />
 		<property name="indirectLabelType" value="inheritedLabel" />
+		<property name="usesKeyword" value="true" />
 	</bean>
 	
 	<bean id="appearKeywordDescriptionPartsInTextFeature"
@@ -91,6 +93,7 @@
 		<property name="entityType" value="keywordEntity" />
 		<property name="directLabelType" value="entityDescription" />
 		<property name="indirectLabelType" value="inheritedDescription" />
+		<property name="usesKeyword" value="true" />
 	</bean>
 	
 	<bean id="appearLabelsInTextFeature"
@@ -101,6 +104,7 @@
 		<property name="entityType" value="entity" />
 		<property name="directLabelType" value="entityLabel" />
 		<property name="indirectLabelType" value="" />
+		<property name="usesKeyword" value="false" />
 	</bean>
 	
 	<bean id="appearSplitDescriptionsInTextFeature"
@@ -111,6 +115,7 @@
 		<property name="entityType" value="entity" />
 		<property name="directLabelType" value="entityDescription" />
 		<property name="indirectLabelType" value="" />
+		<property name="usesKeyword" value="false" />
 	</bean>
 	
 	<bean id="appearSplitLabelsInTextFeature"
@@ -121,13 +126,14 @@
 		<property name="entityType" value="entity" />
 		<property name="directLabelType" value="entityLabel" />
 		<property name="indirectLabelType" value="" />
+		<property name="usesKeyword" value="false" />
 	</bean>
 	
 	<bean id="hasDBpediaEntitiesFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="hasDBpediaEntities" />
-		<property name="valueName" value="keywordEntities" />
+		<property name="valueName" value="numberOfKeywordEntities" />
 	</bean>
 	
 	<bean id="keywordEntityMatchingKeywordFeature"
@@ -145,6 +151,7 @@
 		<property name="doUseContainsInsteadOfRegex" value="true" />
 		<property name="useOriginalString" value="true" />
 		<property name="useStem" value="false" />
+		<property name="usesKeyword" value="true" />
 	</bean>
 
 	<bean id="locationPrepBeforeActorFeature"

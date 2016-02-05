@@ -562,6 +562,20 @@ public class Util {
 			sum += d;
 		return sum / collection.size();
 	}
+	
+	/**
+	 * Calculate the maximum value of the given collection. Returns NaN for
+	 * empty collection.
+	 */
+	public static double maxFromCollection(Collection<Double> collection) {
+		if (collection.isEmpty())
+			return Double.NaN;
+
+		double max = Double.NEGATIVE_INFINITY;
+		for (Double d : collection)
+			max = Math.max(max, d);
+		return max;
+	}
 
 	/**
 	 * Stems the given keyword.

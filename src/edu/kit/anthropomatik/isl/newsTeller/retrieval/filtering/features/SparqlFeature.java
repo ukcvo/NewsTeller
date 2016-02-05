@@ -27,14 +27,11 @@ public class SparqlFeature extends UsabilityFeature {
 
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
-		// calculate weighted average over all keywords, based on their weight
-		double sum = 0;
-		double weightSum = 0;
+		double result = Double.NEGATIVE_INFINITY;
 		for (Keyword keyword : keywords) {
-			weightSum += keyword.getWeight();
-			sum += Util.parseXMLDoubleFromSet(ksAdapter.getBufferedValues(Util.getRelationName("event", valueName, keyword.getWord()), eventURI));
+			double keywordResult = Util.parseXMLDouble(ksAdapter.getFirstBufferedValue(Util.getRelationName("event", valueName, keyword.getWord()), eventURI));
+			result = Math.max(result, keywordResult);
 		}
-		double result = sum / weightSum;
 		return result;
 	}
 

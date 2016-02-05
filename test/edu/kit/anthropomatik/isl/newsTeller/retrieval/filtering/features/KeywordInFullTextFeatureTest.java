@@ -85,4 +85,34 @@ public class KeywordInFullTextFeatureTest {
 		
 		assertTrue(result == 1.0);
 	}
+	
+	@Test
+	public void shouldReturnOneMultipleKeywords() {
+		Keyword k = new Keyword("Michael Jackson");
+		Util.stemKeyword(k);
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(k);
+		Keyword k2 = new Keyword("Barack Obama");
+		Util.stemKeyword(k2);
+		keywords.add(k2);
+		
+		double result = this.feature.getValue("event-2", keywords);
+		
+		assertTrue(result == 1.0);
+	}
+	
+	@Test
+	public void shouldReturnZeroMultipleKeywords() {
+		Keyword k = new Keyword("Michael Jackson");
+		Util.stemKeyword(k);
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(k);
+		Keyword k2 = new Keyword("Barack Obama");
+		Util.stemKeyword(k2);
+		keywords.add(k2);
+		
+		double result = this.feature.getValue("event-1", keywords);
+		
+		assertTrue(result == 0.0);
+	}
 }

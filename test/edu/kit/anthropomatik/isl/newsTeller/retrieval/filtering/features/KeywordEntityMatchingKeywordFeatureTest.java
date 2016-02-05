@@ -32,6 +32,7 @@ public class KeywordEntityMatchingKeywordFeatureTest {
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 	private static List<Keyword> keywords = new ArrayList<Keyword>();
+	private static List<Keyword> twoKeywords = new ArrayList<Keyword>();
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -55,6 +56,11 @@ public class KeywordEntityMatchingKeywordFeatureTest {
 		Keyword k = new Keyword("Hawking");
 		Util.stemKeyword(k);
 		keywords.add(k);
+		twoKeywords.add(k);
+		
+		Keyword k2 = new Keyword("Obama");
+		Util.stemKeyword(k2);
+		twoKeywords.add(k2);
 	}
 
 	@Before
@@ -73,8 +79,20 @@ public class KeywordEntityMatchingKeywordFeatureTest {
 	}
 	
 	@Test
+	public void shouldReturnOneMultipleKeywords() {
+		double value = feature.getValue("event-1", twoKeywords);
+		assertTrue(value == 1.0);
+	}
+	
+	@Test
 	public void shouldReturnZero() {
 		double value = feature.getValue("event-2", keywords);
 		assertTrue(value == 0.0);
 	}	
+	
+	@Test
+	public void shouldReturnZeroMultipleKeywords() {
+		double value = feature.getValue("event-2", twoKeywords);
+		assertTrue(value == 0.0);
+	}
 }

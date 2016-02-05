@@ -23,8 +23,7 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
 public class EventSearcherTest {
 
-	private EventSearcher searcher1;
-	private EventSearcher searcher2;
+	private EventSearcher searcher;
 	private UserModel userModel;
 	private KnowledgeStoreAdapter ksAdapter;
 	
@@ -41,8 +40,7 @@ public class EventSearcherTest {
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		searcher1 = (EventSearcher) context.getBean("searcher1");
-		searcher2 = (EventSearcher) context.getBean("searcher2");
+		searcher = (EventSearcher) context.getBean("searcher");
 		userModel = (UserModel) context.getBean("userModel0");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
@@ -54,39 +52,19 @@ public class EventSearcherTest {
 		ksAdapter.closeConnection();
 	}
 
-	//region scope 1 (sequential)
 	@Test
-	public void shouldReturn93EventsFinder1() {
+	public void shouldReturn93Events() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial intelligence"));
-		Set<NewsEvent> result = searcher1.findEvents(keywords, userModel);
+		Set<NewsEvent> result = searcher.findEvents(keywords, userModel);
 		assertTrue(result.size() == 93);
 	}
 
 	@Test
-	public void shouldReturn211EventsFinder1() {
+	public void shouldReturn211Events() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("erupt"));
-		Set<NewsEvent> result = searcher1.findEvents(keywords, userModel);
+		Set<NewsEvent> result = searcher.findEvents(keywords, userModel);
 		assertTrue(result.size() == 211);
 	}
-	//endregion
-	
-	//region scope 2 (parallel)
-	@Test
-	public void shouldReturn93EventsFinder2() {
-		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(new Keyword("artificial intelligence"));
-		Set<NewsEvent> result = searcher2.findEvents(keywords, userModel);
-		assertTrue(result.size() == 93);
-	}
-
-	@Test
-	public void shouldReturn211EventsFinder2() {
-		List<Keyword> keywords = new ArrayList<Keyword>();
-		keywords.add(new Keyword("erupt"));
-		Set<NewsEvent> result = searcher2.findEvents(keywords, userModel);
-		assertTrue(result.size() == 211);
-	}
-	//endregion
 }

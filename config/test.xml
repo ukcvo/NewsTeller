@@ -18,23 +18,7 @@
 		<property name="maxNumberOfConnections" value="100" />
 	</bean>
 
-	<bean id="searcher0"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
-		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
-		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="maxNumberOfEvents" value="10000" />
-	</bean>
-
-	<bean id="searcher1"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
-		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
-		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="maxNumberOfEvents" value="10000" />
-	</bean>
-
-	<bean id="searcher2"
+	<bean id="searcher"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
 		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
 		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
@@ -79,7 +63,7 @@
 
 	<bean id="retriever0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
-		<property name="eventSearcher" ref="searcher0" />
+		<property name="eventSearcher" ref="searcher" />
 		<property name="eventFilter" ref="filter0" />
 		<property name="eventRanker" ref="ranker0" />
 		<property name="eventSelector" ref="selector0" />
@@ -87,7 +71,7 @@
 
 	<bean id="retriever1"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
-		<property name="eventSearcher" ref="searcher1" />
+		<property name="eventSearcher" ref="searcher" />
 		<property name="eventFilter" ref="filter0" />
 		<property name="eventRanker" ref="ranker0" />
 		<property name="eventSelector" ref="selector0" />
@@ -95,7 +79,7 @@
 
 	<bean id="retriever2"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
-		<property name="eventSearcher" ref="searcher1" />
+		<property name="eventSearcher" ref="searcher" />
 		<property name="eventFilter" ref="filter2b" />
 		<property name="eventRanker" ref="ranker0" />
 		<property name="eventSelector" ref="selector0" />
