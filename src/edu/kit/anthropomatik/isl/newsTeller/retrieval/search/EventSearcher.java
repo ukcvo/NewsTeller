@@ -1,5 +1,7 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.search;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,15 +70,12 @@ public class EventSearcher {
 		
 		if (events.size() > maxNumberOfEvents) {
 			// throw away some of the events to make further processing faster
-			Set<NewsEvent> filteredEvents = new HashSet<NewsEvent>();
-			for (NewsEvent e : events) {
-				filteredEvents.add(e);
-				if (filteredEvents.size() == maxNumberOfEvents)
-					break;
-			}
+			List<NewsEvent> eventsAsList = new ArrayList<NewsEvent>(events);
+			Collections.shuffle(eventsAsList);
 			if (log.isDebugEnabled())
-				log.debug(String.format("found %d events, selected first %d for further processing", events.size(), filteredEvents.size()));
-			events = filteredEvents;
+				log.debug(String.format("found %d events, selecting first %d for further processing", events.size(), maxNumberOfEvents));
+			events = new HashSet<NewsEvent>(eventsAsList.subList(0, maxNumberOfEvents));
+			
 		}
 		
 		return events;
