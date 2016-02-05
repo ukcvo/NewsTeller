@@ -67,4 +67,29 @@ public class EventSearcherTest {
 		Set<NewsEvent> result = searcher.findEvents(keywords, userModel);
 		assertTrue(result.size() == 211);
 	}
+	
+	@Test
+	public void shouldReturn52Events() {
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(new Keyword("Rafael Nadal"));
+		Set<NewsEvent> result = searcher.findEvents(keywords, userModel);
+		assertTrue(result.size() == 52);
+	}
+	
+	@Test
+	public void shouldReturn50Events() {
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(new Keyword("Roger Federer"));
+		Set<NewsEvent> result = searcher.findEvents(keywords, userModel);
+		assertTrue(result.size() == 50);
+	}
+	
+	@Test
+	public void shouldReturn95EventsForTwoKeywordQuery() {
+		List<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(new Keyword("Rafael Nadal"));
+		keywords.add(new Keyword("Roger Federer"));
+		Set<NewsEvent> result = searcher.findEvents(keywords, userModel);
+		assertTrue(result.size() == 95);
+	}
 }

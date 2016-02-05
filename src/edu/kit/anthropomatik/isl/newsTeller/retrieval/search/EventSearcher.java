@@ -57,12 +57,13 @@ public class EventSearcher {
 			Util.stemKeyword(keyword);
 			String keywordRegex = keyword.getStemmedRegex();
 			String bifContainsString = keyword.getBifContainsString();
-			events.addAll(ksAdapter.runSingleVariableEventQuery(
+			List<NewsEvent> keywordEvents = ksAdapter.runSingleVariableEventQuery(
 					standardSparqlQuery.replace(Util.PLACEHOLDER_BIF_CONTAINS, bifContainsString).replace(Util.PLACEHOLDER_KEYWORD, keywordRegex), 
-					Util.VARIABLE_EVENT, 5000L));
-			if (events.isEmpty())
-				events.addAll(ksAdapter.runSingleVariableEventQuery(
-						fallbackSparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keywordRegex), Util.VARIABLE_EVENT, 5000L));
+					Util.VARIABLE_EVENT, 6000L);
+			if (keywordEvents.isEmpty())
+				keywordEvents = ksAdapter.runSingleVariableEventQuery(
+						fallbackSparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keywordRegex), Util.VARIABLE_EVENT, 6000L);
+			events.addAll(keywordEvents);
 		}
 		
 		if (events.size() > maxNumberOfEvents) {
