@@ -132,8 +132,8 @@
 		<property name="doSequentialSearcherTest" value="false" />
 		<property name="doParallelSearcherTest" value="false" />
 		<property name="doParallelSparqlTest" value="false" />
-		<property name="doSequentialFilterTest" value="false" />
-		<property name="doParallelFilterTest" value="true" />
+		<property name="doSequentialFilterTest" value="true" />
+		<property name="doParallelFilterTest" value="false" />
 		<property name="doFeatureTest" value="false" />
 		<property name="doDownloadTest" value="false" />
 		<property name="doClassifierTest" value="false" />
@@ -141,7 +141,7 @@
 		<property name="doBulkMentionTest" value="false"/>
 
 
-		<property name="maxNumberOfEvents" value="0" />
+		<property name="maxNumberOfEvents" value="500" />
 		<property name="numberOfRepetitions" value="1" />
 
 	</bean>
