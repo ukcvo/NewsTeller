@@ -805,7 +805,7 @@ public class KnowledgeStoreAdapter {
 				return new KSMention(mentionURI);
 			}
 			List<Character> sentenceDelimiters = Arrays.asList('.', '!', '?');
-			List<Character> skipChars = Arrays.asList(' ', '\n', '\t', '\"');
+			List<Character> skipChars = Arrays.asList(' ', '\n', '\t', '\"', ']', '\'', '|');
 			while ((startIdx > 0) && (!sentenceDelimiters.contains(originalText.charAt(startIdx - 1))))
 				startIdx--;
 			while (skipChars.contains(originalText.charAt(startIdx)))

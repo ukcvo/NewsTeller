@@ -147,6 +147,14 @@ public class KnowledgeStoreAdapterTest {
 	}
 	
 	@Test
+	public void shouldReturnCorrectSentenceForMentionSpecialChars() {
+		String expectedResult = "The European Union presidency says that air traffic over Europe could return to about 50 percent of its normal level on Monday, if weather forecasts confirm that skies over the continent are clearing of volcanic ash.";
+		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Half_of_Europe's_flights_could_take_off_Monday,_EU_says"));
+		String retrievedSentence = ksAdapter.retrieveSentenceFromMention("http://en.wikinews.org/wiki/Half_of_Europe's_flights_could_take_off_Monday,_EU_says#char=372,380");
+		assertTrue(expectedResult.equals(retrievedSentence));
+	}
+	
+	@Test
 	public void shouldReturnCorrectPhraseFromMention() {
 		String expectedResult = "videos uploaded by their users";
 		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Movie_'The_Assassination_of_Jesse_James'_leaked_on_the_internet"));
