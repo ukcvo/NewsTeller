@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	
+	<!-- filters -->
+	<bean id="r_removeStringFilter" class="weka.filters.unsupervised.attribute.RemoveType">
+		<property name="options">
+			<array>
+				<value>-T</value>
+				<value>string</value>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="r_dummyFilter" class="weka.filters.AllFilter" />
+
+	<!-- feature selection -->
+	
+	
+	<!-- classifiers -->
+	<bean id="r_adaBoost" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.meta.AdaBoostM1">
+				<property name="classifier">
+					<bean class="weka.classifiers.trees.J48" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_adaBoostResampling" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.meta.AdaBoostM1">
+				<property name="useResampling" value="true" />
+				<property name="classifier">
+					<bean class="weka.classifiers.trees.J48" />
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_MLP" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron" />
+		</property>
+	</bean>
+
+	<bean id="r_MLP2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_MLP3" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron">
+				<property name="validationSetSize" value="10" />
+				<property name="decay" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_kNN" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.MultiFilter">
+				<property name="filters">
+					<array>
+						<ref bean="r_removeStringFilter" />
+						<bean class="weka.filters.unsupervised.attribute.Normalize" />
+					</array>
+				</property>
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.lazy.IBk">
+				<property name="options">
+					<array>
+						<value>-K</value>
+						<value>10</value>	<!-- max k = 10 -->
+						<value>-X</value>	<!-- find optimal k doing cross-validation -->
+					</array>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_kNN2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.MultiFilter">
+				<property name="filters">
+					<array>
+						<ref bean="r_removeStringFilter" />
+						<bean class="weka.filters.unsupervised.attribute.Normalize" />
+					</array>
+				</property>
+			</bean>
+		</property>
+		<property name="classifier">
+			<bean class="weka.classifiers.lazy.IBk">
+				<property name="options">
+					<array>
+						<value>-K</value>
+						<value>10</value>	<!-- max k = 10 -->
+						<value>-X</value>	<!-- find optimal k doing cross-validation -->
+						<value>-I</value>	<!-- inverse exponential distance weighting -->
+					</array>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_decisionTree" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.J48" />
+		</property>
+	</bean>
+
+	<bean id="r_decisionTree2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.J48">
+				<property name="reducedErrorPruning" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_decisionTree3" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.J48">
+				<property name="unpruned" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_cart" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.SimpleCart" />
+		</property>
+	</bean>
+
+	<bean id="r_cart2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.SimpleCart">
+				<property name="useOneSE" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_randomForest" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numExecutionSlots" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_randomForest2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numTrees" value="20" />
+				<property name="numExecutionSlots" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+</beans>

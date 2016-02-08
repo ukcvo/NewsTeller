@@ -300,6 +300,7 @@ public class UsabilityFeatureExtractor {
 	}
 	// endregion
 	
+	// region filterExistingDataSet
 	private void filterExistingDataSet() {
 		
 		try {
@@ -357,6 +358,7 @@ public class UsabilityFeatureExtractor {
 		}
 		
 	}
+	// endregion
 	
 	public void run() {
 		this.ksAdapter.openConnection();

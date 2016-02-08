@@ -673,5 +673,19 @@ public class Util {
 	public static String getRelationName(String key, String value, String keyword) {
 		return String.format("%s-%s-%s", key, value, keyword);
 	}
+	
+	/**
+	 * Shortcut for binary logarithm.
+	 */
+	public static double log2(double x) {
+		return Math.log(x) / Math.log(2);
+	}
+	
+	/**
+	 * Convert the given value from the regression back to a rank.
+	 */
+	public static double regressionValueToRank(double regressionValue) {
+		return log2(regressionValue + 1.0);
+	}
 	// endregion
 }

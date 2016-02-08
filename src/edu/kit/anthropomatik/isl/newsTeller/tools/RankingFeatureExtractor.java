@@ -41,16 +41,7 @@ public class RankingFeatureExtractor {
 
 	private static Log log = LogFactory.getLog(UsabilityFeatureExtractor.class);
 
-	private Map<List<Keyword>, Map<BenchmarkEvent, GroundTruth>> benchmark; // mapping
-																			// from
-																			// keywords
-																			// to
-																			// events
-																			// and
-																			// corresponding
-																			// labels
-																			// /
-																			// ratings
+	private Map<List<Keyword>, Map<BenchmarkEvent, GroundTruth>> benchmark; // mapping from keywords to events and corresponding groundTruth info
 
 	private Set<String> eventURIs;
 
@@ -60,6 +51,8 @@ public class RankingFeatureExtractor {
 
 	private KnowledgeStoreAdapter ksAdapter;
 
+	private boolean doAddEventInformation;
+	
 	public void setFeatures(List<RankingFeature> features) {
 		this.features = features;
 	}
@@ -72,6 +65,10 @@ public class RankingFeatureExtractor {
 		this.ksAdapter = ksAdapter;
 	}
 
+	public void setDoAddEventInformation(boolean doAddEventInformation) {
+		this.doAddEventInformation = doAddEventInformation;
+	}
+	
 	public RankingFeatureExtractor(String configFileName) {
 		Map<String, List<Keyword>> benchmarkKeywords = Util.readBenchmarkConfigFile(configFileName);
 		this.benchmark = new HashMap<List<Keyword>, Map<BenchmarkEvent, GroundTruth>>();
@@ -95,6 +92,11 @@ public class RankingFeatureExtractor {
 
 		attributes.add(new Attribute(Util.ATTRIBUTE_RELEVANCE));
 
+		if (this.doAddEventInformation) {
+			attributes.add(new Attribute(Util.ATTRIBUTE_URI, (ArrayList<String>) null));
+			attributes.add(new Attribute(Util.ATTRIBUTE_FILE, (ArrayList<String>) null));
+		}
+		
 		int numberOfExpectedExamples = this.benchmark.size();
 		Instances dataSet = new Instances("rankingTest", attributes, numberOfExpectedExamples);
 		dataSet.setClass(dataSet.attribute(Util.ATTRIBUTE_RELEVANCE));
@@ -138,15 +140,22 @@ public class RankingFeatureExtractor {
 
 				BenchmarkEvent event = innerEntry.getKey();
 				GroundTruth gt = innerEntry.getValue();
+				String eventURI = event.getEventURI();
+				String fileName = event.getFileName();
 				double relevance = gt.getRegressionRelevanceValue();
 				UserModel userModel = new DummyUserModel();
 
-				double[] values = new double[this.features.size() + 1];
+				double[] values = new double[dataSet.numAttributes()];
 				for (int i = 0; i < this.features.size(); i++) {
 					RankingFeature f = features.get(i);
-					values[i] = f.getValue(event.getEventURI(), keywords, userModel);
+					values[i] = f.getValue(eventURI, keywords, userModel);
 				}
 				values[this.features.size()] = relevance;
+				
+				if (this.doAddEventInformation) {
+					values[this.features.size() + 1] = dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI);
+					values[this.features.size() + 2] = dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName);
+				}
 
 				Instance instance = new DenseInstance(1.0, values);
 				dataSet.add(instance);

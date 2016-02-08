@@ -8,6 +8,7 @@
 	<import resource="usabilityFeatures.xml" />
 	<import resource="rankingFeatures.xml" />
 	<import resource="weka.xml" />
+	<import resource="wekaRegression.xml" />
 
 	<bean id="ksAdapter"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
@@ -300,6 +301,17 @@
 		<property name="configFileName" value="resources/benchmark/rankingFilteredQueriesMultipleKeywordsOnly.csv" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="delimiter" value="," />
+	</bean>
+
+	<bean id="rankingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RankingBenchmark">
+		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRanking.xrff" />
+		<constructor-arg name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv" />
+		<property name="regressors">
+			<map>
+				<entry key="RandomForest" value-ref="r_randomForest" />
+			</map>
+		</property>
+		<property name="doFileBasedRegression" value="true" />
 	</bean>
 
 </beans>

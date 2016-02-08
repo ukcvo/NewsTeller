@@ -130,6 +130,7 @@
 		<property name="ksAdapter" ref="ksAdapter"/>
 		<property name="outputFileName" value="resources/benchmark/dataSetRanking.xrff"/>
 		<property name="features" ref="rankingFeatureList"/>
+		<property name="doAddEventInformation" value="true"/>
 	</bean>
 
 </beans>
