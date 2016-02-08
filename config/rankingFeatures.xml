@@ -63,4 +63,68 @@
 		</property>
 	</bean>
 	
+	<!-- sparql count features -->
+	<bean id="numberOfKeywordEntitiesFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfKeywordEntitiesAvg" />
+		<property name="valueName" value="numberOfKeywordEntities" />
+		<property name="aggregationType" value="0" />
+	</bean>
+	
+	<bean id="numberOfKeywordEntitiesFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfKeywordEntitiesMin" />
+		<property name="valueName" value="numberOfKeywordEntities" />
+		<property name="aggregationType" value="1" />
+	</bean>
+	
+	<bean id="numberOfKeywordEntitiesFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfKeywordEntitiesMax" />
+		<property name="valueName" value="numberOfKeywordEntities" />
+		<property name="aggregationType" value="2" />
+	</bean>
+	
+	<bean id="numberOfDbpediaEntitiesFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfDbpediaEntitiesAvg" />
+		<property name="valueName" value="numberOfDbpediaEntities" />
+		<property name="aggregationType" value="0" />
+	</bean>
+	
+	<bean id="numberOfDbpediaEntitiesFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfDbpediaEntitiesMin" />
+		<property name="valueName" value="numberOfDbpediaEntities" />
+		<property name="aggregationType" value="1" />
+	</bean>
+	
+	<bean id="numberOfDbpediaEntitiesFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfDbpediaEntitiesMax" />
+		<property name="valueName" value="numberOfDbpediaEntities" />
+		<property name="aggregationType" value="2" />
+	</bean>
+	
+	<bean id="numberOfEntitiesFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfEntitiesAvg" />
+		<property name="valueName" value="numberOfEntities" />
+		<property name="aggregationType" value="0" />
+	</bean>
+	
+	<bean id="numberOfEntitiesFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfEntitiesMin" />
+		<property name="valueName" value="numberOfEntities" />
+		<property name="aggregationType" value="1" />
+	</bean>
+	
+	<bean id="numberOfEntitiesFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfEntitiesMax" />
+		<property name="valueName" value="numberOfEntities" />
+		<property name="aggregationType" value="2" />
+	</bean>
+	
 </beans>

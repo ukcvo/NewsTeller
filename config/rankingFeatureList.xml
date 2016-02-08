@@ -19,11 +19,24 @@
 		<ref bean="sentenceLengthFeatureCharAvg" />
 		<ref bean="sentenceLengthFeatureCharMin" />
 		<ref bean="sentenceLengthFeatureCharMax" />
+		
 		<ref bean="embeddingsFeatureAvg" />
 		<ref bean="embeddingsFeatureMin" />
 		<ref bean="embeddingsFeatureMax" />
 		<ref bean="embeddingsFeatureGeom" />
+		
 		<ref bean="sentenceContainsQuotationFeature" />
+		
+		<ref bean="numberOfKeywordEntitiesFeatureAvg" />
+		<ref bean="numberOfKeywordEntitiesFeatureMin" />
+		<ref bean="numberOfKeywordEntitiesFeatureMax" />
+		<ref bean="numberOfDbpediaEntitiesFeatureAvg" />
+		<ref bean="numberOfDbpediaEntitiesFeatureMin" />
+		<ref bean="numberOfDbpediaEntitiesFeatureMax" />
+		<ref bean="numberOfEntitiesFeatureAvg" />
+		<ref bean="numberOfEntitiesFeatureMin" />
+		<ref bean="numberOfEntitiesFeatureMax" />
+		
 	</util:list>
 	
 </beans>

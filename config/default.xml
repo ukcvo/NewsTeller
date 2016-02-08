@@ -126,7 +126,8 @@
 	</bean>
 
 	<bean id="rankingFeatureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.RankingFeatureExtractor">
-		<constructor-arg value="resources/benchmark/rankingFilteredQueries.csv"/>
+		<constructor-arg name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv"/>
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics.qry" />
 		<property name="ksAdapter" ref="ksAdapter"/>
 		<property name="outputFileName" value="resources/benchmark/dataSetRanking.xrff"/>
 		<property name="features" ref="rankingFeatureList"/>

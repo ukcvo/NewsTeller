@@ -53,6 +53,8 @@ public class RankingFeatureExtractor {
 
 	private boolean doAddEventInformation;
 	
+	private String eventStatisticsQuery;
+	
 	public void setFeatures(List<RankingFeature> features) {
 		this.features = features;
 	}
@@ -69,7 +71,7 @@ public class RankingFeatureExtractor {
 		this.doAddEventInformation = doAddEventInformation;
 	}
 	
-	public RankingFeatureExtractor(String configFileName) {
+	public RankingFeatureExtractor(String configFileName, String eventStatisticsQueryFileName) {
 		Map<String, List<Keyword>> benchmarkKeywords = Util.readBenchmarkConfigFile(configFileName);
 		this.benchmark = new HashMap<List<Keyword>, Map<BenchmarkEvent, GroundTruth>>();
 		this.eventURIs = new HashSet<String>();
@@ -80,6 +82,8 @@ public class RankingFeatureExtractor {
 			for (BenchmarkEvent e : fileContent.keySet())
 				this.eventURIs.add(e.getEventURI());
 		}
+		
+		this.eventStatisticsQuery = Util.readStringFromFile(eventStatisticsQueryFileName);
 	}
 
 	private Instances createDataSetSkeleton() {
@@ -132,6 +136,7 @@ public class RankingFeatureExtractor {
 			ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, keywords);
 			Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", keywords.get(0).getWord())));
 			ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
+			ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, keywords);
 			if (log.isInfoEnabled())
 				log.info("...queries done");
 			

@@ -1,0 +1,18 @@
+SELECT ?event (COUNT(?entity) AS ?numberOfEntities) (COUNT(DISTINCT ?dbpediaEntity) AS ?numberOfDbpediaEntities) (COUNT(DISTINCT ?keywordEntity) AS ?numberOfKeywordEntities)
+WHERE
+{
+	VALUES ?event { *keys* } .
+	{ ?event sem:hasActor|sem:hasPlace ?entity } UNION
+	{ ?event sem:hasActor|sem:hasPlace ?dbpediaEntity .
+	GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en>
+	{
+		?dbpediaEntity rdfs:label ?label
+	} } UNION
+	{ ?event sem:hasActor|sem:hasPlace ?keywordEntity .
+	GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en>
+	{
+		?keywordEntity rdfs:label ?label .
+		FILTER(REGEX(STR(?label),"*k*", "i"))
+	} }
+}
+GROUP BY ?event
