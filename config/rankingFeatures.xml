@@ -20,8 +20,10 @@
 		<ref bean="embeddingsFeatureMin" />
 		<ref bean="embeddingsFeatureMax" />
 		<ref bean="embeddingsFeatureGeom" />
+		<ref bean="sentenceContainsQuotationFeature" />
 	</util:list>
 
+	<!-- sentence length features -->
 	<bean id="sentenceLengthFeatureWordAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceLengthFeature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceLengthWordAvg" />
@@ -64,32 +66,46 @@
 		<property name="aggregationType" value="2" />
 	</bean>
 	
+	<!-- embeddings features -->
 	<bean id="embeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/glove.6B.50d.txt" />
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddingsAvg" />
 		<property name="aggregationType" value="0" />
 	</bean>
 	
 	<bean id="embeddingsFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/glove.6B.50d.txt" />
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddingsMin" />
 		<property name="aggregationType" value="1" />
 	</bean>
 	
 	<bean id="embeddingsFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/glove.6B.50d.txt" />
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddingsMax" />
 		<property name="aggregationType" value="2" />
 	</bean>
 	
 	<bean id="embeddingsFeatureGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/glove.6B.50d.txt" />
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddingsGeom" />
 		<property name="aggregationType" value="3" />
+	</bean>
+	
+	<!-- sentence contains characters features -->
+	<bean id="sentenceContainsQuotationFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsQuotation" />
+		<property name="chars">
+			<list>
+				<value>"</value>
+				<value>'</value>
+				<value>`</value>
+			</list>
+		</property>
 	</bean>
 	
 </beans>
