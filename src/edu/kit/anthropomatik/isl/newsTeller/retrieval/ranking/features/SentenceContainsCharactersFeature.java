@@ -20,7 +20,7 @@ public class SentenceContainsCharactersFeature extends RankingFeature {
 		
 		double result = 0.0;
 		
-		Set<String> sentences = new HashSet<String>(ksAdapter.retrieveSentencesfromEvent(eventURI, keywords.get(0).getWord()));
+		Set<String> sentences = new HashSet<String>(ksAdapter.retrieveSentencesFromEvent(eventURI, keywords.get(0).getWord()));
 		
 		for (String sentence : sentences) {
 			double counter = 0.0;

@@ -25,6 +25,12 @@
 		<ref bean="embeddingsFeatureMax" />
 		<ref bean="embeddingsFeatureGeom" />
 		
+		<ref bean="embeddingsFeatureTitleAvg" />
+		<ref bean="embeddingsFeatureTitleMin" />
+		<ref bean="embeddingsFeatureTitleMax" />
+		<ref bean="embeddingsFeatureTitleGeom" />
+		
+		
 		<ref bean="sentenceContainsQuotationFeature" />
 		
 		<ref bean="numberOfKeywordEntitiesFeatureAvg" />

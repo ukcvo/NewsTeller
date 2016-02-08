@@ -21,6 +21,8 @@ import org.openrdf.model.impl.URIImpl;
 import org.openrdf.query.BindingSet;
 import org.springframework.util.StringUtils;
 
+import com.google.common.collect.Sets;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
@@ -319,24 +321,26 @@ public class KnowledgeStoreAdapter {
 	}
 	// endregion
 	
-	// region mention property
-	private class MentionPropertyWorker implements Runnable {
+	// region property query in general
+	private class PropertyWorker implements Runnable {
 
 		private Set<URI> uriSet;
 		private Set<String> propertyURIs;
 		private ConcurrentMap<String, ConcurrentMap<String, Set<String>>> propertyMap;
+		private URI resourceType;
 		
-		public MentionPropertyWorker(Set<URI> uriSet, Set<String> propertyURIs, ConcurrentMap<String, ConcurrentMap<String, Set<String>>> propertyMap) {
+		public PropertyWorker(Set<URI> uriSet, Set<String> propertyURIs, ConcurrentMap<String, ConcurrentMap<String, Set<String>>> propertyMap, URI resourceType) {
 			this.uriSet = uriSet;
 			this.propertyURIs = propertyURIs;
 			this.propertyMap = propertyMap;
+			this.resourceType = resourceType;
 		}
 		
 		@Override
 		public void run() {
 			try {
 				Session session = knowledgeStore.newSession();
-				Stream<Record> stream = session.retrieve(KS.MENTION).ids(uriSet).timeout(10000L).exec();
+				Stream<Record> stream = session.retrieve(this.resourceType).ids(uriSet).timeout(10000L).exec();
 				List<Record> records = stream.toList();
 				stream.close();
 				
@@ -359,17 +363,14 @@ public class KnowledgeStoreAdapter {
 		}
 		
 	}
-	
-	/**
-	 * Runs a key-value mentionProperty query for a set of properties. Stores the resulting mentionURI-propertyValue pairs in the internal cache.
-	 */
-	public void runKeyValueMentionPropertyQuery(Set<String> propertyURIs, String relationName, Set<String> mentionURIs) {
+	// internal worker for any kind of property query (both resource and mention layer)
+	private void runKeyValuePropertyQuery(Set<String> propertyURIs, String relationName, Set<String> resourceURIs, URI resourceType) {
 		if (!isConnectionOpen) {
 			if (log.isWarnEnabled())
 				log.warn("Trying to access KnowledgeStore without having an open connection. Request ignored.");
 			return;
 		}
-		if (mentionURIs.isEmpty()) {
+		if (resourceURIs.isEmpty()) {
 			if (log.isWarnEnabled())
 				log.warn("Empty set of mentionURIs. Request ignored.");
 			return;
@@ -394,7 +395,7 @@ public class KnowledgeStoreAdapter {
 		List<Set<URI>> queryURISets = new ArrayList<Set<URI>>();
 		Set<URI> currentSet = new HashSet<URI>();
 		int currentLength = 0;
-		for (String mentionURI : mentionURIs) {
+		for (String mentionURI : resourceURIs) {
 			if (currentLength + mentionURI.length() > 6000) {
 				queryURISets.add(currentSet);
 				currentSet = new HashSet<URI>();
@@ -408,7 +409,7 @@ public class KnowledgeStoreAdapter {
 		List<Future<?>> futures = new ArrayList<Future<?>>();
 		
 		for (Set<URI> uriSet : queryURISets) {
-			MentionPropertyWorker w = new MentionPropertyWorker(uriSet, propertyURIs, propertyMap);
+			PropertyWorker w = new PropertyWorker(uriSet, propertyURIs, propertyMap, resourceType);
 			futures.add(this.submit(w));
 		}
 		
@@ -427,6 +428,21 @@ public class KnowledgeStoreAdapter {
 			this.sparqlCache.put(relationName + propertyURI, propertyMap.get(propertyURI));
 		}
 		
+	}
+	// endregion
+		
+	// region mention property
+	/**
+	 * Runs a key-value mentionProperty query for a set of properties. Stores the resulting mentionURI-propertyValue pairs in the internal cache.
+	 */
+	public void runKeyValueMentionPropertyQuery(Set<String> propertyURIs, String relationName, Set<String> mentionURIs) {
+		runKeyValuePropertyQuery(propertyURIs, relationName, mentionURIs, KS.MENTION);
+	}
+	// endregion
+	
+	// region resource titles
+	public void runKeyValueResourceTitleQuery(Set<String> resourceURIs) {
+		runKeyValuePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TITLE), Util.RELATION_NAME_RESOURCE_TITLE, resourceURIs, KS.RESOURCE);
 	}
 	// endregion
 	
@@ -540,6 +556,20 @@ public class KnowledgeStoreAdapter {
 		for (Set<String> set : allSets)
 			result.addAll(set);
 		return result;
+	}
+	
+	/**
+	 * Returns all titles of the resources in which the given event was mentioned.
+	 */
+	public Set<String> getResourceTitlesFromEvent(String eventURI, String dummyKeyword) {
+		Set<String> mentionURIs = getBufferedValues(Util.getRelationName("event", "mention", dummyKeyword), eventURI);
+		Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(mentionURIs);
+		Set<String> titles = new HashSet<String>();
+		
+		for (String resourceURI : resourceURIs)
+			titles.addAll(getBufferedValues(Util.RELATION_NAME_RESOURCE_TITLE + Util.RESOURCE_PROPERTY_TITLE, resourceURI));
+		
+		return titles;
 	}
 	// endregion
 
@@ -851,7 +881,7 @@ public class KnowledgeStoreAdapter {
 	 * sentence from the original resource.
 	 */
 	public String retrieveSentencefromEvent(String eventURI, String dummyKeyword) {
-		List<String> results = retrieveSentencesfromEvent(eventURI, dummyKeyword);
+		List<String> results = retrieveSentencesFromEvent(eventURI, dummyKeyword);
 		if (results.isEmpty())
 			return "";
 		else
@@ -862,7 +892,7 @@ public class KnowledgeStoreAdapter {
 	 * Given the eventURI, returns a list of all sentences mentioning this
 	 * event.
 	 */
-	public List<String> retrieveSentencesfromEvent(String eventURI, String dummyKeyword) {
+	public List<String> retrieveSentencesFromEvent(String eventURI, String dummyKeyword) {
 		return retrievePhrasesFromEntity(eventURI, true, dummyKeyword);
 	}
 	// endregion

@@ -33,7 +33,7 @@ public class SentenceLengthFeature extends RankingFeature {
 		
 		double result = (this.aggregationType == AGGREGATION_TYPE_MIN) ? Double.POSITIVE_INFINITY : 0;
 		
-		List<String> sentences = ksAdapter.retrieveSentencesfromEvent(eventURI, keywords.get(0).getWord());
+		List<String> sentences = ksAdapter.retrieveSentencesFromEvent(eventURI, keywords.get(0).getWord());
 		
 		for (String sentence : sentences) {
 			double sentenceResult = this.useWordCount ? sentence.split(" ").length : sentence.length();

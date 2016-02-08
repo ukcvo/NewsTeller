@@ -137,6 +137,7 @@ public class RankingFeatureExtractor {
 			Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", keywords.get(0).getWord())));
 			ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
 			ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, keywords);
+			ksAdapter.runKeyValueResourceTitleQuery(resourceURIs);
 			if (log.isInfoEnabled())
 				log.info("...queries done");
 			

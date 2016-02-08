@@ -30,6 +30,7 @@ public class EmbeddingsFeatureTest {
 	private static EmbeddingsFeature minFeature;
 	private static EmbeddingsFeature maxFeature;
 	private static EmbeddingsFeature geomFeature;
+	private static EmbeddingsFeature titleFeature;
 	
 	private static KnowledgeStoreAdapter ksAdapter;
 	
@@ -61,10 +62,14 @@ public class EmbeddingsFeatureTest {
 		resourceTextMap.put("mention-3", Sets.newHashSet("The chicken crossed the road."));
 		resourceTextMap.put("mention-4", Sets.newHashSet(""));
 		
+		ConcurrentMap<String, Set<String>> resourceTitleMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceTitleMap.put("mention-1", Sets.newHashSet("Mount Merapi volcano erupts"));
+		resourceTitleMap.put("mention-2", Sets.newHashSet("Most European flights cancelled"));
+		
 		
 		sparqlCache.put(Util.getRelationName("event", "mention", "volcano"), eventMentionMap);
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
-		
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TITLE + Util.RESOURCE_PROPERTY_TITLE, resourceTitleMap);
 		
 		Keyword k = new Keyword("volcano");
 		Util.stemKeyword(k);
@@ -75,6 +80,7 @@ public class EmbeddingsFeatureTest {
 		minFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureMin");
 		maxFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureMax");
 		geomFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureGeom");
+		titleFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureTitleAvg");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
@@ -146,4 +152,15 @@ public class EmbeddingsFeatureTest {
 		assertTrue(Math.abs(value - 0.3380336632449515) < Util.EPSILON);
 	}
 	
+	@Test
+	public void shouldReturnZeroPointEightNineTitle() {
+		double value = titleFeature.getValue("event-1", keywords, userModel);
+		assertTrue(Math.abs(value - 0.8953319644352975) < Util.EPSILON);
+	}
+	
+	@Test
+	public void shouldReturnZeroPointTwoFiveTitle() {
+		double value = titleFeature.getValue("event-2", keywords, userModel);
+		assertTrue(value == 0.2549590756690914);
+	}
 }

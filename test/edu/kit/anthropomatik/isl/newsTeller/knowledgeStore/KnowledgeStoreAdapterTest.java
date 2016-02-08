@@ -134,7 +134,7 @@ public class KnowledgeStoreAdapterTest {
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
 		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
 		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race"));
-		Set<String> retrievedSentences = new HashSet<String>(ksAdapter.retrieveSentencesfromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", "keyword"));
+		Set<String> retrievedSentences = new HashSet<String>(ksAdapter.retrieveSentencesFromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", "keyword"));
 		assertTrue(expectedResults.equals(retrievedSentences));
 	}
 	
@@ -259,5 +259,13 @@ public class KnowledgeStoreAdapterTest {
 		ksAdapter.runKeyValueSparqlQuery("SELECT ?event ?entity WHERE { VALUES ?event { *keys* } . ?event sem:hasActor|sem:hasPlace ?entity}", uris, keywords);
 		Set<String> result = ksAdapter.getBufferedValues("event-entity-test", "http://en.wikinews.org/wiki/Mexican_president_defends_emigration#ev17");
 		assertTrue(result.isEmpty());
+	}
+	
+	@Test
+	public void shouldReturnCorrectResourceTitle() {
+		String expected = "Mexican president defends emigration";
+		ksAdapter.runKeyValueResourceTitleQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Mexican_president_defends_emigration"));
+		String result = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_TITLE + Util.RESOURCE_PROPERTY_TITLE, "http://en.wikinews.org/wiki/Mexican_president_defends_emigration");
+		assertTrue(result.equals(expected));
 	}
 }

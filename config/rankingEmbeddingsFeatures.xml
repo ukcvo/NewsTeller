@@ -9,12 +9,13 @@
 
 	<import resource="test.xml"/>
 
-	<!-- embeddings features -->
+	<!-- embeddings features: sentence -->
 	<bean id="embeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
 		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddingsAvg" />
 		<property name="aggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 	
 	<bean id="embeddingsFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
@@ -22,6 +23,7 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddingsMin" />
 		<property name="aggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 	
 	<bean id="embeddingsFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
@@ -29,6 +31,7 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddingsMax" />
 		<property name="aggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 	
 	<bean id="embeddingsFeatureGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
@@ -36,6 +39,40 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddingsGeom" />
 		<property name="aggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 	
+	
+	<!-- embeddings features: title -->
+	<bean id="embeddingsFeatureTitleAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddingsTitleAvg" />
+		<property name="aggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+	
+	<bean id="embeddingsFeatureTitleMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddingsTitleMin" />
+		<property name="aggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+	
+	<bean id="embeddingsFeatureTitleMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddingsTitleMax" />
+		<property name="aggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+	
+	<bean id="embeddingsFeatureTitleGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddingsTitleGeom" />
+		<property name="aggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
 </beans>

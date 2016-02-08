@@ -21,6 +21,8 @@ import edu.stanford.nlp.simple.Sentence;
 
 public class EmbeddingsFeature extends RankingFeature {
 
+	private static Log log = LogFactory.getLog(EmbeddingsFeature.class);
+	
 	private static final int AGGREGATION_TYPE_AVG = 0;
 	private static final int AGGREGATION_TYPE_MIN = 1;
 	private static final int AGGREGATION_TYPE_MAX = 2;
@@ -28,12 +30,16 @@ public class EmbeddingsFeature extends RankingFeature {
 	
 	private int aggregationType;
 	
-	private static Log log = LogFactory.getLog(EmbeddingsFeature.class);
+	private boolean useTitleInsteadOfSentence;
 	
 	private WordVectors wordVectors;
 	
 	public void setAggregationType(int aggregationType) {
 		this.aggregationType = aggregationType;
+	}
+	
+	public void setUseTitleInsteadOfSentence(boolean useTitleInsteadOfSentence) {
+		this.useTitleInsteadOfSentence = useTitleInsteadOfSentence;
 	}
 	
 	public EmbeddingsFeature(String embeddingsFileName) {
@@ -94,7 +100,12 @@ public class EmbeddingsFeature extends RankingFeature {
 		// TODO: can make this also applicable to userModel.getInterest() --> boolean flag in class
 		List<Keyword> keywordsToUse = keywords;
 		
-		Set<String> sentences = new HashSet<String>(ksAdapter.retrieveSentencesfromEvent(eventURI, keywords.get(0).getWord()));
+		Set<String> sentences = new HashSet<String>();
+		if (this.useTitleInsteadOfSentence) // use titles
+			sentences.addAll(ksAdapter.getResourceTitlesFromEvent(eventURI, keywords.get(0).getWord()));
+		else // use actual sentences
+			sentences.addAll(ksAdapter.retrieveSentencesFromEvent(eventURI, keywords.get(0).getWord()));
+		
 		List<double[]> sentenceVectors = new ArrayList<double[]>();
 		for (String sentence : sentences) {
 			if (sentence.isEmpty())

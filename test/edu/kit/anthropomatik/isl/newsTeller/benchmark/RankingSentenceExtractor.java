@@ -91,7 +91,7 @@ public class RankingSentenceExtractor {
 			for (BenchmarkEvent event : fileMap.keySet()) {
 				Set<String> sentences = new HashSet<String>();
 				for (Keyword k : keywords) 
-					sentences.addAll(ksAdapter.retrieveSentencesfromEvent(event.getEventURI(), k.getWord()));
+					sentences.addAll(ksAdapter.retrieveSentencesFromEvent(event.getEventURI(), k.getWord()));
 				
 				localOutputMap.put(event, new ArrayList<String>(sentences));
 			}

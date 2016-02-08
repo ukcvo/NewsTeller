@@ -98,6 +98,8 @@ public class Util {
 	public static final String MENTION_PROPERTY_PRED = "http://dkm.fbk.eu/ontologies/newsreader#pred";
 	public static final String MENTION_PROPERTY_ANCHOR_OF = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf";
 	
+	public static final String RESOURCE_PROPERTY_TITLE = "http://purl.org/dc/terms/title";
+	
 	public static final double EPSILON = 0.00001;
 
 	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 5;
@@ -122,6 +124,7 @@ public class Util {
 	public static final String RELATION_NAME_CONSTITUENT_MENTION = "constituent-mention-";
 	public static final String RELATION_NAME_MENTION_PROPERTY = "mention-property-";
 	public static final String RELATION_NAME_RESOURCE_TEXT = "resource-text-";
+	public static final String RELATION_NAME_RESOURCE_TITLE = "resource-title-";
 		
 	// private constructor to prevent instantiation
 	private Util() {

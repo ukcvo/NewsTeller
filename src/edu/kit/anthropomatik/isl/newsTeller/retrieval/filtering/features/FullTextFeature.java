@@ -90,7 +90,7 @@ public abstract class FullTextFeature extends UsabilityFeature {
 		String arbitraryKeyword = keywords.get(0).getWord();
 		Set<String> originalTexts;
 		if (this.doOnlyUseSentence)
-			originalTexts = new HashSet<String>(ksAdapter.retrieveSentencesfromEvent(eventURI, arbitraryKeyword)); //use only sentence
+			originalTexts = new HashSet<String>(ksAdapter.retrieveSentencesFromEvent(eventURI, arbitraryKeyword)); //use only sentence
 		else
 			originalTexts = ksAdapter.retrieveOriginalTexts(eventURI, arbitraryKeyword); //use complete text
 		List<Double> appearances = checkLabels(labels, originalTexts);
