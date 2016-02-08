@@ -6,7 +6,6 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<import resource="usabilityFeatures.xml" />
-	<import resource="rankingFeatures.xml" />
 	<import resource="weka.xml" />
 	<import resource="wekaRegression.xml" />
 

@@ -70,7 +70,7 @@ public class EmbeddingsFeatureTest {
 		Util.stemKeyword(k);
 		keywords.add(k);
 		
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/rankingEmbeddingsFeatures.xml");
 		avgFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureAvg");
 		minFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureMin");
 		maxFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureMax");

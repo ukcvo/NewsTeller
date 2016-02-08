@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<import resource="test.xml"/>
+
+	<!-- embeddings features -->
+	<bean id="embeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddingsAvg" />
+		<property name="aggregationType" value="0" />
+	</bean>
+	
+	<bean id="embeddingsFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddingsMin" />
+		<property name="aggregationType" value="1" />
+	</bean>
+	
+	<bean id="embeddingsFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddingsMax" />
+		<property name="aggregationType" value="2" />
+	</bean>
+	
+	<bean id="embeddingsFeatureGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddingsGeom" />
+		<property name="aggregationType" value="3" />
+	</bean>
+	
+</beans>
