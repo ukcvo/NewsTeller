@@ -17,6 +17,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.util.StringUtils;
 
+import com.google.common.collect.Sets;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
@@ -137,7 +139,7 @@ public class RankingFeatureExtractor {
 			Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", keywords.get(0).getWord())));
 			ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
 			ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, keywords);
-			ksAdapter.runKeyValueResourceTitleQuery(resourceURIs);
+			ksAdapter.runKeyValueResourcePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TIME, Util.RESOURCE_PROPERTY_TITLE) ,resourceURIs);
 			if (log.isInfoEnabled())
 				log.info("...queries done");
 			

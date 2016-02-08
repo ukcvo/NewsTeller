@@ -264,8 +264,8 @@ public class KnowledgeStoreAdapterTest {
 	@Test
 	public void shouldReturnCorrectResourceTitle() {
 		String expected = "Mexican president defends emigration";
-		ksAdapter.runKeyValueResourceTitleQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Mexican_president_defends_emigration"));
-		String result = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_TITLE + Util.RESOURCE_PROPERTY_TITLE, "http://en.wikinews.org/wiki/Mexican_president_defends_emigration");
+		ksAdapter.runKeyValueResourcePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TITLE), Sets.newHashSet("http://en.wikinews.org/wiki/Mexican_president_defends_emigration"));
+		String result = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_PROPERTY + Util.RESOURCE_PROPERTY_TITLE, "http://en.wikinews.org/wiki/Mexican_president_defends_emigration");
 		assertTrue(result.equals(expected));
 	}
 }

@@ -43,6 +43,11 @@
 		<ref bean="numberOfEntitiesFeatureMin" />
 		<ref bean="numberOfEntitiesFeatureMax" />
 		
+		<ref bean="recencyFeatureDays" />
+		<ref bean="recencyFeatureWeeks" />
+		<ref bean="recencyFeatureMonths" />
+		<ref bean="recencyFeatureYears" />
+		
 	</util:list>
 	
 </beans>

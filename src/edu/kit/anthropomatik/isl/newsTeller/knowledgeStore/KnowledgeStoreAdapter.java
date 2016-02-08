@@ -21,8 +21,6 @@ import org.openrdf.model.impl.URIImpl;
 import org.openrdf.query.BindingSet;
 import org.springframework.util.StringUtils;
 
-import com.google.common.collect.Sets;
-
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
@@ -441,8 +439,8 @@ public class KnowledgeStoreAdapter {
 	// endregion
 	
 	// region resource titles
-	public void runKeyValueResourceTitleQuery(Set<String> resourceURIs) {
-		runKeyValuePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TITLE), Util.RELATION_NAME_RESOURCE_TITLE, resourceURIs, KS.RESOURCE);
+	public void runKeyValueResourcePropertyQuery(Set<String> propertyURIs, Set<String> resourceURIs) {
+		runKeyValuePropertyQuery(propertyURIs, Util.RELATION_NAME_RESOURCE_PROPERTY, resourceURIs, KS.RESOURCE);
 	}
 	// endregion
 	
@@ -567,7 +565,7 @@ public class KnowledgeStoreAdapter {
 		Set<String> titles = new HashSet<String>();
 		
 		for (String resourceURI : resourceURIs)
-			titles.addAll(getBufferedValues(Util.RELATION_NAME_RESOURCE_TITLE + Util.RESOURCE_PROPERTY_TITLE, resourceURI));
+			titles.addAll(getBufferedValues(Util.RELATION_NAME_RESOURCE_PROPERTY + Util.RESOURCE_PROPERTY_TITLE, resourceURI));
 		
 		return titles;
 	}

@@ -69,7 +69,7 @@ public class EmbeddingsFeatureTest {
 		
 		sparqlCache.put(Util.getRelationName("event", "mention", "volcano"), eventMentionMap);
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
-		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TITLE + Util.RESOURCE_PROPERTY_TITLE, resourceTitleMap);
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_PROPERTY + Util.RESOURCE_PROPERTY_TITLE, resourceTitleMap);
 		
 		Keyword k = new Keyword("volcano");
 		Util.stemKeyword(k);

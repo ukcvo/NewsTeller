@@ -99,6 +99,7 @@ public class Util {
 	public static final String MENTION_PROPERTY_ANCHOR_OF = "http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#anchorOf";
 	
 	public static final String RESOURCE_PROPERTY_TITLE = "http://purl.org/dc/terms/title";
+	public static final String RESOURCE_PROPERTY_TIME = "http://purl.org/dc/terms/created";
 	
 	public static final double EPSILON = 0.00001;
 
@@ -124,7 +125,7 @@ public class Util {
 	public static final String RELATION_NAME_CONSTITUENT_MENTION = "constituent-mention-";
 	public static final String RELATION_NAME_MENTION_PROPERTY = "mention-property-";
 	public static final String RELATION_NAME_RESOURCE_TEXT = "resource-text-";
-	public static final String RELATION_NAME_RESOURCE_TITLE = "resource-title-";
+	public static final String RELATION_NAME_RESOURCE_PROPERTY = "resource-property-";
 		
 	// private constructor to prevent instantiation
 	private Util() {

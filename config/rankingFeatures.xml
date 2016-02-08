@@ -127,4 +127,28 @@
 		<property name="aggregationType" value="2" />
 	</bean>
 	
+	<!-- recency features -->
+	<bean id="recencyFeatureDays" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RecencyFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="recencyDays" />
+		<property name="timeSpan" value="0" />
+	</bean>
+	
+	<bean id="recencyFeatureWeeks" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RecencyFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="recencyWeeks" />
+		<property name="timeSpan" value="1" />
+	</bean>
+	
+	<bean id="recencyFeatureMonths" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RecencyFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="recencyMonths" />
+		<property name="timeSpan" value="2" />
+	</bean>
+	
+	<bean id="recencyFeatureYears" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RecencyFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="recencyYears" />
+		<property name="timeSpan" value="3" />
+	</bean>
 </beans>
