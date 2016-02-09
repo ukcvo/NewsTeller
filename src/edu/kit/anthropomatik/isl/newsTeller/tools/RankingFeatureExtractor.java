@@ -188,10 +188,15 @@ public class RankingFeatureExtractor {
 			e.printStackTrace();
 		}
 
+		if (log.isInfoEnabled())
+			log.info("ranking feature extractor started");
+		
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/default.xml");
 		RankingFeatureExtractor extractor = (RankingFeatureExtractor) context.getBean("rankingFeatureExtractor");
 		((AbstractApplicationContext) context).close();
 
+		if (log.isInfoEnabled())
+			log.info("loaded everything, calling 'run' now");
 		extractor.run();
 	}
 

@@ -63,7 +63,7 @@
 		<ref bean="keywordInSentenceFeature00ttff" />
 		<ref bean="keywordInSentenceFeature00ttft" />
 		<ref bean="keywordInSentenceFeature00tttf" />
-		<ref bean="keywordInSentenceFeature01tttt" />
+		<ref bean="keywordInSentenceFeature00tttt" />
 		<ref bean="keywordInSentenceFeature01ffff" />
 		<ref bean="keywordInSentenceFeature01ffft" />
 		<ref bean="keywordInSentenceFeature01fftf" />
@@ -111,7 +111,7 @@
 		<ref bean="keywordInSentenceFeature10ttff" />
 		<ref bean="keywordInSentenceFeature10ttft" />
 		<ref bean="keywordInSentenceFeature10tttf" />
-		<ref bean="keywordInSentenceFeature11tttt" />
+		<ref bean="keywordInSentenceFeature10tttt" />
 		<ref bean="keywordInSentenceFeature11ffff" />
 		<ref bean="keywordInSentenceFeature11ffft" />
 		<ref bean="keywordInSentenceFeature11fftf" />
@@ -159,7 +159,7 @@
 		<ref bean="keywordInSentenceFeature20ttff" />
 		<ref bean="keywordInSentenceFeature20ttft" />
 		<ref bean="keywordInSentenceFeature20tttf" />
-		<ref bean="keywordInSentenceFeature21tttt" />
+		<ref bean="keywordInSentenceFeature20tttt" />
 		<ref bean="keywordInSentenceFeature21ffff" />
 		<ref bean="keywordInSentenceFeature21ffft" />
 		<ref bean="keywordInSentenceFeature21fftf" />
