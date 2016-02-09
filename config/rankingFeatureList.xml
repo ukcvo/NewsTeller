@@ -13,6 +13,13 @@
 	<util:list id="rankingFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
 		
+		 
+		<ref bean="BM25FeatureSentence1.5" />
+		<ref bean="BM25FeatureText1.5" />
+		<ref bean="BM25FeatureSentence2.0" />
+		<ref bean="BM25FeatureText2.0" />
+		
+		
 		<ref bean="sentenceLengthFeatureWordAvg" />
 		<ref bean="sentenceLengthFeatureWordMin" />
 		<ref bean="sentenceLengthFeatureWordMax" />

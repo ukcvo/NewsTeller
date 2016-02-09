@@ -70,6 +70,8 @@ public class KnowledgeStoreAdapter {
 	
 	private ConcurrentMap<String, List<Sentence>> stanfordSentenceCache;
 	
+	private ConcurrentMap<String, List<String>> documentTokenCache;
+	
 	private ExecutorService threadPool;
 
 	public void setServerURL(String serverURL) {
@@ -103,6 +105,7 @@ public class KnowledgeStoreAdapter {
 		this.sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		this.sentenceMentionCache = new ConcurrentHashMap<String, KSMention>();
 		this.stanfordSentenceCache = new ConcurrentHashMap<String, List<Sentence>>();
+		this.documentTokenCache = new ConcurrentHashMap<String, List<String>>();
 	}
 
 	/**
@@ -151,6 +154,7 @@ public class KnowledgeStoreAdapter {
 		this.sentenceMentionCache.clear();
 		this.eventMentionCache.clear();
 		this.stanfordSentenceCache.clear();
+		this.documentTokenCache.clear();
 	}
 
 	/**
@@ -892,6 +896,79 @@ public class KnowledgeStoreAdapter {
 	 */
 	public List<String> retrieveSentencesFromEvent(String eventURI, String dummyKeyword) {
 		return retrievePhrasesFromEntity(eventURI, true, dummyKeyword);
+	}
+	
+	/**
+	 * Gets ALL sentences retrieved in the current query. Important: assumes that all caches get regularly flushed!!!
+	 */
+	public Set<List<String>> getAllQuerySentenceTokens(String dummyKeyword) {
+		Set<List<String>> result = new HashSet<List<String>>();
+		
+		Set<String> allEvents = sparqlCache.get(Util.getRelationName("event", "mention", dummyKeyword)).keySet();
+		
+		for (String eventURI : allEvents)
+			result.addAll(retrieveSentenceTokensFromEvent(eventURI, dummyKeyword));
+		
+		return result;
+	}
+	
+	/**
+	 * Gets ALL texts retrieved in the current query. Important: assumes that all caches get regularly flushed!!!
+	 */
+	public Set<List<String>> getAllQueryTextTokens(String dummyKeyword) {
+		Set<List<String>> result = new HashSet<List<String>>();
+		
+		Set<String> allEvents = sparqlCache.get(Util.getRelationName("event", "mention", dummyKeyword)).keySet();
+		
+		for (String eventURI : allEvents)
+			result.addAll(retrieveOriginalTextTokens(eventURI, dummyKeyword));
+		
+		return result;
+	}
+	
+	public Set<List<String>> retrieveSentenceTokensFromEvent(String eventURI, String dummyKeyword) {
+
+		Set<List<String>> result = new HashSet<List<String>>();
+		
+		Set<String> mentionURIs = getBufferedValues(Util.getRelationName("event", "mention", dummyKeyword), eventURI);
+		for (String mentionURI : mentionURIs) {
+			KSMention sentenceMention = retrieveKSMentionFromMentionURI(mentionURI, true);
+			if (this.documentTokenCache.containsKey(sentenceMention.toString()))
+				result.add(this.documentTokenCache.get(sentenceMention.toString()));
+			else { //construct manually. TODO: move into bulk?
+				String sentence = this.retrieveSentenceFromMention(mentionURI);
+				List<String> sentenceTokens = (new Sentence(sentence)).words();
+				result.add(sentenceTokens);
+				this.documentTokenCache.putIfAbsent(sentenceMention.toString(), sentenceTokens);
+			}
+			
+		}
+		
+		return result;
+	}
+	
+	public Set<List<String>> retrieveOriginalTextTokens(String eventURI, String dummyKeyword) {
+		
+		Set<List<String>> result = new HashSet<List<String>>();
+		
+		Set<String> mentionURIs = getBufferedValues(Util.getRelationName("event", "mention", dummyKeyword), eventURI);
+		Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(mentionURIs);
+		for (String resourceURI : resourceURIs) {
+			if (this.documentTokenCache.containsKey(resourceURI))
+				result.add(this.documentTokenCache.get(resourceURI));
+			else { //construct manually. TODO: move into bulk?
+				String resourceText = getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_TEXT, resourceURI);
+				Document document = new Document(resourceText);
+				List<String> textTokens = new ArrayList<String>();
+				for (Sentence sentence : document.sentences())
+					textTokens.addAll(sentence.words());
+				result.add(textTokens);
+				this.documentTokenCache.putIfAbsent(resourceURI, textTokens);
+			}
+			
+		}
+		
+		return result;
 	}
 	// endregion
 

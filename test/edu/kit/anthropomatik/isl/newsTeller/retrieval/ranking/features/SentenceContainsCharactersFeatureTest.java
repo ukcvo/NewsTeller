@@ -31,7 +31,6 @@ private KnowledgeStoreAdapter ksAdapter;
 	
 	private SentenceContainsCharactersFeature feature;
 	
-	
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 	private static List<Keyword> keywords = new ArrayList<Keyword>();
@@ -80,8 +79,8 @@ private KnowledgeStoreAdapter ksAdapter;
 	}
 
 	@Test
-	public void shouldReturnThree() {
+	public void shouldReturnFour() {
 		double value = feature.getValue("event-2", keywords, userModel);
-		assertTrue(value == 3.0);
+		assertTrue(value == 4.0);
 	}
 }

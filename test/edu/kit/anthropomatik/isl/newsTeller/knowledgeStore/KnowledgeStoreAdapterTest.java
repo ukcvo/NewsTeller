@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
@@ -267,5 +268,83 @@ public class KnowledgeStoreAdapterTest {
 		ksAdapter.runKeyValueResourcePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TITLE), Sets.newHashSet("http://en.wikinews.org/wiki/Mexican_president_defends_emigration"));
 		String result = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_RESOURCE_PROPERTY + Util.RESOURCE_PROPERTY_TITLE, "http://en.wikinews.org/wiki/Mexican_president_defends_emigration");
 		assertTrue(result.equals(expected));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldReturnAllSentenceTokens() {
+		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", "."), 
+															Lists.newArrayList("ExpectedResultNumberTwo", "."));
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2"));
+		mentionMap.put("event-2", Sets.newHashSet("mention-2#char=1,2"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		ConcurrentMap<String, Set<String>> resourceMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceMap.put("mention-1", Sets.newHashSet("Expected result number one. Irrelevant Sentence."));
+		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
+		
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		Set<List<String>> result = ksAdapter.getAllQuerySentenceTokens("keyword");
+		assertTrue(expectedResult.equals(result));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldReturnAllTextTokens() {
+		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", ".", "Irrelevant", "Sentence", "."),
+															Lists.newArrayList("ExpectedResultNumberTwo", ".", "Another", "irrelevant", "Sentence", "."));
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2"));
+		mentionMap.put("event-2", Sets.newHashSet("mention-2#char=1,2"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		ConcurrentMap<String, Set<String>> resourceMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceMap.put("mention-1", Sets.newHashSet("Expected result number one. Irrelevant Sentence."));
+		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
+		
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		Set<List<String>> result = ksAdapter.getAllQueryTextTokens("keyword");
+		assertTrue(expectedResult.equals(result));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldReturnEventSentenceTokens() {
+		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", "."));
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2"));
+		mentionMap.put("event-2", Sets.newHashSet("mention-2#char=1,2"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		ConcurrentMap<String, Set<String>> resourceMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceMap.put("mention-1", Sets.newHashSet("Expected result number one. Irrelevant Sentence."));
+		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
+		
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		Set<List<String>> result = ksAdapter.retrieveSentenceTokensFromEvent("event-1", "keyword");
+		assertTrue(expectedResult.equals(result));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldReturnEventTextTokens() {
+		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", ".", "Irrelevant", "Sentence", "."));
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2"));
+		mentionMap.put("event-2", Sets.newHashSet("mention-2#char=1,2"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		ConcurrentMap<String, Set<String>> resourceMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceMap.put("mention-1", Sets.newHashSet("Expected result number one. Irrelevant Sentence."));
+		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
+		
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		Set<List<String>> result = ksAdapter.retrieveOriginalTextTokens("event-1", "keyword");
+		assertTrue(expectedResult.equals(result));
 	}
 }

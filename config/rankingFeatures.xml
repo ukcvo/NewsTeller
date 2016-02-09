@@ -7,6 +7,35 @@
     http://www.springframework.org/schema/util
     http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
+	<!-- BM25 features -->
+	<bean id="BM25FeatureSentence1.5" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence1.5" />
+		<property name="k1" value="1.5" />
+		<property name="useTextInsteadOfSentence" value="false" />
+	</bean>
+	
+	<bean id="BM25FeatureText1.5" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.5" />
+		<property name="k1" value="1.5" />
+		<property name="useTextInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureSentence2.0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence2.0" />
+		<property name="k1" value="2.0" />
+		<property name="useTextInsteadOfSentence" value="false" />
+	</bean>
+	
+	<bean id="BM25FeatureText2.0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text2.0" />
+		<property name="k1" value="2.0" />
+		<property name="useTextInsteadOfSentence" value="true" />
+	</bean>
+
 	<!-- sentence length features -->
 	<bean id="sentenceLengthFeatureWordAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceLengthFeature">
 		<property name="ksAdapter" ref="ksAdapter" />

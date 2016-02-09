@@ -142,6 +142,7 @@ public class RankingFeatureExtractor {
 				log.info(StringUtils.collectionToCommaDelimitedString(keywords));
 			
 			// run the queries
+			ksAdapter.flushBuffer();
 			ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, keywords);
 			Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", keywords.get(0).getWord())));
 			ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
