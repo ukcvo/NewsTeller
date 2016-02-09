@@ -52,7 +52,7 @@ private KnowledgeStoreAdapter ksAdapter;
 		
 		ConcurrentMap<String, Set<String>> resourceTextMap = new ConcurrentHashMap<String, Set<String>>();
 		resourceTextMap.put("mention-1", Sets.newHashSet("This does not contain any quotation marks."));
-		resourceTextMap.put("mention-2", Sets.newHashSet("This sentence \" however does."));
+		resourceTextMap.put("mention-2", Sets.newHashSet("This ` sentence \" however ' does '' so."));
 		
 		
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), eventMentionMap);
@@ -80,8 +80,8 @@ private KnowledgeStoreAdapter ksAdapter;
 	}
 
 	@Test
-	public void shouldReturnOne() {
+	public void shouldReturnThree() {
 		double value = feature.getValue("event-2", keywords, userModel);
-		assertTrue(value == 1.0);
+		assertTrue(value == 3.0);
 	}
 }

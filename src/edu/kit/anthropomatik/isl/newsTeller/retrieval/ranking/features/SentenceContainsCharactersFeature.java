@@ -6,6 +6,7 @@ import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
+import edu.stanford.nlp.simple.Sentence;
 
 public class SentenceContainsCharactersFeature extends RankingFeature {
 
@@ -24,8 +25,12 @@ public class SentenceContainsCharactersFeature extends RankingFeature {
 		
 		for (String sentence : sentences) {
 			double counter = 0.0;
+			
+			Sentence s = new Sentence(sentence.toLowerCase());
+			List<String> tokens = s.words();
+			
 			for (String c : this.chars) {
-				if (sentence.toLowerCase().contains(c.toLowerCase())) // case insensitive contains
+				if (tokens.contains(c.toLowerCase()))
 					counter++;
 			}
 			

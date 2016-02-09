@@ -57,6 +57,7 @@
 		<property name="chars">
 			<list>
 				<value>"</value>
+				<value>''</value>
 				<value>'</value>
 				<value>`</value>
 			</list>
