@@ -1,7 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,7 +12,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
-
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -44,8 +42,11 @@ public class EmbeddingsFeature extends RankingFeature {
 	
 	public EmbeddingsFeature(String embeddingsFileName) {
 		try {
-			this.wordVectors = WordVectorSerializer.loadTxtVectors(new File(embeddingsFileName));
-		} catch (FileNotFoundException e) {
+			if (embeddingsFileName.endsWith(".txt"))
+				this.wordVectors = WordVectorSerializer.loadTxtVectors(new File(embeddingsFileName));
+			else
+				this.wordVectors = WordVectorSerializer.loadGoogleModel(new File(embeddingsFileName), true);
+		} catch (Exception e) {
 			if (log.isErrorEnabled())
 				log.error("Could not load word vectors!");
 			if (log.isDebugEnabled())
