@@ -96,6 +96,7 @@ public class RankingBenchmark {
 				double ndcg = 0;
 				double relativeTopRank = 0;
 				double topRank = 0;
+				double expectedRank = 0;
 				
 				Enumeration<Object> enumeration = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
 				while (enumeration.hasMoreElements()) {
@@ -115,15 +116,17 @@ public class RankingBenchmark {
 					ndcg += computeNDCG(evalLocal.predictions());
 					topRank += computeTopRank(evalLocal.predictions(), false);
 					relativeTopRank += computeTopRank(evalLocal.predictions(), true);
+					expectedRank += computeExpectedRank(evalLocal.predictions());
 				}
 
 				ndcg /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				topRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				relativeTopRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				
 				if (log.isInfoEnabled()) {
 					log.info(String.format("%s (file-based)", classifierName));
-					logEvalResults(eval, ndcg, topRank, relativeTopRank);
+					logEvalResults(eval, ndcg, topRank, relativeTopRank, expectedRank);
 				}
 			}
 		} catch (Exception e) {
@@ -133,6 +136,18 @@ public class RankingBenchmark {
 				log.debug("cannot perform file-based regression", e);
 		}
 		
+	}
+	
+	// computes the expected rank when using the predictions as probabilites for selecting a random event.
+	private double computeExpectedRank(List<Prediction> predictions) {
+		double result = 0;
+		double weightSum = 0;
+		for (Prediction p : predictions) {
+			result += Util.regressionValueToRank(p.actual()) * p.predicted();
+			weightSum += p.predicted();
+		}
+		
+		return (result / weightSum);
 	}
 	
 	// computes the rank of the highest-ranked event (optionally normalized by maximum attainable for the given query)
@@ -188,7 +203,7 @@ public class RankingBenchmark {
 		return nDCG;
 	}
 	
-	private void logEvalResults(Evaluation eval, double ndcg, double topRank, double relativeTopRank) {
+	private void logEvalResults(Evaluation eval, double ndcg, double topRank, double relativeTopRank, double expectedRank) {
 		log.info(String.format("RMSE: %f", eval.rootMeanSquaredError()));
 		try {
 			log.info(String.format("correlation coefficient: %f", eval.correlationCoefficient()));
@@ -199,6 +214,7 @@ public class RankingBenchmark {
 		log.info(String.format("NDCG: %f", ndcg));	
 		log.info(String.format("average rank of top 1: %f", topRank));
 		log.info(String.format("average normalized rank of top 1: %f", relativeTopRank));
+		log.info(String.format("expected rank (probability distribution): %f", expectedRank));
 	}
 	
 	private Instances filterByFileName(Instances dataSet, Integer fileNameIdx, boolean isTest) throws Exception {

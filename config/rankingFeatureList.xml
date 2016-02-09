@@ -32,6 +32,15 @@
 		
 		
 		<ref bean="sentenceContainsQuotationFeature" />
+		<ref bean="sentenceContainsIFeature" />
+		<ref bean="sentenceContainsYouFeature" />
+		<ref bean="sentenceContainsHeFeature" />
+		<ref bean="sentenceContainsSheFeature" />
+		<ref bean="sentenceContainsItFeature" />
+		<ref bean="sentenceContainsWeFeature" />
+		<ref bean="sentenceContainsTheyFeature" />
+		<ref bean="sentenceContainsThisThatFeature" />
+		
 		
 		<ref bean="numberOfKeywordEntitiesFeatureAvg" />
 		<ref bean="numberOfKeywordEntitiesFeatureMin" />

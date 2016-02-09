@@ -62,7 +62,112 @@
 			</list>
 		</property>
 	</bean>
-		
+	
+	<bean id="sentenceContainsIFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsI" />
+		<property name="chars">
+			<list>
+				<value>I</value>
+				<value>me</value>
+				<value>my</value>
+				<value>mine</value>
+				<value>myself</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="sentenceContainsYouFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsYou" />
+		<property name="chars">
+			<list>
+				<value>you</value>
+				<value>your</value>
+				<value>yours</value>
+				<value>yourself</value>
+				<value>yourselves</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="sentenceContainsHeFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsHe" />
+		<property name="chars">
+			<list>
+				<value>he</value>
+				<value>him</value>
+				<value>his</value>
+				<value>himself</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="sentenceContainsSheFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsShe" />
+		<property name="chars">
+			<list>
+				<value>she</value>
+				<value>her</value>
+				<value>hers</value>
+				<value>herself</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="sentenceContainsItFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsIt" />
+		<property name="chars">
+			<list>
+				<value>it</value>
+				<value>its</value>
+				<value>itself</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="sentenceContainsWeFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsWe" />
+		<property name="chars">
+			<list>
+				<value>we</value>
+				<value>us</value>
+				<value>our</value>
+				<value>ours</value>
+				<value>ourselves</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="sentenceContainsTheyFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsThey" />
+		<property name="chars">
+			<list>
+				<value>they</value>
+				<value>them</value>
+				<value>their</value>
+				<value>theirs</value>
+				<value>themselves</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="sentenceContainsThisThatFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsThisThat" />
+		<property name="chars">
+			<list>
+				<value>this</value>
+				<value>that</value>
+			</list>
+		</property>
+	</bean>
+	
 	<!-- sparql count features -->
 	<bean id="numberOfKeywordEntitiesFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
 		<property name="ksAdapter" ref="ksAdapter" />

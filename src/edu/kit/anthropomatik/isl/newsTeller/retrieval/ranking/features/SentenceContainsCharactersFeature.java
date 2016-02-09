@@ -25,7 +25,7 @@ public class SentenceContainsCharactersFeature extends RankingFeature {
 		for (String sentence : sentences) {
 			double counter = 0.0;
 			for (String c : this.chars) {
-				if (sentence.contains(c))
+				if (sentence.toLowerCase().contains(c.toLowerCase())) // case insensitive contains
 					counter++;
 			}
 			
