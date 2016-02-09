@@ -57,6 +57,10 @@ public class RankingFeatureExtractor {
 	
 	private String eventStatisticsQuery;
 	
+	private String eventConstituentsQuery;
+	
+	private String entityPropertiesQuery;
+	
 	public void setFeatures(List<RankingFeature> features) {
 		this.features = features;
 	}
@@ -73,7 +77,8 @@ public class RankingFeatureExtractor {
 		this.doAddEventInformation = doAddEventInformation;
 	}
 	
-	public RankingFeatureExtractor(String configFileName, String eventStatisticsQueryFileName) {
+	public RankingFeatureExtractor(String configFileName, String eventStatisticsQueryFileName, String eventConstituentsQueryFileName, 
+									String entityPropertiesQueryFileName) {
 		Map<String, List<Keyword>> benchmarkKeywords = Util.readBenchmarkConfigFile(configFileName);
 		this.benchmark = new HashMap<List<Keyword>, Map<BenchmarkEvent, GroundTruth>>();
 		this.eventURIs = new HashSet<String>();
@@ -86,6 +91,8 @@ public class RankingFeatureExtractor {
 		}
 		
 		this.eventStatisticsQuery = Util.readStringFromFile(eventStatisticsQueryFileName);
+		this.eventConstituentsQuery = Util.readStringFromFile(eventConstituentsQueryFileName);
+		this.entityPropertiesQuery = Util.readStringFromFile(entityPropertiesQueryFileName);
 	}
 
 	private Instances createDataSetSkeleton() {
@@ -140,6 +147,9 @@ public class RankingFeatureExtractor {
 			ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
 			ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, keywords);
 			ksAdapter.runKeyValueResourcePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TIME, Util.RESOURCE_PROPERTY_TITLE) ,resourceURIs);
+			ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, keywords);
+			Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", keywords.get(0).getWord()));
+			ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, keywords);
 			if (log.isInfoEnabled())
 				log.info("...queries done");
 			

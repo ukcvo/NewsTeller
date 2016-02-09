@@ -257,6 +257,223 @@
 		<property name="timeSpan" value="3" />
 	</bean>
 	
+	<!-- keyword-entities features -->
+	<bean id="keywordEntitiesFeature0ffp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ffp" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ffd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ffd" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ftp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ftp" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ftd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ftd" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0tfp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0tfp" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0tfd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0tfd" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ttp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ttp" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ttd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ttd" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ffp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ffp" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ffd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ffd" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ftp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ftp" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ftd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ftd" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1tfp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1tfp" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1tfd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1tfd" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ttp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ttp" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ttd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ttd" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ffp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ffp" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ffd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ffd" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ftp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ftp" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ftd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ftd" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2tfp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2tfp" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2tfd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2tfd" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ttp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ttp" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ttd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ttd" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+	</bean>
+	
 	<!-- keyword in sentence features -->
 	<bean id="keywordInSentenceFeature00ffff" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
 		<property name="ksAdapter" ref="ksAdapter" />

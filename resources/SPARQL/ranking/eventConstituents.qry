@@ -1,0 +1,6 @@
+SELECT ?event ?entity
+WHERE
+{
+	VALUES ?event { *keys* } .
+	?event sem:hasActor|sem:hasPlace ?entity .
+}

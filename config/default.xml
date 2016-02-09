@@ -128,6 +128,8 @@
 	<bean id="rankingFeatureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.RankingFeatureExtractor">
 		<constructor-arg name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv"/>
 		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/ranking/entityProperties.qry" />
 		<property name="ksAdapter" ref="ksAdapter"/>
 		<property name="outputFileName" value="resources/benchmark/dataSetRanking.xrff"/>
 		<property name="features" ref="rankingFeatureList"/>

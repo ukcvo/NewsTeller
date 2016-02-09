@@ -20,10 +20,12 @@
 		<ref bean="sentenceLengthFeatureCharMin" />
 		<ref bean="sentenceLengthFeatureCharMax" />
 		
+		
 		<ref bean="embeddingsFeatureAvg" />
 		<ref bean="embeddingsFeatureMin" />
 		<ref bean="embeddingsFeatureMax" />
 		<ref bean="embeddingsFeatureGeom" />
+		
 		
 		<ref bean="embeddingsFeatureTitleAvg" />
 		<ref bean="embeddingsFeatureTitleMin" />
@@ -52,10 +54,38 @@
 		<ref bean="numberOfEntitiesFeatureMin" />
 		<ref bean="numberOfEntitiesFeatureMax" />
 		
+		
 		<ref bean="recencyFeatureDays" />
 		<ref bean="recencyFeatureWeeks" />
 		<ref bean="recencyFeatureMonths" />
 		<ref bean="recencyFeatureYears" />
+		
+		
+		<ref bean="keywordEntitiesFeature0ffp" />
+		<ref bean="keywordEntitiesFeature0ffd" />
+		<ref bean="keywordEntitiesFeature0ftp" />
+		<ref bean="keywordEntitiesFeature0ftd" />
+		<ref bean="keywordEntitiesFeature0tfp" />
+		<ref bean="keywordEntitiesFeature0tfd" />
+		<ref bean="keywordEntitiesFeature0ttp" />
+		<ref bean="keywordEntitiesFeature0ttd" />
+		<ref bean="keywordEntitiesFeature1ffp" />
+		<ref bean="keywordEntitiesFeature1ffd" />
+		<ref bean="keywordEntitiesFeature1ftp" />
+		<ref bean="keywordEntitiesFeature1ftd" />
+		<ref bean="keywordEntitiesFeature1tfp" />
+		<ref bean="keywordEntitiesFeature1tfd" />
+		<ref bean="keywordEntitiesFeature1ttp" />
+		<ref bean="keywordEntitiesFeature1ttd" />
+		<ref bean="keywordEntitiesFeature2ffp" />
+		<ref bean="keywordEntitiesFeature2ffd" />
+		<ref bean="keywordEntitiesFeature2ftp" />
+		<ref bean="keywordEntitiesFeature2ftd" />
+		<ref bean="keywordEntitiesFeature2tfp" />
+		<ref bean="keywordEntitiesFeature2tfd" />
+		<ref bean="keywordEntitiesFeature2ttp" />
+		<ref bean="keywordEntitiesFeature2ttd" />
+
 		
 		<ref bean="keywordInSentenceFeature00ffff" />
 		<ref bean="keywordInSentenceFeature00ffft" />

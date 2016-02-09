@@ -26,6 +26,13 @@
 	
 	
 	<!-- classifiers -->
+	<bean id="r_zeroR" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.rules.ZeroR" />
+		</property>
+	</bean>
+	
 	<bean id="r_adaBoost" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">

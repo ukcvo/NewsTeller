@@ -1,0 +1,7 @@
+SELECT ?entity ?entityDbpediaLabel ?entityPrefLabel
+WHERE
+{
+	VALUES ?entity { *keys* } .
+	OPTIONAL { ?entity skos:prefLabel ?entityPrefLabel }
+	OPTIONAL { ?entity rdf:type* ?class . GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?class rdfs:label ?entityDbpediaLabel } }
+}
