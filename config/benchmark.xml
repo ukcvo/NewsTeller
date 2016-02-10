@@ -307,7 +307,8 @@
 		<constructor-arg name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv" />
 		<property name="regressors">
 			<map>
-				<entry key="baseline" value-ref="r_zeroR" />
+			 <!--
+				<entry key="baseline" value-ref="r_zeroR" />  -->
 				<entry key="RandomForest" value-ref="r_randomForest" />
 			</map>
 		</property>

@@ -16,8 +16,8 @@
 	</bean>
 
 	<bean id="embeddings" class="edu.kit.anthropomatik.isl.newsTeller.util.embeddings.EmbeddingsProvider">
-		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
-		<property name="useLowercase" value="true" />
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/GoogleNews-vectors-negative300.bin" />
+		<property name="useLowercase" value="false" />
 		<property name="splitKeywordsIntoTokens" value="true" />
 	</bean>
 

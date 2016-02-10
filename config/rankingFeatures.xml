@@ -198,6 +198,46 @@
 		</property>
 	</bean>
 	
+	<bean id="sentenceContainsPronounFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sentenceContainsPronoun" />
+		<property name="chars">
+			<list>
+				<value>I</value>
+				<value>me</value>
+				<value>my</value>
+				<value>mine</value>
+				<value>myself</value>
+				<value>you</value>
+				<value>your</value>
+				<value>yours</value>
+				<value>yourself</value>
+				<value>yourselves</value>
+				<value>he</value>
+				<value>him</value>
+				<value>his</value>
+				<value>himself</value>
+				<value>she</value>
+				<value>her</value>
+				<value>hers</value>
+				<value>herself</value>
+				<value>it</value>
+				<value>its</value>
+				<value>itself</value>
+				<value>we</value>
+				<value>us</value>
+				<value>our</value>
+				<value>ours</value>
+				<value>ourselves</value>
+				<value>they</value>
+				<value>them</value>
+				<value>their</value>
+				<value>theirs</value>
+				<value>themselves</value>
+			</list>
+		</property>
+	</bean>
+	
 	<!-- sparql count features -->
 	<bean id="numberOfKeywordEntitiesFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
 		<property name="ksAdapter" ref="ksAdapter" />
