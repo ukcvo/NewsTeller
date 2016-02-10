@@ -108,10 +108,15 @@ public class EmbeddingsFeature extends RankingFeature {
 			// preprocess the keyword string as required by embeddings
 			String preprocessed = embeddings.getUseLowercase() ? keyword.getWord().toLowerCase() : keyword.getWord();
 			List<String> keywordTokens = new ArrayList<String>();
-			if (embeddings.getSplitKeywordsIntoTokens())
+			if (embeddings.getSplitKeywordsIntoTokens()) 
 				keywordTokens.addAll(Arrays.asList(preprocessed.split(" ")));
-			else
-				keywordTokens.add(preprocessed.replace(" ", "_"));
+			else {
+//				if (embeddings.hasWord(preprocessed.replace(" ", "_")))
+					keywordTokens.add(preprocessed.replace(" ", "_"));
+//				else
+//					keywordTokens.addAll(Arrays.asList(preprocessed.split(" ")));
+			}
+				
 			double[] keywordVector = embeddings.wordsToVector(keywordTokens);
 			
 			if (keywordVector == null)

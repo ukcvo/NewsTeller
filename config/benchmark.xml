@@ -313,9 +313,19 @@
 			</map>
 		</property>
 		
-		<property name="outputRankings" value="true" />
+		<property name="featureSelectors">
+			<list>
+				<ref bean="r_relief-f"/>
+				<ref bean="r_cfs"/>
+				<ref bean="r_wrapperREPTree"/> <!-- M5P instead? -->
+				<ref bean="r_wrapperRandomForest"/>
+			</list>
+		</property>
 		
-		<property name="doFileBasedRegression" value="true" />
+		<property name="outputRankings" value="false" />
+		
+		<property name="doFeatureSelection" value="true" />
+		<property name="doFileBasedRegression" value="false" />
 	</bean>
 
 </beans>

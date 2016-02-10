@@ -75,12 +75,12 @@ public class EmbeddingsFeatureTest {
 		Util.stemKeyword(k);
 		keywords.add(k);
 		
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/rankingEmbeddingsFeatures.xml");
-		avgFeature = (EmbeddingsFeature) context.getBean("embeddingsFeature00f");
-		minFeature = (EmbeddingsFeature) context.getBean("embeddingsFeature11f");
-		maxFeature = (EmbeddingsFeature) context.getBean("embeddingsFeature22f");
-		geomFeature = (EmbeddingsFeature) context.getBean("embeddingsFeature33f");
-		titleFeature = (EmbeddingsFeature) context.getBean("embeddingsFeature00t");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/testEmbeddings.xml");
+		avgFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureAvg");
+		minFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureMin");
+		maxFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureMax");
+		geomFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureGeom");
+		titleFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureTitle");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);

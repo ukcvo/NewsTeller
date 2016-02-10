@@ -47,7 +47,7 @@
 		<ref bean="embeddingsFeature33f" />
 		<ref bean="embeddingsFeature33t" />
 		
-		
+		<!-- 
 		<ref bean="BM25FeatureSentence1.5" />
 		<ref bean="BM25FeatureText1.5" />
 		<ref bean="BM25FeatureSentence2.0" />
@@ -262,7 +262,7 @@
 		<ref bean="keywordInSentenceFeature22tttf" />
 		<ref bean="keywordInSentenceFeature22tttt" />
 		
-		
+		 -->
 	</util:list>
 	
 </beans>

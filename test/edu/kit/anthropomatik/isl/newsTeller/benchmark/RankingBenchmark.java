@@ -21,14 +21,17 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
+import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.evaluation.Prediction;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.Utils;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.RemoveType;
 import weka.filters.unsupervised.attribute.StringToNominal;
 import weka.filters.unsupervised.instance.RemoveWithValues;
 
@@ -42,7 +45,11 @@ public class RankingBenchmark {
 	
 	private Map<String, Classifier> regressors;
 	
+	private List<AttributeSelection> featureSelectors;
+	
 	private boolean doFileBasedRegression;
+	
+	private boolean doFeatureSelection;
 	
 	private boolean outputRankings;
 	
@@ -50,8 +57,16 @@ public class RankingBenchmark {
 		this.regressors = regressors;
 	}
 	
+	public void setFeatureSelectors(List<AttributeSelection> featureSelectors) {
+		this.featureSelectors = featureSelectors;
+	}
+	
 	public void setDoFileBasedRegression(boolean doFileBasedRegression) {
 		this.doFileBasedRegression = doFileBasedRegression;
+	}
+	
+	public void setDoFeatureSelection(boolean doFeatureSelection) {
+		this.doFeatureSelection = doFeatureSelection;
 	}
 	
 	public void setOutputRankings(boolean outputRankings) {
@@ -83,6 +98,30 @@ public class RankingBenchmark {
 				log.debug("Can't read data set", e);
 		}
 	}
+	
+	// region featureSelection
+	private void featureSelection() {
+		
+		try {
+			RemoveType stringFilter = new RemoveType();
+			stringFilter.setOptions(Utils.splitOptions("-T string"));
+			stringFilter.setInputFormat(this.dataSet);
+			Instances filtered = Filter.useFilter(this.dataSet, stringFilter);
+			
+			for (AttributeSelection config : this.featureSelectors) {
+				config.SelectAttributes(filtered);
+				if (log.isInfoEnabled())
+					log.info(config.toResultsString());
+			}
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't select features");
+			if (log.isDebugEnabled())
+				log.debug("Exception", e);
+		}
+	}
+	// endregion
 	
 	// region fileBasedRegression
 	private void fileBasedRegression() {
@@ -161,7 +200,7 @@ public class RankingBenchmark {
 		
 		@Override
 		public String toString() {
-			return String.format("%s,%f,%f", eventURI, Util.regressionValueToRank(predicted), Util.regressionValueToRank(actual));
+			return String.format("\"%s\";%f;%f", eventURI, Util.regressionValueToRank(predicted), Util.regressionValueToRank(actual));
 		}
 	}
 	
@@ -185,7 +224,7 @@ public class RankingBenchmark {
 			});
 			
 			log.info(testData.get(0).stringValue(testData.attribute(Util.ATTRIBUTE_FILE)));
-			log.info("event,predicted,actual");
+			log.info("event;predicted;actual");
 			for (RankEntry e : ranking)
 				log.info(e.toString());
 			
@@ -295,6 +334,8 @@ public class RankingBenchmark {
 	public void run() {
 		if (this.doFileBasedRegression)
 			fileBasedRegression();
+		if (this.doFeatureSelection)
+			featureSelection();
 	}
 	
 	public static void main(String[] args) {

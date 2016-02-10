@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.springframework.org/schema/context
@@ -23,8 +24,63 @@
 	<bean id="r_dummyFilter" class="weka.filters.AllFilter" />
 
 	<!-- feature selection -->
-	
-	
+	<bean id="r_relief-f" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.ReliefFAttributeEval" />
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.Ranker">
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_cfs" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.CfsSubsetEval">
+				<property name="missingSeparate" value="true" />
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.GreedyStepwise">
+				<property name="generateRanking" value="false" />
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_wrapperREPTree" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="classifier">
+					<bean class="weka.classifiers.trees.REPTree" />
+				</property>
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.GreedyStepwise">
+				<property name="generateRanking" value="false" />
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_wrapperRandomForest" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="classifier">
+					<bean class="weka.classifiers.trees.RandomForest" />
+				</property>
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.GreedyStepwise">
+				<property name="generateRanking" value="false" />
+				<property name="numToSelect" value="10" />
+			</bean>
+		</property>
+	</bean>
+
 	<!-- classifiers -->
 	<bean id="r_zeroR" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
