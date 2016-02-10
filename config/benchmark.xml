@@ -312,6 +312,9 @@
 				<entry key="RandomForest" value-ref="r_randomForest" />
 			</map>
 		</property>
+		
+		<property name="outputRankings" value="true" />
+		
 		<property name="doFileBasedRegression" value="true" />
 	</bean>
 

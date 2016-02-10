@@ -25,6 +25,7 @@ import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.evaluation.Prediction;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
@@ -37,11 +38,13 @@ public class RankingBenchmark {
 	
 	private Instances dataSet;
 	
+	private Map<String, Map<String, GroundTruth>> benchmark;
+	
 	private Map<String, Classifier> regressors;
 	
 	private boolean doFileBasedRegression;
 	
-	private Map<String, Map<String, GroundTruth>> benchmark;
+	private boolean outputRankings;
 	
 	public void setRegressors(Map<String, Classifier> regressors) {
 		this.regressors = regressors;
@@ -49,6 +52,10 @@ public class RankingBenchmark {
 	
 	public void setDoFileBasedRegression(boolean doFileBasedRegression) {
 		this.doFileBasedRegression = doFileBasedRegression;
+	}
+	
+	public void setOutputRankings(boolean outputRankings) {
+		this.outputRankings = outputRankings;
 	}
 	
 	public RankingBenchmark(String dataSetFileName, String configFileName) {
@@ -117,6 +124,9 @@ public class RankingBenchmark {
 					topRank += computeTopRank(evalLocal.predictions(), false);
 					relativeTopRank += computeTopRank(evalLocal.predictions(), true);
 					expectedRank += computeExpectedRank(evalLocal.predictions());
+					
+					if (this.outputRankings && log.isInfoEnabled())
+						logRankings(r, test);
 				}
 
 				ndcg /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
@@ -134,6 +144,57 @@ public class RankingBenchmark {
 				log.error("cannot perform file-based regression!");
 			if (log.isDebugEnabled())
 				log.debug("cannot perform file-based regression", e);
+		}
+		
+	}
+	
+	private class RankEntry {
+		public String eventURI;
+		public double actual;
+		public double predicted;
+		
+		public RankEntry(String eventURI, double actual, double predicted) {
+			this.eventURI = eventURI;
+			this.actual = actual;
+			this.predicted = predicted;
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("%s,%f,%f", eventURI, Util.regressionValueToRank(predicted), Util.regressionValueToRank(actual));
+		}
+	}
+	
+	// log the rankings to the console
+	private void logRankings(Classifier regressor, Instances testData) {
+		
+		try {
+			List<RankEntry> ranking = new ArrayList<RankEntry>();
+			for (Instance instance : testData) {
+				String eventURI = instance.stringValue(testData.attribute(Util.ATTRIBUTE_URI));
+				double actual = instance.classValue();
+				double predicted = regressor.classifyInstance(instance);
+				ranking.add(new RankEntry(eventURI, actual, predicted));
+			}
+			
+			Collections.sort(ranking, new Comparator<RankEntry>() {
+				@Override
+				public int compare(RankEntry o1, RankEntry o2) {
+					return (-1) * Double.compare(o1.predicted, o2.predicted);
+				}
+			});
+			
+			log.info(testData.get(0).stringValue(testData.attribute(Util.ATTRIBUTE_FILE)));
+			log.info("event,predicted,actual");
+			for (RankEntry e : ranking)
+				log.info(e.toString());
+			
+			
+		} catch (Exception e) {
+			if (log.isWarnEnabled())
+				log.warn("Cannot output ranking");
+			if (log.isDebugEnabled())
+				log.debug("Cannot output ranking", e);
 		}
 		
 	}
