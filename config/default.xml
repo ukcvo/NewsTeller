@@ -134,6 +134,7 @@
 		<property name="outputFileName" value="resources/benchmark/dataSetRanking.xrff"/>
 		<property name="features" ref="rankingFeatureList"/>
 		<property name="doAddEventInformation" value="true"/>
+		<property name="nThreads" value="1000" />
 	</bean>
 
 </beans>

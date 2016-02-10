@@ -4,10 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
-
 import com.google.common.collect.Sets;
 
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -18,9 +14,7 @@ public class EmbeddingsProviderTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/rankingEmbeddingsFeatures.xml");
-		glove = (EmbeddingsProvider) context.getBean("embeddingsGlove");
-		((AbstractApplicationContext) context).close();
+		glove = new EmbeddingsProvider("resources/wordvectors/glove.6B.50d.txt");
 	}
 
 	@Test

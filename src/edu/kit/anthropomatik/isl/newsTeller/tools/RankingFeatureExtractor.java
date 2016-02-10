@@ -8,6 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.LogManager;
 
 import org.apache.commons.logging.Log;
@@ -61,6 +65,8 @@ public class RankingFeatureExtractor {
 	
 	private String entityPropertiesQuery;
 	
+	private ExecutorService threadPool;
+	
 	public void setFeatures(List<RankingFeature> features) {
 		this.features = features;
 	}
@@ -75,6 +81,10 @@ public class RankingFeatureExtractor {
 
 	public void setDoAddEventInformation(boolean doAddEventInformation) {
 		this.doAddEventInformation = doAddEventInformation;
+	}
+	
+	public void setNThreads (int nThreads) {
+		this.threadPool = Executors.newFixedThreadPool(nThreads);
 	}
 	
 	public RankingFeatureExtractor(String configFileName, String eventStatisticsQueryFileName, String eventConstituentsQueryFileName, 
@@ -131,6 +141,47 @@ public class RankingFeatureExtractor {
 		}
 	}
 
+	private class EventWorker implements Callable<Instance> {
+
+		private String eventURI;
+		private UserModel userModel;
+		private List<Keyword> keywords;
+		private double relevance;
+		private int numberOfAttributes;
+		private int uriIndex;
+		private int fileIndex;
+		
+		public EventWorker(String eventURI, UserModel userModel, List<Keyword> keywords, double relevance, int numberOfAttributes, int uriIndex, int fileIndex) {
+			this.eventURI = eventURI;
+			this.userModel = userModel;
+			this.keywords = keywords;
+			this.relevance = relevance;
+			this.numberOfAttributes = numberOfAttributes;
+			this.uriIndex = uriIndex;
+			this.fileIndex = fileIndex;
+		}
+		
+		@Override
+		public Instance call() throws Exception {
+			double[] values = new double[numberOfAttributes];
+			for (int i = 0; i < features.size(); i++) {
+				RankingFeature f = features.get(i);
+				values[i] = f.getValue(eventURI, keywords, userModel);
+			}
+			
+			values[features.size()] = relevance;
+			
+			if (doAddEventInformation) {
+				values[features.size() + 1] = uriIndex;
+				values[features.size() + 2] = fileIndex;
+			}
+
+			Instance instance = new DenseInstance(1.0, values);
+			return instance;
+		}
+		
+	}
+	
 	public void run() {
 		Instances dataSet = createDataSetSkeleton();
 		this.ksAdapter.openConnection();
@@ -143,16 +194,82 @@ public class RankingFeatureExtractor {
 			
 			// run the queries
 			ksAdapter.flushBuffer();
-			ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, keywords);
-			Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", keywords.get(0).getWord())));
-			ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
-			ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, keywords);
-			ksAdapter.runKeyValueResourcePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TIME, Util.RESOURCE_PROPERTY_TITLE) ,resourceURIs);
-			ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, keywords);
-			Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", keywords.get(0).getWord()));
-			ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, keywords);
+			List<Future<?>> futures = new ArrayList<Future<?>>();
+			
+			// task 1: get event mentions, based on this get resource texts and resource titles
+			futures.add(ksAdapter.submit(new Runnable() {
+				
+				@Override
+				public void run() {
+					ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, keywords);
+					Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", keywords.get(0).getWord())));
+					
+					List<Future<?>> futures = new ArrayList<Future<?>>();
+					futures.add(ksAdapter.submit(new Runnable() {
+						
+						@Override
+						public void run() {
+							ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
+						}
+					}));
+					futures.add(ksAdapter.submit(new Runnable() {
+						
+						@Override
+						public void run() {
+							ksAdapter.runKeyValueResourcePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TIME, Util.RESOURCE_PROPERTY_TITLE) ,resourceURIs);
+						}
+					}));
+					
+					for (Future<?> f : futures) {
+						try {
+							f.get();
+						} catch (Exception e) {
+							if (log.isErrorEnabled())
+								log.error("thread execution somehow failed!");
+							if (log.isDebugEnabled())
+								log.debug("thread execution exception", e);
+						}
+					}
+				}
+			}));
+			
+			// task 2: event statistics
+			futures.add(ksAdapter.submit(new Runnable() {
+				
+				@Override
+				public void run() {
+					ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, keywords);
+				}
+			}));
+			
+			// task 3: event entities & entity properties
+			futures.add(ksAdapter.submit(new Runnable() {
+				
+				@Override
+				public void run() {
+					ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, keywords);
+					Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", keywords.get(0).getWord()));
+					ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, keywords);
+				}
+			}));
+			
+			// wait until all are done
+			for (Future<?> f : futures) {
+				try {
+					f.get();
+				} catch (Exception e) {
+					if (log.isErrorEnabled())
+						log.error("thread execution somehow failed!");
+					if (log.isDebugEnabled())
+						log.debug("thread execution exception", e);
+				}
+			}
 			if (log.isInfoEnabled())
 				log.info("...queries done");
+			
+			List<Future<Instance>> instanceFutures = new ArrayList<Future<Instance>>();
+			
+			int numberOfAttributes = dataSet.numAttributes();
 			
 			// compute the features
 			for (Map.Entry<BenchmarkEvent, GroundTruth> innerEntry : content.entrySet()) {
@@ -163,21 +280,48 @@ public class RankingFeatureExtractor {
 				String fileName = event.getFileName();
 				double relevance = gt.getRegressionRelevanceValue();
 				UserModel userModel = new DummyUserModel();
-
-				double[] values = new double[dataSet.numAttributes()];
-				for (int i = 0; i < this.features.size(); i++) {
-					RankingFeature f = features.get(i);
-					values[i] = f.getValue(eventURI, keywords, userModel);
-				}
-				values[this.features.size()] = relevance;
+				int uriIndex = dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI);
+				int fileIndex = dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName);
 				
-				if (this.doAddEventInformation) {
-					values[this.features.size() + 1] = dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI);
-					values[this.features.size() + 2] = dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName);
+				EventWorker w = new EventWorker(eventURI, userModel, keywords, relevance, numberOfAttributes, uriIndex, fileIndex);
+				instanceFutures.add(threadPool.submit(w));
+			}
+			
+//			for (Map.Entry<BenchmarkEvent, GroundTruth> innerEntry : content.entrySet()) {
+//
+//				BenchmarkEvent event = innerEntry.getKey();
+//				GroundTruth gt = innerEntry.getValue();
+//				String eventURI = event.getEventURI();
+//				String fileName = event.getFileName();
+//				double relevance = gt.getRegressionRelevanceValue();
+//				UserModel userModel = new DummyUserModel();
+//
+//				double[] values = new double[dataSet.numAttributes()];
+//				for (int i = 0; i < this.features.size(); i++) {
+//					RankingFeature f = features.get(i);
+//					values[i] = f.getValue(eventURI, keywords, userModel);
+//				}
+//				values[this.features.size()] = relevance;
+//				
+//				if (this.doAddEventInformation) {
+//					values[this.features.size() + 1] = dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI);
+//					values[this.features.size() + 2] = dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName);
+//				}
+//
+//				Instance instance = new DenseInstance(1.0, values);
+//				dataSet.add(instance);
+//			}
+			
+			// wait until all are done
+			for (Future<Instance> f : instanceFutures) {
+				try {
+					dataSet.add(f.get());
+				} catch (Exception e) {
+					if (log.isErrorEnabled())
+						log.error("thread execution somehow failed!");
+					if (log.isDebugEnabled())
+						log.debug("thread execution exception", e);
 				}
-
-				Instance instance = new DenseInstance(1.0, values);
-				dataSet.add(instance);
 			}
 			if (log.isInfoEnabled())
 				log.info("...features done");
@@ -187,6 +331,7 @@ public class RankingFeatureExtractor {
 			log.info("done");
 
 		this.ksAdapter.closeConnection();
+		this.threadPool.shutdown();
 		writeDataSet(dataSet);
 	}
 

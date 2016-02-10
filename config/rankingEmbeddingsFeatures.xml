@@ -9,12 +9,6 @@
 
 	<import resource="test.xml"/>
 
-	<bean id="embeddingsGlove" class="edu.kit.anthropomatik.isl.newsTeller.util.embeddings.EmbeddingsProvider">
-		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
-		<property name="useLowercase" value="true" />
-		<property name="splitKeywordsIntoTokens" value="true" />
-	</bean>
-
 	<bean id="embeddings" class="edu.kit.anthropomatik.isl.newsTeller.util.embeddings.EmbeddingsProvider">
 		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/GoogleNews-vectors-negative300.bin" />
 		<property name="useLowercase" value="false" />
