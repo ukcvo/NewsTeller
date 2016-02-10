@@ -14,6 +14,40 @@
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
 		
 		 
+		<ref bean="embeddingsFeature00f" />
+		<ref bean="embeddingsFeature00t" />
+		<ref bean="embeddingsFeature01f" />
+		<ref bean="embeddingsFeature01t" />
+		<ref bean="embeddingsFeature02f" />
+		<ref bean="embeddingsFeature02t" />
+		<ref bean="embeddingsFeature03f" />
+		<ref bean="embeddingsFeature03t" />
+		<ref bean="embeddingsFeature10f" />
+		<ref bean="embeddingsFeature10t" />
+		<ref bean="embeddingsFeature11f" />
+		<ref bean="embeddingsFeature11t" />
+		<ref bean="embeddingsFeature12f" />
+		<ref bean="embeddingsFeature12t" />
+		<ref bean="embeddingsFeature13f" />
+		<ref bean="embeddingsFeature13t" />
+		<ref bean="embeddingsFeature20f" />
+		<ref bean="embeddingsFeature20t" />
+		<ref bean="embeddingsFeature21f" />
+		<ref bean="embeddingsFeature21t" />
+		<ref bean="embeddingsFeature22f" />
+		<ref bean="embeddingsFeature22t" />
+		<ref bean="embeddingsFeature23f" />
+		<ref bean="embeddingsFeature23t" />
+		<ref bean="embeddingsFeature30f" />
+		<ref bean="embeddingsFeature30t" />
+		<ref bean="embeddingsFeature31f" />
+		<ref bean="embeddingsFeature31t" />
+		<ref bean="embeddingsFeature32f" />
+		<ref bean="embeddingsFeature32t" />
+		<ref bean="embeddingsFeature33f" />
+		<ref bean="embeddingsFeature33t" />
+		
+		<!-- 
 		<ref bean="BM25FeatureSentence1.5" />
 		<ref bean="BM25FeatureText1.5" />
 		<ref bean="BM25FeatureSentence2.0" />
@@ -26,18 +60,6 @@
 		<ref bean="sentenceLengthFeatureCharAvg" />
 		<ref bean="sentenceLengthFeatureCharMin" />
 		<ref bean="sentenceLengthFeatureCharMax" />
-		
-		
-		<ref bean="embeddingsFeatureAvg" />
-		<ref bean="embeddingsFeatureMin" />
-		<ref bean="embeddingsFeatureMax" />
-		<ref bean="embeddingsFeatureGeom" />
-		
-		
-		<ref bean="embeddingsFeatureTitleAvg" />
-		<ref bean="embeddingsFeatureTitleMin" />
-		<ref bean="embeddingsFeatureTitleMax" />
-		<ref bean="embeddingsFeatureTitleGeom" />
 		
 		
 		<ref bean="sentenceContainsQuotationFeature" />
@@ -238,7 +260,7 @@
 		<ref bean="keywordInSentenceFeature22ttft" />
 		<ref bean="keywordInSentenceFeature22tttf" />
 		<ref bean="keywordInSentenceFeature22tttt" />
-		
+		 -->
 	</util:list>
 	
 </beans>

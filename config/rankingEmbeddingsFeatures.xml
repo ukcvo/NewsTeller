@@ -9,70 +9,305 @@
 
 	<import resource="test.xml"/>
 
-	<!-- embeddings features: sentence -->
-	<bean id="embeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="embeddingsGlove" class="edu.kit.anthropomatik.isl.newsTeller.util.embeddings.EmbeddingsProvider">
 		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="useLowercase" value="true" />
+		<property name="splitKeywordsIntoTokens" value="true" />
+	</bean>
+
+	<bean id="embeddings" class="edu.kit.anthropomatik.isl.newsTeller.util.embeddings.EmbeddingsProvider">
+		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+		<property name="useLowercase" value="true" />
+		<property name="splitKeywordsIntoTokens" value="true" />
+	</bean>
+
+	<!-- embeddings features -->
+		<bean id="embeddingsFeature00f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddingsAvg" />
-		<property name="aggregationType" value="0" />
+		<property name="name" value="embeddings00f" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="sentenceAggregationType" value="0" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
-	
-	<bean id="embeddingsFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+
+	<bean id="embeddingsFeature00t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddingsMin" />
-		<property name="aggregationType" value="1" />
+		<property name="name" value="embeddings00t" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="sentenceAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature01f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings01f" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="sentenceAggregationType" value="1" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
-	
-	<bean id="embeddingsFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+
+	<bean id="embeddingsFeature01t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddingsMax" />
-		<property name="aggregationType" value="2" />
+		<property name="name" value="embeddings01t" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="sentenceAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature02f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings02f" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="sentenceAggregationType" value="2" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
-	
-	<bean id="embeddingsFeatureGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+
+	<bean id="embeddingsFeature02t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddingsGeom" />
-		<property name="aggregationType" value="3" />
+		<property name="name" value="embeddings02t" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="sentenceAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature03f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings03f" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="sentenceAggregationType" value="3" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
-	
-	
-	<!-- embeddings features: title -->
-	<bean id="embeddingsFeatureTitleAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+
+	<bean id="embeddingsFeature03t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddingsTitleAvg" />
-		<property name="aggregationType" value="0" />
+		<property name="name" value="embeddings03t" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="sentenceAggregationType" value="3" />
 		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
-	
-	<bean id="embeddingsFeatureTitleMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+
+	<bean id="embeddingsFeature10f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddingsTitleMin" />
-		<property name="aggregationType" value="1" />
+		<property name="name" value="embeddings10f" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="sentenceAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature10t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings10t" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="sentenceAggregationType" value="0" />
 		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
-	
-	<bean id="embeddingsFeatureTitleMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+
+	<bean id="embeddingsFeature11f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddingsTitleMax" />
-		<property name="aggregationType" value="2" />
+		<property name="name" value="embeddings11f" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="sentenceAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature11t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings11t" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="sentenceAggregationType" value="1" />
 		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
-	
-	<bean id="embeddingsFeatureTitleGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/glove.6B.50d.txt" />
+
+	<bean id="embeddingsFeature12f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddingsTitleGeom" />
-		<property name="aggregationType" value="3" />
+		<property name="name" value="embeddings12f" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="sentenceAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature12t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings12t" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="sentenceAggregationType" value="2" />
 		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
+
+	<bean id="embeddingsFeature13f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings13f" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="sentenceAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature13t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings13t" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="sentenceAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature20f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings20f" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="sentenceAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature20t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings20t" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="sentenceAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature21f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings21f" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="sentenceAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature21t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings21t" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="sentenceAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature22f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings22f" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="sentenceAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature22t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings22t" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="sentenceAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature23f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings23f" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="sentenceAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature23t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings23t" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="sentenceAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature30f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings30f" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="sentenceAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature30t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings30t" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="sentenceAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature31f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings31f" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="sentenceAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature31t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings31t" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="sentenceAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature32f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings32f" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="sentenceAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature32t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings32t" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="sentenceAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="embeddingsFeature33f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings33f" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="sentenceAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="embeddingsFeature33t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings33t" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="sentenceAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
 </beans>
