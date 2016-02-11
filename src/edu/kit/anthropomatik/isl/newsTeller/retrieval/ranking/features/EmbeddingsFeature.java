@@ -91,7 +91,7 @@ public class EmbeddingsFeature extends RankingFeature {
 		
 		for (Keyword keyword : keywordsToUse) {
 			double keywordResult;
-			switch (this.keywordAggregationType) {
+			switch (this.sentenceAggregationType) {
 			case AGGREGATION_TYPE_MIN:
 				keywordResult = Double.POSITIVE_INFINITY;
 				break;
@@ -165,6 +165,9 @@ public class EmbeddingsFeature extends RankingFeature {
 		
 		if (this.keywordAggregationType == AGGREGATION_TYPE_GEOM)
 			result = Math.pow(result, (1.0 / keywordsToUse.size()));
+		
+		if (Double.isInfinite(result))
+			result = 0;
 		
 		return result;
 	}

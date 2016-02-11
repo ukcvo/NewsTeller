@@ -9,12 +9,6 @@
     http://www.springframework.org/schema/util
     http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<context:property-placeholder properties-ref="wekaProperties" />
-	<util:properties id="wekaProperties">
-		<prop key="toSelect">4</prop>
-		<prop key="numFeatures">8</prop>
-	</util:properties>
-
 	<bean id="testFilter" class="weka.filters.unsupervised.attribute.Remove">
 		<property name="attributeIndices" value="23,24,25" />
 	</bean>

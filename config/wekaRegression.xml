@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
@@ -10,7 +10,6 @@
     http://www.springframework.org/schema/util
     http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	
 	<!-- filters -->
 	<bean id="r_removeStringFilter" class="weka.filters.unsupervised.attribute.RemoveType">
 		<property name="options">
@@ -23,6 +22,10 @@
 
 	<bean id="r_dummyFilter" class="weka.filters.AllFilter" />
 
+	<bean id="r_relevanceToNominalFilter" class="weka.filters.unsupervised.attribute.NumericToNominal">
+		<property name="attributeIndices" value="last" />
+	</bean>
+
 	<!-- feature selection -->
 	<bean id="r_relief-f" class="weka.attributeSelection.AttributeSelection">
 		<property name="evaluator">
@@ -30,7 +33,7 @@
 		</property>
 		<property name="search">
 			<bean class="weka.attributeSelection.Ranker">
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelectReg}" />
 			</bean>
 		</property>
 	</bean>
@@ -44,42 +47,104 @@
 		<property name="search">
 			<bean class="weka.attributeSelection.GreedyStepwise">
 				<property name="generateRanking" value="false" />
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelectReg}" />
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="r_wrapperREPTree" class="weka.attributeSelection.AttributeSelection">
+	<bean id="r_correlation" class="weka.attributeSelection.AttributeSelection">
 		<property name="evaluator">
-			<bean class="weka.attributeSelection.WrapperSubsetEval">
-				<property name="classifier">
-					<bean class="weka.classifiers.trees.REPTree" />
+			<bean class="weka.attributeSelection.FilteredAttributeEval">
+				<property name="filter" ref="r_relevanceToNominalFilter" />
+				<property name="attributeEvaluator">
+					<bean class="weka.attributeSelection.CorrelationAttributeEval" />
+				</property>
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.Ranker">
+				<property name="numToSelect" value="${toSelectReg}" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_oneR" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.FilteredAttributeEval">
+				<property name="filter" ref="r_relevanceToNominalFilter" />
+				<property name="attributeEvaluator">
+					<bean class="weka.attributeSelection.OneRAttributeEval" />
+				</property>
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.Ranker">
+				<property name="numToSelect" value="${toSelectReg}" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_gainRatio" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.FilteredAttributeEval">
+				<property name="filter" ref="r_relevanceToNominalFilter" />
+				<property name="attributeEvaluator">
+					<bean class="weka.attributeSelection.GainRatioAttributeEval">
+						<property name="missingMerge" value="false" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.Ranker">
+				<property name="numToSelect" value="${toSelectReg}" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_wrapperDT" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.FilteredSubsetEval">
+				<property name="filter" ref="r_relevanceToNominalFilter" />
+				<property name="subsetEvaluator">
+					<bean class="weka.attributeSelection.WrapperSubsetEval">
+						<property name="classifier">
+							<bean class="weka.classifiers.trees.J48" />
+						</property>
+					</bean>
 				</property>
 			</bean>
 		</property>
 		<property name="search">
 			<bean class="weka.attributeSelection.GreedyStepwise">
 				<property name="generateRanking" value="false" />
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelectReg}" />
 			</bean>
 		</property>
 	</bean>
 
-	<bean id="r_wrapperRandomForest" class="weka.attributeSelection.AttributeSelection">
+	<bean id="r_wrapperNB" class="weka.attributeSelection.AttributeSelection">
 		<property name="evaluator">
-			<bean class="weka.attributeSelection.WrapperSubsetEval">
-				<property name="classifier">
-					<bean class="weka.classifiers.trees.RandomForest" />
+			<bean class="weka.attributeSelection.FilteredSubsetEval">
+				<property name="filter" ref="r_relevanceToNominalFilter" />
+				<property name="subsetEvaluator">
+					<bean class="weka.attributeSelection.WrapperSubsetEval">
+						<property name="classifier">
+							<bean class="weka.classifiers.bayes.NaiveBayes" />
+						</property>
+					</bean>
 				</property>
 			</bean>
 		</property>
 		<property name="search">
 			<bean class="weka.attributeSelection.GreedyStepwise">
 				<property name="generateRanking" value="false" />
-				<property name="numToSelect" value="10" />
+				<property name="numToSelect" value="${toSelectReg}" />
 			</bean>
 		</property>
 	</bean>
+
+	
 
 	<!-- classifiers -->
 	<bean id="r_zeroR" class="weka.classifiers.meta.FilteredClassifier">
@@ -88,7 +153,15 @@
 			<bean class="weka.classifiers.rules.ZeroR" />
 		</property>
 	</bean>
-	
+
+	<bean id="r_REPTree" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.REPTree" />
+		</property>
+	</bean>
+
+
 	<bean id="r_adaBoost" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
