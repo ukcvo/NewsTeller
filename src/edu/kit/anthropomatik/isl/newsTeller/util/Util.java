@@ -80,6 +80,9 @@ public class Util {
 	public static final String COLUMN_NAME_PERCENTAGE = "percentage";
 	public static final String COLUMN_NAME_CONSTITUENT = "constituent";
 	public static final String COLUMN_NAME_REASON = "reason_";
+	public static final String COLUMN_NAME_SENTENCE = "System response";
+	public static final String COLUMN_NAME_INTEREST = "interest_";
+	
 
 	public static final String LABEL_FALSE = "false";
 	public static final String LABEL_TRUE = "true";
@@ -103,8 +106,9 @@ public class Util {
 	
 	public static final double EPSILON = 0.00001;
 
-	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 5;
-	public static final int MAX_NUMBER_OF_REASONS = 6;
+	public static final int MAX_NUMBER_OF_BENCHMARK_KEYWORDS = 3;
+	public static final int MAX_NUMBER_OF_BENCHMARK_REASONS = 6;
+	public static final int MAX_NUMBER_OF_BENCHMARK_INTERESTS = 6;
 
 	public static final String EMPTY_EVENT_RESPONSE = "I'm sorry, but there's nothing I can tell you about this topic.";
 
@@ -266,7 +270,7 @@ public class Util {
 					int relevanceRank = Integer.parseInt(in.get(Util.COLUMN_NAME_RELEVANCE_RANK));
 					
 					Set<UsabilityRatingReason> reasons = new HashSet<>();
-					for (int i = 1; i <= Util.MAX_NUMBER_OF_REASONS; i++) {
+					for (int i = 1; i <= Util.MAX_NUMBER_OF_BENCHMARK_REASONS; i++) {
 						String s = in.get(Util.COLUMN_NAME_REASON + i);
 						if (s != null && !s.isEmpty())
 							reasons.add(UsabilityRatingReason.fromInteger(Integer.parseInt(s)));
@@ -459,7 +463,7 @@ public class Util {
 				out.write(Util.COLUMN_NAME_URI);
 				out.write(Util.COLUMN_NAME_USABILITY_RATING);
 				out.write(Util.COLUMN_NAME_RELEVANCE_RANK);
-				for (int i = 1; i <= Util.MAX_NUMBER_OF_REASONS; i++)
+				for (int i = 1; i <= Util.MAX_NUMBER_OF_BENCHMARK_REASONS; i++)
 					out.write(Util.COLUMN_NAME_REASON + i);
 				out.endRecord();
 				
@@ -524,6 +528,81 @@ public class Util {
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
 				log.error("could not write ranking sentences");
+			if (log.isDebugEnabled())
+				log.debug("cannnot write file", e);
+		}
+	}
+	
+	/**
+	 * Writes the given query file.
+	 */
+	public static void writeQueryFile(String outputFileName, Map<String, String> eventToSentenceMap) {
+		try {
+			CsvWriter out = new CsvWriter(new FileWriter(outputFileName, false), ';');
+
+			out.write(Util.COLUMN_NAME_SENTENCE);
+			out.write(Util.COLUMN_NAME_RELEVANCE_RANK);
+			out.write(Util.COLUMN_NAME_USABILITY_RATING);
+			out.write(Util.COLUMN_NAME_URI);
+			out.endRecord();
+			
+			for (Map.Entry<String, String> entry : eventToSentenceMap.entrySet()) {
+				String eventURI = entry.getKey();
+				String sentence = entry.getValue();
+				
+				out.write(sentence);
+				out.write(" ");
+				out.write("1");
+				out.write(eventURI);
+				out.endRecord();
+			}
+
+			out.close();
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("could not write query");
+			if (log.isDebugEnabled())
+				log.debug("cannnot write file", e);
+		}
+	}
+	
+	/**
+	 * Writes the given query file.
+	 */
+	public static void writeUserConfigFile(String outputFileName, List<String> interests, Map<String, List<String>> fileNameToKeywordMap) {
+		try {
+			CsvWriter out = new CsvWriter(new FileWriter(outputFileName, false), ';');
+
+			out.write(Util.COLUMN_NAME_FILENAME);
+			for (int i = 1; i <= Util.MAX_NUMBER_OF_BENCHMARK_KEYWORDS; i++)
+				out.write(Util.COLUMN_NAME_KEYWORD + i);
+			for (int i = 1; i <= interests.size(); i++)
+				out.write(Util.COLUMN_NAME_INTEREST + i);
+			out.endRecord();
+			
+			for (Map.Entry<String, List<String>> entry : fileNameToKeywordMap.entrySet()) {
+				String fileName = entry.getKey();
+				List<String> keywords = entry.getValue();
+				
+				out.write(fileName);
+				for (int i = 0; i < Util.MAX_NUMBER_OF_BENCHMARK_KEYWORDS; i++) {
+					if (i < keywords.size())
+						out.write(keywords.get(i));
+					else
+						out.write(" ");
+				}
+				for (int i = 0; i < interests.size(); i++)
+					out.write(interests.get(i));
+				
+				out.endRecord();
+			}
+
+			out.close();
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("could not write user config file");
 			if (log.isDebugEnabled())
 				log.debug("cannnot write file", e);
 		}

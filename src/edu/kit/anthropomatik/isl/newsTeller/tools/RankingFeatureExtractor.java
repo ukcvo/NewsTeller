@@ -339,7 +339,7 @@ public class RankingFeatureExtractor {
 		System.setProperty("java.util.logging.config.file", "./config/logging.properties");
 		try {
 			LogManager.getLogManager().readConfiguration();
-			log = LogFactory.getLog(UsabilityFeatureExtractor.class);
+			log = LogFactory.getLog(RankingFeatureExtractor.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

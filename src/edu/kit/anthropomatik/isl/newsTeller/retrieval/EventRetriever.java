@@ -77,7 +77,7 @@ public class EventRetriever {
 			old = l;
 		}
 		//endregion
-		List<NewsEvent> rankedEvents = eventRanker.rankEvents(filteredEvents);
+		List<NewsEvent> rankedEvents = eventRanker.rankEvents(filteredEvents, userQuery, userModel);
 		//region time logging
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();
