@@ -18,7 +18,7 @@
 	<util:properties id="wekaProperties">
 		<prop key="toSelect">4</prop>
 		<prop key="numFeatures">8</prop>
-		<prop key="toSelectReg">4</prop>
+		<prop key="toSelectReg">2</prop>
 	</util:properties>
 	
 	
@@ -317,17 +317,11 @@
 	</bean>
 
 	<bean id="rankingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RankingBenchmark">
-		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRanking.xrff" />
+		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRanking - Kopie.xrff" />
 		<constructor-arg name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv" />
 		<property name="regressors">
 			<map>
-				<!--
-				<entry key="baseline" value-ref="r_zeroR" />  
-				
-				<entry key="REPTree" value-ref="r_REPTree" />
-				-->
 				<entry key="RandomForest" value-ref="r_randomForest" />
-				
 			</map>
 		</property>
 		

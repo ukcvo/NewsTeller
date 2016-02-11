@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import edu.kit.anthropomatik.isl.newsTeller.util.embeddings.EmbeddingsProvider;
 import edu.stanford.nlp.simple.Sentence;
 
@@ -29,6 +30,8 @@ public class EmbeddingsFeature extends RankingFeature {
 	
 	private EmbeddingsProvider embeddings;
 	
+	private Set<String> stopWords;
+	
 	public void setSentenceAggregationType(int sentenceAggregationType) {
 		this.sentenceAggregationType = sentenceAggregationType;
 	}
@@ -45,6 +48,11 @@ public class EmbeddingsFeature extends RankingFeature {
 		this.embeddings = embeddings;
 	}
 		
+	public EmbeddingsFeature(String stopWordsFileName) {
+		this.stopWords = new HashSet<String>();
+		stopWords.addAll(Util.readStringListFromFile(stopWordsFileName));
+	}
+	
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords, UserModel userModel) {
 		
@@ -84,7 +92,12 @@ public class EmbeddingsFeature extends RankingFeature {
 				continue;
 			String preprocessed = embeddings.getUseLowercase() ? sentence.toLowerCase() : sentence;
 			Sentence s = new Sentence(preprocessed);
-			double[] vector = embeddings.wordsToVector(s.words());
+			List<String> contentWords = new ArrayList<String>();
+			for (String word : s.words()) {
+				if (!this.stopWords.contains(word.toLowerCase())) // filter out stop words
+					contentWords.add(word);
+			}
+			double[] vector = embeddings.wordsToVector(contentWords);
 			if (vector != null)
 				sentenceVectors.add(vector);
 		}
@@ -116,8 +129,14 @@ public class EmbeddingsFeature extends RankingFeature {
 //				else
 //					keywordTokens.addAll(Arrays.asList(preprocessed.split(" ")));
 			}
-				
-			double[] keywordVector = embeddings.wordsToVector(keywordTokens);
+			
+			List<String> keywordContentTokens = new ArrayList<String>();
+			for (String keywordToken : keywordTokens) {
+				if (!this.stopWords.contains(keywordToken)) // filter out stop words in case we split the label
+					keywordContentTokens.add(keywordToken);
+			}
+			
+			double[] keywordVector = embeddings.wordsToVector(keywordContentTokens);
 			
 			if (keywordVector == null)
 				continue;

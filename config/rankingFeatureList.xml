@@ -46,7 +46,6 @@
 		<ref bean="embeddingsFeature32t" />
 		<ref bean="embeddingsFeature33f" />
 		<ref bean="embeddingsFeature33t" />
-		
 		<!-- 
 		<ref bean="BM25FeatureSentence1.5" />
 		<ref bean="BM25FeatureText1.5" />
@@ -72,6 +71,7 @@
 		<ref bean="sentenceContainsTheyFeature" />
 		<ref bean="sentenceContainsThisThatFeature" />
 		<ref bean="sentenceContainsPronounFeature" />
+		<ref bean="sentenceContainsStopwordFeature" />
 		
 		
 		<ref bean="numberOfKeywordEntitiesFeatureAvg" />
@@ -261,8 +261,7 @@
 		<ref bean="keywordInSentenceFeature22ttft" />
 		<ref bean="keywordInSentenceFeature22tttf" />
 		<ref bean="keywordInSentenceFeature22tttt" />
-		
-		 -->
+		-->
 	</util:list>
 	
 </beans>

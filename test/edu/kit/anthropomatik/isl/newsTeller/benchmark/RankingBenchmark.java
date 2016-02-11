@@ -143,6 +143,8 @@ public class RankingBenchmark {
 				double relativeTopRank = 0;
 				double topRank = 0;
 				double expectedRank = 0;
+				double top5relativeRank = 0;
+				double top5expectedRank = 0;
 				
 				Enumeration<Object> enumeration = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
 				while (enumeration.hasMoreElements()) {
@@ -160,9 +162,11 @@ public class RankingBenchmark {
 					evalLocal.evaluateModel(r, test);
 					
 					ndcg += computeNDCG(evalLocal.predictions());
-					topRank += computeTopRank(evalLocal.predictions(), false);
-					relativeTopRank += computeTopRank(evalLocal.predictions(), true);
-					expectedRank += computeExpectedRank(evalLocal.predictions());
+					topRank += computeTopRank(evalLocal.predictions(), false, 1);
+					relativeTopRank += computeTopRank(evalLocal.predictions(), true, 1);
+					expectedRank += computeExpectedRank(evalLocal.predictions(), evalLocal.predictions().size());
+					top5relativeRank += computeTopRank(evalLocal.predictions(), true, 5);
+					top5expectedRank += computeExpectedRank(evalLocal.predictions(), 5);
 					
 					if (this.outputRankings && log.isInfoEnabled())
 						logRankings(r, test);
@@ -172,10 +176,12 @@ public class RankingBenchmark {
 				topRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				relativeTopRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				top5relativeRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				top5expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				
 				if (log.isInfoEnabled()) {
 					log.info(String.format("%s (file-based)", classifierName));
-					logEvalResults(eval, ndcg, topRank, relativeTopRank, expectedRank);
+					logEvalResults(eval, ndcg, topRank, relativeTopRank, expectedRank, top5relativeRank, top5expectedRank);
 				}
 			}
 		} catch (Exception e) {
@@ -239,10 +245,19 @@ public class RankingBenchmark {
 	}
 	
 	// computes the expected rank when using the predictions as probabilites for selecting a random event.
-	private double computeExpectedRank(List<Prediction> predictions) {
+	private double computeExpectedRank(List<Prediction> predictions, int n) {
+		
+		List<Prediction> sortedByPrediction = new ArrayList<Prediction>(predictions);
+		Collections.sort(sortedByPrediction, new Comparator<Prediction>() {
+			@Override
+			public int compare(Prediction o1, Prediction o2) {
+				return (-1) * Double.compare(o1.predicted(), o2.predicted());
+			}
+		});
 		double result = 0;
 		double weightSum = 0;
-		for (Prediction p : predictions) {
+		for (int i = 0; i < Math.min(n, predictions.size()); i++) {
+			Prediction p = sortedByPrediction.get(i);
 			result += Util.regressionValueToRank(p.actual()) * p.predicted();
 			weightSum += p.predicted();
 		}
@@ -250,22 +265,32 @@ public class RankingBenchmark {
 		return (result / weightSum);
 	}
 	
-	// computes the rank of the highest-ranked event (optionally normalized by maximum attainable for the given query)
-	private double computeTopRank(List<Prediction> predictions, boolean shouldBeRelative) {
+	// computes the average rank of the n highest-ranked events (optionally normalized by maximum attainable for the given query)
+	private double computeTopRank(List<Prediction> predictions, boolean shouldBeRelative, int n) {
 		
-		Prediction topPrediction = null;
+		List<Prediction> sortedByPrediction = new ArrayList<Prediction>(predictions);
+		Collections.sort(sortedByPrediction, new Comparator<Prediction>() {
+			@Override
+			public int compare(Prediction o1, Prediction o2) {
+				return (-1) * Double.compare(o1.predicted(), o2.predicted());
+			}
+		});
+		
 		double maxActualValue = 0;
+		double topAvgValue = 0;
 		
-		for (Prediction p : predictions) {
-			if (topPrediction == null || p.predicted() > topPrediction.predicted())
-				topPrediction = p;
-			if (p.actual() > maxActualValue)
+		for (int i = 0; i < sortedByPrediction.size(); i++) {
+			Prediction p = sortedByPrediction.get(i);
+			if (Util.regressionValueToRank(p.actual()) > maxActualValue)
 				maxActualValue = Util.regressionValueToRank(p.actual());
+			if (i < n)
+				topAvgValue += Util.regressionValueToRank(p.actual());
 		}
 		
-		double topValue = Util.regressionValueToRank(topPrediction.actual());
+		topAvgValue /= Math.min(n, sortedByPrediction.size());
 		
-		return shouldBeRelative ? topValue / maxActualValue : topValue;
+			
+		return shouldBeRelative ? topAvgValue / maxActualValue : topAvgValue;
 	}
 	
 	private double computeNDCG(List<Prediction> predictions) {
@@ -303,7 +328,8 @@ public class RankingBenchmark {
 		return nDCG;
 	}
 	
-	private void logEvalResults(Evaluation eval, double ndcg, double topRank, double relativeTopRank, double expectedRank) {
+	private void logEvalResults(Evaluation eval, double ndcg, double topRank, double relativeTopRank, double expectedRank, 
+								double top5RelativeRank, double top5expectedRank) {
 		log.info(String.format("RMSE: %f", eval.rootMeanSquaredError()));
 		try {
 			log.info(String.format("correlation coefficient: %f", eval.correlationCoefficient()));
@@ -315,6 +341,9 @@ public class RankingBenchmark {
 		log.info(String.format("average rank of top 1: %f", topRank));
 		log.info(String.format("average normalized rank of top 1: %f", relativeTopRank));
 		log.info(String.format("expected rank (probability distribution): %f", expectedRank));
+		log.info(String.format("average normalized rank of top 5: %f", top5RelativeRank));
+		log.info(String.format("expected rank (probability distribution) for top 5: %f", top5expectedRank));
+		
 	}
 	
 	private Instances filterByFileName(Instances dataSet, Integer fileNameIdx, boolean isTest) throws Exception {
