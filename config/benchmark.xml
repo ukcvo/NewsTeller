@@ -18,7 +18,7 @@
 	<util:properties id="wekaProperties">
 		<prop key="toSelect">4</prop>
 		<prop key="numFeatures">8</prop>
-		<prop key="toSelectReg">2</prop>
+		<prop key="toSelectReg">4</prop>
 	</util:properties>
 	
 	
@@ -334,15 +334,16 @@
 				<ref bean="r_gainRatio"/>
 				<ref bean="r_wrapperDT"/>
 				<ref bean="r_wrapperNB"/>
+				<ref bean="r_wrapperRF"/>
 			</list>
 		</property>
 		<property name="groundTruthAttributes" value="235,236,237" />
 		
 		<property name="outputRankings" value="true" />
 		
-		<property name="doFeatureSelection" value="false" />
+		<property name="doFeatureSelection" value="true" />
 		<property name="doFileBasedRegression" value="false" />
-		<property name="doSearchBestNDCGFeature" value="true" />
+		<property name="doSearchBestNDCGFeature" value="false" />
 	</bean>
 
 </beans>

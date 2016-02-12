@@ -13,7 +13,59 @@
 	<util:list id="rankingFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
 		
-		 
+		
+		
+		<!-- narrowed down 
+		<ref bean="embeddingsFeature01f" />
+		<ref bean="embeddingsFeature11f" />
+		<ref bean="embeddingsFeature13f" />
+		<ref bean="embeddingsFeature31t" />
+		
+		<ref bean="sentenceLengthFeatureWordMin" />
+		<ref bean="sentenceLengthFeatureCharAvg" />
+		<ref bean="sentenceLengthFeatureCharMin" />
+		
+		<ref bean="numberOfKeywordEntitiesFeatureAvg" />
+		<ref bean="numberOfKeywordEntitiesFeatureMin" />
+		<ref bean="numberOfKeywordEntitiesFeatureMax" />
+		<ref bean="numberOfDbpediaEntitiesFeatureAvg" />
+		<ref bean="numberOfDbpediaEntitiesFeatureMin" />
+		<ref bean="numberOfDbpediaEntitiesFeatureMax" />
+		<ref bean="numberOfEntitiesFeatureAvg" />
+		<ref bean="numberOfEntitiesFeatureMin" />
+		<ref bean="numberOfEntitiesFeatureMax" />
+		<ref bean="numberOfNonEntitiesFeatureAvg" />
+		<ref bean="numberOfNonEntitiesFeatureMin" />
+		<ref bean="numberOfNonEntitiesFeatureMax" />
+		
+		<ref bean="recencyFeatureDays" />
+		<ref bean="recencyFeatureWeeks" />
+		<ref bean="recencyFeatureMonths" />
+		<ref bean="recencyFeatureYears" />
+		
+		<ref bean="keywordEntitiesFeature0ffd" />
+		<ref bean="keywordEntitiesFeature1ffp" />
+		<ref bean="keywordEntitiesFeature1ffd" />
+		<ref bean="keywordEntitiesFeature1ftd" />
+		
+		<ref bean="keywordInSentenceFeature10ftft" />
+		<ref bean="keywordInSentenceFeature11ftft" />
+		<ref bean="keywordInSentenceFeature11ttft" />
+		<ref bean="keywordInSentenceFeature12ftft" />
+		
+		<ref bean="BM25FeatureSentence1.2" />
+		<ref bean="BM25FeatureSentence1.3" />
+		<ref bean="BM25FeatureText1.5" />
+		<ref bean="BM25FeatureText1.8" />
+		
+		<ref bean="sentenceContainsQuotationFeature" />
+		<ref bean="sentenceContainsYouFeature" />
+		<ref bean="sentenceContainsHeSheItFeature" />
+		<ref bean="sentenceContainsStopwordFeature" />
+				
+		-->
+		
+		<!--  full set of all of them
 		<ref bean="embeddingsFeature00f" />
 		<ref bean="embeddingsFeature00t" />
 		<ref bean="embeddingsFeature01f" />
@@ -47,11 +99,24 @@
 		<ref bean="embeddingsFeature33f" />
 		<ref bean="embeddingsFeature33t" />
 		
+		<ref bean="BM25FeatureSentence1.2" />
+		<ref bean="BM25FeatureText1.2" />
+		<ref bean="BM25FeatureSentence1.3" />
+		<ref bean="BM25FeatureText1.3" />
+		<ref bean="BM25FeatureSentence1.4" />
+		<ref bean="BM25FeatureText1.4" />
 		<ref bean="BM25FeatureSentence1.5" />
 		<ref bean="BM25FeatureText1.5" />
+		<ref bean="BM25FeatureSentence1.6" />
+		<ref bean="BM25FeatureText1.6" />
+		<ref bean="BM25FeatureSentence1.7" />
+		<ref bean="BM25FeatureText1.7" />
+		<ref bean="BM25FeatureSentence1.8" />
+		<ref bean="BM25FeatureText1.8" />
+		<ref bean="BM25FeatureSentence1.9" />
+		<ref bean="BM25FeatureText1.9" />
 		<ref bean="BM25FeatureSentence2.0" />
 		<ref bean="BM25FeatureText2.0" />
-		
 		
 		<ref bean="sentenceLengthFeatureWordAvg" />
 		<ref bean="sentenceLengthFeatureWordMin" />
@@ -71,6 +136,8 @@
 		<ref bean="sentenceContainsTheyFeature" />
 		<ref bean="sentenceContainsThisThatFeature" />
 		<ref bean="sentenceContainsPronounFeature" />
+		<ref bean="sentenceContainsHeSheItFeature" />
+		<ref bean="sentenceContainsHeSheFeature" />
 		<ref bean="sentenceContainsStopwordFeature" />
 		
 		
@@ -262,6 +329,7 @@
 		<ref bean="keywordInSentenceFeature22tttf" />
 		<ref bean="keywordInSentenceFeature22tttt" />
 		
+		 -->
 	</util:list>
 	
 </beans>

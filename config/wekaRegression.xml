@@ -139,7 +139,21 @@
 		</property>
 	</bean>
 
-	
+	<bean id="r_wrapperRF" class="weka.attributeSelection.AttributeSelection">
+		<property name="evaluator">
+			<bean class="weka.attributeSelection.WrapperSubsetEval">
+				<property name="classifier">
+					<bean class="weka.classifiers.trees.RandomForest" />
+				</property>
+			</bean>
+		</property>
+		<property name="search">
+			<bean class="weka.attributeSelection.GreedyStepwise">
+				<property name="generateRanking" value="false" />
+				<property name="numToSelect" value="${toSelectReg}" />
+			</bean>
+		</property>
+	</bean>
 
 	<!-- classifiers -->
 	<bean id="r_zeroR" class="weka.classifiers.meta.FilteredClassifier">
@@ -156,53 +170,10 @@
 		</property>
 	</bean>
 
-
-	<bean id="r_adaBoost" class="weka.classifiers.meta.FilteredClassifier">
+	<bean id="r_M5P" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
-			<bean class="weka.classifiers.meta.AdaBoostM1">
-				<property name="classifier">
-					<bean class="weka.classifiers.trees.J48" />
-				</property>
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="r_adaBoostResampling" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.meta.AdaBoostM1">
-				<property name="useResampling" value="true" />
-				<property name="classifier">
-					<bean class="weka.classifiers.trees.J48" />
-				</property>
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="r_MLP" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.functions.MultilayerPerceptron" />
-		</property>
-	</bean>
-
-	<bean id="r_MLP2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.functions.MultilayerPerceptron">
-				<property name="validationSetSize" value="10" />
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="r_MLP3" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.functions.MultilayerPerceptron">
-				<property name="validationSetSize" value="10" />
-				<property name="decay" value="true" />
-			</bean>
+			<bean class="weka.classifiers.trees.M5P" />
 		</property>
 	</bean>
 

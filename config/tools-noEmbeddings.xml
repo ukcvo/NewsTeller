@@ -60,70 +60,70 @@
 		<property name="outputFolder" value="resources/benchmark/userModel" />
 		<property name="totalNumberOfEvents" value="100" />
 		
-		<property name="userID" value="usr_01" />
+		<property name="userID" value="usr_03" />
 		<property name="interests">
 			<list>
-				<value>tennis</value>
-				<value>exchange rates</value>
-				<value>RHCP</value>
-				<value>Putin</value>
-				<value>Germany</value>
-				<value>information technology</value>
+				<value>football</value>
+				<value>video games</value>
+				<value>cars</value>
+				<value>movies</value>
+				<value>Internet</value>
+				<value>Breaking Bad</value>
 			</list>
 		</property>
 		<property name="queries">
 			<list>
 				<list>
-					<value>exchange rates</value>
-					<value>Russian ruble to euro</value>
+					<value>Bundesliga</value>
+					<value>results</value>
 				</list>
 				<list>
-					<value>Moscow</value>
-					<value>latest events</value>
+					<value>USA</value>
+					<value>election</value>
 				</list>
 				<list>
-					<value>northern Germany</value>
-					<value>refugees</value>
+					<value>Donald Trump</value>
+					<value>daughter</value>
 				</list>
 				<list>
-					<value>RHCP</value>
-					<value>the next concert</value>
-					<value>Germany</value>
+					<value>jogging</value>
+					<value>shoes</value>
+					<value>test</value>
 				</list>
 				<list>
-					<value>tennis</value>
-					<value>courts</value>
-					<value>winter</value>
+					<value>Dark Souls 3</value>
+					<value>review</value>
+					<value>PC</value>
 				</list>
 				<list>
-					<value>tennis</value>
-					<value>trainer</value>
-					<value>prices</value>
+					<value>Mario Kart</value>
+					<value>online</value>
 				</list>
 				<list>
-					<value>information technology</value>
-					<value>latest news</value>
+					<value>Formula 1</value>
+					<value>car presentations</value>
 				</list>
 				<list>
-					<value>Putin</value>
-					<value>Merkel</value>
+					<value>Formula 1</value>
+					<value>Hockenheim</value>
+					<value>date</value>
 				</list>
 				<list>
-					<value>Putin</value>
-					<value>Syria</value>
+					<value>Christopher Nolan</value>
+					<value>new movie</value>
 				</list>
 				<list>
-					<value>Apple</value>
-					<value>computer novelties</value>
+					<value>Oscars</value>
+					<value>nominations</value>
 				</list>
 				<list>
-					<value>Frankfurt am Main</value>
-					<value>Moscow</value>
-					<value>cheap flights</value>
+					<value>Better Call Saul</value>
+					<value>first episode</value>
 				</list>
 				<list>
-					<value>northern Germany</value>
-					<value>places to visit</value>
+					<value>Lost</value>
+					<value>ending</value>
+					<value>explanation</value>
 				</list>
 			</list>
 		</property>

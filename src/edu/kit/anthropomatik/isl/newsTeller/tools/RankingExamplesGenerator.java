@@ -181,6 +181,8 @@ public class RankingExamplesGenerator {
 			Collections.shuffle(remainder);
 			selectedEvents.addAll(remainder.subList(0, numberOfEventToTake - selectedEvents.size()));
 			
+			Collections.shuffle(selectedEvents); // make sure that there's no pattern in the data
+			
 			numberOfEventsStillMissing = numberOfEventsStillMissing - numberOfEventToTake;
 			
 			String queryFileName = String.format("%s/query_%d.csv", folderName, i);
