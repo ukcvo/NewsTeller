@@ -124,10 +124,10 @@ public class EmbeddingsFeature extends RankingFeature {
 			if (embeddings.getSplitKeywordsIntoTokens()) 
 				keywordTokens.addAll(Arrays.asList(preprocessed.split(" ")));
 			else {
-//				if (embeddings.hasWord(preprocessed.replace(" ", "_")))
+				if (embeddings.hasWord(preprocessed.replace(" ", "_")))
 					keywordTokens.add(preprocessed.replace(" ", "_"));
-//				else
-//					keywordTokens.addAll(Arrays.asList(preprocessed.split(" ")));
+				else
+					keywordTokens.addAll(Arrays.asList(preprocessed.split(" ")));
 			}
 			
 			List<String> keywordContentTokens = new ArrayList<String>();

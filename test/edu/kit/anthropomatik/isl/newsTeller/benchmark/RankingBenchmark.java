@@ -25,6 +25,7 @@ import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.evaluation.NumericPrediction;
 import weka.classifiers.evaluation.Prediction;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -47,9 +48,13 @@ public class RankingBenchmark {
 	
 	private List<AttributeSelection> featureSelectors;
 	
+	private String groundTruthAttributes;
+	
 	private boolean doFileBasedRegression;
 	
 	private boolean doFeatureSelection;
+	
+	private boolean doSearchBestNDCGFeature;
 	
 	private boolean outputRankings;
 	
@@ -61,12 +66,20 @@ public class RankingBenchmark {
 		this.featureSelectors = featureSelectors;
 	}
 	
+	public void setGroundTruthAttributes(String groundTruthAttributes) {
+		this.groundTruthAttributes = groundTruthAttributes;
+	}
+	
 	public void setDoFileBasedRegression(boolean doFileBasedRegression) {
 		this.doFileBasedRegression = doFileBasedRegression;
 	}
 	
 	public void setDoFeatureSelection(boolean doFeatureSelection) {
 		this.doFeatureSelection = doFeatureSelection;
+	}
+	
+	public void setDoSearchBestNDCGFeature(boolean doSearchBestNDCGFeature) {
+		this.doSearchBestNDCGFeature = doSearchBestNDCGFeature;
 	}
 	
 	public void setOutputRankings(boolean outputRankings) {
@@ -124,7 +137,7 @@ public class RankingBenchmark {
 	// endregion
 	
 	// region fileBasedRegression
-	private void fileBasedRegression() {
+	private void fileBasedRegression(Instances dataSet) { 
 		
 		try {
 			
@@ -190,7 +203,6 @@ public class RankingBenchmark {
 			if (log.isDebugEnabled())
 				log.debug("cannot perform file-based regression", e);
 		}
-		
 	}
 	
 	private class RankEntry {
@@ -262,7 +274,7 @@ public class RankingBenchmark {
 			weightSum += p.predicted();
 		}
 		
-		return (result / weightSum);
+		return (weightSum == 0) ? 0 : (result / weightSum);
 	}
 	
 	// computes the average rank of the n highest-ranked events (optionally normalized by maximum attainable for the given query)
@@ -354,17 +366,63 @@ public class RankingBenchmark {
 		filter.setInvertSelection(isTest);
 		filter.setInputFormat(dataSet);
 
-		Instances result = Filter.useFilter(dataSet, filter);
-
-		return result;
+		Instances filtered = Filter.useFilter(dataSet, filter);
+		
+		return filtered;
+	}
+	// endregion
+	
+	// region searchBestNDCGFeature
+	private void searchBestNDCGFeature() {
+		try {
+			Map<String, Double> ndcgMap = new HashMap<String, Double>();
+			
+			int numberOfAttributesToCheck = this.dataSet.numAttributes() - this.groundTruthAttributes.split(",").length;
+			
+			for (int i = 0; i < numberOfAttributesToCheck; i++) {
+				
+				List<Prediction> predictions = new ArrayList<Prediction>();
+				for (Instance instance : this.dataSet) {
+					Prediction pred = new NumericPrediction(instance.classValue(), instance.value(i));
+					predictions.add(pred);
+				}
+				
+				double ndcg = computeNDCG(predictions);
+				String attributeName = this.dataSet.attribute(i).name();
+				ndcgMap.put(attributeName, ndcg);
+			}
+			
+			// random baseline
+			List<Prediction> randomPredictions = new ArrayList<Prediction>();
+			for (Instance instance : this.dataSet) {
+				Prediction pred = new NumericPrediction(instance.classValue(), Math.random());
+				randomPredictions.add(pred);
+			}
+			double randomNDCG = computeNDCG(randomPredictions);
+			ndcgMap.put("random baseline", randomNDCG);
+			
+			if (log.isInfoEnabled()) {
+				log.info("attribute;ndcg");
+				for (Map.Entry<String, Double> entry : ndcgMap.entrySet())
+					log.info(String.format("%s;%f", entry.getKey(), entry.getValue()));
+			}
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't select best NDCG Feature");
+			if (log.isDebugEnabled())
+				log.debug("Exception", e);
+		}
 	}
 	// endregion
 	
 	public void run() {
 		if (this.doFileBasedRegression)
-			fileBasedRegression();
+			fileBasedRegression(this.dataSet);
 		if (this.doFeatureSelection)
 			featureSelection();
+		if (this.doSearchBestNDCGFeature)
+			searchBestNDCGFeature();
 	}
 	
 	public static void main(String[] args) {

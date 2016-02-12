@@ -111,9 +111,9 @@ public class EmbeddingsFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnZeroPointFiveFiveAvg() {
+	public void shouldReturnZeroPointSixEightAvg() {
 		double value = avgFeature.getValue("event-2", keywords, userModel);
-		assertTrue(Math.abs(value - 0.5500468348569636) < Util.EPSILON);
+		assertTrue(Math.abs(value - 0.6880536740415572) < Util.EPSILON);
 	}
 	
 	@Test
@@ -129,9 +129,9 @@ public class EmbeddingsFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnZeroPointThreeSevenAvg() {
+	public void shouldReturnZeroPointFourFourAvg() {
 		double value = avgFeature.getValue("event-5", keywords, userModel);
-		assertTrue(Math.abs(value - 0.3788934428932367) < Util.EPSILON);
+		assertTrue(Math.abs(value - 0.4478968624855335) < Util.EPSILON);
 	}
 	
 	@Test
@@ -141,15 +141,15 @@ public class EmbeddingsFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnZeroPointFiveFiveMax() {
+	public void shouldReturnZeroPointSixEightMax() {
 		double value = maxFeature.getValue("event-5", keywords, userModel);
-		assertTrue(Math.abs(value - 0.5500468348569636) < Util.EPSILON);
+		assertTrue(Math.abs(value - 0.6880536740415572) < Util.EPSILON);
 	}
 	
 	@Test
-	public void shouldReturnZeroPointThreeThreeGeom() {
+	public void shouldReturnZeroPointThreeSevenGeom() {
 		double value = geomFeature.getValue("event-5", keywords, userModel);
-		assertTrue(Math.abs(value - 0.3380336632449515) < Util.EPSILON);
+		assertTrue(Math.abs(value - 0.3780691805577776) < Util.EPSILON);
 	}
 	
 	@Test
@@ -159,8 +159,8 @@ public class EmbeddingsFeatureTest {
 	}
 	
 	@Test
-	public void shouldReturnZeroPointTwoFiveTitle() {
+	public void shouldReturnZeroPointTwoThreeTitle() {
 		double value = titleFeature.getValue("event-2", keywords, userModel);
-		assertTrue(value == 0.2549590756690914);
+		assertTrue(value == 0.23652349958527183);
 	}
 }

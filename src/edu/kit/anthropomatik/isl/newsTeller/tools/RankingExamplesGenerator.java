@@ -174,8 +174,13 @@ public class RankingExamplesGenerator {
 			List<String> query = queryResultList.get(i).getQuery();
 			List<EventSentenceTuple> events = queryResultList.get(i).getResult();
 			
+			// take 50% as sorted by best feature, remaining 50% random
 			int numberOfEventToTake = Math.min(events.size(), (int) Math.ceil(numberOfEventsStillMissing / (queryResultList.size() - i)));
-			List<EventSentenceTuple> selectedEvents = events.subList(0, numberOfEventToTake);
+			List<EventSentenceTuple> selectedEvents = new ArrayList<EventSentenceTuple>(events.subList(0, (int) Math.round(numberOfEventToTake / 2.0)));
+			List<EventSentenceTuple> remainder = new ArrayList<EventSentenceTuple>(events.subList((int) Math.round(numberOfEventToTake / 2.0), events.size()));
+			Collections.shuffle(remainder);
+			selectedEvents.addAll(remainder.subList(0, numberOfEventToTake - selectedEvents.size()));
+			
 			numberOfEventsStillMissing = numberOfEventsStillMissing - numberOfEventToTake;
 			
 			String queryFileName = String.format("%s/query_%d.csv", folderName, i);
@@ -212,7 +217,7 @@ public class RankingExamplesGenerator {
 			e.printStackTrace();
 		}
 
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/rankingExamples.xml");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/tools-noEmbeddings.xml");
 		RankingExamplesGenerator generator = (RankingExamplesGenerator) context.getBean("rankingExamplesGenerator");
 		((AbstractApplicationContext) context).close();
 

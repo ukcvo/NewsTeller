@@ -11,13 +11,8 @@
     http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
 	<!-- filters -->
-	<bean id="r_removeStringFilter" class="weka.filters.unsupervised.attribute.RemoveType">
-		<property name="options">
-			<array>
-				<value>-T</value>
-				<value>string</value>
-			</array>
-		</property>
+	<bean id="r_removeStringFilter" class="weka.filters.unsupervised.attribute.RemoveByName">
+		<property name="expression" value="(eventURI|fileName)" />
 	</bean>
 
 	<bean id="r_dummyFilter" class="weka.filters.AllFilter" />
@@ -256,47 +251,6 @@
 						<value>-I</value>	<!-- inverse exponential distance weighting -->
 					</array>
 				</property>
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="r_decisionTree" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.trees.J48" />
-		</property>
-	</bean>
-
-	<bean id="r_decisionTree2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.trees.J48">
-				<property name="reducedErrorPruning" value="true" />
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="r_decisionTree3" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.trees.J48">
-				<property name="unpruned" value="true" />
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="r_cart" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.trees.SimpleCart" />
-		</property>
-	</bean>
-
-	<bean id="r_cart2" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
-		<property name="classifier">
-			<bean class="weka.classifiers.trees.SimpleCart">
-				<property name="useOneSE" value="true" />
 			</bean>
 		</property>
 	</bean>

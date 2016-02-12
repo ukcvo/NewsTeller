@@ -9,8 +9,8 @@
 
 	<bean id="embeddings" class="edu.kit.anthropomatik.isl.newsTeller.util.embeddings.EmbeddingsProvider">
 		<constructor-arg name="embeddingsFileName" value="resources/wordvectors/GoogleNews-vectors-negative300.bin" />
-		<property name="useLowercase" value="true" />
-		<property name="splitKeywordsIntoTokens" value="true" />
+		<property name="useLowercase" value="false" />
+		<property name="splitKeywordsIntoTokens" value="false" />
 	</bean>
 
 	<!-- embeddings features -->

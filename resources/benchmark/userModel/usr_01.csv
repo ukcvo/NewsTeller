@@ -1,11 +1,11 @@
-"filename";"keyword_1";"keyword_2";"keyword_3";"interest_1";"interest_2";"interest_3";"interest_4";"interest_5";"interest_6"
-"resources/benchmark/userModel/usr_01/query_0.csv";"exchange rates";"Russian ruble to euro";;"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
-"resources/benchmark/userModel/usr_01/query_1.csv";"information technology";"latest news";;"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
-"resources/benchmark/userModel/usr_01/query_2.csv";"Putin";"Syria";;"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
-"resources/benchmark/userModel/usr_01/query_3.csv";"Moscow";"latest events";;"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
-"resources/benchmark/userModel/usr_01/query_4.csv";"Frankfurt am Main";"Moscow";"cheap flights";"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
-"resources/benchmark/userModel/usr_01/query_5.csv";"Putin";"Merkel";;"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
-"resources/benchmark/userModel/usr_01/query_6.csv";"tennis";"trainer";"prices";"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
-"resources/benchmark/userModel/usr_01/query_7.csv";"tennis";"courts";"winter";"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
-"resources/benchmark/userModel/usr_01/query_8.csv";"northern Germany";"refugees";;"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
-"resources/benchmark/userModel/usr_01/query_9.csv";"Apple";"computer novelties";;"tennis";"exchange rates";"RHCP";"Putin";"Germany";"information technology"
+filename;keyword_1;keyword_2;keyword_3;interest_1;interest_2;interest_3;interest_4;interest_5;interest_6
+resources/benchmark/userModel/usr_01/query_1.csv;information technology;latest news;;tennis;exchange rates;RHCP;Putin;Germany;information technology
+resources/benchmark/userModel/usr_01/query_6.csv;tennis;trainer;prices;tennis;exchange rates;RHCP;Putin;Germany;information technology
+resources/benchmark/userModel/usr_01/query_7.csv;tennis;courts;winter;tennis;exchange rates;RHCP;Putin;Germany;information technology
+resources/benchmark/userModel/usr_01/query_0.csv;exchange rates;Russian ruble to euro;;tennis;exchange rates;RHCP;Putin;Germany;information technology
+resources/benchmark/userModel/usr_01/query_5.csv;Putin;Merkel;;tennis;exchange rates;RHCP;Putin;Germany;information technology
+resources/benchmark/userModel/usr_01/query_2.csv;Putin;Syria;;tennis;exchange rates;RHCP;Putin;Germany;information technology
+resources/benchmark/userModel/usr_01/query_3.csv;Moscow;latest events;;tennis;exchange rates;RHCP;Putin;Germany;information technology
+resources/benchmark/userModel/usr_01/query_4.csv;Frankfurt am Main;Moscow;cheap flights;tennis;exchange rates;RHCP;Putin;Germany;information technology
+resources/benchmark/userModel/usr_01/query_9.csv;Apple;computer novelties;;tennis;exchange rates;RHCP;Putin;Germany;information technology
+resources/benchmark/userModel/usr_01/query_8.csv;northern Germany;refugees;;tennis;exchange rates;RHCP;Putin;Germany;information technology

@@ -17,6 +17,7 @@
 
 	<!-- embeddings features -->
 		<bean id="embeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings00f" />
@@ -26,6 +27,7 @@
 	</bean>
 
 	<bean id="embeddingsFeatureTitle" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings00t" />
@@ -35,6 +37,7 @@
 	</bean>
 
 	<bean id="embeddingsFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings11f" />
@@ -44,6 +47,7 @@
 	</bean>
 
 	<bean id="embeddingsFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings22f" />
@@ -53,6 +57,7 @@
 	</bean>
 
 	<bean id="embeddingsFeatureGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings33f" />

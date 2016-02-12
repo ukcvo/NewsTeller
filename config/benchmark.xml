@@ -317,7 +317,7 @@
 	</bean>
 
 	<bean id="rankingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RankingBenchmark">
-		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRanking - Kopie.xrff" />
+		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRanking.xrff" />
 		<constructor-arg name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv" />
 		<property name="regressors">
 			<map>
@@ -336,11 +336,13 @@
 				<ref bean="r_wrapperNB"/>
 			</list>
 		</property>
+		<property name="groundTruthAttributes" value="235,236,237" />
 		
-		<property name="outputRankings" value="false" />
+		<property name="outputRankings" value="true" />
 		
-		<property name="doFeatureSelection" value="true" />
+		<property name="doFeatureSelection" value="false" />
 		<property name="doFileBasedRegression" value="false" />
+		<property name="doSearchBestNDCGFeature" value="true" />
 	</bean>
 
 </beans>
