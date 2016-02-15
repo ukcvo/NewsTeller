@@ -28,15 +28,10 @@
 		<ref bean="numberOfKeywordEntitiesFeatureAvg" />
 		<ref bean="numberOfKeywordEntitiesFeatureMin" />
 		<ref bean="numberOfKeywordEntitiesFeatureMax" />
-		<ref bean="numberOfDbpediaEntitiesFeatureAvg" />
-		<ref bean="numberOfDbpediaEntitiesFeatureMin" />
-		<ref bean="numberOfDbpediaEntitiesFeatureMax" />
-		<ref bean="numberOfEntitiesFeatureAvg" />
-		<ref bean="numberOfEntitiesFeatureMin" />
-		<ref bean="numberOfEntitiesFeatureMax" />
-		<ref bean="numberOfNonEntitiesFeatureAvg" />
-		<ref bean="numberOfNonEntitiesFeatureMin" />
-		<ref bean="numberOfNonEntitiesFeatureMax" />
+		<ref bean="numberOfDbpediaEntitiesFeature" />
+		<ref bean="numberOfEntitiesFeature" />
+		<ref bean="numberOfNonEntitiesFeature" />
+		<ref bean="numberOfDummyEntitiesFeature" />
 		
 		<ref bean="recencyFeatureDays" />
 		<ref bean="recencyFeatureWeeks" />
@@ -100,23 +95,33 @@
 		<ref bean="embeddingsFeature33t" />
 		
 		<ref bean="BM25FeatureSentence1.2" />
-		<ref bean="BM25FeatureText1.2" />
 		<ref bean="BM25FeatureSentence1.3" />
-		<ref bean="BM25FeatureText1.3" />
 		<ref bean="BM25FeatureSentence1.4" />
-		<ref bean="BM25FeatureText1.4" />
 		<ref bean="BM25FeatureSentence1.5" />
-		<ref bean="BM25FeatureText1.5" />
 		<ref bean="BM25FeatureSentence1.6" />
-		<ref bean="BM25FeatureText1.6" />
 		<ref bean="BM25FeatureSentence1.7" />
-		<ref bean="BM25FeatureText1.7" />
 		<ref bean="BM25FeatureSentence1.8" />
-		<ref bean="BM25FeatureText1.8" />
 		<ref bean="BM25FeatureSentence1.9" />
-		<ref bean="BM25FeatureText1.9" />
 		<ref bean="BM25FeatureSentence2.0" />
+		<ref bean="BM25FeatureText1.2" />
+		<ref bean="BM25FeatureText1.3" />
+		<ref bean="BM25FeatureText1.4" />
+		<ref bean="BM25FeatureText1.5" />
+		<ref bean="BM25FeatureText1.6" />
+		<ref bean="BM25FeatureText1.7" />
+		<ref bean="BM25FeatureText1.8" />
+		<ref bean="BM25FeatureText1.9" />
 		<ref bean="BM25FeatureText2.0" />
+		<ref bean="BM25FeatureTitle1.2" />
+		<ref bean="BM25FeatureTitle1.3" />
+		<ref bean="BM25FeatureTitle1.4" />
+		<ref bean="BM25FeatureTitle1.5" />
+		<ref bean="BM25FeatureTitle1.6" />
+		<ref bean="BM25FeatureTitle1.7" />
+		<ref bean="BM25FeatureTitle1.8" />
+		<ref bean="BM25FeatureTitle1.9" />
+		<ref bean="BM25FeatureTitle2.0" />
+		
 		
 		<ref bean="sentenceLengthFeatureWordAvg" />
 		<ref bean="sentenceLengthFeatureWordMin" />
@@ -150,7 +155,9 @@
 		<ref bean="numberOfEntitiesFeatureAvg" />
 		<ref bean="numberOfEntitiesFeatureMin" />
 		<ref bean="numberOfEntitiesFeatureMax" />
-		
+		<ref bean="numberOfDummyEntitiesFeatureAvg" />
+		<ref bean="numberOfDummyEntitiesFeatureMin" />
+		<ref bean="numberOfDummyEntitiesFeatureMax" />
 		
 		<ref bean="recencyFeatureDays" />
 		<ref bean="recencyFeatureWeeks" />

@@ -347,4 +347,23 @@ public class KnowledgeStoreAdapterTest {
 		Set<List<String>> result = ksAdapter.retrieveOriginalTextTokens("event-1", "keyword");
 		assertTrue(expectedResult.equals(result));
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldReturnAllTitleTokens() {
+		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", "."), 
+															Lists.newArrayList("ExpectedResultNumberTwo", "."));
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2", "mention-2#char=1,2"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		ConcurrentMap<String, Set<String>> resourceMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceMap.put("mention-1", Sets.newHashSet("Expected result number one."));
+		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo."));
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_PROPERTY + Util.RESOURCE_PROPERTY_TITLE, resourceMap);
+		
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		Set<List<String>> result = ksAdapter.retrieveTitleTokensFromEvent("event-1", "keyword");
+		assertTrue(expectedResult.equals(result));
+	}
 }

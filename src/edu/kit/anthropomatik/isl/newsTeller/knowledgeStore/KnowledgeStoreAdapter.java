@@ -970,6 +970,25 @@ public class KnowledgeStoreAdapter {
 		
 		return result;
 	}
+	
+	public Set<List<String>> retrieveTitleTokensFromEvent(String eventURI, String dummyKeyword) {
+		Set<List<String>> result = new HashSet<List<String>>();
+		
+		Set<String> titles = getResourceTitlesFromEvent(eventURI, dummyKeyword);
+		
+		for (String titleString : titles) {
+			if (this.documentTokenCache.containsKey(titleString))
+				result.add(this.documentTokenCache.get(titleString));
+			else {
+				Sentence sentence = new Sentence(titleString);
+				List<String> titleTokens = sentence.words();
+				result.add(titleTokens);
+				this.documentTokenCache.putIfAbsent(titleString, titleTokens);
+			}
+		}
+		
+		return result;
+	}
 	// endregion
 
 	// region handling mentions

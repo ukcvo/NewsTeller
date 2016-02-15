@@ -77,7 +77,7 @@ public class SparqlCountFeatureTest {
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		feature = (SparqlCountFeature) context.getBean("numberOfEntitiesFeatureAvg");
+		feature = (SparqlCountFeature) context.getBean("numberOfEntitiesFeature");
 		avgFeature = (SparqlCountFeature) context.getBean("numberOfKeywordEntitiesFeatureAvg");
 		minFeature = (SparqlCountFeature) context.getBean("numberOfKeywordEntitiesFeatureMin");
 		maxFeature = (SparqlCountFeature) context.getBean("numberOfKeywordEntitiesFeatureMax");

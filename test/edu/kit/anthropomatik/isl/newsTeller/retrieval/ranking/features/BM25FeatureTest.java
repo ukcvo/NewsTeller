@@ -29,6 +29,7 @@ public class BM25FeatureTest {
 
 	private BM25Feature sentenceFeature;
 	private BM25Feature textFeature;
+	private BM25Feature titleFeature;
 	
 	private KnowledgeStoreAdapter ksAdapter;
 	
@@ -55,8 +56,15 @@ public class BM25FeatureTest {
 		resourceTextMap.put("mention-2", Sets.newHashSet("Here, there is no useful information. But here we mention Obama!"));
 		resourceTextMap.put("mention-3", Sets.newHashSet("This sentence is about Obama being mentioned by his last name."));
 		
+		ConcurrentMap<String, Set<String>> resourceTitleMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceTitleMap.put("mention-1", Sets.newHashSet("Barack Obama elected president!"));
+		resourceTitleMap.put("mention-2", Sets.newHashSet("Something something something"));
+		resourceTitleMap.put("mention-3", Sets.newHashSet("President Obama sued for tax fraud"));
+		
+		
 		sparqlCache.put(Util.getRelationName("event", "mention", "Barack Obama"), eventMentionMap);
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_PROPERTY + Util.RESOURCE_PROPERTY_TITLE, resourceTitleMap);
 		
 		
 		Keyword k = new Keyword("Barack Obama");
@@ -69,6 +77,7 @@ public class BM25FeatureTest {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
 		sentenceFeature = (BM25Feature) context.getBean("BM25FeatureSentence1.5");
 		textFeature = (BM25Feature) context.getBean("BM25FeatureText2.0");
+		titleFeature = (BM25Feature) context.getBean("BM25FeatureTitle1.2");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
@@ -96,5 +105,17 @@ public class BM25FeatureTest {
 	public void shouldReturnZeroText() {
 		double value = textFeature.getValue("event-2", keywords, userModel);
 		assertTrue(value == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnThreeTitle() {
+		double value = titleFeature.getValue("event-1", keywords, userModel);
+		assertTrue(Math.abs(value - 3.003761350311157) < Util.EPSILON);
+	}
+
+	@Test
+	public void shouldReturnZeroPointEightTitle() {
+		double value = titleFeature.getValue("event-2", keywords, userModel);
+		assertTrue(Math.abs(value - 0.809745843694904) < Util.EPSILON);
 	}
 }

@@ -13,10 +13,16 @@ public class BM25Feature extends RankingFeature {
 
 	private boolean useTextInsteadOfSentence;
 	
+	private boolean useTitleInsteadOfSentence;
+	
 	private double k1;
 	
 	public void setUseTextInsteadOfSentence(boolean useTextInsteadOfSentence) {
 		this.useTextInsteadOfSentence = useTextInsteadOfSentence;
+	}
+	
+	public void setUseTitleInsteadOfSentence(boolean useTitleInsteadOfSentence) {
+		this.useTitleInsteadOfSentence = useTitleInsteadOfSentence;
 	}
 	
 	public void setK1(double k1) {
@@ -78,6 +84,8 @@ public class BM25Feature extends RankingFeature {
 		Set<List<String>> eventDocuments;
 		if (this.useTextInsteadOfSentence)
 			eventDocuments = ksAdapter.retrieveOriginalTextTokens(eventURI, arbitraryKeyword);
+		else if (this.useTitleInsteadOfSentence)
+			eventDocuments = ksAdapter.retrieveTitleTokensFromEvent(eventURI, arbitraryKeyword);
 		else
 			eventDocuments = ksAdapter.retrieveSentenceTokensFromEvent(eventURI, arbitraryKeyword);
 		

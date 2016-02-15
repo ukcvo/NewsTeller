@@ -1,4 +1,4 @@
-SELECT ?event (COUNT(?entity) AS ?numberOfEntities) (COUNT(DISTINCT ?dbpediaEntity) AS ?numberOfDbpediaEntities) (COUNT(DISTINCT ?keywordEntity) AS ?numberOfKeywordEntities) (COUNT(DISTINCT ?nonEntity) AS ?numberOfNonEntities)
+SELECT ?event (COUNT(?entity) AS ?numberOfEntities) (COUNT(DISTINCT ?dbpediaEntity) AS ?numberOfDbpediaEntities) (COUNT(DISTINCT ?keywordEntity) AS ?numberOfKeywordEntities) (COUNT(DISTINCT ?nonEntity) AS ?numberOfNonEntities) (COUNT(DISTINCT ?dummyEntity) AS ?numberOfDummyEntities)
 WHERE
 {
 	VALUES ?event { *keys* } .
@@ -15,6 +15,9 @@ WHERE
 		FILTER(REGEX(STR(?label),"*k*", "i"))
 	} } UNION
 	{ ?event sem:hasActor|sem:hasPlace ?nonEntity .
-	FILTER NOT EXISTS { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?nonEntity ?link ?object } } }
+	FILTER NOT EXISTS { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?nonEntity ?link ?object } } } UNION
+	{ ?event sem:hasActor|sem:hasPlace ?dummyEntity .
+	FILTER NOT EXISTS { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?dummyEntity ?link ?object } }
+	FILTER NOT EXISTS { ?dummyEntity rdf:type ?class } }
 }
 GROUP BY ?event

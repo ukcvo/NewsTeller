@@ -12,127 +12,218 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Sentence1.2" />
 		<property name="k1" value="1.2" />
-		<property name="useTextInsteadOfSentence" value="false" />
-	</bean>
-	
-	<bean id="BM25FeatureText1.2" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="BM25Text1.2" />
-		<property name="k1" value="1.2" />
-		<property name="useTextInsteadOfSentence" value="true" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
 
 	<bean id="BM25FeatureSentence1.3" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Sentence1.3" />
 		<property name="k1" value="1.3" />
-		<property name="useTextInsteadOfSentence" value="false" />
-	</bean>
-	
-	<bean id="BM25FeatureText1.3" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="BM25Text1.3" />
-		<property name="k1" value="1.3" />
-		<property name="useTextInsteadOfSentence" value="true" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
 
 	<bean id="BM25FeatureSentence1.4" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Sentence1.4" />
 		<property name="k1" value="1.4" />
-		<property name="useTextInsteadOfSentence" value="false" />
-	</bean>
-	
-	<bean id="BM25FeatureText1.4" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="BM25Text1.4" />
-		<property name="k1" value="1.4" />
-		<property name="useTextInsteadOfSentence" value="true" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
 
 	<bean id="BM25FeatureSentence1.5" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Sentence1.5" />
 		<property name="k1" value="1.5" />
-		<property name="useTextInsteadOfSentence" value="false" />
-	</bean>
-	
-	<bean id="BM25FeatureText1.5" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="BM25Text1.5" />
-		<property name="k1" value="1.5" />
-		<property name="useTextInsteadOfSentence" value="true" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
 
 	<bean id="BM25FeatureSentence1.6" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Sentence1.6" />
 		<property name="k1" value="1.6" />
-		<property name="useTextInsteadOfSentence" value="false" />
-	</bean>
-	
-	<bean id="BM25FeatureText1.6" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="BM25Text1.6" />
-		<property name="k1" value="1.6" />
-		<property name="useTextInsteadOfSentence" value="true" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
 
 	<bean id="BM25FeatureSentence1.7" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Sentence1.7" />
 		<property name="k1" value="1.7" />
-		<property name="useTextInsteadOfSentence" value="false" />
-	</bean>
-	
-	<bean id="BM25FeatureText1.7" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="BM25Text1.7" />
-		<property name="k1" value="1.7" />
-		<property name="useTextInsteadOfSentence" value="true" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
 
 	<bean id="BM25FeatureSentence1.8" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Sentence1.8" />
 		<property name="k1" value="1.8" />
-		<property name="useTextInsteadOfSentence" value="false" />
-	</bean>
-	
-	<bean id="BM25FeatureText1.8" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="BM25Text1.8" />
-		<property name="k1" value="1.8" />
-		<property name="useTextInsteadOfSentence" value="true" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
 
 	<bean id="BM25FeatureSentence1.9" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Sentence1.9" />
 		<property name="k1" value="1.9" />
-		<property name="useTextInsteadOfSentence" value="false" />
-	</bean>
-	
-	<bean id="BM25FeatureText1.9" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="BM25Text1.9" />
-		<property name="k1" value="1.9" />
-		<property name="useTextInsteadOfSentence" value="true" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
 
 	<bean id="BM25FeatureSentence2.0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Sentence2.0" />
 		<property name="k1" value="2.0" />
-		<property name="useTextInsteadOfSentence" value="false" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
-	
+
+	<bean id="BM25FeatureText1.2" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.2" />
+		<property name="k1" value="1.2" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+	</bean>
+
+	<bean id="BM25FeatureText1.3" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.3" />
+		<property name="k1" value="1.3" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+	</bean>
+
+	<bean id="BM25FeatureText1.4" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.4" />
+		<property name="k1" value="1.4" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+	</bean>
+
+	<bean id="BM25FeatureText1.5" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.5" />
+		<property name="k1" value="1.5" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+	</bean>
+
+	<bean id="BM25FeatureText1.6" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.6" />
+		<property name="k1" value="1.6" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+	</bean>
+
+	<bean id="BM25FeatureText1.7" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.7" />
+		<property name="k1" value="1.7" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+	</bean>
+
+	<bean id="BM25FeatureText1.8" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.8" />
+		<property name="k1" value="1.8" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+	</bean>
+
+	<bean id="BM25FeatureText1.9" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.9" />
+		<property name="k1" value="1.9" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+	</bean>
+
 	<bean id="BM25FeatureText2.0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="BM25Text2.0" />
 		<property name="k1" value="2.0" />
-		<property name="useTextInsteadOfSentence" value="true" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
+
+	<bean id="BM25FeatureTitle1.2" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.2" />
+		<property name="k1" value="1.2" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.3" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.3" />
+		<property name="k1" value="1.3" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.4" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.4" />
+		<property name="k1" value="1.4" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.5" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.5" />
+		<property name="k1" value="1.5" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.6" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.6" />
+		<property name="k1" value="1.6" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.7" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.7" />
+		<property name="k1" value="1.7" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.8" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.8" />
+		<property name="k1" value="1.8" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.9" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.9" />
+		<property name="k1" value="1.9" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+	</bean>
+
+	<bean id="BM25FeatureTitle2.0" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title2.0" />
+		<property name="k1" value="2.0" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+	</bean>
+
 
 	<!-- sentence length features -->
 	<bean id="sentenceLengthFeatureWordAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceLengthFeature">
@@ -585,67 +676,32 @@
 		<property name="aggregationType" value="2" />
 	</bean>
 	
-	<bean id="numberOfDbpediaEntitiesFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+	<bean id="numberOfDbpediaEntitiesFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfDbpediaEntitiesAvg" />
+		<property name="name" value="numberOfDbpediaEntities" />
 		<property name="valueName" value="numberOfDbpediaEntities" />
 		<property name="aggregationType" value="0" />
 	</bean>
 	
-	<bean id="numberOfDbpediaEntitiesFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+	<bean id="numberOfEntitiesFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfDbpediaEntitiesMin" />
-		<property name="valueName" value="numberOfDbpediaEntities" />
-		<property name="aggregationType" value="1" />
-	</bean>
-	
-	<bean id="numberOfDbpediaEntitiesFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfDbpediaEntitiesMax" />
-		<property name="valueName" value="numberOfDbpediaEntities" />
-		<property name="aggregationType" value="2" />
-	</bean>
-	
-	<bean id="numberOfEntitiesFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfEntitiesAvg" />
+		<property name="name" value="numberOfEntities" />
 		<property name="valueName" value="numberOfEntities" />
 		<property name="aggregationType" value="0" />
 	</bean>
 	
-	<bean id="numberOfEntitiesFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+	<bean id="numberOfNonEntitiesFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfEntitiesMin" />
-		<property name="valueName" value="numberOfEntities" />
-		<property name="aggregationType" value="1" />
-	</bean>
-	
-	<bean id="numberOfEntitiesFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfEntitiesMax" />
-		<property name="valueName" value="numberOfEntities" />
-		<property name="aggregationType" value="2" />
-	</bean>
-	
-	<bean id="numberOfNonEntitiesFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfNonEntitiesAvg" />
+		<property name="name" value="numberOfNonEntities" />
 		<property name="valueName" value="numberOfNonEntities" />
 		<property name="aggregationType" value="0" />
 	</bean>
 	
-	<bean id="numberOfNonEntitiesFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+	<bean id="numberOfDummyEntitiesFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfNonEntitiesMin" />
-		<property name="valueName" value="numberOfNonEntities" />
-		<property name="aggregationType" value="1" />
-	</bean>
-	
-	<bean id="numberOfNonEntitiesFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="numberOfNonEntitiesMax" />
-		<property name="valueName" value="numberOfNonEntities" />
-		<property name="aggregationType" value="2" />
+		<property name="name" value="numberOfDummyEntities" />
+		<property name="valueName" value="numberOfDummyEntities" />
+		<property name="aggregationType" value="0" />
 	</bean>
 	
 	<!-- recency features -->
