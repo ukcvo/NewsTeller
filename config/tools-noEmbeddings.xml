@@ -60,70 +60,78 @@
 		<property name="outputFolder" value="resources/benchmark/userModel" />
 		<property name="totalNumberOfEvents" value="100" />
 		
-		<property name="userID" value="usr_03" />
+		<property name="userID" value="usr_04" />
 		<property name="interests">
 			<list>
+				<value>graphic design</value>
+				<value>user experience design</value>
 				<value>football</value>
-				<value>video games</value>
-				<value>cars</value>
-				<value>movies</value>
-				<value>Internet</value>
-				<value>Breaking Bad</value>
+				<value>new technologies</value>
+				<value>politics</value>
 			</list>
 		</property>
 		<property name="queries">
 			<list>
 				<list>
+					<value>graphic design</value>
+					<value>typography</value>
+				</list>
+				<list>
+					<value>graphic design</value>
+					<value>posters</value>
+				</list>
+				<list>
+					<value>apps</value>
+					<value>user experience design</value>
+				</list>
+				<list>
+					<value>new technologies</value>
+					<value>Silicon Valley</value>
+				</list>
+				<list>
+					<value>football</value>
+					<value>Champions League</value>
 					<value>Bundesliga</value>
-					<value>results</value>
 				</list>
 				<list>
-					<value>USA</value>
-					<value>election</value>
+					<value>football</value>
+					<value>transfer</value>
 				</list>
 				<list>
-					<value>Donald Trump</value>
-					<value>daughter</value>
+					<value>Apple</value>
+					<value>Google</value>
+					<value>Microsoft</value>
 				</list>
 				<list>
-					<value>jogging</value>
-					<value>shoes</value>
-					<value>test</value>
+					<value>startup</value>
+					<value>Kickstarter</value>
 				</list>
 				<list>
-					<value>Dark Souls 3</value>
-					<value>review</value>
-					<value>PC</value>
+					<value>Germany</value>
+					<value>politics</value>
+					<value>Internet</value>
 				</list>
 				<list>
-					<value>Mario Kart</value>
-					<value>online</value>
+					<value>politics</value>
+					<value>satire</value>
 				</list>
 				<list>
-					<value>Formula 1</value>
-					<value>car presentations</value>
+					<value>design</value>
+					<value>books</value>
 				</list>
 				<list>
-					<value>Formula 1</value>
-					<value>Hockenheim</value>
-					<value>date</value>
+					<value>Internet</value>
+					<value>blogs</value>
+					<value>design</value>
 				</list>
 				<list>
-					<value>Christopher Nolan</value>
-					<value>new movie</value>
+					<value>graphic design</value>
+					<value>corporate design</value>
+					<value>logos</value>
 				</list>
 				<list>
-					<value>Oscars</value>
-					<value>nominations</value>
-				</list>
-				<list>
-					<value>Better Call Saul</value>
-					<value>first episode</value>
-				</list>
-				<list>
-					<value>Lost</value>
-					<value>ending</value>
-					<value>explanation</value>
+					<value>Internet</value>
+					<value>lifestyle</value>
 				</list>
 			</list>
 		</property>
