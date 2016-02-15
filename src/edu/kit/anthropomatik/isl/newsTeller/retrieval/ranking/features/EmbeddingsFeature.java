@@ -14,7 +14,7 @@ import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import edu.kit.anthropomatik.isl.newsTeller.util.embeddings.EmbeddingsProvider;
 import edu.stanford.nlp.simple.Sentence;
 
-public class EmbeddingsFeature extends RankingFeature {
+public abstract class EmbeddingsFeature extends RankingFeature {
 
 	private static Log log = LogFactory.getLog(EmbeddingsFeature.class);
 	
@@ -23,25 +23,19 @@ public class EmbeddingsFeature extends RankingFeature {
 	private static final int AGGREGATION_TYPE_MAX = 2;
 	private static final int AGGREGATION_TYPE_GEOM = 3;
 	
-	private int sentenceAggregationType;
+	private int innerAggregationType;
 	private int keywordAggregationType;
-	
-	private boolean useTitleInsteadOfSentence;
 	
 	private EmbeddingsProvider embeddings;
 	
 	private Set<String> stopWords;
 	
-	public void setSentenceAggregationType(int sentenceAggregationType) {
-		this.sentenceAggregationType = sentenceAggregationType;
+	public void setInnerAggregationType(int sentenceAggregationType) {
+		this.innerAggregationType = sentenceAggregationType;
 	}
 	
 	public void setKeywordAggregationType(int keywordAggregationType) {
 		this.keywordAggregationType = keywordAggregationType;
-	}
-	
-	public void setUseTitleInsteadOfSentence(boolean useTitleInsteadOfSentence) {
-		this.useTitleInsteadOfSentence = useTitleInsteadOfSentence;
 	}
 	
 	public void setEmbeddings(EmbeddingsProvider embeddings) {
@@ -74,20 +68,16 @@ public class EmbeddingsFeature extends RankingFeature {
 		// TODO: can make this also applicable to userModel.getInterest() --> boolean flag in class
 		List<Keyword> keywordsToUse = keywords;
 		
-		Set<String> sentences = new HashSet<String>();
-		if (this.useTitleInsteadOfSentence) // use titles
-			sentences.addAll(ksAdapter.getResourceTitlesFromEvent(eventURI, keywords.get(0).getWord()));
-		else // use actual sentences
-			sentences.addAll(ksAdapter.retrieveSentencesFromEvent(eventURI, keywords.get(0).getWord()));
+		Set<String> comparisonStrings = getComparisonStrings(eventURI, keywordsToUse, userModel);
 		
-		if (sentences.isEmpty()) {
+		if (comparisonStrings.isEmpty()) {
 			if (log.isWarnEnabled())
 				log.warn(String.format("no sentences for event '%s', returning 0", eventURI));
 			return 0;
 		}
 		
 		List<double[]> sentenceVectors = new ArrayList<double[]>();
-		for (String sentence : sentences) {
+		for (String sentence : comparisonStrings) {
 			if (sentence.isEmpty())
 				continue;
 			String preprocessed = embeddings.getUseLowercase() ? sentence.toLowerCase() : sentence;
@@ -104,7 +94,7 @@ public class EmbeddingsFeature extends RankingFeature {
 		
 		for (Keyword keyword : keywordsToUse) {
 			double keywordResult;
-			switch (this.sentenceAggregationType) {
+			switch (this.innerAggregationType) {
 			case AGGREGATION_TYPE_MIN:
 				keywordResult = Double.POSITIVE_INFINITY;
 				break;
@@ -144,7 +134,7 @@ public class EmbeddingsFeature extends RankingFeature {
 			for (double[] sentenceVector : sentenceVectors) {
 				double similarity = EmbeddingsProvider.cosineSimilarity(keywordVector, sentenceVector);
 				
-				switch (this.sentenceAggregationType) {
+				switch (this.innerAggregationType) {
 				case AGGREGATION_TYPE_AVG:
 					keywordResult += similarity / sentenceVectors.size();
 					break;
@@ -161,7 +151,7 @@ public class EmbeddingsFeature extends RankingFeature {
 					break;
 				}
 			}
-			if (this.sentenceAggregationType == AGGREGATION_TYPE_GEOM)
+			if (this.innerAggregationType == AGGREGATION_TYPE_GEOM)
 				keywordResult = Math.pow(keywordResult, (1.0 / sentenceVectors.size()));
 			
 			switch (this.keywordAggregationType) {
@@ -190,4 +180,6 @@ public class EmbeddingsFeature extends RankingFeature {
 		
 		return result;
 	}
+	
+	protected abstract Set<String> getComparisonStrings(String eventURI, List<Keyword> keywords, UserModel userModel);
 }

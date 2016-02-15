@@ -1,7 +1,9 @@
-SELECT ?entity ?entityDbpediaLabel ?entityPrefLabel
+SELECT ?entity ?entityDbpediaLabel ?entityPrefLabel ?entityLabel ?entityDescription
 WHERE
 {
 	VALUES ?entity { *keys* } .
 	OPTIONAL { ?entity skos:prefLabel ?entityPrefLabel }
 	OPTIONAL { ?entity rdf:type* ?class . GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?class rdfs:label ?entityDbpediaLabel } }
+	OPTIONAL { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?entity rdfs:label ?entityLabel } }
+	OPTIONAL { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?entity rdfs:comment ?entityDescription } }
 }

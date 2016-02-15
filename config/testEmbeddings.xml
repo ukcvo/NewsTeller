@@ -15,54 +15,67 @@
 		<property name="splitKeywordsIntoTokens" value="true" />
 	</bean>
 
-	<!-- embeddings features -->
-		<bean id="embeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<!-- constituent embeddings features -->
+	<bean id="constituentEmbeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="testEmbeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings00epf" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="0" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="entityName" value="entity" />
+		<property name="needsKeywordIteration" value="false" />
+	</bean>
+
+	<!-- text embeddings features -->
+	<bean id="textEmbeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings00f" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="0" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="False" />
 	</bean>
 
-	<bean id="embeddingsFeatureTitle" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeatureTitle" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings00t" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="0" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings11f" />
 		<property name="keywordAggregationType" value="1" />
-		<property name="sentenceAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings22f" />
 		<property name="keywordAggregationType" value="2" />
-		<property name="sentenceAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeatureGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeatureGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="embeddings33f" />
 		<property name="keywordAggregationType" value="3" />
-		<property name="sentenceAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 

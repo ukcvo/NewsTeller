@@ -24,13 +24,13 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
-public class EmbeddingsFeatureTest {
+public class TextEmbeddingsFeatureTest {
 
-	private static EmbeddingsFeature avgFeature;
-	private static EmbeddingsFeature minFeature;
-	private static EmbeddingsFeature maxFeature;
-	private static EmbeddingsFeature geomFeature;
-	private static EmbeddingsFeature titleFeature;
+	private static TextEmbeddingsFeature avgFeature;
+	private static TextEmbeddingsFeature minFeature;
+	private static TextEmbeddingsFeature maxFeature;
+	private static TextEmbeddingsFeature geomFeature;
+	private static TextEmbeddingsFeature titleFeature;
 	
 	private static KnowledgeStoreAdapter ksAdapter;
 	
@@ -76,11 +76,11 @@ public class EmbeddingsFeatureTest {
 		keywords.add(k);
 		
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/testEmbeddings.xml");
-		avgFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureAvg");
-		minFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureMin");
-		maxFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureMax");
-		geomFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureGeom");
-		titleFeature = (EmbeddingsFeature) context.getBean("embeddingsFeatureTitle");
+		avgFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureAvg");
+		minFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureMin");
+		maxFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureMax");
+		geomFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureGeom");
+		titleFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureTitle");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);

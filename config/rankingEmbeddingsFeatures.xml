@@ -13,325 +13,1864 @@
 		<property name="splitKeywordsIntoTokens" value="false" />
 	</bean>
 
-	<!-- embeddings features -->
-	<bean id="embeddingsFeature00f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<!-- constituent embeddings features -->
+	<bean id="constituentEmbeddingsFeature00ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings00f" />
+		<property name="name" value="constituentEmbeddings00ep" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="0" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
 	</bean>
 
-	<bean id="embeddingsFeature00t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature00el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings00t" />
+		<property name="name" value="constituentEmbeddings00el" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="0" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
 	</bean>
 
-	<bean id="embeddingsFeature01f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature00em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings01f" />
+		<property name="name" value="constituentEmbeddings00em" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="1" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature01t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature00ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings01t" />
+		<property name="name" value="constituentEmbeddings00ed" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="1" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
 	</bean>
 
-	<bean id="embeddingsFeature02f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature00kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings02f" />
+		<property name="name" value="constituentEmbeddings00kp" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="2" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature02t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature00kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings02t" />
+		<property name="name" value="constituentEmbeddings00kl" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="2" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature03f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature00km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings03f" />
+		<property name="name" value="constituentEmbeddings00km" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="3" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature03t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature00kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings03t" />
+		<property name="name" value="constituentEmbeddings00kd" />
 		<property name="keywordAggregationType" value="0" />
-		<property name="sentenceAggregationType" value="3" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature10f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature01ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings10f" />
+		<property name="name" value="constituentEmbeddings01ep" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature01el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings01el" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature01em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings01em" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature01ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings01ed" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature01kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings01kp" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature01kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings01kl" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature01km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings01km" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature01kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings01kd" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature02ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings02ep" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature02el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings02el" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature02em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings02em" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature02ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings02ed" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature02kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings02kp" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature02kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings02kl" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature02km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings02km" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature02kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings02kd" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature03ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings03ep" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature03el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings03el" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature03em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings03em" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature03ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings03ed" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature03kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings03kp" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature03kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings03kl" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature03km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings03km" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature03kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings03kd" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature10ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings10ep" />
 		<property name="keywordAggregationType" value="1" />
-		<property name="sentenceAggregationType" value="0" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
 	</bean>
 
-	<bean id="embeddingsFeature10t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature10el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings10t" />
+		<property name="name" value="constituentEmbeddings10el" />
 		<property name="keywordAggregationType" value="1" />
-		<property name="sentenceAggregationType" value="0" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
 	</bean>
 
-	<bean id="embeddingsFeature11f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature10em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings11f" />
+		<property name="name" value="constituentEmbeddings10em" />
 		<property name="keywordAggregationType" value="1" />
-		<property name="sentenceAggregationType" value="1" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature11t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature10ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings11t" />
+		<property name="name" value="constituentEmbeddings10ed" />
 		<property name="keywordAggregationType" value="1" />
-		<property name="sentenceAggregationType" value="1" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
 	</bean>
 
-	<bean id="embeddingsFeature12f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature10kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings12f" />
+		<property name="name" value="constituentEmbeddings10kp" />
 		<property name="keywordAggregationType" value="1" />
-		<property name="sentenceAggregationType" value="2" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature12t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature10kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings12t" />
+		<property name="name" value="constituentEmbeddings10kl" />
 		<property name="keywordAggregationType" value="1" />
-		<property name="sentenceAggregationType" value="2" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature13f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature10km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings13f" />
+		<property name="name" value="constituentEmbeddings10km" />
 		<property name="keywordAggregationType" value="1" />
-		<property name="sentenceAggregationType" value="3" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature13t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature10kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings13t" />
+		<property name="name" value="constituentEmbeddings10kd" />
 		<property name="keywordAggregationType" value="1" />
-		<property name="sentenceAggregationType" value="3" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
 	</bean>
 
-	<bean id="embeddingsFeature20f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="constituentEmbeddingsFeature11ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings20f" />
+		<property name="name" value="constituentEmbeddings11ep" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature11el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings11el" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature11em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings11em" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature11ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings11ed" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature11kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings11kp" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature11kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings11kl" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature11km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings11km" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature11kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings11kd" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature12ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings12ep" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature12el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings12el" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature12em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings12em" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature12ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings12ed" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature12kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings12kp" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature12kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings12kl" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature12km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings12km" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature12kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings12kd" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature13ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings13ep" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature13el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings13el" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature13em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings13em" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature13ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings13ed" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature13kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings13kp" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature13kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings13kl" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature13km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings13km" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature13kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings13kd" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature20ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings20ep" />
 		<property name="keywordAggregationType" value="2" />
-		<property name="sentenceAggregationType" value="0" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature20el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings20el" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature20em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings20em" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature20ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings20ed" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature20kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings20kp" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature20kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings20kl" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature20km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings20km" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature20kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings20kd" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature21ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings21ep" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature21el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings21el" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature21em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings21em" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature21ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings21ed" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature21kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings21kp" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature21kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings21kl" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature21km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings21km" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature21kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings21kd" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature22ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings22ep" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature22el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings22el" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature22em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings22em" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature22ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings22ed" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature22kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings22kp" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature22kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings22kl" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature22km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings22km" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature22kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings22kd" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature23ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings23ep" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature23el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings23el" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature23em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings23em" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature23ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings23ed" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature23kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings23kp" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature23kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings23kl" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature23km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings23km" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature23kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings23kd" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature30ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings30ep" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature30el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings30el" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature30em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings30em" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature30ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings30ed" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature30kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings30kp" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature30kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings30kl" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature30km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings30km" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature30kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings30kd" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="0" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature31ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings31ep" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature31el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings31el" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature31em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings31em" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature31ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings31ed" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature31kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings31kp" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature31kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings31kl" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature31km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings31km" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature31kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings31kd" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature32ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings32ep" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature32el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings32el" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature32em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings32em" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature32ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings32ed" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature32kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings32kp" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature32kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings32kl" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature32km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings32km" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature32kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings32kd" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature33ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings33ep" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature33el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings33el" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature33em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings33em" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature33ed" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings33ed" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature33kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings33kp" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature33kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings33kl" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature33km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings33km" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentEmbeddingsFeature33kd" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentEmbeddings33kd" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityDescription" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	
+	<!-- text embeddings features -->
+	<bean id="textEmbeddingsFeature00f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings00f" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="0" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeature20t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature00t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings20t" />
-		<property name="keywordAggregationType" value="2" />
-		<property name="sentenceAggregationType" value="0" />
+		<property name="name" value="textEmbeddings00t" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="0" />
 		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
 
-	<bean id="embeddingsFeature21f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature01f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings21f" />
-		<property name="keywordAggregationType" value="2" />
-		<property name="sentenceAggregationType" value="1" />
+		<property name="name" value="textEmbeddings01f" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeature21t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature01t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings21t" />
+		<property name="name" value="textEmbeddings01t" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature02f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings02f" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature02t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings02t" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature03f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings03f" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature03t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings03t" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature10f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings10f" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature10t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings10t" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature11f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings11f" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature11t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings11t" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature12f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings12f" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature12t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings12t" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature13f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings13f" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature13t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings13t" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature20f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings20f" />
 		<property name="keywordAggregationType" value="2" />
-		<property name="sentenceAggregationType" value="1" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeature22f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature20t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings22f" />
+		<property name="name" value="textEmbeddings20t" />
 		<property name="keywordAggregationType" value="2" />
-		<property name="sentenceAggregationType" value="2" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
 
-	<bean id="embeddingsFeature22t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature21f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings22t" />
+		<property name="name" value="textEmbeddings21f" />
 		<property name="keywordAggregationType" value="2" />
-		<property name="sentenceAggregationType" value="2" />
-		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="innerAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeature23f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature21t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings23f" />
+		<property name="name" value="textEmbeddings21t" />
 		<property name="keywordAggregationType" value="2" />
-		<property name="sentenceAggregationType" value="3" />
-		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="innerAggregationType" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
 
-	<bean id="embeddingsFeature23t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature22f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings23t" />
+		<property name="name" value="textEmbeddings22f" />
 		<property name="keywordAggregationType" value="2" />
-		<property name="sentenceAggregationType" value="3" />
-		<property name="useTitleInsteadOfSentence" value="true" />
-	</bean>
-
-	<bean id="embeddingsFeature30f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
-		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
-		<property name="embeddings" ref="embeddings" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings30f" />
-		<property name="keywordAggregationType" value="3" />
-		<property name="sentenceAggregationType" value="0" />
+		<property name="innerAggregationType" value="2" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeature30t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature22t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings30t" />
-		<property name="keywordAggregationType" value="3" />
-		<property name="sentenceAggregationType" value="0" />
+		<property name="name" value="textEmbeddings22t" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
 		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
 
-	<bean id="embeddingsFeature31f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature23f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings31f" />
-		<property name="keywordAggregationType" value="3" />
-		<property name="sentenceAggregationType" value="1" />
+		<property name="name" value="textEmbeddings23f" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeature31t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature23t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings31t" />
-		<property name="keywordAggregationType" value="3" />
-		<property name="sentenceAggregationType" value="1" />
+		<property name="name" value="textEmbeddings23t" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="3" />
 		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
 
-	<bean id="embeddingsFeature32f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature30f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings32f" />
+		<property name="name" value="textEmbeddings30f" />
 		<property name="keywordAggregationType" value="3" />
-		<property name="sentenceAggregationType" value="2" />
+		<property name="innerAggregationType" value="0" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeature32t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature30t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings32t" />
+		<property name="name" value="textEmbeddings30t" />
 		<property name="keywordAggregationType" value="3" />
-		<property name="sentenceAggregationType" value="2" />
+		<property name="innerAggregationType" value="0" />
 		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
 
-	<bean id="embeddingsFeature33f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature31f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings33f" />
+		<property name="name" value="textEmbeddings31f" />
 		<property name="keywordAggregationType" value="3" />
-		<property name="sentenceAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
 
-	<bean id="embeddingsFeature33t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.EmbeddingsFeature">
+	<bean id="textEmbeddingsFeature31t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
 		<property name="embeddings" ref="embeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="name" value="embeddings33t" />
+		<property name="name" value="textEmbeddings31t" />
 		<property name="keywordAggregationType" value="3" />
-		<property name="sentenceAggregationType" value="3" />
+		<property name="innerAggregationType" value="1" />
 		<property name="useTitleInsteadOfSentence" value="true" />
 	</bean>
+
+	<bean id="textEmbeddingsFeature32f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings32f" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature32t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings32t" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature33f" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings33f" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+	</bean>
+
+	<bean id="textEmbeddingsFeature33t" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="textEmbeddings33t" />
+		<property name="keywordAggregationType" value="3" />
+		<property name="innerAggregationType" value="3" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+	</bean>
+
 
 </beans>
