@@ -18,7 +18,7 @@
 	<util:properties id="wekaProperties">
 		<prop key="toSelect">4</prop>
 		<prop key="numFeatures">8</prop>
-		<prop key="toSelectReg">4</prop>
+		<prop key="toSelectReg">15</prop>
 	</util:properties>
 	
 	
@@ -321,7 +321,9 @@
 		<constructor-arg name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv" />
 		<property name="regressors">
 			<map>
-				<entry key="RandomForest" value-ref="r_randomForest" />
+				<entry key="baseline" value-ref="r_zeroR" />
+			<!-- 
+				<entry key="RandomForest" value-ref="r_randomForest" /> -->
 			</map>
 		</property>
 		
@@ -339,10 +341,10 @@
 		</property>
 		<property name="groundTruthAttributes" value="235,236,237" />
 		
-		<property name="outputRankings" value="true" />
+		<property name="outputRankings" value="false" />
 		
-		<property name="doFeatureSelection" value="true" />
-		<property name="doFileBasedRegression" value="false" />
+		<property name="doFeatureSelection" value="false" />
+		<property name="doFileBasedRegression" value="true" />
 		<property name="doSearchBestNDCGFeature" value="false" />
 	</bean>
 

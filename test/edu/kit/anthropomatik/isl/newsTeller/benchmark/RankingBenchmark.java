@@ -158,6 +158,10 @@ public class RankingBenchmark {
 				double expectedRank = 0;
 				double top5relativeRank = 0;
 				double top5expectedRank = 0;
+				double precision0At1 = 0;
+				double precision0At5 = 0;
+				double precision1At1 = 0;
+				double precision1At5 = 0;
 				
 				Enumeration<Object> enumeration = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
 				while (enumeration.hasMoreElements()) {
@@ -181,6 +185,12 @@ public class RankingBenchmark {
 					top5relativeRank += computeTopRank(evalLocal.predictions(), true, 5);
 					top5expectedRank += computeExpectedRank(evalLocal.predictions(), 5);
 					
+					precision0At1 += computePrecision(evalLocal.predictions(), 1, 0);
+					precision0At5 += computePrecision(evalLocal.predictions(), 5, 0);
+					precision1At1 += computePrecision(evalLocal.predictions(), 1, 1);
+					precision1At5 += computePrecision(evalLocal.predictions(), 5, 1);
+					
+					
 					if (this.outputRankings && log.isInfoEnabled())
 						logRankings(r, test);
 				}
@@ -191,10 +201,16 @@ public class RankingBenchmark {
 				expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				top5relativeRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				top5expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				precision0At1 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				precision0At5 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				precision1At1 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				precision1At5 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				
 				
 				if (log.isInfoEnabled()) {
 					log.info(String.format("%s (file-based)", classifierName));
-					logEvalResults(eval, ndcg, topRank, relativeTopRank, expectedRank, top5relativeRank, top5expectedRank);
+					logEvalResults(eval, ndcg, topRank, relativeTopRank, expectedRank, top5relativeRank, top5expectedRank, 
+							precision0At1, precision0At5, precision1At1, precision1At5);
 				}
 			}
 		} catch (Exception e) {
@@ -245,7 +261,7 @@ public class RankingBenchmark {
 			log.info("event;predicted;actual");
 			for (RankEntry e : ranking)
 				log.info(e.toString());
-			
+			log.info("\n");
 			
 		} catch (Exception e) {
 			if (log.isWarnEnabled())
@@ -340,8 +356,28 @@ public class RankingBenchmark {
 		return nDCG;
 	}
 	
+	private double computePrecision(List<Prediction> predictions, int n, double threshold) {
+		List<Prediction> sortedByPrediction = new ArrayList<Prediction>(predictions);
+		Collections.sort(sortedByPrediction, new Comparator<Prediction>() {
+			@Override
+			public int compare(Prediction o1, Prediction o2) {
+				return (-1) * Double.compare(o1.predicted(), o2.predicted());
+			}
+		});
+		
+		int k = Math.min(n, sortedByPrediction.size());
+		double positive = 0;
+		for (int i = 0; i < k; i++) {
+			if (sortedByPrediction.get(i).actual() > threshold)
+				positive++;
+		}
+		
+		return (positive / k);
+	}
+	
 	private void logEvalResults(Evaluation eval, double ndcg, double topRank, double relativeTopRank, double expectedRank, 
-								double top5RelativeRank, double top5expectedRank) {
+								double top5RelativeRank, double top5expectedRank, double precision0At1, double precision0At5, 
+								double precision1At1, double precision1At5) {
 		log.info(String.format("RMSE: %f", eval.rootMeanSquaredError()));
 		try {
 			log.info(String.format("correlation coefficient: %f", eval.correlationCoefficient()));
@@ -355,7 +391,10 @@ public class RankingBenchmark {
 		log.info(String.format("expected rank (probability distribution): %f", expectedRank));
 		log.info(String.format("average normalized rank of top 5: %f", top5RelativeRank));
 		log.info(String.format("expected rank (probability distribution) for top 5: %f", top5expectedRank));
-		
+		log.info(String.format(">0 precision at top 1: %f", precision0At1));
+		log.info(String.format(">0 precision at top 5: %f", precision0At5));
+		log.info(String.format(">1 precision at top 1: %f", precision1At1));
+		log.info(String.format(">1 precision at top 5: %f", precision1At5));
 	}
 	
 	private Instances filterByFileName(Instances dataSet, Integer fileNameIdx, boolean isTest) throws Exception {

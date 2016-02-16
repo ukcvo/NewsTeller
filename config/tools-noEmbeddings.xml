@@ -60,78 +60,68 @@
 		<property name="outputFolder" value="resources/benchmark/userModel" />
 		<property name="totalNumberOfEvents" value="100" />
 		
-		<property name="userID" value="usr_04" />
+		<property name="userID" value="usr_07" />
 		<property name="interests">
 			<list>
-				<value>graphic design</value>
-				<value>user experience design</value>
-				<value>football</value>
-				<value>new technologies</value>
-				<value>politics</value>
+				<value>automated video editing </value>
+				<value>automated event detection</value>
+				<value>automated video tagging </value>
 			</list>
 		</property>
 		<property name="queries">
 			<list>
 				<list>
-					<value>graphic design</value>
-					<value>typography</value>
+					<value>footage</value>
+					<value>tagging</value>
 				</list>
 				<list>
-					<value>graphic design</value>
-					<value>posters</value>
+					<value>automatic</value>
+					<value>video</value>
+					<value>editing</value>
 				</list>
 				<list>
-					<value>apps</value>
-					<value>user experience design</value>
+					<value>event</value>
+					<value>detection</value>
 				</list>
 				<list>
-					<value>new technologies</value>
-					<value>Silicon Valley</value>
+					<value>keyword</value>
+					<value>generation</value>
 				</list>
 				<list>
-					<value>football</value>
-					<value>Champions League</value>
-					<value>Bundesliga</value>
+					<value>tag</value>
+					<value>generation</value>
 				</list>
 				<list>
-					<value>football</value>
-					<value>transfer</value>
+					<value>detect</value>
+					<value>interesting</value>
+					<value>video</value>
 				</list>
 				<list>
-					<value>Apple</value>
-					<value>Google</value>
-					<value>Microsoft</value>
+					<value>automated</value>
+					<value>footage</value>
+					<value>processing</value>
 				</list>
 				<list>
-					<value>startup</value>
-					<value>Kickstarter</value>
+					<value>algorithmic</value>
+					<value>video</value>
+					<value>editing</value>
 				</list>
 				<list>
-					<value>Germany</value>
-					<value>politics</value>
-					<value>Internet</value>
+					<value>action</value>
+					<value>detection</value>
 				</list>
 				<list>
-					<value>politics</value>
-					<value>satire</value>
+					<value>action</value>
+					<value>recognition</value>
 				</list>
 				<list>
-					<value>design</value>
-					<value>books</value>
+					<value>video</value>
+					<value>keywords</value>
 				</list>
 				<list>
-					<value>Internet</value>
-					<value>blogs</value>
-					<value>design</value>
-				</list>
-				<list>
-					<value>graphic design</value>
-					<value>corporate design</value>
-					<value>logos</value>
-				</list>
-				<list>
-					<value>Internet</value>
-					<value>lifestyle</value>
+					<value>tags</value>
+					<value>from</value>
+					<value>videos</value>
 				</list>
 			</list>
 		</property>

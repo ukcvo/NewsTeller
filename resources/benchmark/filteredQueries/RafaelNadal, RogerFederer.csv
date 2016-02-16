@@ -1,6 +1,6 @@
 "URI","usabilityRating","relevanceRank","reason_1","reason_2"
 "http://en.wikinews.org/wiki/Djokovic_defeats_Federer_to_win_2015_Wimbledon_Championship_men's_singles#ev21","1.0",0,1,
-"http://en.wikinews.org/wiki/Federer_wins_fifth_Wimbledon_title#ev26","1.0",0,1,
+"http://en.wikinews.org/wiki/Federer_wins_fifth_Wimbledon_title#ev26","1.0",3,1,
 "http://en.wikinews.org/wiki/Federer_wins_fifth_Wimbledon_title#ev50","1.0",0,1,
 "http://en.wikinews.org/wiki/Federer_wins_fifth_Wimbledon_title#ev73","0.0",1,4,
 "http://en.wikinews.org/wiki/Federer_wins_fifth_Wimbledon_title#ev85","0.0",3,8,
@@ -20,7 +20,7 @@
 "http://en.wikinews.org/wiki/Roger_Federer_wins_the_French_Open_at_Roland_Garros#ev38","1.0",0,1,
 "http://en.wikinews.org/wiki/Roger_Federer_wins_the_French_Open_at_Roland_Garros#ev41","0.0",0,4,
 "http://en.wikinews.org/wiki/Tennis_player_Rafael_Nadal_crowned_%22King_of_Clay%22#ev12","1.0",0,1,
-"http://en.wikinews.org/wiki/Tennis_player_Rafael_Nadal_crowned_%22King_of_Clay%22#ev28","0.0",0,9,
+"http://en.wikinews.org/wiki/Tennis_player_Rafael_Nadal_crowned_%22King_of_Clay%22#ev28","0.0",1,9,
 "http://en.wikinews.org/wiki/Tennis:_Nadal_beats_Murray_in_Wimbledon_quarter_final#ev30","1.0",0,1,
 "http://en.wikinews.org/wiki/Tennis:_Nadal_beats_Murray_in_Wimbledon_quarter_final#ev40","0.0",0,9,
 "http://en.wikinews.org/wiki/Tennis:_Nadal_beats_Murray_in_Wimbledon_quarter_final#ev58","1.0",2,1,

@@ -11,8 +11,20 @@
     http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
 	<!-- filters -->
-	<bean id="r_removeStringFilter" class="weka.filters.unsupervised.attribute.RemoveByName">
-		<property name="expression" value="(eventURI|fileName)" />
+	<bean id="r_removeStringFilter" class="weka.filters.MultiFilter">
+		<property name="filters">
+			<array>
+				<bean class="weka.filters.unsupervised.attribute.RemoveByName">
+					<property name="expression" value="(eventURI|fileName)" />
+				</bean>
+				<!-- 
+				<bean class="weka.filters.unsupervised.attribute.Remove">
+					<property name="attributeIndices" value="3,5,7,9,10,15,23,29,31,38,41,42,44" />
+					<property name="invertSelection" value="true" />
+				</bean>	
+				 -->
+			</array>
+		</property>
 	</bean>
 
 	<bean id="r_dummyFilter" class="weka.filters.AllFilter" />
@@ -143,7 +155,9 @@
 		<property name="evaluator">
 			<bean class="weka.attributeSelection.WrapperSubsetEval">
 				<property name="classifier">
-					<bean class="weka.classifiers.trees.RandomForest" />
+					<bean class="weka.classifiers.trees.RandomForest">
+						<property name="numExecutionSlots" value="100" />
+					</bean>
 				</property>
 			</bean>
 		</property>
@@ -151,6 +165,7 @@
 			<bean class="weka.attributeSelection.GreedyStepwise">
 				<property name="generateRanking" value="false" />
 				<property name="numToSelect" value="${toSelectReg}" />
+				<property name="numExecutionSlots" value="100" />
 			</bean>
 		</property>
 	</bean>

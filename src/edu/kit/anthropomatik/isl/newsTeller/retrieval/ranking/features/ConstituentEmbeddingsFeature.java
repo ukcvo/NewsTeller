@@ -30,6 +30,7 @@ public class ConstituentEmbeddingsFeature extends EmbeddingsFeature {
 	
 	public ConstituentEmbeddingsFeature(String stopWordsFileName) {
 		super(stopWordsFileName);
+		this.shouldWarnIfNoComparisonStrings = false;
 	}
 
 	@Override

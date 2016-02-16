@@ -23,6 +23,7 @@ public class TextEmbeddingsFeature extends EmbeddingsFeature {
 	
 	public TextEmbeddingsFeature(String stopWordsFileName) {
 		super(stopWordsFileName);
+		this.shouldWarnIfNoComparisonStrings = true;
 	}
 
 	@Override

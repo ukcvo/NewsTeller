@@ -30,6 +30,8 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 	
 	private Set<String> stopWords;
 	
+	protected boolean shouldWarnIfNoComparisonStrings;
+	
 	public void setInnerAggregationType(int sentenceAggregationType) {
 		this.innerAggregationType = sentenceAggregationType;
 	}
@@ -71,8 +73,8 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 		Set<String> comparisonStrings = getComparisonStrings(eventURI, keywordsToUse, userModel);
 		
 		if (comparisonStrings.isEmpty()) {
-			if (log.isWarnEnabled())
-				log.warn(String.format("no sentences for event '%s', returning 0", eventURI));
+			if (this.shouldWarnIfNoComparisonStrings && log.isWarnEnabled())
+				log.warn(String.format("no comparisonStrings for event '%s', returning 0", eventURI));
 			return 0;
 		}
 		

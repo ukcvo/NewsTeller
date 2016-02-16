@@ -1,17 +1,17 @@
-System response;relevanceRank;usabilityRating;URI
-Today, Apple continues to lead the industry in innovation with its award-winning desktop and notebook computers, OS X operating system, and iLife and professional applications.;;1;http://en.wikinews.org/wiki/Apple_updates_iMac_line#ev20
-On Monday, computer company Apple announced that they had had two billion downloads from the iTunes App Store.;;1;http://en.wikinews.org/wiki/Apple_announces_two_billionth_download_from_App_Store#ev34
-"Although pesticides remained after washing and peeling, Formuzis said the health benefits of eating fruits and vegetables make them a better choice than most other snack foods: ""If it's a choice between an apple and potato chips, choose the apple"".";;1;http://en.wikinews.org/wiki/Apples_top_most_contaminated_produce_list#ev86
+"System response";"relevanceRank";"usabilityRating";"URI"
+"Today, Apple continues to lead the industry in innovation with its award-winning desktop and notebook computers, OS X operating system, and iLife and professional applications.";3;1;"http://en.wikinews.org/wiki/Apple_updates_iMac_line#ev20"
+"On Monday, computer company Apple announced that they had had two billion downloads from the iTunes App Store.";1;1;"http://en.wikinews.org/wiki/Apple_announces_two_billionth_download_from_App_Store#ev34"
+"Although pesticides remained after washing and peeling, Formuzis said the health benefits of eating fruits and vegetables make them a better choice than most other snack foods: ""If it's a choice between an apple and potato chips, choose the apple"".";0;1;"http://en.wikinews.org/wiki/Apples_top_most_contaminated_produce_list#ev86"
 "From Apple's PR site:
 
-:Apple ignited the personal computer revolution in the 1970s with the Apple II and reinvented the personal computer in the 1980s with the Macintosh.";;1;http://en.wikinews.org/wiki/Apple_updates_iMac_line#ev18
-Scott Forestall, an Apple employee, also revealed that iOS devices would no longer require a computer for setup, allowing users to 'cut the cord' between their devices and PCs.;;1;http://en.wikinews.org/wiki/Apple_announces_Mac_OS_X_Lion,_iOS_5,_and_iCloud#ev108
+:Apple ignited the personal computer revolution in the 1970s with the Apple II and reinvented the personal computer in the 1980s with the Macintosh.";2;1;"http://en.wikinews.org/wiki/Apple_updates_iMac_line#ev18"
+"Scott Forestall, an Apple employee, also revealed that iOS devices would no longer require a computer for setup, allowing users to 'cut the cord' between their devices and PCs.";2;1;"http://en.wikinews.org/wiki/Apple_announces_Mac_OS_X_Lion,_iOS_5,_and_iCloud#ev108"
 "From Apple's PR site:
 
-:Apple ignited the personal computer revolution in the 1970s with the Apple II and reinvented the personal computer in the 1980s with the Macintosh.";;1;http://en.wikinews.org/wiki/Apple_updates_iMac_line#ev16
-org requesting that Apple remove the app.;;1;http://en.wikinews.org/wiki/Petition_urges_Apple_to_remove_'anti-gay'_app#ev82
-The European Commission rejected today a proposal by Microsoft to license its workgroup server software protocols.;;1;http://en.wikinews.org/wiki/EU_concerned_about_Microsoft_compliance,_$5_million_daily_fine_possible#ev75
-The Beatles' Apple Corps has filed a lawsuit against computer and electronics maker Apple Computer in a London court this week, the third such lawsuit in a long running trademark dispute between the two companies.;;1;http://en.wikinews.org/wiki/Beatles'_Apple_Corps_sues_Apple_Computer#ev44
-"Formerly ""iPhone OS,"" iOS 4 was first introduced by Apple in April, and includes multitasking capabilities.";;1;http://en.wikinews.org/wiki/Apple_unveils_iPhone_4,_iOS_4_at_Worldwide_Developers_Conference_2010#ev82
-In California, a class-action lawsuit was filed against Apple in January over claims of hearing loss from iPod use.;;1;http://en.wikinews.org/wiki/Apple_releases_program_to_limit_iPod_volume#ev39
-today revealed a new product named Mighty Mouse.;;1;http://en.wikinews.org/wiki/New_'Mighty_Mouse'_from_Apple_debuts#ev35
+:Apple ignited the personal computer revolution in the 1970s with the Apple II and reinvented the personal computer in the 1980s with the Macintosh.";2;1;"http://en.wikinews.org/wiki/Apple_updates_iMac_line#ev16"
+"org requesting that Apple remove the app.";1;1;"http://en.wikinews.org/wiki/Petition_urges_Apple_to_remove_'anti-gay'_app#ev82"
+"The European Commission rejected today a proposal by Microsoft to license its workgroup server software protocols.";0;1;"http://en.wikinews.org/wiki/EU_concerned_about_Microsoft_compliance,_$5_million_daily_fine_possible#ev75"
+"The Beatles' Apple Corps has filed a lawsuit against computer and electronics maker Apple Computer in a London court this week, the third such lawsuit in a long running trademark dispute between the two companies.";1;1;"http://en.wikinews.org/wiki/Beatles'_Apple_Corps_sues_Apple_Computer#ev44"
+"Formerly ""iPhone OS,"" iOS 4 was first introduced by Apple in April, and includes multitasking capabilities.";3;1;"http://en.wikinews.org/wiki/Apple_unveils_iPhone_4,_iOS_4_at_Worldwide_Developers_Conference_2010#ev82"
+"In California, a class-action lawsuit was filed against Apple in January over claims of hearing loss from iPod use.";1;1;"http://en.wikinews.org/wiki/Apple_releases_program_to_limit_iPod_volume#ev39"
+"today revealed a new product named Mighty Mouse.";2;1;"http://en.wikinews.org/wiki/New_'Mighty_Mouse'_from_Apple_debuts#ev35"
