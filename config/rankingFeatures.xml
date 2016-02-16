@@ -269,389 +269,82 @@
 	</bean>
 	
 	<!-- sentence contains characters features -->
-	<bean id="sentenceContainsQuotationFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsQuotationFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsQuotation" />
-		<property name="chars">
-			<list>
-				<value>"</value>
-				<value>''</value>
-				<value>'</value>
-				<value>`</value>
-			</list>
-		</property>
 	</bean>
 	
-	<bean id="sentenceContainsIFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsIFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsI" />
-		<property name="chars">
-			<list>
-				<value>I</value>
-				<value>me</value>
-				<value>my</value>
-				<value>mine</value>
-				<value>myself</value>
-			</list>
-		</property>
 	</bean>
 	
-	<bean id="sentenceContainsYouFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsYouFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsYou" />
-		<property name="chars">
-			<list>
-				<value>you</value>
-				<value>your</value>
-				<value>yours</value>
-				<value>yourself</value>
-				<value>yourselves</value>
-			</list>
-		</property>
 	</bean>
 	
-	<bean id="sentenceContainsHeFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsHeFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/he.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsHe" />
-		<property name="chars">
-			<list>
-				<value>he</value>
-				<value>him</value>
-				<value>his</value>
-				<value>himself</value>
-			</list>
-		</property>
 	</bean>
 	
-	<bean id="sentenceContainsSheFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsSheFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/she.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsShe" />
-		<property name="chars">
-			<list>
-				<value>she</value>
-				<value>her</value>
-				<value>hers</value>
-				<value>herself</value>
-			</list>
-		</property>
 	</bean>
 	
-	<bean id="sentenceContainsItFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsItFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsIt" />
-		<property name="chars">
-			<list>
-				<value>it</value>
-				<value>its</value>
-				<value>itself</value>
-			</list>
-		</property>
 	</bean>
 	
-	<bean id="sentenceContainsWeFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsWeFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsWe" />
-		<property name="chars">
-			<list>
-				<value>we</value>
-				<value>us</value>
-				<value>our</value>
-				<value>ours</value>
-				<value>ourselves</value>
-			</list>
-		</property>
 	</bean>
 	
-	<bean id="sentenceContainsTheyFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsTheyFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsThey" />
-		<property name="chars">
-			<list>
-				<value>they</value>
-				<value>them</value>
-				<value>their</value>
-				<value>theirs</value>
-				<value>themselves</value>
-			</list>
-		</property>
 	</bean>
 	
-	<bean id="sentenceContainsThisThatFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsThisThatFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsThisThat" />
-		<property name="chars">
-			<list>
-				<value>this</value>
-				<value>that</value>
-			</list>
-		</property>
 	</bean>
 	
-	<bean id="sentenceContainsPronounFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsPronounFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsPronoun" />
-		<property name="chars">
-			<list>
-				<value>I</value>
-				<value>me</value>
-				<value>my</value>
-				<value>mine</value>
-				<value>myself</value>
-				<value>you</value>
-				<value>your</value>
-				<value>yours</value>
-				<value>yourself</value>
-				<value>yourselves</value>
-				<value>he</value>
-				<value>him</value>
-				<value>his</value>
-				<value>himself</value>
-				<value>she</value>
-				<value>her</value>
-				<value>hers</value>
-				<value>herself</value>
-				<value>it</value>
-				<value>its</value>
-				<value>itself</value>
-				<value>we</value>
-				<value>us</value>
-				<value>our</value>
-				<value>ours</value>
-				<value>ourselves</value>
-				<value>they</value>
-				<value>them</value>
-				<value>their</value>
-				<value>theirs</value>
-				<value>themselves</value>
-			</list>
-		</property>
 	</bean>
 
-	<bean id="sentenceContainsHeSheFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsHeSheFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsHeShe" />
-		<property name="chars">
-			<list>
-				<value>he</value>
-				<value>him</value>
-				<value>his</value>
-				<value>himself</value>
-				<value>she</value>
-				<value>her</value>
-				<value>hers</value>
-				<value>herself</value>
-			</list>
-		</property>
 	</bean>
 
-	<bean id="sentenceContainsHeSheItFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsHeSheItFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsHeSheIt" />
-		<property name="chars">
-			<list>
-				<value>he</value>
-				<value>him</value>
-				<value>his</value>
-				<value>himself</value>
-				<value>she</value>
-				<value>her</value>
-				<value>hers</value>
-				<value>herself</value>
-				<value>it</value>
-				<value>its</value>
-				<value>itself</value>
-			</list>
-		</property>
 	</bean>
 
-	<bean id="sentenceContainsStopwordFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsCharactersFeature">
+	<bean id="sentenceContainsStopwordFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="name" value="sentenceContainsStopword" />
-		<property name="chars">
-			<list>
-				<value>a</value>
-				<value>about</value>
-				<value>above</value>
-				<value>after</value>
-				<value>again</value>
-				<value>against</value>
-				<value>all</value>
-				<value>am</value>
-				<value>an</value>
-				<value>and</value>
-				<value>any</value>
-				<value>are</value>
-				<value>aren't</value>
-				<value>as</value>
-				<value>at</value>
-				<value>be</value>
-				<value>because</value>
-				<value>been</value>
-				<value>before</value>
-				<value>being</value>
-				<value>below</value>
-				<value>between</value>
-				<value>both</value>
-				<value>but</value>
-				<value>by</value>
-				<value>can</value>
-				<value>can't</value>
-				<value>cannot</value>
-				<value>could</value>
-				<value>couldn't</value>
-				<value>did</value>
-				<value>didn't</value>
-				<value>do</value>
-				<value>does</value>
-				<value>doesn't</value>
-				<value>doing</value>
-				<value>don</value>
-				<value>don't</value>
-				<value>down</value>
-				<value>during</value>
-				<value>each</value>
-				<value>few</value>
-				<value>for</value>
-				<value>from</value>
-				<value>further</value>
-				<value>had</value>
-				<value>hadn't</value>
-				<value>has</value>
-				<value>hasn't</value>
-				<value>have</value>
-				<value>haven't</value>
-				<value>having</value>
-				<value>he</value>
-				<value>he'd</value>
-				<value>he'll</value>
-				<value>he's</value>
-				<value>her</value>
-				<value>here</value>
-				<value>here's</value>
-				<value>hers</value>
-				<value>herself</value>
-				<value>him</value>
-				<value>himself</value>
-				<value>his</value>
-				<value>how</value>
-				<value>how's</value>
-				<value>i</value>
-				<value>i'd</value>
-				<value>i'll</value>
-				<value>i'm</value>
-				<value>i've</value>
-				<value>if</value>
-				<value>in</value>
-				<value>into</value>
-				<value>is</value>
-				<value>isn't</value>
-				<value>it</value>
-				<value>it's</value>
-				<value>its</value>
-				<value>itself</value>
-				<value>just</value>
-				<value>let's</value>
-				<value>me</value>
-				<value>more</value>
-				<value>most</value>
-				<value>mustn't</value>
-				<value>my</value>
-				<value>myself</value>
-				<value>no</value>
-				<value>nor</value>
-				<value>not</value>
-				<value>now</value>
-				<value>of</value>
-				<value>off</value>
-				<value>on</value>
-				<value>once</value>
-				<value>only</value>
-				<value>or</value>
-				<value>other</value>
-				<value>ought</value>
-				<value>our</value>
-				<value>ours</value>
-				<value>ourselves</value>
-				<value>out</value>
-				<value>over</value>
-				<value>own</value>
-				<value>s</value>
-				<value>same</value>
-				<value>shan't</value>
-				<value>she</value>
-				<value>she'd</value>
-				<value>she'll</value>
-				<value>she's</value>
-				<value>should</value>
-				<value>shouldn't</value>
-				<value>so</value>
-				<value>some</value>
-				<value>such</value>
-				<value>t</value>
-				<value>than</value>
-				<value>that</value>
-				<value>that's</value>
-				<value>the</value>
-				<value>their</value>
-				<value>theirs</value>
-				<value>them</value>
-				<value>themselves</value>
-				<value>then</value>
-				<value>there</value>
-				<value>there's</value>
-				<value>these</value>
-				<value>they</value>
-				<value>they'd</value>
-				<value>they'll</value>
-				<value>they're</value>
-				<value>they've</value>
-				<value>this</value>
-				<value>those</value>
-				<value>through</value>
-				<value>to</value>
-				<value>too</value>
-				<value>under</value>
-				<value>until</value>
-				<value>up</value>
-				<value>very</value>
-				<value>was</value>
-				<value>wasn't</value>
-				<value>we</value>
-				<value>we'd</value>
-				<value>we'll</value>
-				<value>we're</value>
-				<value>we've</value>
-				<value>were</value>
-				<value>weren't</value>
-				<value>what</value>
-				<value>what's</value>
-				<value>when</value>
-				<value>when's</value>
-				<value>where</value>
-				<value>where's</value>
-				<value>which</value>
-				<value>while</value>
-				<value>who</value>
-				<value>who's</value>
-				<value>whom</value>
-				<value>why</value>
-				<value>why's</value>
-				<value>will</value>
-				<value>with</value>
-				<value>won't</value>
-				<value>would</value>
-				<value>wouldn't</value>
-				<value>you</value>
-				<value>you'd</value>
-				<value>you'll</value>
-				<value>you're</value>
-				<value>you've</value>
-				<value>your</value>
-				<value>yours</value>
-				<value>yourself</value>
-				<value>yourselves</value>
-			</list>
-		</property>
 	</bean>
 	
 	<!-- sparql count features -->
@@ -703,6 +396,21 @@
 		<property name="valueName" value="numberOfDummyEntities" />
 		<property name="aggregationType" value="0" />
 	</bean>
+	
+	<bean id="numberOfMentionsRegFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfMentions" />
+		<property name="valueName" value="numberOfMentions" />
+		<property name="aggregationType" value="0" />
+	</bean>
+	
+	<bean id="numberOfKeywordNonEntitiesFeature" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfKeywordNonEntities" />
+		<property name="valueName" value="numberOfKeywordNonEntities" />
+		<property name="aggregationType" value="0" />
+	</bean>
+	
 	
 	<!-- recency features -->
 	<bean id="recencyFeatureDays" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RecencyFeature">

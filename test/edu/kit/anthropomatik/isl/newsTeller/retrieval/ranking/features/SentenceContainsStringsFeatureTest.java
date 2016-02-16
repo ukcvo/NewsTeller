@@ -25,11 +25,11 @@ import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
-public class SentenceContainsCharactersFeatureTest {
+public class SentenceContainsStringsFeatureTest {
 
 private KnowledgeStoreAdapter ksAdapter;
 	
-	private SentenceContainsCharactersFeature feature;
+	private SentenceContainsStringsFeature feature;
 	
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
@@ -66,7 +66,7 @@ private KnowledgeStoreAdapter ksAdapter;
 	@Before
 	public void setUp() throws Exception {
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/test.xml");
-		feature = (SentenceContainsCharactersFeature) context.getBean("sentenceContainsQuotationFeature");
+		feature = (SentenceContainsStringsFeature) context.getBean("sentenceContainsQuotationFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);

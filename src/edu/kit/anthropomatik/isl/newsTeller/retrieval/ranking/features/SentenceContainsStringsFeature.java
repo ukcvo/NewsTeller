@@ -5,13 +5,14 @@ import java.util.Set;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
-public class SentenceContainsCharactersFeature extends RankingFeature {
+public class SentenceContainsStringsFeature extends RankingFeature {
 
-	private List<String> chars;
+	private List<String> stringsToCheck;
 	
-	public void setChars(List<String> chars) {
-		this.chars = chars;
+	public SentenceContainsStringsFeature(String stringFileName) {
+		this.stringsToCheck = Util.readStringListFromFile(stringFileName);
 	}
 	
 	@Override
@@ -24,7 +25,7 @@ public class SentenceContainsCharactersFeature extends RankingFeature {
 		for (List<String> tokens : sentences) {
 			double counter = 0.0;
 			
-			for (String c : this.chars) {
+			for (String c : this.stringsToCheck) {
 				for (String token : tokens) {
 					if (token.equalsIgnoreCase(c))
 						counter++;

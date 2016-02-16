@@ -32,7 +32,7 @@
 ]
 >
 
-<dataset name="rankingTest-weka.filters.unsupervised.attribute.Remove-R1-2,4,6,8,11-14,16-22,24-28,30,32-37,39-40,43" version="3.7.13">
+<dataset name="rankingTest" version="3.7.13">
    <header>
       <attributes>
          <attribute name="textEmbeddings13f" type="numeric"/>
@@ -64,7 +64,7 @@
             <value>391</value>
             <value>0</value>
             <value>0</value>
-            <value>26.262724</value>
+            <value>27.250311</value>
             <value>0</value>
             <value>1</value>
             <value>0</value>
@@ -81,7 +81,7 @@
             <value>505</value>
             <value>0</value>
             <value>0</value>
-            <value>33.730462</value>
+            <value>34.793815</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
@@ -98,7 +98,7 @@
             <value>24</value>
             <value>0</value>
             <value>0</value>
-            <value>14.499433</value>
+            <value>14.93669</value>
             <value>0</value>
             <value>1</value>
             <value>0</value>
@@ -106,16 +106,16 @@
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
          </instance>
          <instance>
-            <value>0.351204</value>
+            <value>0</value>
             <value>0.474661</value>
             <value>0.442436</value>
             <value>0.792247</value>
             <value>0.555751</value>
             <value>0.5</value>
-            <value>391</value>
+            <value>Infinity</value>
             <value>0</value>
+            <value>Infinity</value>
             <value>0</value>
-            <value>26.262724</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
@@ -126,34 +126,17 @@
             <value>0.201056</value>
             <value>0</value>
             <value>0</value>
-            <value>0.800597</value>
+            <value>0</value>
             <value>0.587243</value>
             <value>0.5</value>
             <value>510</value>
+            <value missing="yes"/>
             <value>0</value>
-            <value>0</value>
-            <value>30.00168</value>
+            <value>31.22368</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
             <value>http://en.wikinews.org/wiki/Federer_wins_Pacific_Life_Open_in_Indian_Wells#ev28</value>
-            <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
-         </instance>
-         <instance>
-            <value>0.407363</value>
-            <value>0</value>
-            <value>0</value>
-            <value>0.800597</value>
-            <value>0.587243</value>
-            <value>0.5</value>
-            <value>505</value>
-            <value>0</value>
-            <value>0.5</value>
-            <value>33.730462</value>
-            <value>0</value>
-            <value>2</value>
-            <value>0</value>
-            <value>http://en.wikinews.org/wiki/Tennis_player_Rafael_Nadal_crowned_%22King_of_Clay%22#ev28</value>
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
          </instance>
          <instance>
@@ -166,7 +149,7 @@
             <value>442</value>
             <value>0</value>
             <value>1</value>
-            <value>17.041053</value>
+            <value>18.563621</value>
             <value>0</value>
             <value>0</value>
             <value>3</value>
@@ -183,28 +166,11 @@
             <value>442</value>
             <value>0.5</value>
             <value>1</value>
-            <value>35.511668</value>
+            <value>35.906666</value>
             <value>0</value>
             <value>1</value>
-            <value>0</value>
+            <value>7</value>
             <value>http://en.wikinews.org/wiki/Federer_wins_fifth_Wimbledon_title#ev26</value>
-            <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
-         </instance>
-         <instance>
-            <value>0.290772</value>
-            <value>0.474661</value>
-            <value>0.442436</value>
-            <value>0.792247</value>
-            <value>0.555751</value>
-            <value>0.5</value>
-            <value>442</value>
-            <value>0</value>
-            <value>0</value>
-            <value>35.511668</value>
-            <value>0</value>
-            <value>1</value>
-            <value>0</value>
-            <value>http://en.wikinews.org/wiki/Federer_wins_fifth_Wimbledon_title#ev50</value>
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
          </instance>
          <instance>
@@ -217,7 +183,7 @@
             <value>290</value>
             <value>0</value>
             <value>0</value>
-            <value>30.907827</value>
+            <value>32.16602</value>
             <value>0</value>
             <value>1</value>
             <value>1</value>
@@ -225,16 +191,16 @@
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
          </instance>
          <instance>
-            <value>0.201056</value>
+            <value>0</value>
             <value>0</value>
             <value>0</value>
             <value>0.800597</value>
             <value>0.587243</value>
             <value>0.5</value>
-            <value>510</value>
+            <value>Infinity</value>
             <value>0</value>
+            <value>Infinity</value>
             <value>0</value>
-            <value>30.00168</value>
             <value>0</value>
             <value>0</value>
             <value>3</value>
@@ -251,7 +217,7 @@
             <value>340</value>
             <value>0</value>
             <value>0</value>
-            <value>12.463935</value>
+            <value>13.05769</value>
             <value>0</value>
             <value>1</value>
             <value>1</value>
@@ -268,7 +234,7 @@
             <value>9</value>
             <value>0</value>
             <value>0</value>
-            <value>15.308358</value>
+            <value>15.940021</value>
             <value>0</value>
             <value>0</value>
             <value>1</value>
@@ -279,13 +245,13 @@
             <value>0.317736</value>
             <value>0</value>
             <value>0</value>
-            <value>0.800597</value>
+            <value>0</value>
             <value>0.587243</value>
             <value>0.5</value>
             <value>308</value>
+            <value missing="yes"/>
             <value>0</value>
-            <value>0</value>
-            <value>17.435109</value>
+            <value>17.829867</value>
             <value>0</value>
             <value>0</value>
             <value>1</value>
@@ -302,7 +268,7 @@
             <value>342</value>
             <value>0</value>
             <value>0</value>
-            <value>29.308028</value>
+            <value>30.357687</value>
             <value>0</value>
             <value>1</value>
             <value>0</value>
@@ -310,37 +276,20 @@
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
          </instance>
          <instance>
-            <value>0.376442</value>
+            <value>0</value>
             <value>0</value>
             <value>0</value>
             <value>0.800597</value>
             <value>0.587243</value>
             <value>0.5</value>
-            <value>342</value>
+            <value>Infinity</value>
+            <value>0</value>
+            <value>Infinity</value>
             <value>0</value>
             <value>0</value>
-            <value>29.308028</value>
             <value>0</value>
-            <value>1</value>
             <value>0</value>
             <value>http://en.wikinews.org/wiki/Roger_Federer_wins_the_French_Open_at_Roland_Garros#ev41</value>
-            <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
-         </instance>
-         <instance>
-            <value>0.406874</value>
-            <value>0</value>
-            <value>0</value>
-            <value>0.800597</value>
-            <value>0.587243</value>
-            <value>0.5</value>
-            <value>342</value>
-            <value>0</value>
-            <value>0</value>
-            <value>29.308028</value>
-            <value>0</value>
-            <value>0</value>
-            <value>1</value>
-            <value>http://en.wikinews.org/wiki/Roger_Federer_wins_the_French_Open_at_Roland_Garros#ev14</value>
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
          </instance>
          <instance>
@@ -353,7 +302,7 @@
             <value>342</value>
             <value>0.5</value>
             <value>0.5</value>
-            <value>29.308028</value>
+            <value>30.357687</value>
             <value>0</value>
             <value>1</value>
             <value>3</value>
@@ -370,7 +319,7 @@
             <value>342</value>
             <value>0</value>
             <value>0</value>
-            <value>29.308028</value>
+            <value>30.357687</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
@@ -387,7 +336,7 @@
             <value>340</value>
             <value>0</value>
             <value>0</value>
-            <value>24.280324</value>
+            <value>25.507878</value>
             <value>0</value>
             <value>0</value>
             <value>1</value>
@@ -395,50 +344,33 @@
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
          </instance>
          <instance>
-            <value>0.248836</value>
-            <value>0.474661</value>
-            <value>0.442436</value>
-            <value>0.792247</value>
-            <value>0.555751</value>
-            <value>0.5</value>
-            <value>442</value>
             <value>0</value>
-            <value>0</value>
-            <value>35.511668</value>
-            <value>0</value>
-            <value>0</value>
-            <value>7</value>
-            <value>http://en.wikinews.org/wiki/Federer_wins_fifth_Wimbledon_title#ev85</value>
-            <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
-         </instance>
-         <instance>
-            <value>0.403447</value>
             <value>0</value>
             <value>0</value>
             <value>0.800597</value>
             <value>0.587243</value>
             <value>0.5</value>
-            <value>442</value>
+            <value>Infinity</value>
             <value>0</value>
-            <value>0.5</value>
-            <value>35.511668</value>
+            <value>Infinity</value>
             <value>0</value>
-            <value>1</value>
+            <value>0</value>
+            <value>0</value>
             <value>1</value>
             <value>http://en.wikinews.org/wiki/Federer_wins_fifth_Wimbledon_title#ev73</value>
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
          </instance>
          <instance>
-            <value>0.396934</value>
+            <value>0</value>
             <value>0</value>
             <value>0</value>
             <value>0.800597</value>
             <value>0.587243</value>
             <value>0.5</value>
-            <value>510</value>
+            <value>Infinity</value>
             <value>0</value>
+            <value>Infinity</value>
             <value>0</value>
-            <value>30.00168</value>
             <value>0</value>
             <value>0</value>
             <value>0</value>
@@ -455,7 +387,7 @@
             <value>340</value>
             <value>0</value>
             <value>0</value>
-            <value>12.463935</value>
+            <value>13.05769</value>
             <value>0</value>
             <value>1</value>
             <value>1</value>
@@ -463,18 +395,18 @@
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
          </instance>
          <instance>
-            <value>0.234134</value>
+            <value>0</value>
             <value>0.474661</value>
             <value>0.442436</value>
             <value>0.792247</value>
             <value>0.555751</value>
             <value>0.5</value>
-            <value>391</value>
+            <value>Infinity</value>
+            <value>0</value>
+            <value>Infinity</value>
             <value>0</value>
             <value>0</value>
-            <value>26.262724</value>
             <value>0</value>
-            <value>1</value>
             <value>3</value>
             <value>http://en.wikinews.org/wiki/Tennis:_Nadal_beats_Murray_in_Wimbledon_quarter_final#ev58</value>
             <value>resources/benchmark/filteredQueries/RafaelNadal, RogerFederer.csv</value>
@@ -489,7 +421,7 @@
             <value>340</value>
             <value>0</value>
             <value>0</value>
-            <value>12.463935</value>
+            <value>13.05769</value>
             <value>0</value>
             <value>0</value>
             <value>1</value>
@@ -1206,7 +1138,7 @@
             <value>9.48071</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Romanian_band_to_hold_concert_for_tsunami_victims#ev17</value>
             <value>resources/benchmark/filteredQueries/concert, Edinburgh.csv</value>
          </instance>
@@ -1410,7 +1342,7 @@
             <value>6.386721</value>
             <value>0</value>
             <value>2</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Angela_Merkel_elected_new_German_chancellor#ev32</value>
             <value>resources/benchmark/filteredQueries/chancellor.csv</value>
          </instance>
@@ -4623,7 +4555,7 @@
             <value>0</value>
             <value>0</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Getting_even_with_the_law:_Wikinews_interviews_New_York_City&apos;s_&apos;Jimmy_Justice&apos;#ev74</value>
             <value>resources/benchmark/filteredQueries/upload.csv</value>
          </instance>
@@ -5048,7 +4980,7 @@
             <value>0</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Three_Google_executives_found_guilty_over_Italian_video#ev27</value>
             <value>resources/benchmark/filteredQueries/upload.csv</value>
          </instance>
@@ -5082,7 +5014,7 @@
             <value>0</value>
             <value>0</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Getty_taps_into_Flickr_snappers#ev40</value>
             <value>resources/benchmark/filteredQueries/upload.csv</value>
          </instance>
@@ -5439,7 +5371,7 @@
             <value>0</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Soldiers_question_U.S._Defense_Secretary_on_issues_during_Kuwait_visit#ev106</value>
             <value>resources/benchmark/filteredQueries/contradict.csv</value>
          </instance>
@@ -6136,7 +6068,7 @@
             <value>3.367011</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Icelandic_parliament_grants_Bobby_Fischer_full_citizenship#ev47</value>
             <value>resources/benchmark/filteredQueries/Iceland.csv</value>
          </instance>
@@ -6272,7 +6204,7 @@
             <value>9.430611</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/British_Airways_to_fly_to_Iceland#ev30</value>
             <value>resources/benchmark/filteredQueries/Iceland.csv</value>
          </instance>
@@ -7581,7 +7513,7 @@
             <value>12.876205</value>
             <value>0</value>
             <value>2</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/IBM_Releases_500_patents_to_open_source_community#ev79</value>
             <value>resources/benchmark/filteredQueries/IBM.csv</value>
          </instance>
@@ -9519,7 +9451,7 @@
             <value>0</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/University_of_Illinois_student_newspaper_runs_six_Prophet_Mohammed_cartoons#ev33</value>
             <value>resources/benchmark/filteredQueries/riot, erupt.csv</value>
          </instance>
@@ -13429,7 +13361,7 @@
             <value>8.937654</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Indian_museum_combats_spread_of_HIV#ev16</value>
             <value>resources/benchmark/filteredQueries/museum.csv</value>
          </instance>
@@ -16795,7 +16727,7 @@
             <value>4.367838</value>
             <value>0</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Volkswagen_CEO_resigns_after_emissions_scandal#ev39</value>
             <value>resources/benchmark/filteredQueries/manipulate.csv</value>
          </instance>
@@ -16829,7 +16761,7 @@
             <value>0</value>
             <value>0</value>
             <value>1</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Wikipedia_founder_Jimmy_Wales_to_start_wiki-based_search_engine#ev30</value>
             <value>resources/benchmark/filteredQueries/manipulate.csv</value>
          </instance>
@@ -18325,7 +18257,7 @@
             <value>6.879261</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>3</value>
             <value>http://en.wikinews.org/wiki/Bulusan_Volcano_releases_some_ash#ev4</value>
             <value>resources/benchmark/filteredQueries/erupt, volcano.csv</value>
          </instance>
@@ -21011,7 +20943,7 @@
             <value>2.7247</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Danish_and_Austrian_embassies_in_Tehran_attacked#ev31</value>
             <value>resources/benchmark/filteredQueries/riot.csv</value>
          </instance>
@@ -21504,7 +21436,7 @@
             <value>2.7247</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Priest_charged_in_exorcism_death#ev40</value>
             <value>resources/benchmark/filteredQueries/riot.csv</value>
          </instance>
@@ -21776,7 +21708,7 @@
             <value>4.307222</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Moscow_detains_anti-Kremlin_protesters#ev15</value>
             <value>resources/benchmark/filteredQueries/riot.csv</value>
          </instance>
@@ -24088,7 +24020,7 @@
             <value>3.625343</value>
             <value>0</value>
             <value>5</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Comedian_Richard_Pryor_dies_at_65#ev14</value>
             <value>resources/benchmark/filteredQueries/comedy.csv</value>
          </instance>
@@ -24105,7 +24037,7 @@
             <value>5.730964</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Comedian_Jon_Stewart_to_host_78th_Academy_Awards#ev77_3</value>
             <value>resources/benchmark/filteredQueries/comedy.csv</value>
          </instance>
@@ -24547,7 +24479,7 @@
             <value>6.712381</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Mourinho_and_Chelsea_FC_part_company#ev11</value>
             <value>resources/benchmark/filteredQueries/champions league.csv</value>
          </instance>
@@ -24598,7 +24530,7 @@
             <value>10.610974</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Football_CL:_Third_qualifying_round_draw_results#ev19</value>
             <value>resources/benchmark/filteredQueries/champions league.csv</value>
          </instance>
@@ -26519,7 +26451,7 @@
             <value>0</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Large_earthquake_rattles_Indonesia;_Seventh_in_two_days#ev34</value>
             <value>resources/benchmark/filteredQueries/volcano.csv</value>
          </instance>
@@ -27369,7 +27301,7 @@
             <value>13.831259</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Mourinho_has_nothing_to_say_as_Klopp_gets_first_Premier_League_victory#ev63</value>
             <value>resources/benchmark/filteredQueries/Real Madrid, champions league.csv</value>
          </instance>
@@ -27709,7 +27641,7 @@
             <value>20.530412</value>
             <value>0</value>
             <value>0</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Judge_threatened_Michael_Jackson_with_jail#ev65</value>
             <value>resources/benchmark/filteredQueries/Michael Jackson.csv</value>
          </instance>
@@ -28814,7 +28746,7 @@
             <value>20.487258</value>
             <value>0</value>
             <value>2</value>
-            <value>0</value>
+            <value>1</value>
             <value>http://en.wikinews.org/wiki/Renewed_concern_over_nuclear_response_following_atomic_bomb_anniversary#ev46</value>
             <value>resources/benchmark/filteredQueries/Fukushima, Chernobyl.csv</value>
          </instance>

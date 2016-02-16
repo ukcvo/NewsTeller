@@ -13,6 +13,33 @@
 	<util:list id="rankingFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
 		
+		<ref bean="textEmbeddingsFeature13f" />
+		
+		<ref bean="constituentEmbeddingsFeature02ed" />
+		<ref bean="constituentEmbeddingsFeature11ed" />
+		<ref bean="constituentEmbeddingsFeature12ep" />
+		<ref bean="constituentEmbeddingsFeature12em" />
+				
+		<ref bean="numberOfKeywordEntitiesFeatureAvg" />
+		
+		<ref bean="recencyFeatureWeeks" />
+		
+		<ref bean="keywordEntitiesFeature1ftd" />
+		
+		<ref bean="keywordInSentenceFeature11ftft" />
+		
+		<ref bean="BM25FeatureText1.8" />
+		
+		<ref bean="sentenceContainsYouFeature" />
+		<ref bean="sentenceContainsHeSheItFeature" />
+		
+		
+		<!--  new 
+		<ref bean="numberOfMentionsRegFeature" />
+		<ref bean="numberOfKeywordNonEntities" />
+		 -->
+		 
+		<!-- selected
 		
 		<ref bean="textEmbeddingsFeature13f" />
 		
@@ -34,7 +61,7 @@
 		<ref bean="sentenceContainsYouFeature" />
 		<ref bean="sentenceContainsHeSheItFeature" />
 		
-
+		 -->
 		
 		<!-- narrowed down 
 		<ref bean="textEmbeddingsFeature01f" />
