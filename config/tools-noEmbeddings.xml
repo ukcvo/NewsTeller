@@ -60,74 +60,61 @@
 		<property name="outputFolder" value="resources/benchmark/userModel" />
 		<property name="totalNumberOfEvents" value="100" />
 		
-		<property name="userID" value="usr_08" />
+		<property name="userID" value="usr_04" />
 		<property name="interests">
 			<list>
-				<value>travel</value>
-				<value>politics</value>
-				<value>movies</value>
-				<value>business</value>
-				<value>food</value>
-				<value>psychology</value>
+				<value>cricket</value>
+				<value>adventure</value>
+				<value>Italy</value>
+				<value>Big Bang Theory</value>
+				<value>Friends TV show</value>
+				<value>Albert Einstein</value>
 			</list>
 		</property>
 		<property name="queries">
 			<list>
 				<list>
-					<value>elections</value>
-					<value>eastern</value>
-					<value>Europe</value>
+					<value>world cup</value>
 				</list>
 				<list>
-					<value>international</value>
-					<value>mergers</value>
+					<value>terrorist</value>
+					<value>attack</value>
 				</list>
 				<list>
-					<value>largest</value>
-					<value>airport</value>
-					<value>worldwide</value>
+					<value>Barack Obama</value>
 				</list>
 				<list>
-					<value>new</value>
-					<value>movie</value>
-					<value>hits</value>
+					<value>football</value>
+					<value>match</value>
 				</list>
 				<list>
-					<value>DAX</value>
-					<value>development</value>
-					<value>2015</value>
+					<value>deep learning</value>
 				</list>
 				<list>
-					<value>airplane</value>
-					<value>crash</value>
-					<value>Europe</value>
-				</list>
-				<list>
-					<value>UFO</value>
-					<value>sightings</value>
+					<value>Christopher Nolan</value>
 				</list>
 				<list>
 					<value>best</value>
-					<value>restaurant</value>
-					<value>worldwide</value>
+					<value>cricketer</value>
 				</list>
 				<list>
-					<value>food</value>
-					<value>trends</value>
-					<value>2015</value>
+					<value>Jobs</value>
 				</list>
 				<list>
-					<value>Donald Trump</value>
+					<value>Nobel</value>
+					<value>prize</value>
 				</list>
 				<list>
-					<value>Nobel Peace Prize</value>
-					<value>winner</value>
-					<value>2014</value>
+					<value>political parties</value>
 				</list>
 				<list>
-					<value>gold</value>
-					<value>price</value>
-					<value>development</value>
+					<value>wiki</value>
+					<value>news</value>
+					<value>leak</value>
+				</list>
+				<list>
+					<value>4g</value>
+					<value>network</value>
 				</list>
 			</list>
 		</property>

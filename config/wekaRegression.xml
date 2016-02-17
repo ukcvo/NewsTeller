@@ -19,10 +19,9 @@
 				</bean>
 				<!-- 
 				<bean class="weka.filters.unsupervised.attribute.Remove">
-					<property name="attributeIndices" value="3,5,7,9,10,15,23,29,31,38,41,42,44" />
+					<property name="attributeIndices" value="1,2,3,5,6,7,8,9,10,14,16,18,22,25,29,31,32,33,35,37,39,42,49,56,61,62" />
 					<property name="invertSelection" value="true" />
-				</bean>	
-				 -->
+				</bean>	 -->
 			</array>
 		</property>
 	</bean>

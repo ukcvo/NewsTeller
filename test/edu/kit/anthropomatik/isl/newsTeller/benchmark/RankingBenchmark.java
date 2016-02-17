@@ -17,6 +17,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.util.StringUtils;
+
+import com.google.common.collect.Lists;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
@@ -32,6 +35,7 @@ import weka.core.Instances;
 import weka.core.Utils;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 import weka.filters.unsupervised.attribute.RemoveType;
 import weka.filters.unsupervised.attribute.StringToNominal;
 import weka.filters.unsupervised.instance.RemoveWithValues;
@@ -50,11 +54,17 @@ public class RankingBenchmark {
 	
 	private String groundTruthAttributes;
 	
+	private List<Integer> featureIndices;
+	
+	private String outputFileName;
+	
 	private boolean doFileBasedRegression;
 	
 	private boolean doFeatureSelection;
 	
 	private boolean doSearchBestNDCGFeature;
+	
+	private boolean doFeatureElimination;
 	
 	private boolean outputRankings;
 	
@@ -70,6 +80,17 @@ public class RankingBenchmark {
 		this.groundTruthAttributes = groundTruthAttributes;
 	}
 	
+	public void setFeatureIndices(String featureIndices) {
+		String[] array = StringUtils.commaDelimitedListToStringArray(featureIndices);
+		this.featureIndices = new ArrayList<Integer>(array.length);
+		for (String s : array)
+			this.featureIndices.add(Integer.parseInt(s));
+	}
+	
+	public void setOutputFileName(String outputFileName) {
+		this.outputFileName = outputFileName;
+	}
+	
 	public void setDoFileBasedRegression(boolean doFileBasedRegression) {
 		this.doFileBasedRegression = doFileBasedRegression;
 	}
@@ -80,6 +101,10 @@ public class RankingBenchmark {
 	
 	public void setDoSearchBestNDCGFeature(boolean doSearchBestNDCGFeature) {
 		this.doSearchBestNDCGFeature = doSearchBestNDCGFeature;
+	}
+	
+	public void setDoFeatureElimination(boolean doFeatureElimination) {
+		this.doFeatureElimination = doFeatureElimination;
 	}
 	
 	public void setOutputRankings(boolean outputRankings) {
@@ -137,7 +162,9 @@ public class RankingBenchmark {
 	// endregion
 	
 	// region fileBasedRegression
-	private void fileBasedRegression(Instances dataSet) { 
+	private Map<String, Double> fileBasedRegression(Instances dataSet) { 
+		
+		Map<String, Double> resultMap = new HashMap<String, Double>();
 		
 		try {
 			
@@ -206,6 +233,18 @@ public class RankingBenchmark {
 				precision1At1 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				precision1At5 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 				
+				resultMap.put("RMSE", eval.rootMeanSquaredError());
+				resultMap.put("correlation", eval.correlationCoefficient());
+				resultMap.put("NDCG", ndcg);
+				resultMap.put("avg top 1", topRank);
+				resultMap.put("avg top 1 norm", relativeTopRank);
+				resultMap.put("expected", expectedRank);
+				resultMap.put("avg top 5 norm", top5relativeRank);
+				resultMap.put("expected top 5", top5expectedRank);
+				resultMap.put(">0 precision @1", precision0At1);
+				resultMap.put(">0 precision @5", precision0At5);
+				resultMap.put(">1 precision @1", precision1At1);
+				resultMap.put(">1 precision @5", precision1At5);
 				
 				if (log.isInfoEnabled()) {
 					log.info(String.format("%s (file-based)", classifierName));
@@ -219,6 +258,8 @@ public class RankingBenchmark {
 			if (log.isDebugEnabled())
 				log.debug("cannot perform file-based regression", e);
 		}
+		
+		return resultMap;
 	}
 	
 	private class RankEntry {
@@ -455,6 +496,48 @@ public class RankingBenchmark {
 	}
 	// endregion
 	
+	// region featureElimination
+	private void featureElimination() {
+		
+		try {
+			Map<String, Map<String, Double>> resultMap = new HashMap<String, Map<String, Double>>();
+			
+			Remove removeFilter = new Remove();
+			removeFilter.setAttributeIndices(StringUtils.collectionToCommaDelimitedString(featureIndices));
+			removeFilter.setInvertSelection(true);
+			removeFilter.setInputFormat(this.dataSet);
+			Instances baselineData = Filter.useFilter(this.dataSet, removeFilter);
+			Map<String, Double> baselineResults = this.fileBasedRegression(baselineData);
+			resultMap.put("baseline", baselineResults);
+			
+			for (int i = 0; i < featureIndices.size(); i++) {
+				if (StringUtils.commaDelimitedListToSet(this.groundTruthAttributes).contains(featureIndices.get(i).toString())) 
+					continue; // skip ground truth entries
+				Remove filter = new Remove();
+				List<Integer> indices = new ArrayList<Integer>(featureIndices);
+				indices.remove(featureIndices.get(i));
+				filter.setAttributeIndices(StringUtils.collectionToCommaDelimitedString(indices));
+				filter.setInvertSelection(true);
+				filter.setInputFormat(this.dataSet);
+				Instances filtered = Filter.useFilter(this.dataSet, filter);
+				Map<String, Double> localResults = this.fileBasedRegression(filtered);
+				resultMap.put(String.format("without %d", featureIndices.get(i)), localResults);
+			}
+			
+			List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", "expected", 
+					"avg top 5 norm", "expected top 5", ">0 precision @1", ">0 precision @5", ">1 precision @1", ">1 precision @5");
+			Util.writeEvaluationToCsv(this.outputFileName, columnNames, resultMap);
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't do feature elimination");
+			if (log.isDebugEnabled())
+				log.debug("Can't do feature elimination", e);
+		}
+		
+		
+	}
+	// endregion
+	
 	public void run() {
 		if (this.doFileBasedRegression)
 			fileBasedRegression(this.dataSet);
@@ -462,6 +545,8 @@ public class RankingBenchmark {
 			featureSelection();
 		if (this.doSearchBestNDCGFeature)
 			searchBestNDCGFeature();
+		if (this.doFeatureElimination)
+			featureElimination();
 	}
 	
 	public static void main(String[] args) {
