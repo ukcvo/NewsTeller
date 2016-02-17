@@ -322,8 +322,7 @@
 		<property name="regressors">
 			<map>
 				<entry key="baseline" value-ref="r_zeroR" />
-			<!-- 
-				<entry key="RandomForest" value-ref="r_randomForest" /> -->
+				<entry key="RandomForest" value-ref="r_randomForest" /> 
 			</map>
 		</property>
 		

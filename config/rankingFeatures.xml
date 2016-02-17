@@ -347,6 +347,901 @@
 		<property name="name" value="sentenceContainsStopword" />
 	</bean>
 	
+	<!-- constituent contains strings features -->
+	<bean id="constituentContainsFeature_quotation_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_quotation_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_quotation_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_quotation_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_quotation_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_quotation_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_quotation_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_quotation_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_quotation_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_quotation_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_quotation_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_quotation_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_quotation_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_quotation_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_quotation_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_quotation_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_quotation_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/quotation.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_quotation_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_I_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_I_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_I_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_I_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_I_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_I_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_I_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_I_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_I_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_I_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_I_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_I_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_I_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_I_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_I_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_I_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_I_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/I.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_I_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_you_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_you_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_you_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_you_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_you_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_you_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_you_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_you_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_you_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_you_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_you_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_you_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_you_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_you_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_you_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_you_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_you_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/you.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_you_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heSheIt_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heSheIt_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heSheIt_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heSheIt_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heSheIt_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heSheIt_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heSheIt_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heSheIt_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heSheIt_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heSheIt_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heSheIt_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heSheIt_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heSheIt_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heSheIt_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heSheIt_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heSheIt_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heSheIt_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heSheIt.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heSheIt_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heShe_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heShe_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heShe_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heShe_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heShe_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heShe_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heShe_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heShe_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heShe_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heShe_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heShe_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heShe_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heShe_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heShe_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heShe_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heShe_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_heShe_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/heShe.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_heShe_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_it_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_it_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_it_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_it_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_it_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_it_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_it_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_it_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_it_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_it_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_it_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_it_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_it_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_it_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_it_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_it_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_it_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_it_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_we_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_we_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_we_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_we_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_we_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_we_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_we_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_we_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_we_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_we_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_we_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_we_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_we_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_we_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_we_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_we_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_we_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/we.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_we_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_they_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_they_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_they_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_they_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_they_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_they_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_they_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_they_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_they_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_they_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_they_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_they_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_they_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_they_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_they_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_they_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_they_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/they.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_they_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_thisThat_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_thisThat_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_thisThat_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_thisThat_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_thisThat_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_thisThat_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_thisThat_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_thisThat_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_thisThat_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_thisThat_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_thisThat_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_thisThat_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_thisThat_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_thisThat_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_thisThat_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_thisThat_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_thisThat_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/thisThat.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_thisThat_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_stopwords_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_stopwords_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_stopwords_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_stopwords_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_stopwords_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_stopwords_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_stopwords_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_stopwords_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_stopwords_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_stopwords_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_stopwords_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_stopwords_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_stopwords_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_stopwords_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_stopwords_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_stopwords_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_stopwords_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/stopwords.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_stopwords_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_pronoun_ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_pronoun_ep" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_pronoun_el" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_pronoun_el" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_pronoun_em" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_pronoun_em" />
+		<property name="entityName" value="entity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_pronoun_kp" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_pronoun_kp" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_pronoun_kl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_pronoun_kl" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_pronoun_km" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_pronoun_km" />
+		<property name="entityName" value="keywordEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	<bean id="constituentContainsFeature_pronoun_np" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_pronoun_np" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_pronoun_nl" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_pronoun_nl" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="entityLabel" />
+		<property name="needsKeywordIteration" value="False" />
+	</bean>
+
+	<bean id="constituentContainsFeature_pronoun_nm" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+		<constructor-arg name="stringFileName" value="resources/features/pronoun.txt" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="constituentContains_pronoun_nm" />
+		<property name="entityName" value="nonEntity" />
+		<property name="valueName" value="matchingEntityLabel" />
+		<property name="needsKeywordIteration" value="True" />
+	</bean>
+
+	
+	
+	
 	<!-- sparql count features -->
 	<bean id="numberOfKeywordEntitiesFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
 		<property name="ksAdapter" ref="ksAdapter" />

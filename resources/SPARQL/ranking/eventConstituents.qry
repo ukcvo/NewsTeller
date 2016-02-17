@@ -1,4 +1,4 @@
-SELECT ?event ?entity ?keywordEntity
+SELECT ?event ?entity ?keywordEntity ?nonEntity
 WHERE
 {
 	VALUES ?event { *keys* } .
@@ -9,6 +9,8 @@ WHERE
 	{
 		?class rdfs:label ?keyEntLabel.
 		FILTER(REGEX(STR(?keyEntLabel),"*k*", "i"))
-	}} 
+	}} UNION
+	{ ?event sem:hasActor|sem:hasPlace ?nonEntity .
+		FILTER NOT EXISTS { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?nonEntity ?link ?object } } }
 	
 }

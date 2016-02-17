@@ -37,6 +37,117 @@
 		<!--  new 
 		<ref bean="numberOfMentionsRegFeature" />
 		<ref bean="numberOfKeywordNonEntities" />
+		
+		<ref bean="constituentContainsFeature_quotation_ep" />
+		<ref bean="constituentContainsFeature_quotation_el" />
+		<ref bean="constituentContainsFeature_quotation_em" />
+		<ref bean="constituentContainsFeature_quotation_kp" />
+		<ref bean="constituentContainsFeature_quotation_kl" />
+		<ref bean="constituentContainsFeature_quotation_km" />
+		<ref bean="constituentContainsFeature_quotation_np" />
+		<ref bean="constituentContainsFeature_quotation_nl" />
+		<ref bean="constituentContainsFeature_quotation_nm" />
+		
+		<ref bean="constituentContainsFeature_I_ep" />
+		<ref bean="constituentContainsFeature_I_el" />
+		<ref bean="constituentContainsFeature_I_em" />
+		<ref bean="constituentContainsFeature_I_kp" />
+		<ref bean="constituentContainsFeature_I_kl" />
+		<ref bean="constituentContainsFeature_I_km" />
+		<ref bean="constituentContainsFeature_I_np" />
+		<ref bean="constituentContainsFeature_I_nl" />
+		<ref bean="constituentContainsFeature_I_nm" />
+
+		<ref bean="constituentContainsFeature_you_ep" />
+		<ref bean="constituentContainsFeature_you_el" />
+		<ref bean="constituentContainsFeature_you_em" />
+		<ref bean="constituentContainsFeature_you_kp" />
+		<ref bean="constituentContainsFeature_you_kl" />
+		<ref bean="constituentContainsFeature_you_km" />
+		<ref bean="constituentContainsFeature_you_np" />
+		<ref bean="constituentContainsFeature_you_nl" />
+		<ref bean="constituentContainsFeature_you_nm" />
+
+		<ref bean="constituentContainsFeature_heShe_ep" />
+		<ref bean="constituentContainsFeature_heShe_el" />
+		<ref bean="constituentContainsFeature_heShe_em" />
+		<ref bean="constituentContainsFeature_heShe_kp" />
+		<ref bean="constituentContainsFeature_heShe_kl" />
+		<ref bean="constituentContainsFeature_heShe_km" />
+		<ref bean="constituentContainsFeature_heShe_np" />
+		<ref bean="constituentContainsFeature_heShe_nl" />
+		<ref bean="constituentContainsFeature_heShe_nm" />
+		
+		<ref bean="constituentContainsFeature_it_ep" />
+		<ref bean="constituentContainsFeature_it_el" />
+		<ref bean="constituentContainsFeature_it_em" />
+		<ref bean="constituentContainsFeature_it_kp" />
+		<ref bean="constituentContainsFeature_it_kl" />
+		<ref bean="constituentContainsFeature_it_km" />
+		<ref bean="constituentContainsFeature_it_np" />
+		<ref bean="constituentContainsFeature_it_nl" />
+		<ref bean="constituentContainsFeature_it_nm" />
+
+		<ref bean="constituentContainsFeature_heSheIt_ep" />
+		<ref bean="constituentContainsFeature_heSheIt_el" />
+		<ref bean="constituentContainsFeature_heSheIt_em" />
+		<ref bean="constituentContainsFeature_heSheIt_kp" />
+		<ref bean="constituentContainsFeature_heSheIt_kl" />
+		<ref bean="constituentContainsFeature_heSheIt_km" />
+		<ref bean="constituentContainsFeature_heSheIt_np" />
+		<ref bean="constituentContainsFeature_heSheIt_nl" />
+		<ref bean="constituentContainsFeature_heSheIt_nm" />
+
+		<ref bean="constituentContainsFeature_we_ep" />
+		<ref bean="constituentContainsFeature_we_el" />
+		<ref bean="constituentContainsFeature_we_em" />
+		<ref bean="constituentContainsFeature_we_kp" />
+		<ref bean="constituentContainsFeature_we_kl" />
+		<ref bean="constituentContainsFeature_we_km" />
+		<ref bean="constituentContainsFeature_we_np" />
+		<ref bean="constituentContainsFeature_we_nl" />
+		<ref bean="constituentContainsFeature_we_nm" />
+
+		<ref bean="constituentContainsFeature_they_ep" />
+		<ref bean="constituentContainsFeature_they_el" />
+		<ref bean="constituentContainsFeature_they_em" />
+		<ref bean="constituentContainsFeature_they_kp" />
+		<ref bean="constituentContainsFeature_they_kl" />
+		<ref bean="constituentContainsFeature_they_km" />
+		<ref bean="constituentContainsFeature_they_np" />
+		<ref bean="constituentContainsFeature_they_nl" />
+		<ref bean="constituentContainsFeature_they_nm" />
+
+		<ref bean="constituentContainsFeature_thisThat_ep" />
+		<ref bean="constituentContainsFeature_thisThat_el" />
+		<ref bean="constituentContainsFeature_thisThat_em" />
+		<ref bean="constituentContainsFeature_thisThat_kp" />
+		<ref bean="constituentContainsFeature_thisThat_kl" />
+		<ref bean="constituentContainsFeature_thisThat_km" />
+		<ref bean="constituentContainsFeature_thisThat_np" />
+		<ref bean="constituentContainsFeature_thisThat_nl" />
+		<ref bean="constituentContainsFeature_thisThat_nm" />
+
+		<ref bean="constituentContainsFeature_pronoun_ep" />
+		<ref bean="constituentContainsFeature_pronoun_el" />
+		<ref bean="constituentContainsFeature_pronoun_em" />
+		<ref bean="constituentContainsFeature_pronoun_kp" />
+		<ref bean="constituentContainsFeature_pronoun_kl" />
+		<ref bean="constituentContainsFeature_pronoun_km" />
+		<ref bean="constituentContainsFeature_pronoun_np" />
+		<ref bean="constituentContainsFeature_pronoun_nl" />
+		<ref bean="constituentContainsFeature_pronoun_nm" />
+
+		<ref bean="constituentContainsFeature_stopwords_ep" />
+		<ref bean="constituentContainsFeature_stopwords_el" />
+		<ref bean="constituentContainsFeature_stopwords_em" />
+		<ref bean="constituentContainsFeature_stopwords_kp" />
+		<ref bean="constituentContainsFeature_stopwords_kl" />
+		<ref bean="constituentContainsFeature_stopwords_km" />
+		<ref bean="constituentContainsFeature_stopwords_np" />
+		<ref bean="constituentContainsFeature_stopwords_nl" />
+		<ref bean="constituentContainsFeature_stopwords_nm" />
+
 		 -->
 		 
 		<!-- selected

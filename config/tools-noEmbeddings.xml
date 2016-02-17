@@ -60,68 +60,74 @@
 		<property name="outputFolder" value="resources/benchmark/userModel" />
 		<property name="totalNumberOfEvents" value="100" />
 		
-		<property name="userID" value="usr_07" />
+		<property name="userID" value="usr_08" />
 		<property name="interests">
 			<list>
-				<value>automated video editing </value>
-				<value>automated event detection</value>
-				<value>automated video tagging </value>
+				<value>travel</value>
+				<value>politics</value>
+				<value>movies</value>
+				<value>business</value>
+				<value>food</value>
+				<value>psychology</value>
 			</list>
 		</property>
 		<property name="queries">
 			<list>
 				<list>
-					<value>footage</value>
-					<value>tagging</value>
+					<value>elections</value>
+					<value>eastern</value>
+					<value>Europe</value>
 				</list>
 				<list>
-					<value>automatic</value>
-					<value>video</value>
-					<value>editing</value>
+					<value>international</value>
+					<value>mergers</value>
 				</list>
 				<list>
-					<value>event</value>
-					<value>detection</value>
+					<value>largest</value>
+					<value>airport</value>
+					<value>worldwide</value>
 				</list>
 				<list>
-					<value>keyword</value>
-					<value>generation</value>
+					<value>new</value>
+					<value>movie</value>
+					<value>hits</value>
 				</list>
 				<list>
-					<value>tag</value>
-					<value>generation</value>
+					<value>DAX</value>
+					<value>development</value>
+					<value>2015</value>
 				</list>
 				<list>
-					<value>detect</value>
-					<value>interesting</value>
-					<value>video</value>
+					<value>airplane</value>
+					<value>crash</value>
+					<value>Europe</value>
 				</list>
 				<list>
-					<value>automated</value>
-					<value>footage</value>
-					<value>processing</value>
+					<value>UFO</value>
+					<value>sightings</value>
 				</list>
 				<list>
-					<value>algorithmic</value>
-					<value>video</value>
-					<value>editing</value>
+					<value>best</value>
+					<value>restaurant</value>
+					<value>worldwide</value>
 				</list>
 				<list>
-					<value>action</value>
-					<value>detection</value>
+					<value>food</value>
+					<value>trends</value>
+					<value>2015</value>
 				</list>
 				<list>
-					<value>action</value>
-					<value>recognition</value>
+					<value>Donald Trump</value>
 				</list>
 				<list>
-					<value>video</value>
-					<value>keywords</value>
+					<value>Nobel Peace Prize</value>
+					<value>winner</value>
+					<value>2014</value>
 				</list>
 				<list>
-					<value>tags</value>
-					<value>from</value>
-					<value>videos</value>
+					<value>gold</value>
+					<value>price</value>
+					<value>development</value>
 				</list>
 			</list>
 		</property>
