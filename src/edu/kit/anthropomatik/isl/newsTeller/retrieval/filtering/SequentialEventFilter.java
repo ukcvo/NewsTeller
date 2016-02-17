@@ -143,6 +143,8 @@ public class SequentialEventFilter implements IEventFilter {
 			
 			if (isUsable)
 				result.add(event);
+			else
+				ksAdapter.removeEvent(event.getEventURI());
 		}
 		
 		t = System.currentTimeMillis() - t;

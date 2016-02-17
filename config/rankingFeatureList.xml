@@ -148,6 +148,20 @@
 		<ref bean="constituentContainsFeature_stopwords_nl" />
 		<ref bean="constituentContainsFeature_stopwords_nm" />
 
+		<ref bean="sameDocumentFeature0ff" />
+		<ref bean="sameDocumentFeature0ft" />
+		<ref bean="sameDocumentFeature0tf" />
+		<ref bean="sameDocumentFeature0tt" />
+		<ref bean="sameDocumentFeature1ff" />
+		<ref bean="sameDocumentFeature1ft" />
+		<ref bean="sameDocumentFeature1tf" />
+		<ref bean="sameDocumentFeature1tt" />
+		<ref bean="sameDocumentFeature2ff" />
+		<ref bean="sameDocumentFeature2ft" />
+		<ref bean="sameDocumentFeature2tf" />
+		<ref bean="sameDocumentFeature2tt" />
+		
+
 		 -->
 		 
 		<!-- selected

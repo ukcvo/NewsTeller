@@ -173,6 +173,14 @@ public class KnowledgeStoreAdapter {
 		this.eventMentionCache.putAll(eventMentionCache);
 	}
 
+	/**
+	 * Removes the given eventURI from the internal buffers.
+	 */
+	public void removeEvent(String eventURI) {
+		for (ConcurrentMap<String, Set<String>> map : this.sparqlCache.values())
+			map.remove(eventURI);
+	}
+	
 	// region filling the buffer
 
 	// region sparql
@@ -922,6 +930,33 @@ public class KnowledgeStoreAdapter {
 		
 		for (String eventURI : allEvents)
 			result.addAll(retrieveOriginalTextTokens(eventURI, dummyKeyword));
+		
+		return result;
+	}
+	
+	/**
+	 * Returns a list, where for each event of the current query a set of all resourceURIs in which this event is mentioned is given.
+	 */
+	public List<Set<String>> getAllQueryResourceURIs(String dummyKeyword) {
+		
+		List<Set<String>> result = new ArrayList<Set<String>>();
+		
+		Set<String> allEvents = sparqlCache.get(Util.getRelationName("event", "mention", dummyKeyword)).keySet();
+		for (String eventURI : allEvents)
+			result.add(Util.resourceURIsFromMentionURIs(getBufferedValues(Util.getRelationName("event", "mention", dummyKeyword), eventURI)));
+		
+		return result;
+	}
+	
+	/**
+	 * Returns a list, where for each event of the current query a list of all mentioning sentences is given.
+	 */
+	public List<Set<String>> getAllQuerySentences(String dummyKeyword) {
+		List<Set<String>> result = new ArrayList<Set<String>>();
+		
+		Set<String> allEvents = sparqlCache.get(Util.getRelationName("event", "mention", dummyKeyword)).keySet();
+		for (String eventURI : allEvents)
+			result.add(new HashSet<String>(retrieveSentencesFromEvent(eventURI, dummyKeyword)));
 		
 		return result;
 	}

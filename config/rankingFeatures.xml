@@ -3134,5 +3134,103 @@
 		<property name="splitKeywords" value="true" />
 	</bean>
 
+	<!-- same document features -->
+		<bean id="sameDocumentFeature0tt" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument0tt" />
+		<property name="aggregationType" value="0" />
+		<property name="useSentenceInsteadOfText" value="true" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="true" />
+	</bean>
+
+	<bean id="sameDocumentFeature0tf" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument0tf" />
+		<property name="aggregationType" value="0" />
+		<property name="useSentenceInsteadOfText" value="true" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="false" />
+	</bean>
+
+	<bean id="sameDocumentFeature0ft" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument0ft" />
+		<property name="aggregationType" value="0" />
+		<property name="useSentenceInsteadOfText" value="false" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="true" />
+	</bean>
+
+	<bean id="sameDocumentFeature0ff" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument0ff" />
+		<property name="aggregationType" value="0" />
+		<property name="useSentenceInsteadOfText" value="false" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="false" />
+	</bean>
+
+	<bean id="sameDocumentFeature1tt" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument1tt" />
+		<property name="aggregationType" value="1" />
+		<property name="useSentenceInsteadOfText" value="true" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="true" />
+	</bean>
+
+	<bean id="sameDocumentFeature1tf" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument1tf" />
+		<property name="aggregationType" value="1" />
+		<property name="useSentenceInsteadOfText" value="true" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="false" />
+	</bean>
+
+	<bean id="sameDocumentFeature1ft" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument1ft" />
+		<property name="aggregationType" value="1" />
+		<property name="useSentenceInsteadOfText" value="false" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="true" />
+	</bean>
+
+	<bean id="sameDocumentFeature1ff" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument1ff" />
+		<property name="aggregationType" value="1" />
+		<property name="useSentenceInsteadOfText" value="false" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="false" />
+	</bean>
+
+	<bean id="sameDocumentFeature2tt" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument2tt" />
+		<property name="aggregationType" value="2" />
+		<property name="useSentenceInsteadOfText" value="true" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="true" />
+	</bean>
+
+	<bean id="sameDocumentFeature2tf" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument2tf" />
+		<property name="aggregationType" value="2" />
+		<property name="useSentenceInsteadOfText" value="true" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="false" />
+	</bean>
+
+	<bean id="sameDocumentFeature2ft" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument2ft" />
+		<property name="aggregationType" value="2" />
+		<property name="useSentenceInsteadOfText" value="false" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="true" />
+	</bean>
+
+	<bean id="sameDocumentFeature2ff" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="sameDocument2ff" />
+		<property name="aggregationType" value="2" />
+		<property name="useSentenceInsteadOfText" value="false" />
+		<property name="normalizeOverNumberOfTotalDocuments" value="false" />
+	</bean>
+
+	
 
 </beans>

@@ -366,4 +366,39 @@ public class KnowledgeStoreAdapterTest {
 		Set<List<String>> result = ksAdapter.retrieveTitleTokensFromEvent("event-1", "keyword");
 		assertTrue(expectedResult.equals(result));
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldReturnAllTextURIs() {
+		List<Set<String>> expectedResult = Lists.newArrayList(Sets.newHashSet("mention-1"),	Sets.newHashSet("mention-1", "mention-2"));
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2"));
+		mentionMap.put("event-2", Sets.newHashSet("mention-1#char=1,2", "mention-2#char=1,2"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		List<Set<String>> result = ksAdapter.getAllQueryResourceURIs("keyword");
+		assertTrue(expectedResult.equals(result));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldReturnAllSentences() {
+		List<Set<String>> expectedResult = Lists.newArrayList(Sets.newHashSet("Expected result number one."), 
+																Sets.newHashSet("ExpectedResultNumberTwo.", "Expected result number one."));
+		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
+		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
+		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2"));
+		mentionMap.put("event-2", Sets.newHashSet("mention-1#char=1,2", "mention-2#char=1,2"));
+		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
+		ConcurrentMap<String, Set<String>> resourceMap = new ConcurrentHashMap<String, Set<String>>();
+		resourceMap.put("mention-1", Sets.newHashSet("Expected result number one. Irrelevant Sentence."));
+		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
+		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
+		
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		List<Set<String>> result = ksAdapter.getAllQuerySentences("keyword");
+		assertTrue(expectedResult.equals(result));
+	}
 }
