@@ -60,8 +60,10 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 		case AGGREGATION_TYPE_GEOM:
 			result = 1.0;
 			break;
-		case AGGREGATION_TYPE_AVG:
 		case AGGREGATION_TYPE_MAX:
+			result = Double.NEGATIVE_INFINITY;
+			break;
+		case AGGREGATION_TYPE_AVG:
 		default:
 			result = 0.0;
 			break;
@@ -103,8 +105,10 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 			case AGGREGATION_TYPE_GEOM:
 				keywordResult = 1.0;
 				break;
-			case AGGREGATION_TYPE_AVG:
 			case AGGREGATION_TYPE_MAX:
+				keywordResult = Double.NEGATIVE_INFINITY;
+				break;
+			case AGGREGATION_TYPE_AVG:
 			default:
 				keywordResult = 0.0;
 				break;
@@ -154,7 +158,7 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 				}
 			}
 			if (this.innerAggregationType == AGGREGATION_TYPE_GEOM)
-				keywordResult = Math.pow(keywordResult, (1.0 / sentenceVectors.size()));
+				keywordResult = Math.pow((keywordResult > 0) ? keywordResult : -keywordResult, (1.0 / sentenceVectors.size()));
 			
 			switch (this.keywordAggregationType) {
 			case AGGREGATION_TYPE_AVG:
@@ -175,7 +179,7 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 		}
 		
 		if (this.keywordAggregationType == AGGREGATION_TYPE_GEOM)
-			result = Math.pow(result, (1.0 / keywordsToUse.size()));
+			result = Math.pow((result > 0) ? result : -result, (1.0 / keywordsToUse.size()));
 		
 		if (Double.isInfinite(result))
 			result = 0;

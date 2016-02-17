@@ -13,6 +13,36 @@
 		<property name="splitKeywordsIntoTokens" value="false" />
 	</bean>
 
+	<!-- keyword comparison features -->
+	<bean id="keywordComparisonFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordComparisonAvg" />
+		<property name="aggregationType" value="0" />
+	</bean>
+
+	<bean id="keywordComparisonFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordComparisonMin" />
+		<property name="aggregationType" value="1" />
+	</bean>
+
+	<bean id="keywordComparisonFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordComparisonMax" />
+		<property name="aggregationType" value="2" />
+	</bean>
+
+	<bean id="keywordComparisonFeatureGeom" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
+		<property name="embeddings" ref="embeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordComparisonGeom" />
+		<property name="aggregationType" value="3" />
+	</bean>
+
+
 	<!-- constituent embeddings features -->
 	<bean id="constituentEmbeddingsFeature00ep" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
