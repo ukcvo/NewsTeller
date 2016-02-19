@@ -667,6 +667,20 @@ public class Util {
 			max = Math.max(max, d);
 		return max;
 	}
+	
+	/**
+	 * Calculate the minimum value of the given collection. Returns NaN for
+	 * empty collection.
+	 */
+	public static double minFromCollection(Collection<Double> collection) {
+		if (collection.isEmpty())
+			return Double.NaN;
+
+		double min = Double.POSITIVE_INFINITY;
+		for (Double d : collection)
+			min = Math.min(min, d);
+		return min;
+	}
 
 	/**
 	 * Stems the given keyword.

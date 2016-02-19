@@ -60,61 +60,62 @@
 		<property name="outputFolder" value="resources/benchmark/userModel" />
 		<property name="totalNumberOfEvents" value="100" />
 		
-		<property name="userID" value="usr_04" />
+		<property name="userID" value="usr_10" />
 		<property name="interests">
 			<list>
-				<value>cricket</value>
-				<value>adventure</value>
-				<value>Italy</value>
-				<value>Big Bang Theory</value>
-				<value>Friends TV show</value>
-				<value>Albert Einstein</value>
+				<value>cars</value>
+				<value>sports</value>
+				<value>politics</value>
+				<value>stock market</value>
+				<value>research advancements</value>
+				<value>travel</value>
 			</list>
 		</property>
 		<property name="queries">
 			<list>
 				<list>
+					<value>F1</value>
+					<value>2010</value>
+					<value>drivers</value>
+				</list>
+				<list>
+					<value>cricket</value>
 					<value>world cup</value>
+					<value>2011</value>
 				</list>
 				<list>
-					<value>terrorist</value>
-					<value>attack</value>
+					<value>electric cars</value>
 				</list>
 				<list>
-					<value>Barack Obama</value>
+					<value>travel</value>
+					<value>Cambodia</value>
 				</list>
 				<list>
-					<value>football</value>
-					<value>match</value>
+					<value>Arab</value>
+					<value>revolution</value>
 				</list>
 				<list>
-					<value>deep learning</value>
+					<value>Black Friday</value>
 				</list>
 				<list>
-					<value>Christopher Nolan</value>
+					<value>Lehman Brothers</value>
 				</list>
 				<list>
-					<value>best</value>
-					<value>cricketer</value>
+					<value>world economy</value>
 				</list>
 				<list>
-					<value>Jobs</value>
+					<value>MIT</value>
+					<value>Media Lab</value>
 				</list>
 				<list>
-					<value>Nobel</value>
-					<value>prize</value>
+					<value>Olympics</value>
+					<value>London</value>
 				</list>
 				<list>
-					<value>political parties</value>
+					<value>Sochi</value>
 				</list>
 				<list>
-					<value>wiki</value>
-					<value>news</value>
-					<value>leak</value>
-				</list>
-				<list>
-					<value>4g</value>
-					<value>network</value>
+					<value>Modi</value>
 				</list>
 			</list>
 		</property>

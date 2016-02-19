@@ -341,8 +341,11 @@
 		</property>
 		<property name="groundTruthAttributes" value="62,63,64" />
 		<property name="outputFileName" value="out/featureElimination.csv" />
-		<property name="featureIndices" value="1,2,3,5,6,7,8,9,14,16,18,22,29,31,33,35,37,39,42,49,56,61,62,63,64" />
+		<property name="featureIndices" value="1,2,3,5,6,7,8,9,10,14,16,18,22,25,29,31,32,33,35,37,39,42,49,56,61,62,63,64" />
+		<property name="newFeatureIndices" value="22,23,49,56,61" />
+		
 		<!-- 1,2,3,5,6,7,8,9,10,14,16,18,22,25,29,31,32,33,35,37,39,42,49,56,61,62,63,64 -->
+		<property name="minimumNumberOfFeatures" value="22" />
 		
 		<property name="outputRankings" value="false" />
 		
@@ -350,6 +353,8 @@
 		<property name="doFileBasedRegression" value="false" />
 		<property name="doSearchBestNDCGFeature" value="false" />
 		<property name="doFeatureElimination" value="true" />
+		<property name="doRecursiveFeatureElimination" value="false" />
+		<property name="doFeatureAddition" value="false" />
 	</bean>
 
 </beans>

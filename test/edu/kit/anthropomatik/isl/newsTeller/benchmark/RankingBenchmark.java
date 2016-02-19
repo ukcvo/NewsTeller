@@ -7,8 +7,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.logging.LogManager;
 
@@ -54,9 +57,15 @@ public class RankingBenchmark {
 	
 	private String groundTruthAttributes;
 	
+	private int numberOfGroundTruthAttributes;
+	
 	private List<Integer> featureIndices;
 	
+	private List<Integer> newFeatureIndices;
+	
 	private String outputFileName;
+	
+	private int minimumNumberOfFeatures;
 	
 	private boolean doFileBasedRegression;
 	
@@ -65,6 +74,10 @@ public class RankingBenchmark {
 	private boolean doSearchBestNDCGFeature;
 	
 	private boolean doFeatureElimination;
+	
+	private boolean doRecursiveFeatureElimination;
+	
+	private boolean doFeatureAddition;
 	
 	private boolean outputRankings;
 	
@@ -78,6 +91,7 @@ public class RankingBenchmark {
 	
 	public void setGroundTruthAttributes(String groundTruthAttributes) {
 		this.groundTruthAttributes = groundTruthAttributes;
+		this.numberOfGroundTruthAttributes = StringUtils.commaDelimitedListToStringArray(groundTruthAttributes).length;
 	}
 	
 	public void setFeatureIndices(String featureIndices) {
@@ -87,8 +101,19 @@ public class RankingBenchmark {
 			this.featureIndices.add(Integer.parseInt(s));
 	}
 	
+	public void setNewFeatureIndices(String newFeatureIndices) {
+		String[] array = StringUtils.commaDelimitedListToStringArray(newFeatureIndices);
+		this.newFeatureIndices = new ArrayList<Integer>(array.length);
+		for (String s : array)
+			this.newFeatureIndices.add(Integer.parseInt(s));
+	}
+	
 	public void setOutputFileName(String outputFileName) {
 		this.outputFileName = outputFileName;
+	}
+	
+	public void setMinimumNumberOfFeatures(int minimumNumberOfFeatures) {
+		this.minimumNumberOfFeatures = minimumNumberOfFeatures;
 	}
 	
 	public void setDoFileBasedRegression(boolean doFileBasedRegression) {
@@ -105,6 +130,14 @@ public class RankingBenchmark {
 	
 	public void setDoFeatureElimination(boolean doFeatureElimination) {
 		this.doFeatureElimination = doFeatureElimination;
+	}
+	
+	public void setDoRecursiveFeatureElimination(boolean doRecursiveFeatureElimination) {
+		this.doRecursiveFeatureElimination = doRecursiveFeatureElimination;
+	}
+	
+	public void setDoFeatureAddition(boolean doFeatureAddition) {
+		this.doFeatureAddition = doFeatureAddition;
 	}
 	
 	public void setOutputRankings(boolean outputRankings) {
@@ -538,6 +571,306 @@ public class RankingBenchmark {
 	}
 	// endregion
 	
+	// region recursiveFeatureElimination
+	
+	private class FeatureSet {
+		
+		public List<Integer> features;
+		public Map<String, Double> results;
+		public double max;
+		public double min;
+		public double avg;
+		
+		public FeatureSet(List<Integer> features, Map<String, Double> results, double max, double min, double avg) {
+			this.features = features;
+			this.results = results;
+			this.max = max;
+			this.min = min;
+			this.avg = avg;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			// equal iff same set of features
+			return ((obj instanceof FeatureSet) && this.features.equals(((FeatureSet) obj).features));
+		}
+	}
+	
+	// do recursive feature elimination, always looking at most at 9 child hypotheses
+	private void recursiveFeatureElimination() {
+		
+		try {
+			Map<String, Map<String, Double>> resultMap = new HashMap<String, Map<String, Double>>();
+			Map<String, Map<String, Double>> resultBuffer = new HashMap<String, Map<String, Double>>();
+			List<String> metrics = Lists.newArrayList("avg top 1 norm", ">0 precision @1", ">1 precision @1");
+			
+			Queue<FeatureSet> queue = new LinkedList<FeatureSet>();
+			List<FeatureSet> nextLevel = new LinkedList<FeatureSet>();
+			
+			// compute baseline results
+			Remove removeFilter = new Remove();
+			removeFilter.setAttributeIndices(StringUtils.collectionToCommaDelimitedString(featureIndices));
+			removeFilter.setInvertSelection(true);
+			removeFilter.setInputFormat(this.dataSet);
+			Instances baselineData = Filter.useFilter(this.dataSet, removeFilter);
+			Map<String, Double> baselineResults = this.fileBasedRegression(baselineData);
+			resultMap.put(StringUtils.collectionToCommaDelimitedString(featureIndices), baselineResults);
+			resultBuffer.put(StringUtils.collectionToCommaDelimitedString(featureIndices), baselineResults);
+			
+			FeatureSet baselineFS = new FeatureSet(featureIndices, baselineResults, 1, 1, 1);
+			queue.add(baselineFS);
+			while (queue.peek().features.size() - this.numberOfGroundTruthAttributes > this.minimumNumberOfFeatures) {
+				
+				if(log.isInfoEnabled())
+					log.info(String.format("#features: %d, #sets: %d", queue.peek().features.size() - this.numberOfGroundTruthAttributes, queue.size()));
+				
+				// do bfs on feature sets
+				while (!queue.isEmpty()) {
+					
+					FeatureSet current = queue.poll();
+									
+					List<FeatureSet> candidates = new ArrayList<FeatureSet>();
+					
+					for (Integer featureIdx : current.features) {
+						if (StringUtils.commaDelimitedListToSet(this.groundTruthAttributes).contains(featureIdx.toString())) 
+							continue; // skip ground truth entries
+						
+						// remove feature
+						List<Integer> indices = new ArrayList<Integer>(current.features);
+						indices.remove(featureIdx);
+						String indexString = StringUtils.collectionToCommaDelimitedString(indices);
+						
+						Map<String, Double> localResults;
+						if (resultBuffer.containsKey(indexString)) {
+							// we already computed this set earlier!
+							localResults = resultBuffer.get(indexString);
+							
+						} else {
+							
+							// compute results from scratch and store them
+							Remove filter = new Remove();
+							filter.setAttributeIndices(indexString);
+							filter.setInvertSelection(true);
+							filter.setInputFormat(this.dataSet);
+							Instances filtered = Filter.useFilter(this.dataSet, filter);
+							localResults = this.fileBasedRegression(filtered);
+							resultBuffer.put(indexString, localResults);
+						}
+						
+						// compute fraction result/baseline
+						List<Double> relativeResults = new ArrayList<Double>();
+						for (String column : metrics) {
+							relativeResults.add(localResults.get(column) / baselineResults.get(column));
+						}
+						
+						// compute max, min, and avg
+						double max = Util.maxFromCollection(relativeResults);
+						double min = Util.minFromCollection(relativeResults);
+						double avg = Util.averageFromCollection(relativeResults);
+						
+						// store the results
+						FeatureSet fs = new FeatureSet(indices, localResults, max, min, avg);
+						candidates.add(fs);
+					}
+					
+					// sort features by max/min/avg and keep top 3 for each
+					Set<FeatureSet> selected = new HashSet<FeatureSet>();
+					Collections.sort(candidates, new Comparator<FeatureSet>() {
+
+						@Override
+						public int compare(FeatureSet o1, FeatureSet o2) {
+							return (-1) * Double.compare(o1.max, o2.max);
+						}
+					});
+					selected.addAll(candidates.subList(0, Math.min(3, candidates.size())));
+					Collections.sort(candidates, new Comparator<FeatureSet>() {
+
+						@Override
+						public int compare(FeatureSet o1, FeatureSet o2) {
+							return (-1) * Double.compare(o1.min, o2.min);
+						}
+					});
+					selected.addAll(candidates.subList(0, Math.min(3, candidates.size())));
+					Collections.sort(candidates, new Comparator<FeatureSet>() {
+
+						@Override
+						public int compare(FeatureSet o1, FeatureSet o2) {
+							return (-1) * Double.compare(o1.avg, o2.avg);
+						}
+					});
+					selected.addAll(candidates.subList(0, Math.min(3, candidates.size())));
+					
+					for (FeatureSet fs : selected) {
+						resultMap.put(StringUtils.collectionToCommaDelimitedString(fs.features), fs.results);
+						if (!nextLevel.contains(fs))
+							nextLevel.add(fs);
+					}
+				}
+				
+				// sort features by max/min/avg and keep top 7 for each
+				Set<FeatureSet> levelSelected = new HashSet<FeatureSet>();
+				Collections.sort(nextLevel, new Comparator<FeatureSet>() {
+					@Override
+					public int compare(FeatureSet o1, FeatureSet o2) {
+						return (-1) * Double.compare(o1.max, o2.max);
+					}
+				});
+				levelSelected.addAll(nextLevel.subList(0, Math.min(5, nextLevel.size())));
+				Collections.sort(nextLevel, new Comparator<FeatureSet>() {
+					@Override
+					public int compare(FeatureSet o1, FeatureSet o2) {
+						return (-1) * Double.compare(o1.min, o2.min);
+					}
+				});
+				levelSelected.addAll(nextLevel.subList(0, Math.min(5, nextLevel.size())));
+				Collections.sort(nextLevel, new Comparator<FeatureSet>() {
+					@Override
+					public int compare(FeatureSet o1, FeatureSet o2) {
+						return (-1) * Double.compare(o1.avg, o2.avg);
+					}
+				});
+				levelSelected.addAll(nextLevel.subList(0, Math.min(5, nextLevel.size())));
+				
+				queue.addAll(levelSelected);
+				nextLevel.clear();
+			}
+			
+			// output results
+			List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", "expected", 
+					"avg top 5 norm", "expected top 5", ">0 precision @1", ">0 precision @5", ">1 precision @1", ">1 precision @5");
+			Util.writeEvaluationToCsv(this.outputFileName, columnNames, resultMap);
+			
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't do recursive feature elimination");
+			if (log.isDebugEnabled())
+				log.debug("Can't do recursive feature elimination", e);
+		}
+	}
+	
+	private Map<String, Map<String, Double>> recursiveFeatureEliminationRec(List<Integer> baselineFeatures, Map<String, Double> baselineValues, 
+																				List<String> metrics) throws Exception {
+		
+		Map<String, Map<String, Double>> resultMap = new HashMap<String, Map<String, Double>>();
+		if ((baselineFeatures.size() - this.numberOfGroundTruthAttributes) <= this.minimumNumberOfFeatures) // base case of the recursion
+			return resultMap;
+		
+		List<FeatureSet> candidates = new ArrayList<FeatureSet>();
+		
+		for (Integer featureIdx : baselineFeatures) {
+			if (StringUtils.commaDelimitedListToSet(this.groundTruthAttributes).contains(featureIdx.toString())) 
+				continue; // skip ground truth entries
+			
+			// remove feature
+			Remove filter = new Remove();
+			List<Integer> indices = new ArrayList<Integer>(baselineFeatures);
+			indices.remove(featureIdx);
+			filter.setAttributeIndices(StringUtils.collectionToCommaDelimitedString(indices));
+			filter.setInvertSelection(true);
+			filter.setInputFormat(this.dataSet);
+			Instances filtered = Filter.useFilter(this.dataSet, filter);
+			
+			// compute results
+			Map<String, Double> localResults = this.fileBasedRegression(filtered);
+
+			// compute fraction result/baseline
+			List<Double> relativeResults = new ArrayList<Double>();
+			for (String column : metrics) {
+				relativeResults.add(localResults.get(column) / baselineValues.get(column));
+			}
+			
+			// compute max, min, and avg
+			double max = Util.maxFromCollection(relativeResults);
+			double min = Util.minFromCollection(relativeResults);
+			double avg = Util.averageFromCollection(relativeResults);
+			
+			// store the results
+			FeatureSet fs = new FeatureSet(indices, localResults, max, min, avg);
+			candidates.add(fs);
+		}
+		
+		// sort features by max/min/avg and keep top 3 for each
+		Set<FeatureSet> selected = new HashSet<FeatureSet>();
+		Collections.sort(candidates, new Comparator<FeatureSet>() {
+
+			@Override
+			public int compare(FeatureSet o1, FeatureSet o2) {
+				return (-1) * Double.compare(o1.max, o2.max);
+			}
+		});
+		selected.addAll(candidates.subList(0, Math.min(3, candidates.size())));
+		Collections.sort(candidates, new Comparator<FeatureSet>() {
+
+			@Override
+			public int compare(FeatureSet o1, FeatureSet o2) {
+				return (-1) * Double.compare(o1.min, o2.min);
+			}
+		});
+		selected.addAll(candidates.subList(0, Math.min(3, candidates.size())));
+		Collections.sort(candidates, new Comparator<FeatureSet>() {
+
+			@Override
+			public int compare(FeatureSet o1, FeatureSet o2) {
+				return (-1) * Double.compare(o1.avg, o2.avg);
+			}
+		});
+		selected.addAll(candidates.subList(0, Math.min(3, candidates.size())));
+		
+		// recurse and collect results
+		for (FeatureSet fs : selected) {
+			resultMap.put(StringUtils.collectionToCommaDelimitedString(fs.features), fs.results);
+			resultMap.putAll(recursiveFeatureEliminationRec(fs.features, fs.results, metrics));
+		}
+		
+		// return the collected results
+		return resultMap;
+	}
+	
+	// endregion
+	
+	// region featureAddition
+	private void featureAddition() {
+		
+		try {
+			Map<String, Map<String, Double>> resultMap = new HashMap<String, Map<String, Double>>();
+			
+			Remove removeFilter = new Remove();
+			removeFilter.setAttributeIndices(StringUtils.collectionToCommaDelimitedString(featureIndices));
+			removeFilter.setInvertSelection(true);
+			removeFilter.setInputFormat(this.dataSet);
+			Instances baselineData = Filter.useFilter(this.dataSet, removeFilter);
+			Map<String, Double> baselineResults = this.fileBasedRegression(baselineData);
+			resultMap.put("baseline", baselineResults);
+			
+			for (int i = 0; i < this.newFeatureIndices.size(); i++) {
+				Remove filter = new Remove();
+				List<Integer> indices = new ArrayList<Integer>(featureIndices);
+				indices.add(0, newFeatureIndices.get(i));
+				Collections.sort(indices);
+				//indices.add(newFeatureIndices.get(i));
+				filter.setAttributeIndices(StringUtils.collectionToCommaDelimitedString(indices));
+				filter.setInvertSelection(true);
+				filter.setInputFormat(this.dataSet);
+				Instances filtered = Filter.useFilter(this.dataSet, filter);
+				Map<String, Double> localResults = this.fileBasedRegression(filtered);
+				resultMap.put(String.format("with %d", newFeatureIndices.get(i)), localResults);
+			}
+			
+			List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", "expected", 
+					"avg top 5 norm", "expected top 5", ">0 precision @1", ">0 precision @5", ">1 precision @1", ">1 precision @5");
+			Util.writeEvaluationToCsv(this.outputFileName, columnNames, resultMap);
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("Can't do feature elimination");
+			if (log.isDebugEnabled())
+				log.debug("Can't do feature elimination", e);
+		}
+		
+		
+	}
+	// endregion
+
+	
 	public void run() {
 		if (this.doFileBasedRegression)
 			fileBasedRegression(this.dataSet);
@@ -547,6 +880,10 @@ public class RankingBenchmark {
 			searchBestNDCGFeature();
 		if (this.doFeatureElimination)
 			featureElimination();
+		if (this.doRecursiveFeatureElimination)
+			recursiveFeatureElimination();
+		if (this.doFeatureAddition) 
+			featureAddition();
 	}
 	
 	public static void main(String[] args) {
