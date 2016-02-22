@@ -322,8 +322,16 @@
 		<property name="regressors">
 			<map>
 			<!-- 
-				<entry key="baseline" value-ref="r_zeroR" />  -->
-				<entry key="RandomForest" value-ref="r_randomForest" /> 
+				<entry key="baseline" value-ref="r_zeroR" /> 
+				<entry key="RandomForest" value-ref="r_randomForest" />
+				<entry key="bestFeature" value-ref="r_linearRegression" />
+				  -->
+				<entry key="RF_A" value-ref="r_randomForest_A" />
+				<entry key="RF_B" value-ref="r_randomForest_B" />
+				<entry key="RF_C" value-ref="r_randomForest_C" />
+				<entry key="RF_D" value-ref="r_randomForest_D" />
+				<entry key="RF_E" value-ref="r_randomForest_E" />
+				
 			</map>
 		</property>
 		
@@ -339,9 +347,9 @@
 				<ref bean="r_wrapperRF"/>
 			</list>
 		</property>
-		<property name="groundTruthAttributes" value="62,63,64" />
+		<property name="groundTruthAttributes" value="16,17,18" />
 		<property name="outputFileName" value="out/featureElimination.csv" />
-		<property name="featureIndices" value="1,2,3,5,6,7,8,9,10,14,16,18,22,25,29,31,32,33,35,37,39,42,49,56,61,62,63,64" />
+		<property name="featureIndices" value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" />
 		<property name="newFeatureIndices" value="22,23,49,56,61" />
 		
 		<!-- 1,2,3,5,6,7,8,9,10,14,16,18,22,25,29,31,32,33,35,37,39,42,49,56,61,62,63,64 -->
@@ -350,9 +358,9 @@
 		<property name="outputRankings" value="false" />
 		
 		<property name="doFeatureSelection" value="false" />
-		<property name="doFileBasedRegression" value="false" />
+		<property name="doFileBasedRegression" value="true" />
 		<property name="doSearchBestNDCGFeature" value="false" />
-		<property name="doFeatureElimination" value="true" />
+		<property name="doFeatureElimination" value="false" />
 		<property name="doRecursiveFeatureElimination" value="false" />
 		<property name="doFeatureAddition" value="false" />
 	</bean>

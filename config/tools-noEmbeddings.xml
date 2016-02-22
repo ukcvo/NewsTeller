@@ -60,62 +60,42 @@
 		<property name="outputFolder" value="resources/benchmark/userModel" />
 		<property name="totalNumberOfEvents" value="100" />
 		
-		<property name="userID" value="usr_10" />
+		<property name="userID" value="usr_11" />
 		<property name="interests">
 			<list>
-				<value>cars</value>
-				<value>sports</value>
+				<value>Iran</value>
+				<value>religion</value>
 				<value>politics</value>
-				<value>stock market</value>
-				<value>research advancements</value>
-				<value>travel</value>
+				<value>Italy</value>
+				<value>touristic attractions</value>
 			</list>
 		</property>
 		<property name="queries">
 			<list>
 				<list>
-					<value>F1</value>
-					<value>2010</value>
-					<value>drivers</value>
+					<value>Islam</value>
+					<value>Christianity</value>
 				</list>
 				<list>
-					<value>cricket</value>
-					<value>world cup</value>
-					<value>2011</value>
+					<value>Iran</value>
+					<value>nuclear deal</value>
 				</list>
 				<list>
-					<value>electric cars</value>
+					<value>Iran</value>
+					<value>foreign policies</value>
 				</list>
 				<list>
-					<value>travel</value>
-					<value>Cambodia</value>
+					<value>Italy</value>
+					<value>touristic attractions</value>
 				</list>
 				<list>
-					<value>Arab</value>
-					<value>revolution</value>
+					<value>Venice</value>
+					<value>history</value>
 				</list>
 				<list>
-					<value>Black Friday</value>
-				</list>
-				<list>
-					<value>Lehman Brothers</value>
-				</list>
-				<list>
-					<value>world economy</value>
-				</list>
-				<list>
-					<value>MIT</value>
-					<value>Media Lab</value>
-				</list>
-				<list>
-					<value>Olympics</value>
-					<value>London</value>
-				</list>
-				<list>
-					<value>Sochi</value>
-				</list>
-				<list>
-					<value>Modi</value>
+					<value>Iran</value>
+					<value>congress</value>
+					<value>election</value>
 				</list>
 			</list>
 		</property>
