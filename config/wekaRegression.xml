@@ -262,8 +262,29 @@
 	<bean id="r_linearRegression" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
-			<bean class="weka.classifiers.functions.SimpleLinearRegression">
+			<bean class="weka.classifiers.functions.LinearRegression">
 			</bean>
+		</property>
+	</bean>
+
+	<bean id="r_MLP" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MultilayerPerceptron" />
+		</property>
+	</bean>
+	
+	<bean id="r_MLP2" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.MLPRegressor" />
+		</property>
+	</bean>
+	
+	<bean id="r_RBF" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.functions.RBFRegressor" />
 		</property>
 	</bean>
 
@@ -276,7 +297,7 @@
 				<property name="breakTiesRandomly" value="false" />
 				<property name="maxDepth" value="0" />
 				<property name="numFeatures" value="0" />
-				<property name="numTrees" value="150" />
+				<property name="numTrees" value="100" />
 			</bean>
 		</property>
 	</bean>
@@ -287,10 +308,10 @@
 			<bean class="weka.classifiers.trees.RandomForest">
 				<property name="numExecutionSlots" value="10" />
 				
-				<property name="breakTiesRandomly" value="false" />
+				<property name="breakTiesRandomly" value="true" />
 				<property name="maxDepth" value="0" />
 				<property name="numFeatures" value="0" />
-				<property name="numTrees" value="200" />
+				<property name="numTrees" value="100" />
 			</bean>
 		</property>
 	</bean>
@@ -302,9 +323,9 @@
 				<property name="numExecutionSlots" value="10" />
 				
 				<property name="breakTiesRandomly" value="false" />
-				<property name="maxDepth" value="0" />
+				<property name="maxDepth" value="6" />
 				<property name="numFeatures" value="0" />
-				<property name="numTrees" value="250" />
+				<property name="numTrees" value="100" />
 			</bean>
 		</property>
 	</bean>
@@ -316,9 +337,9 @@
 				<property name="numExecutionSlots" value="10" />
 				
 				<property name="breakTiesRandomly" value="false" />
-				<property name="maxDepth" value="0" />
+				<property name="maxDepth" value="6" />
 				<property name="numFeatures" value="0" />
-				<property name="numTrees" value="300" />
+				<property name="numTrees" value="150" />
 			</bean>
 		</property>
 	</bean>
@@ -330,9 +351,9 @@
 				<property name="numExecutionSlots" value="10" />
 				
 				<property name="breakTiesRandomly" value="false" />
-				<property name="maxDepth" value="0" />
+				<property name="maxDepth" value="6" />
 				<property name="numFeatures" value="0" />
-				<property name="numTrees" value="500" />
+				<property name="numTrees" value="200" />
 			</bean>
 		</property>
 	</bean>

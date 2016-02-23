@@ -325,12 +325,23 @@
 				<entry key="baseline" value-ref="r_zeroR" /> 
 				<entry key="RandomForest" value-ref="r_randomForest" />
 				<entry key="bestFeature" value-ref="r_linearRegression" />
-				  -->
+				
 				<entry key="RF_A" value-ref="r_randomForest_A" />
 				<entry key="RF_B" value-ref="r_randomForest_B" />
 				<entry key="RF_C" value-ref="r_randomForest_C" />
 				<entry key="RF_D" value-ref="r_randomForest_D" />
 				<entry key="RF_E" value-ref="r_randomForest_E" />
+				
+				<entry key="MLP" value-ref="r_MLP" />
+				<entry key="MLP2" value-ref="r_MLP2" />
+				<entry key="RBF" value-ref="r_RBF" />
+				<entry key="knn" value-ref="r_kNN2" />
+				<entry key="knn2" value-ref="r_kNN" />
+				<entry key="M5P" value-ref="r_M5P" />
+				<entry key="REPTree" value-ref="r_REPTree" />
+				<entry key="linearRegression" value-ref="r_linearRegression" />
+				  -->
+				<entry key="RandomForest" value-ref="r_randomForest" />
 				
 			</map>
 		</property>

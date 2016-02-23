@@ -38,9 +38,38 @@
 		<property name="numThreads" value="1000" />
 	</bean>
 
-	<bean id="ranker" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.DummyEventRanker">
+	<bean id="ranker"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressor.model" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="features">
+			<list>
+				<ref bean="textEmbeddingsFeature13f" />
+				<ref bean="constituentEmbeddingsFeature02ed" />
+				<ref bean="constituentEmbeddingsFeature02kd" />
+				<ref bean="constituentEmbeddingsFeature11ed" />
+				<ref bean="constituentEmbeddingsFeature12ep" />
+				<ref bean="sentenceLengthFeatureCharMin" />
+				<ref bean="numberOfKeywordEntitiesFeatureMin" />
+				<ref bean="numberOfMentionsRegFeature" />
+				<ref bean="keywordEntitiesFeature1ftd" />
+				<ref bean="keywordInSentenceFeature11ftft" />
+				<ref bean="keywordInSentenceFeature12ftft" />
+				<ref bean="BM25FeatureSentence1.4" />
+				<ref bean="BM25FeatureText1.7" />
+				<ref bean="constituentContainsFeature_stopwords_np" />
+				<ref bean="sameDocumentFeature2tt" />
+			</list>
+		</property>
 	</bean>
 
+<!-- 
+	<bean id="ranker" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.DummyEventRanker">
+	</bean>
+ -->
 	<bean id="selector"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
 	</bean>
@@ -127,9 +156,9 @@
 
 	<bean id="rankingFeatureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.RankingFeatureExtractor">
 		<constructor-arg name="configFileName" value="resources/benchmark/rankingFilteredQueries.csv"/>
-		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics.qry" />
-		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents.qry" />
-		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics_FE.qry" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents_FE.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/ranking/entityProperties_FE.qry" />
 		<property name="ksAdapter" ref="ksAdapter"/>
 		<property name="outputFileName" value="resources/benchmark/dataSetRanking.xrff"/>
 		<property name="features" ref="rankingFeatureList"/>

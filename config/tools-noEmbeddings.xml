@@ -44,7 +44,7 @@
 	</bean>
 
 	<bean id="regressorTrainer" class="edu.kit.anthropomatik.isl.newsTeller.tools.RegressorTrainer">
-		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRanking_preliminary_train.xrff" />
+		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRanking_train.xrff" />
 		<property name="fileName" value="resources/regressor.model" />
 		<property name="regressor">
 			<bean class="weka.classifiers.trees.RandomForest" />

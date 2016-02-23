@@ -1,15 +1,9 @@
-SELECT ?entity ?entityDbpediaLabel ?entityPrefLabel ?entityLabel ?entityDescription ?matchingEntityLabel
+SELECT ?entity ?entityDbpediaLabel 
 WHERE
 {
 	VALUES ?entity { *keys* } .
-	OPTIONAL { ?entity skos:prefLabel ?entityPrefLabel }
-	OPTIONAL { ?entity rdf:type* ?class . GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?class rdfs:label ?entityDbpediaLabel } }
-	OPTIONAL { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?entity rdfs:label ?entityLabel } }
-	OPTIONAL { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?entity rdfs:comment ?entityDescription } }
-	OPTIONAL { ?entity rdf:type* ?class3 .
-	GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en>
-	{
-		?class3 rdfs:label ?matchingEntityLabel .
-		FILTER(REGEX(STR(?matchingEntityLabel),"*k*", "i"))
-	} }
+	?entity skos:prefLabel ?prefLabel .
+	?entity rdf:type* ?class . 
+	GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?class rdfs:label ?entityDbpediaLabel }
 }
+GROUP BY ?entity ?entityDbpediaLabel
