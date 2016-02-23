@@ -17,9 +17,9 @@
 				<bean class="weka.filters.unsupervised.attribute.RemoveByName">
 					<property name="expression" value="(eventURI|fileName)" />
 				</bean>
-			<!--	<bean class="weka.filters.unsupervised.attribute.Remove">
-					<property name="attributeIndices" value="33,62" />
-					 1,2,3,5,6,7,8,9,10,14,16,18,22,25,29,31,32,33,35,37,39,42,49,56,61,62 
+	<!--			<bean class="weka.filters.unsupervised.attribute.Remove">
+					<property name="attributeIndices" value="2,3,5,7,8,10,11,14,16,20,21,22,25,28,29,30,31,32,33,35,40,46,56,58" />
+					 2,3,5,7,8,10,11,14,16,20,21,22,25,28,29,30,31,32,33,35,40,46,56,58 
 					<property name="invertSelection" value="true" />
 				</bean>-->
 			</array>
@@ -345,7 +345,20 @@
 	</bean>
 	
 	<bean id="r_randomForest_E" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
+		<property name="filter">
+			<bean class="weka.filters.MultiFilter">
+				<property name="filters">
+					<array>
+						<bean class="weka.filters.unsupervised.attribute.Remove">
+							<property name="attributeIndices" value="32,59" />
+					 		<property name="invertSelection" value="true" />
+						</bean>
+						<ref bean="r_removeStringFilter"/>
+					</array>
+				</property>
+			</bean>
+		</property>
+		<!-- <property name="filter" ref="r_removeStringFilter" />  -->
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
 				<property name="numExecutionSlots" value="10" />

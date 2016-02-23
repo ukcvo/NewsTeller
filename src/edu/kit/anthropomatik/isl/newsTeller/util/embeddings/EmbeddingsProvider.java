@@ -77,6 +77,9 @@ public class EmbeddingsProvider {
 			}
 		}
 		
+		if (resultVector == null)
+			resultVector = new double[wordVectors.getWordVector("dog").length];	// dirty hack to return 0 if none of the words is in the dictionary
+		
 		return resultVector;
 	}
 	

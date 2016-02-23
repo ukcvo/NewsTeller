@@ -13,6 +13,80 @@
 	<util:list id="rankingFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
 
+
+		<ref bean="textEmbeddingsFeature01f" />
+		<ref bean="textEmbeddingsFeature11f" />
+		<ref bean="textEmbeddingsFeature13f" />
+		<ref bean="textEmbeddingsFeature31t" />
+		
+		<ref bean="constituentEmbeddingsFeature02ed" />
+		<ref bean="constituentEmbeddingsFeature02kd" />
+		<ref bean="constituentEmbeddingsFeature11ed" />
+		<ref bean="constituentEmbeddingsFeature11kp" />
+		<ref bean="constituentEmbeddingsFeature12ep" />
+		<ref bean="constituentEmbeddingsFeature12em" />
+		<ref bean="constituentEmbeddingsFeature32kl" />
+				
+		<ref bean="sentenceLengthFeatureWordMin" />
+		<ref bean="sentenceLengthFeatureCharAvg" />
+		<ref bean="sentenceLengthFeatureCharMin" />
+		
+		<ref bean="numberOfKeywordEntitiesFeatureAvg" />
+		<ref bean="numberOfKeywordEntitiesFeatureMin" />
+		<ref bean="numberOfKeywordEntitiesFeatureMax" />
+		<ref bean="numberOfDbpediaEntitiesFeature" />
+		<ref bean="numberOfEntitiesFeature" />
+		<ref bean="numberOfNonEntitiesFeature" />
+		<ref bean="numberOfDummyEntitiesFeature" />
+		<ref bean="numberOfMentionsRegFeature" />
+		<ref bean="numberOfKeywordNonEntitiesFeature" />
+		
+		<ref bean="recencyFeatureDays" />
+		<ref bean="recencyFeatureWeeks" />
+		<ref bean="recencyFeatureMonths" />
+		<ref bean="recencyFeatureYears" />
+		
+		<ref bean="keywordEntitiesFeature0ffd" />
+		<ref bean="keywordEntitiesFeature1ffp" />
+		<ref bean="keywordEntitiesFeature1ffd" />
+		<ref bean="keywordEntitiesFeature1ftd" />
+		
+		<ref bean="keywordInSentenceFeature10ftft" />
+		<ref bean="keywordInSentenceFeature11ftft" />
+		<ref bean="keywordInSentenceFeature11ttft" />
+		<ref bean="keywordInSentenceFeature12ftft" />
+		
+		<ref bean="BM25FeatureSentence1.2" />
+		<ref bean="BM25FeatureSentence1.6" />
+		<ref bean="BM25FeatureSentence2.0" />
+		<ref bean="BM25FeatureTitle1.5" />
+		
+		<ref bean="sentenceContainsQuotationFeature" />
+		<ref bean="sentenceContainsYouFeature" />
+		<ref bean="sentenceContainsHeSheItFeature" />
+		<ref bean="sentenceContainsStopwordFeature" />
+
+		<ref bean="keywordComparisonFeatureAvg" />
+		<ref bean="keywordComparisonFeatureMin" />
+		<ref bean="keywordComparisonFeatureMax" />
+		<ref bean="keywordComparisonFeatureGeom" />
+
+		<ref bean="constituentContainsFeature_quotation_el" />
+		<ref bean="constituentContainsFeature_I_el" />
+		<ref bean="constituentContainsFeature_heShe_kp" />
+		<ref bean="constituentContainsFeature_it_ep" />
+		<ref bean="constituentContainsFeature_they_kp" />
+		<ref bean="constituentContainsFeature_thisThat_ep" />
+		<ref bean="constituentContainsFeature_stopwords_np" />
+		
+		<ref bean="sameDocumentFeature0ft" />
+		<ref bean="sameDocumentFeature0tt" />
+		<ref bean="sameDocumentFeature1tt" />
+		<ref bean="sameDocumentFeature2tt" />
+		
+		
+		
+		<!-- selected, but wrong
 		<ref bean="textEmbeddingsFeature13f" />
 		<ref bean="constituentEmbeddingsFeature02ed" />
 		<ref bean="constituentEmbeddingsFeature02kd" />
@@ -28,6 +102,7 @@
 		<ref bean="BM25FeatureText1.7" />
 		<ref bean="constituentContainsFeature_stopwords_np" />
 		<ref bean="sameDocumentFeature2tt" />
+		 -->
 				
 		<!-- all prefiltered
 		<ref bean="textEmbeddingsFeature01f" />
@@ -73,11 +148,9 @@
 		<ref bean="keywordInSentenceFeature12ftft" />
 		
 		<ref bean="BM25FeatureSentence1.2" />
-		<ref bean="BM25FeatureSentence1.4" />
-		<ref bean="BM25FeatureSentence1.9" />
-		<ref bean="BM25FeatureText1.7" />
-		<ref bean="BM25FeatureText1.8" />
-		<ref bean="BM25FeatureTitle2.0" />
+		<ref bean="BM25FeatureSentence1.6" />
+		<ref bean="BM25FeatureSentence2.0" />
+		<ref bean="BM25FeatureTitle1.5" />
 		
 		<ref bean="sentenceContainsQuotationFeature" />
 		<ref bean="sentenceContainsYouFeature" />
@@ -99,7 +172,6 @@
 		
 		<ref bean="sameDocumentFeature0ft" />
 		<ref bean="sameDocumentFeature0tt" />
-		<ref bean="sameDocumentFeature1tf" />
 		<ref bean="sameDocumentFeature1tt" />
 		<ref bean="sameDocumentFeature2tt" />
 		 -->
