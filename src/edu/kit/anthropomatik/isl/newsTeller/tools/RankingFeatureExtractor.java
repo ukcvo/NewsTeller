@@ -49,8 +49,6 @@ public class RankingFeatureExtractor {
 
 	private Map<List<Keyword>, Map<BenchmarkEvent, GroundTruth>> benchmark; // mapping from keywords to events and corresponding groundTruth info
 
-	private Set<String> eventURIs;
-
 	private List<RankingFeature> features;
 
 	private String outputFileName;
@@ -91,13 +89,10 @@ public class RankingFeatureExtractor {
 									String entityPropertiesQueryFileName) {
 		Map<String, List<Keyword>> benchmarkKeywords = Util.readBenchmarkConfigFile(configFileName);
 		this.benchmark = new HashMap<List<Keyword>, Map<BenchmarkEvent, GroundTruth>>();
-		this.eventURIs = new HashSet<String>();
 
 		for (String fileName : benchmarkKeywords.keySet()) {
 			Map<BenchmarkEvent, GroundTruth> fileContent = Util.readBenchmarkQueryFromFile(fileName);
 			this.benchmark.put(benchmarkKeywords.get(fileName), fileContent);
-			for (BenchmarkEvent e : fileContent.keySet())
-				this.eventURIs.add(e.getEventURI());
 		}
 		
 		this.eventStatisticsQuery = Util.readStringFromFile(eventStatisticsQueryFileName);
@@ -196,6 +191,10 @@ public class RankingFeatureExtractor {
 			ksAdapter.flushBuffer();
 			List<Future<?>> futures = new ArrayList<Future<?>>();
 			
+			Set<String> eventURIs = new HashSet<String>();
+			for (BenchmarkEvent e : content.keySet())
+				eventURIs.add(e.getEventURI());
+			
 			// task 1: get event mentions, based on this get resource texts and resource titles
 			futures.add(ksAdapter.submit(new Runnable() {
 				
@@ -286,31 +285,6 @@ public class RankingFeatureExtractor {
 				EventWorker w = new EventWorker(eventURI, userModel, keywords, relevance, numberOfAttributes, uriIndex, fileIndex);
 				instanceFutures.add(threadPool.submit(w));
 			}
-			
-//			for (Map.Entry<BenchmarkEvent, GroundTruth> innerEntry : content.entrySet()) {
-//
-//				BenchmarkEvent event = innerEntry.getKey();
-//				GroundTruth gt = innerEntry.getValue();
-//				String eventURI = event.getEventURI();
-//				String fileName = event.getFileName();
-//				double relevance = gt.getRegressionRelevanceValue();
-//				UserModel userModel = new DummyUserModel();
-//
-//				double[] values = new double[dataSet.numAttributes()];
-//				for (int i = 0; i < this.features.size(); i++) {
-//					RankingFeature f = features.get(i);
-//					values[i] = f.getValue(eventURI, keywords, userModel);
-//				}
-//				values[this.features.size()] = relevance;
-//				
-//				if (this.doAddEventInformation) {
-//					values[this.features.size() + 1] = dataSet.attribute(Util.ATTRIBUTE_URI).addStringValue(eventURI);
-//					values[this.features.size() + 2] = dataSet.attribute(Util.ATTRIBUTE_FILE).addStringValue(fileName);
-//				}
-//
-//				Instance instance = new DenseInstance(1.0, values);
-//				dataSet.add(instance);
-//			}
 			
 			// wait until all are done
 			for (Future<Instance> f : instanceFutures) {

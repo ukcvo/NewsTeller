@@ -58,17 +58,6 @@
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.DummyEventRanker">
 	</bean>
 
-	<bean id="ranker3"
-		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
-		<constructor-arg name="regressorFileName" value="resources/regressor.model" />
-		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="features">
-			<list>
-				<ref bean="BM25FeatureText1.5" />
-			</list>
-		</property>
-	</bean>
-
 	<bean id="rankerFeature"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SingleFeatureEventRanker">
 		<property name="feature" ref="keywordInSentenceFeature11ftft" />

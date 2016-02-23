@@ -15,8 +15,8 @@
 		<constructor-arg name="getEventFromMentionFileName"
 			value="resources/SPARQL/general/getEventFromMention.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
-		<property name="timeoutMsec" value="10000" />
-		<property name="maxNumberOfConnections" value="100"/>
+		<property name="timeoutMsec" value="20000" />
+		<property name="maxNumberOfConnections" value="20"/>
 	</bean>
 
 	<bean id="searcher"
@@ -66,12 +66,9 @@
 		</property>
 	</bean>
 
-<!-- 
-	<bean id="ranker" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.DummyEventRanker">
-	</bean>
- -->
 	<bean id="selector"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0" />
 	</bean>
 
 	<bean id="retriever"
