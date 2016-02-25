@@ -10,6 +10,8 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.common.collect.Sets;
+
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
@@ -80,6 +82,9 @@ public class SequentialEventRanker implements IEventRanker {
 		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
 		Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", userQuery.get(0).getWord()));
 		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
+		Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord())));
+		ksAdapter.runKeyValueResourcePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TIME, Util.RESOURCE_PROPERTY_TITLE) ,resourceURIs);
+		
 		
 		for (NewsEvent event : events) {
 			double[] values = new double[features.size() + 1];

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<import resource="usabilityFeatures.xml" />
+	<import resource="weka.xml" />
+	<import resource="wekaRegression.xml" />
+	<import resource="benchmark.xml" />
+	<import resource="rankingFeatureList.xml" />
+	
+	<bean id="ranker"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressor.model" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="features" ref="rankingFeatureList" />
+	</bean>
+	
+	<bean id="runtimeTester"
+		class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RuntimeTester">
+		<constructor-arg name="configFileName"
+			value="resources/benchmark/rankingFilteredQueries.csv" />
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
+		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSet.xrff" />
+			
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="stemmedKeywords">
+			<set>
+				<value>(-| |^|\\))artific(i|y)(\\w)* intellig(\\w)*(-| |$|\\))
+				</value>
+				<value>(-| |^|\\))Berlin(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))champion(\\w)* leagu(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))chancellor(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))charit(i|y)(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Chernobyl(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))cinema(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))climat(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))comed(i|y)(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))concert(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))contradict(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))danc(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))earthquak(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Edinburgh(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Edmund(\\w)* Hillar(i|y)(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))erupt(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))European(\\w)* Space(\\w)* Agenc(\\w)*(-| |$|\\))
+				</value>
+				<value>(-| |^|\\))Facebook(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Fukushima(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Hawk(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Himalaya(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))hurrican(\\w)* Katrina(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))IBM(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Iceland(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))kiss(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Lehman(\\w)* Brother(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))manipul(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))marathon(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Medvedev(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Merkel(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Michael(\\w)* Jackson(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Mount(\\w)* Everest(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))museum(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))power(\\w)* station(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Real(\\w)* Madrid(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Rhine(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))riot(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Rome(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Sahara(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Star(\\w)* War(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Tom(\\w)* Cruis(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))upload(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))volcano(\\w)*(-| |$|\\))</value>
+				<value>(-| |^|\\))Watson(\\w)*(-| |$|\\))</value>
+			</set>
+		</property>
+
+		<property name="sequentialSearcher" ref="searcher1" />
+		<property name="parallelSearcher" ref="searcher2" />
+		<property name="sequentialFilter" ref="filter2a" />
+		<property name="parallelFilter" ref="filter2b" />
+		<property name="sequentialRanker" ref="ranker" />
+
+
+		<property name="features" ref="activeFeatureList" />
+
+		<property name="doKSAccessTests" value="false" />
+		<property name="doSparqlSearchTests" value="false" />
+		<property name="doSparqlFeatureTests" value="false" />
+		<property name="doSequentialSearcherTest" value="false" />
+		<property name="doParallelSearcherTest" value="false" />
+		<property name="doParallelSparqlTest" value="false" />
+		<property name="doSequentialFilterTest" value="false" />
+		<property name="doParallelFilterTest" value="false" />
+		<property name="doFeatureTest" value="false" />
+		<property name="doDownloadTest" value="false" />
+		<property name="doClassifierTest" value="false" />
+		<property name="doBulkSparqlTest" value="false"/>
+		<property name="doBulkMentionTest" value="false"/>
+		<property name="doEndToEndTest" value="true" />
+
+		<property name="maxNumberOfEvents" value="500" />
+		<property name="numberOfRepetitions" value="1" />
+
+	</bean>
+
+</beans>

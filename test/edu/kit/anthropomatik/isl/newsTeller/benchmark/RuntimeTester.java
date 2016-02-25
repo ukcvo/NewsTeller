@@ -19,6 +19,7 @@ import org.openrdf.model.impl.URIImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
@@ -28,8 +29,10 @@ import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import eu.fbk.knowledgestore.KnowledgeStore;
 import eu.fbk.knowledgestore.Session;
@@ -79,6 +82,8 @@ public class RuntimeTester {
 	
 	private boolean doBulkMentionTest;
 	
+	private boolean doEndToEndTest;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 
 	private Map<String, String> sparqlSearchQueries;
@@ -99,6 +104,8 @@ public class RuntimeTester {
 
 	private ParallelEventFilter parallelFilter;
 
+	private SequentialEventRanker sequentialRanker;
+	
 	private Set<List<Keyword>> keywords;
 
 	private int numberOfRepetitions;
@@ -164,6 +171,10 @@ public class RuntimeTester {
 		this.doBulkMentionTest = doBulkMentionTest;
 	}
 	
+	public void setDoEndToEndTest(boolean doEndToEndTest) {
+		this.doEndToEndTest = doEndToEndTest;
+	}
+	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
 		this.ksAdapter = ksAdapter;
 	}
@@ -202,6 +213,10 @@ public class RuntimeTester {
 		this.parallelFilter = parallelFilter;
 	}
 
+	public void setSequentialRanker(SequentialEventRanker sequentialRanker) {
+		this.sequentialRanker = sequentialRanker;
+	}
+	
 	public void setNumberOfRepetitions(int numberOfRepetitions) {
 		this.numberOfRepetitions = numberOfRepetitions;
 	}
@@ -679,6 +694,76 @@ public class RuntimeTester {
 	}
 	// endregion
 	
+	// region endToEndTest
+	public void endToEndTest() {
+		
+		long searchTime = 0;
+		long relSearchTime = 0;
+		long filterTime = 0;
+		long relFilterTime = 0;
+		long rankTime = 0;
+		long relRankTime = 0;
+		long overallTime = 0;
+		long relOverallTime = 0;
+		
+		UserModel um = new DummyUserModel();
+		
+		if (log.isInfoEnabled())
+			log.info("query;total;totalRel;search;searchRel;filter;filterRel;rank;rankRel");
+		
+		for (List<Keyword> query : this.keywords) {
+			
+			long total = 0;
+			long search = System.currentTimeMillis();
+			Set<NewsEvent> found = this.parallelSearcher.findEvents(query, um);
+			search = System.currentTimeMillis() - search;
+			searchTime += search;
+			relSearchTime += search / found.size();
+			total += search;
+			
+			long filter = System.currentTimeMillis();
+			Set<NewsEvent> filtered = this.parallelFilter.filterEvents(found, query);
+			filter = System.currentTimeMillis() - filter;
+			filterTime += filter;
+			relFilterTime += filter / found.size();
+			total += filter;
+			
+			long rank = System.currentTimeMillis();
+			this.sequentialRanker.rankEvents(filtered, query, um);
+			rank = System.currentTimeMillis() - rank;
+			rankTime += rank;
+			relRankTime += rank / filtered.size();
+			total += rank;
+			
+			overallTime += total;
+			relOverallTime += total / found.size();
+			
+			if (log.isInfoEnabled())
+				log.info(String.format("%s;%d;%d;%d;%d;%d;%d;%d;%d", 
+						StringUtils.collectionToCommaDelimitedString(query), 
+						total, total / found.size(), search, search / found.size(), filter, filter / found.size(), rank, rank / filtered.size()));
+			
+		}
+		
+		searchTime /= this.keywords.size();
+		relSearchTime /= this.keywords.size();
+		filterTime /= this.keywords.size();
+		relFilterTime /= this.keywords.size();
+		rankTime /= this.keywords.size();
+		relRankTime /= this.keywords.size();
+		overallTime /= this.keywords.size();
+		relOverallTime /= this.keywords.size();
+		
+		if (log.isInfoEnabled()) {
+			log.info(String.format("average;%d;%d;%d;%d;%d;%d;%d;%d\n\n", overallTime, relOverallTime, searchTime, relSearchTime, filterTime, relFilterTime, rankTime, relRankTime));
+			log.info(String.format("overall time per query: %d (%d per event)", overallTime, relOverallTime));
+			log.info(String.format("search time per query: %d (%d per event)", searchTime, relSearchTime));
+			log.info(String.format("filter time per query: %d (%d per event)", filterTime, relFilterTime));
+			log.info(String.format("rank time per query: %d (%d per event)", rankTime, relRankTime));
+		}
+	}
+	// endregion
+	
 	public void run() {
 		this.ksAdapter.openConnection();
 
@@ -710,6 +795,8 @@ public class RuntimeTester {
 			bulkSparqlTest();
 		if (this.doBulkMentionTest)
 			bulkMentionTest();
+		if(this.doEndToEndTest)
+			endToEndTest();
 		
 		sequentialFilter.shutDown();
 		parallelFilter.shutDown();
@@ -725,7 +812,7 @@ public class RuntimeTester {
 			e.printStackTrace();
 		}
 
-		ApplicationContext context = new FileSystemXmlApplicationContext("config/benchmark.xml");
+		ApplicationContext context = new FileSystemXmlApplicationContext("config/benchmarkRuntime.xml");
 		RuntimeTester test = (RuntimeTester) context.getBean("runtimeTester");
 		((AbstractApplicationContext) context).close();
 

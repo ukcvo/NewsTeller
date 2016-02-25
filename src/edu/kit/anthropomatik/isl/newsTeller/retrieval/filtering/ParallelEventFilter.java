@@ -256,8 +256,8 @@ public class ParallelEventFilter implements IEventFilter {
 		}
 		
 		t = System.currentTimeMillis() - t;
-		if (log.isInfoEnabled())
-			log.info(String.format("bulk retrieval: %d ms", t));
+//		if (log.isInfoEnabled())
+//			log.info(String.format("bulk retrieval: %d ms", t));
 		t = System.currentTimeMillis();
 		
 		
@@ -283,8 +283,8 @@ public class ParallelEventFilter implements IEventFilter {
 		}
 		
 		t = System.currentTimeMillis() - t;
-		if (log.isInfoEnabled())
-			log.info(String.format("feature extraction: %d ms", t));
+//		if (log.isInfoEnabled())
+//			log.info(String.format("feature extraction: %d ms", t));
 		t = System.currentTimeMillis();
 		
 		// sequential classification
@@ -309,8 +309,8 @@ public class ParallelEventFilter implements IEventFilter {
 		}
 		
 		t = System.currentTimeMillis() - t;
-		if (log.isInfoEnabled())
-			log.info(String.format("classification: %d ms", t));
+//		if (log.isInfoEnabled())
+//			log.info(String.format("classification: %d ms", t));
 		
 		
 		return result;
