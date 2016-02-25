@@ -50,7 +50,7 @@
 
 	<bean id="selector"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
-		<property name="threshold" value="0" />
+		<property name="threshold" value="0.74" />
 	</bean>
 
 	<bean id="retriever"
