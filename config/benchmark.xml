@@ -332,6 +332,9 @@
 				<entry key="RF_D" value-ref="r_randomForest_D" />
 				<entry key="RF_E" value-ref="r_randomForest_E" />
 				
+				<entry key="final RF" value-ref="r_randomForest2" />
+				
+				
 				<entry key="MLP" value-ref="r_MLP" />
 				<entry key="MLP2" value-ref="r_MLP2" />
 				<entry key="RBF" value-ref="r_RBF" />
@@ -341,7 +344,8 @@
 				<entry key="REPTree" value-ref="r_REPTree" />
 				<entry key="linearRegression" value-ref="r_linearRegression" />
 				  -->
-				<entry key="RandomForest" value-ref="r_randomForest" />
+				
+				<entry key="final RF" value-ref="r_randomForest2" />
 				
 			</map>
 		</property>
@@ -369,9 +373,9 @@
 		<property name="outputRankings" value="false" />
 		
 		<property name="doFeatureSelection" value="false" />
-		<property name="doFileBasedRegression" value="false" />
+		<property name="doFileBasedRegression" value="true" />
 		<property name="doSearchBestNDCGFeature" value="false" />
-		<property name="doFeatureElimination" value="true" />
+		<property name="doFeatureElimination" value="false" />
 		<property name="doRecursiveFeatureElimination" value="false" />
 		<property name="doFeatureAddition" value="false" />
 	</bean>

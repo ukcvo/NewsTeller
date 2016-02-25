@@ -47,7 +47,10 @@
 		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRanking_train.xrff" />
 		<property name="fileName" value="resources/regressor.model" />
 		<property name="regressor">
-			<bean class="weka.classifiers.trees.RandomForest" />
+			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numExecutionSlots" value="10" />
+				<property name="numTrees" value="200" />
+			</bean>
 		</property>
 	</bean>
 
