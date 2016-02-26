@@ -67,7 +67,7 @@ public class RankingBenchmark {
 
 	private int minimumNumberOfFeatures;
 
-	private boolean doFileBasedRegression;
+	private boolean doQueryBasedRegression;
 
 	private boolean doFeatureSelection;
 
@@ -80,6 +80,8 @@ public class RankingBenchmark {
 	private boolean doFeatureAddition;
 
 	private boolean doTestPretrainedRegressor;
+	
+	private boolean doUserBasedRegression;
 	
 	private boolean outputRankings;
 
@@ -119,8 +121,8 @@ public class RankingBenchmark {
 		this.minimumNumberOfFeatures = minimumNumberOfFeatures;
 	}
 
-	public void setDoFileBasedRegression(boolean doFileBasedRegression) {
-		this.doFileBasedRegression = doFileBasedRegression;
+	public void setDoQueryBasedRegression(boolean doQueryBasedRegression) {
+		this.doQueryBasedRegression = doQueryBasedRegression;
 	}
 
 	public void setDoFeatureSelection(boolean doFeatureSelection) {
@@ -145,6 +147,10 @@ public class RankingBenchmark {
 
 	public void setDoTestPretrainedRegressor(boolean doTestPretrainedRegressor) {
 		this.doTestPretrainedRegressor = doTestPretrainedRegressor;
+	}
+	
+	public void setDoUserBasedRegression(boolean doUserBasedRegression) {
+		this.doUserBasedRegression = doUserBasedRegression;
 	}
 	
 	public void setOutputRankings(boolean outputRankings) {
@@ -200,15 +206,15 @@ public class RankingBenchmark {
 	}
 	// endregion
 
-	// region fileBasedRegression
-	private void fileBasedRegression() {
+	// region queryBasedRegression
+	private void queryBasedRegression() {
 
 		Map<String, Map<String, Double>> resultMap = new HashMap<String, Map<String, Double>>();
 
 		for (Map.Entry<String, Classifier> entry : this.regressors.entrySet()) {
 			String regressorName = entry.getKey();
 			Classifier regressor = entry.getValue();
-			resultMap.put(regressorName, fileBasedRegressionOneRegressor(this.dataSet, regressor, regressorName));
+			resultMap.put(regressorName, queryBasedRegressionOneRegressor(this.dataSet, regressor, regressorName));
 		}
 		
 		List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", "expected", "avg top 5 norm", "expected top 5", ">0 precision @1", ">0 precision @5", ">1 precision @1", ">1 precision @5");
@@ -216,15 +222,15 @@ public class RankingBenchmark {
 
 	}
 
-	private Map<String, Double> fileBasedRegressionOneRegressor(Instances dataSet) {
+	private Map<String, Double> queryBasedRegressionOneRegressor(Instances dataSet) {
 		if (this.regressors.size() != 1)
 			return new HashMap<String, Double>();
 		String regressorName = this.regressors.keySet().toArray(new String[1])[0];
 		Classifier regressor = this.regressors.get(regressorName);
-		return fileBasedRegressionOneRegressor(dataSet, regressor, regressorName);
+		return queryBasedRegressionOneRegressor(dataSet, regressor, regressorName);
 	}
 	
-	private Map<String, Double> fileBasedRegressionOneRegressor(Instances dataSet, Classifier regressor, String regressorName) {
+	private Map<String, Double> queryBasedRegressionOneRegressor(Instances dataSet, Classifier regressor, String regressorName) {
 
 		Map<String, Double> resultMap = new HashMap<String, Double>();
 
@@ -319,14 +325,14 @@ public class RankingBenchmark {
 			resultMap.put(">1 precision @5", precision1At5);
 
 			if (log.isInfoEnabled()) {
-				log.info(String.format("%s (file-based)", regressorName));
+				log.info(String.format("%s (query-based)", regressorName));
 				logEvalResults(eval, ndcg, topRank, relativeTopRank, expectedRank, top5relativeRank, top5expectedRank, precision0At1, precision0At5, precision1At1, precision1At5);
 			}
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
-				log.error("cannot perform file-based regression!");
+				log.error("cannot perform query-based regression!");
 			if (log.isDebugEnabled())
-				log.debug("cannot perform file-based regression", e);
+				log.debug("cannot perform query-based regression", e);
 		}
 
 		return resultMap;
@@ -579,7 +585,7 @@ public class RankingBenchmark {
 			removeFilter.setInvertSelection(true);
 			removeFilter.setInputFormat(this.dataSet);
 			Instances baselineData = Filter.useFilter(this.dataSet, removeFilter);
-			Map<String, Double> baselineResults = this.fileBasedRegressionOneRegressor(baselineData);
+			Map<String, Double> baselineResults = this.queryBasedRegressionOneRegressor(baselineData);
 			resultMap.put("baseline", baselineResults);
 
 			for (int i = 0; i < featureIndices.size(); i++) {
@@ -592,7 +598,7 @@ public class RankingBenchmark {
 				filter.setInvertSelection(true);
 				filter.setInputFormat(this.dataSet);
 				Instances filtered = Filter.useFilter(this.dataSet, filter);
-				Map<String, Double> localResults = this.fileBasedRegressionOneRegressor(filtered);
+				Map<String, Double> localResults = this.queryBasedRegressionOneRegressor(filtered);
 				resultMap.put(String.format("without %d", featureIndices.get(i)), localResults);
 			}
 
@@ -651,7 +657,7 @@ public class RankingBenchmark {
 			removeFilter.setInvertSelection(true);
 			removeFilter.setInputFormat(this.dataSet);
 			Instances baselineData = Filter.useFilter(this.dataSet, removeFilter);
-			Map<String, Double> baselineResults = this.fileBasedRegressionOneRegressor(baselineData);
+			Map<String, Double> baselineResults = this.queryBasedRegressionOneRegressor(baselineData);
 			resultMap.put(StringUtils.collectionToCommaDelimitedString(featureIndices), baselineResults);
 			resultBuffer.put(StringUtils.collectionToCommaDelimitedString(featureIndices), baselineResults);
 
@@ -691,7 +697,7 @@ public class RankingBenchmark {
 							filter.setInvertSelection(true);
 							filter.setInputFormat(this.dataSet);
 							Instances filtered = Filter.useFilter(this.dataSet, filter);
-							localResults = this.fileBasedRegressionOneRegressor(filtered);
+							localResults = this.queryBasedRegressionOneRegressor(filtered);
 							resultBuffer.put(indexString, localResults);
 						}
 
@@ -797,7 +803,7 @@ public class RankingBenchmark {
 			removeFilter.setInvertSelection(true);
 			removeFilter.setInputFormat(this.dataSet);
 			Instances baselineData = Filter.useFilter(this.dataSet, removeFilter);
-			Map<String, Double> baselineResults = this.fileBasedRegressionOneRegressor(baselineData);
+			Map<String, Double> baselineResults = this.queryBasedRegressionOneRegressor(baselineData);
 			resultMap.put("baseline", baselineResults);
 
 			for (int i = 0; i < this.newFeatureIndices.size(); i++) {
@@ -810,7 +816,7 @@ public class RankingBenchmark {
 				filter.setInvertSelection(true);
 				filter.setInputFormat(this.dataSet);
 				Instances filtered = Filter.useFilter(this.dataSet, filter);
-				Map<String, Double> localResults = this.fileBasedRegressionOneRegressor(filtered);
+				Map<String, Double> localResults = this.queryBasedRegressionOneRegressor(filtered);
 				resultMap.put(String.format("with %d", newFeatureIndices.get(i)), localResults);
 			}
 
@@ -835,9 +841,9 @@ public class RankingBenchmark {
 			int attributeIdx = dataSet.attribute(Util.ATTRIBUTE_FILE).index() + 1; // conversion from 0-based to 1-based indices...
 			filter.setAttributeRange(Integer.toString(attributeIdx));
 			filter.setInputFormat(dataSet);
-			Instances modifedDataSet = Filter.useFilter(dataSet, filter);
+			Instances modifiedDataSet = Filter.useFilter(dataSet, filter);
 
-			Evaluation eval = new Evaluation(modifedDataSet);
+			Evaluation eval = new Evaluation(modifiedDataSet);
 			double ndcg = 0;
 			int ndcgNaNs = 0;
 			double relativeTopRank = 0;
@@ -852,14 +858,14 @@ public class RankingBenchmark {
 			double precision1At1 = 0;
 			double precision1At5 = 0;
 
-			Enumeration<Object> enumeration = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
+			Enumeration<Object> enumeration = modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
 			while (enumeration.hasMoreElements()) {
 
-				Evaluation evalLocal = new Evaluation(modifedDataSet);
+				Evaluation evalLocal = new Evaluation(modifiedDataSet);
 				String fileName = (String) enumeration.nextElement();
-				Integer idx = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
+				Integer idx = modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
 
-				Instances filtered = filterByFileName(modifedDataSet, idx, true);
+				Instances filtered = filterByFileName(modifiedDataSet, idx, true);
 				RemoveByName stringFilter = new RemoveByName();
 				stringFilter.setExpression("(eventURI|fileName|user)");
 				stringFilter.setInputFormat(filtered);
@@ -897,16 +903,16 @@ public class RankingBenchmark {
 					logRankings(this.pretrainedRegressor, test);
 			}
 
-			ndcg /= (modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - ndcgNaNs);
-			topRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			relativeTopRank /= (modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - relativeTopRankNaNs);
-			expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			top5relativeRank /= (modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - top5relativeRankNaNs);
-			top5expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			precision0At1 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			precision0At5 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			precision1At1 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			precision1At5 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			ndcg /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - ndcgNaNs);
+			topRank /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			relativeTopRank /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - relativeTopRankNaNs);
+			expectedRank /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			top5relativeRank /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - top5relativeRankNaNs);
+			top5expectedRank /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			precision0At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			precision0At5 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			precision1At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			precision1At5 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 
 			if (log.isInfoEnabled()) {
 				log.info(String.format("pretrained regressor (file-based)"));
@@ -922,9 +928,157 @@ public class RankingBenchmark {
 	}
 	// endregion
 	
+	// region userBasedRegression
+	private void userBasedRegression() {
+
+		Map<String, Map<String, Double>> resultMap = new HashMap<String, Map<String, Double>>();
+
+		for (Map.Entry<String, Classifier> entry : this.regressors.entrySet()) {
+			String regressorName = entry.getKey();
+			Classifier regressor = entry.getValue();
+			resultMap.put(regressorName, userBasedRegressionOneRegressor(this.dataSet, regressor, regressorName));
+		}
+		
+		List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1 norm", ">0 precision @1", ">1 precision @1");
+		Util.writeEvaluationToCsv(this.outputFileName, columnNames, resultMap);
+
+	}
+
+	@SuppressWarnings("unused")
+	private Map<String, Double> userBasedRegressionOneRegressor(Instances dataSet) {
+		if (this.regressors.size() != 1)
+			return new HashMap<String, Double>();
+		String regressorName = this.regressors.keySet().toArray(new String[1])[0];
+		Classifier regressor = this.regressors.get(regressorName);
+		return userBasedRegressionOneRegressor(dataSet, regressor, regressorName);
+	}
+	
+	private Map<String, Double> userBasedRegressionOneRegressor(Instances dataSet, Classifier regressor, String regressorName) {
+		
+		Map<String, Double> resultMap = new HashMap<String, Double>();
+
+		try {
+
+			StringToNominal userFilter = new StringToNominal();
+			int userAttributeIdx = dataSet.attribute(Util.ATTRIBUTE_USER).index() + 1; // conversion from 0-based to 1-based indices...
+			userFilter.setAttributeRange(Integer.toString(userAttributeIdx));
+			userFilter.setInputFormat(dataSet);
+			Instances modifiedDataSet = Filter.useFilter(dataSet, userFilter);
+
+			Evaluation eval = new Evaluation(modifiedDataSet);
+			double ndcg = 0;
+			int ndcgNaNs = 0;
+			double relativeTopRank = 0;
+			int relativeTopRankNaNs = 0;
+			double precision0At1 = 0;
+			double precision1At1 = 0;
+			
+			Enumeration<Object> userEnumeration = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).enumerateValues();
+			while (userEnumeration.hasMoreElements()) {
+
+				String userName = (String) userEnumeration.nextElement();
+				Integer userIdx = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).indexOfValue(userName) + 1;
+
+				Instances train = filterByUserName(modifiedDataSet, userIdx, false);
+				Instances test = filterByUserName(modifiedDataSet, userIdx, true);
+
+				Classifier r = AbstractClassifier.makeCopy(regressor);
+				r.buildClassifier(train);
+				
+				StringToNominal fileFilter = new StringToNominal();
+				int fileAttributeIdx = test.attribute(Util.ATTRIBUTE_FILE).index() + 1; // conversion from 0-based to 1-based indices...
+				fileFilter.setAttributeRange(Integer.toString(fileAttributeIdx));
+				fileFilter.setInputFormat(test);
+				Instances modifiedTest = Filter.useFilter(test, fileFilter);
+
+				Enumeration<Object> fileEnumeration = modifiedTest.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
+				while (fileEnumeration.hasMoreElements()) {
+					Evaluation evalLocal = new Evaluation(modifiedTest);
+					String fileName = (String) fileEnumeration.nextElement();
+					Integer fileIdx = modifiedTest.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
+					
+					Instances query = filterByFileName(modifiedTest, fileIdx, true);
+					eval.evaluateModel(r, query);
+					evalLocal.evaluateModel(r, query);
+
+					double localNDCG = computeNDCG(evalLocal.predictions());
+					if (Double.isNaN(localNDCG))
+						ndcgNaNs++;
+					else
+						ndcg += localNDCG;
+					double localRelativeTopRank = computeTopRank(evalLocal.predictions(), true, 1);
+					if (Double.isNaN(localRelativeTopRank))
+						relativeTopRankNaNs++;
+					else
+						relativeTopRank += localRelativeTopRank;
+					
+					precision0At1 += computePrecision(evalLocal.predictions(), 1, 0);
+					precision1At1 += computePrecision(evalLocal.predictions(), 1, 1);
+					
+					if (this.outputRankings && log.isInfoEnabled())
+						logRankings(r, query);
+				}
+			}
+
+			ndcg /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - ndcgNaNs);
+			relativeTopRank /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - relativeTopRankNaNs);
+			precision0At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			precision1At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			
+			resultMap.put("RMSE", eval.rootMeanSquaredError());
+			resultMap.put("correlation", eval.correlationCoefficient());
+			resultMap.put("NDCG", ndcg);
+			resultMap.put("avg top 1 norm", relativeTopRank);
+			resultMap.put(">0 precision @1", precision0At1);
+			resultMap.put(">1 precision @1", precision1At1);
+			
+			if (log.isInfoEnabled()) {
+				log.info(String.format("%s (user-based)", regressorName));
+				logEvalResults(eval, ndcg, relativeTopRank, precision0At1, precision1At1);
+			}
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("cannot perform user-based regression!");
+			if (log.isDebugEnabled())
+				log.debug("cannot perform user-based regression", e);
+		}
+
+		return resultMap;
+
+	}
+	
+	private void logEvalResults(Evaluation eval, double ndcg, double relativeTopRank, double precision0At1, double precision1At1) {
+		log.info(String.format("RMSE: %f", eval.rootMeanSquaredError()));
+		try {
+			log.info(String.format("correlation coefficient: %f", eval.correlationCoefficient()));
+		} catch (Exception e) {
+			if (log.isWarnEnabled())
+				log.warn("cannot compute correlation coefficient!");
+		}
+		log.info(String.format("NDCG: %f", ndcg));
+		log.info(String.format("average normalized rank of top 1: %f", relativeTopRank));
+		log.info(String.format(">0 precision at top 1: %f", precision0At1));
+		log.info(String.format(">1 precision at top 1: %f", precision1At1));
+	}
+
+	private Instances filterByUserName(Instances dataSet, Integer userNameIdx, boolean isTest) throws Exception {
+
+		RemoveWithValues filter = new RemoveWithValues();
+		int attributeIdx = dataSet.attribute(Util.ATTRIBUTE_USER).index() + 1; // conversion from 0-based to 1-based indices...
+		filter.setAttributeIndex(Integer.toString(attributeIdx));
+		filter.setNominalIndices(userNameIdx.toString());
+		filter.setInvertSelection(isTest);
+		filter.setInputFormat(dataSet);
+
+		Instances filtered = Filter.useFilter(dataSet, filter);
+
+		return filtered;
+	}
+	// endregion
+	
 	public void run() {
-		if (this.doFileBasedRegression)
-			fileBasedRegression();
+		if (this.doQueryBasedRegression)
+			queryBasedRegression();
 		if (this.doFeatureSelection)
 			featureSelection();
 		if (this.doSearchBestNDCGFeature)
@@ -937,6 +1091,8 @@ public class RankingBenchmark {
 			featureAddition();
 		if (this.doTestPretrainedRegressor)
 			testPretrainedRegressor();
+		if (this.doUserBasedRegression)
+			userBasedRegression();
 	}
 
 	public static void main(String[] args) {

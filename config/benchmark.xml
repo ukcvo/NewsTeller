@@ -21,8 +21,6 @@
 		<prop key="toSelectReg">20</prop>
 	</util:properties>
 	
-	
-	
 	<bean id="ksAdapter"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
 		<constructor-arg name="getMentionFromEventFileName"
@@ -231,7 +229,7 @@
 	</bean>
 
 	<bean id="rankingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RankingBenchmark">
-		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRankingUM.xrff" />
+		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRankingAll.xrff" />
 		<constructor-arg name="pretrainedRegressorFileName" value="resources/regressor.model" />
 		<property name="regressors">
 			<map>
@@ -258,9 +256,10 @@
 				<entry key="REPTree" value-ref="r_REPTree" />
 				<entry key="linearRegression" value-ref="r_linearRegression" />
 				  -->
-				
+				<entry key="baseline" value-ref="r_zeroR" /> 
+				<entry key="bestFeature" value-ref="r_bestFeature" />
 				<entry key="final RF" value-ref="r_randomForest2" />
-				
+								
 			</map>
 		</property>
 		
@@ -287,12 +286,13 @@
 		<property name="outputRankings" value="false" />
 		
 		<property name="doFeatureSelection" value="false" />
-		<property name="doFileBasedRegression" value="true" />
+		<property name="doQueryBasedRegression" value="false" />
 		<property name="doSearchBestNDCGFeature" value="false" />
 		<property name="doFeatureElimination" value="false" />
 		<property name="doRecursiveFeatureElimination" value="false" />
 		<property name="doFeatureAddition" value="false" />
 		<property name="doTestPretrainedRegressor" value="false" />
+		<property name="doUserBasedRegression" value="true" />
 	</bean>
 
 </beans>
