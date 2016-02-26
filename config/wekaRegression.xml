@@ -15,7 +15,7 @@
 		<property name="filters">
 			<array>
 				<bean class="weka.filters.unsupervised.attribute.RemoveByName">
-					<property name="expression" value="(eventURI|fileName)" />
+					<property name="expression" value="(eventURI|fileName|user)" />
 				</bean>
 			<!-- 
 					 	<bean class="weka.filters.unsupervised.attribute.Remove">
@@ -263,8 +263,20 @@
 		</property>
 	</bean>
 
-	<bean id="r_linearRegression" class="weka.classifiers.meta.FilteredClassifier">
-		<property name="filter" ref="r_removeStringFilter" />
+	<bean id="r_bestFeature" class="weka.classifiers.meta.FilteredClassifier">
+		<property name="filter">
+			<bean class="weka.filters.MultiFilter">
+				<property name="filters">
+					<array>
+						<ref bean="r_removeStringFilter" />
+						<bean class="weka.filters.unsupervised.attribute.Remove">
+							<property name="attributeIndices" value="11,14" />
+							<property name="invertSelection" value="true" />
+						</bean>
+					</array>
+				</property>
+			</bean>
+		</property>
 		<property name="classifier">
 			<bean class="weka.classifiers.functions.LinearRegression">
 			</bean>

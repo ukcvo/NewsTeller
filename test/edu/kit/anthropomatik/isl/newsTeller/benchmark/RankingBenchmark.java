@@ -33,10 +33,12 @@ import weka.classifiers.evaluation.NumericPrediction;
 import weka.classifiers.evaluation.Prediction;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.SerializationHelper;
 import weka.core.Utils;
 import weka.core.converters.XRFFLoader;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
+import weka.filters.unsupervised.attribute.RemoveByName;
 import weka.filters.unsupervised.attribute.RemoveType;
 import weka.filters.unsupervised.attribute.StringToNominal;
 import weka.filters.unsupervised.instance.RemoveWithValues;
@@ -47,6 +49,8 @@ public class RankingBenchmark {
 
 	private Instances dataSet;
 
+	private Classifier pretrainedRegressor;
+	
 	private Map<String, Classifier> regressors;
 
 	private List<AttributeSelection> featureSelectors;
@@ -75,8 +79,11 @@ public class RankingBenchmark {
 
 	private boolean doFeatureAddition;
 
+	private boolean doTestPretrainedRegressor;
+	
 	private boolean outputRankings;
 
+	// region setters
 	public void setRegressors(Map<String, Classifier> regressors) {
 		this.regressors = regressors;
 	}
@@ -136,11 +143,16 @@ public class RankingBenchmark {
 		this.doFeatureAddition = doFeatureAddition;
 	}
 
+	public void setDoTestPretrainedRegressor(boolean doTestPretrainedRegressor) {
+		this.doTestPretrainedRegressor = doTestPretrainedRegressor;
+	}
+	
 	public void setOutputRankings(boolean outputRankings) {
 		this.outputRankings = outputRankings;
 	}
-
-	public RankingBenchmark(String dataSetFileName) {
+	// endregion
+	
+	public RankingBenchmark(String dataSetFileName, String pretrainedRegressorFileName) {
 		try {
 			XRFFLoader loader = new XRFFLoader();
 			loader.setSource(new File(dataSetFileName));
@@ -150,6 +162,17 @@ public class RankingBenchmark {
 				log.error("Can't read data set");
 			if (log.isDebugEnabled())
 				log.debug("Can't read data set", e);
+		}
+		
+		try {
+			Object[] input = SerializationHelper.readAll(pretrainedRegressorFileName);
+			this.pretrainedRegressor = (Classifier) input[0];
+			//this.pretrainedRegressorHeader = (Instances) input[1];
+		} catch (Exception e) {
+			if (log.isFatalEnabled())
+				log.fatal(String.format("Can't read classifier from file: '%s'", pretrainedRegressorFileName));
+			if (log.isDebugEnabled())
+				log.debug("can't read classifier from file", e);
 		}
 	}
 
@@ -208,16 +231,20 @@ public class RankingBenchmark {
 		try {
 
 			StringToNominal filter = new StringToNominal();
-			filter.setAttributeRange("last");
+			int attributeIdx = dataSet.attribute(Util.ATTRIBUTE_FILE).index() + 1; // conversion from 0-based to 1-based indices...
+			filter.setAttributeRange(Integer.toString(attributeIdx));
 			filter.setInputFormat(dataSet);
 			Instances modifedDataSet = Filter.useFilter(dataSet, filter);
 
 			Evaluation eval = new Evaluation(modifedDataSet);
 			double ndcg = 0;
+			int ndcgNaNs = 0;
 			double relativeTopRank = 0;
+			int relativeTopRankNaNs = 0;
 			double topRank = 0;
 			double expectedRank = 0;
 			double top5relativeRank = 0;
+			int top5relativeRankNaNs = 0;
 			double top5expectedRank = 0;
 			double precision0At1 = 0;
 			double precision0At5 = 0;
@@ -239,11 +266,23 @@ public class RankingBenchmark {
 				eval.evaluateModel(r, test);
 				evalLocal.evaluateModel(r, test);
 
-				ndcg += computeNDCG(evalLocal.predictions());
+				double localNDCG = computeNDCG(evalLocal.predictions());
+				if (Double.isNaN(localNDCG))
+					ndcgNaNs++;
+				else
+					ndcg += localNDCG;
 				topRank += computeTopRank(evalLocal.predictions(), false, 1);
-				relativeTopRank += computeTopRank(evalLocal.predictions(), true, 1);
+				double localRelativeTopRank = computeTopRank(evalLocal.predictions(), true, 1);
+				if (Double.isNaN(localRelativeTopRank))
+					relativeTopRankNaNs++;
+				else
+					relativeTopRank += localRelativeTopRank;
 				expectedRank += computeExpectedRank(evalLocal.predictions(), evalLocal.predictions().size());
-				top5relativeRank += computeTopRank(evalLocal.predictions(), true, 5);
+				double localTop5relativeRank = computeTopRank(evalLocal.predictions(), true, 5);
+				if (Double.isNaN(localTop5relativeRank))
+					top5relativeRankNaNs++;
+				else
+					top5relativeRank += localTop5relativeRank;
 				top5expectedRank += computeExpectedRank(evalLocal.predictions(), 5);
 
 				precision0At1 += computePrecision(evalLocal.predictions(), 1, 0);
@@ -255,11 +294,11 @@ public class RankingBenchmark {
 					logRankings(r, test);
 			}
 
-			ndcg /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			ndcg /= (modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - ndcgNaNs);
 			topRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			relativeTopRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			relativeTopRank /= (modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - relativeTopRankNaNs);
 			expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			top5relativeRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			top5relativeRank /= (modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - top5relativeRankNaNs);
 			top5expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 			precision0At1 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
 			precision0At5 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
@@ -472,7 +511,9 @@ public class RankingBenchmark {
 	private Instances filterByFileName(Instances dataSet, Integer fileNameIdx, boolean isTest) throws Exception {
 
 		RemoveWithValues filter = new RemoveWithValues();
-		filter.setAttributeIndex("last");
+		int attributeIdx = dataSet.attribute(Util.ATTRIBUTE_FILE).index() + 1; // conversion from 0-based to 1-based indices...
+		filter.setAttributeIndex(Integer.toString(attributeIdx));
+		//filter.setAttributeIndex("last");
 		filter.setNominalIndices(fileNameIdx.toString());
 		filter.setInvertSelection(isTest);
 		filter.setInputFormat(dataSet);
@@ -785,6 +826,102 @@ public class RankingBenchmark {
 	}
 	// endregion
 
+	// region testPretrainedRegressor
+	private void testPretrainedRegressor() {
+		
+		try {
+
+			StringToNominal filter = new StringToNominal();
+			int attributeIdx = dataSet.attribute(Util.ATTRIBUTE_FILE).index() + 1; // conversion from 0-based to 1-based indices...
+			filter.setAttributeRange(Integer.toString(attributeIdx));
+			filter.setInputFormat(dataSet);
+			Instances modifedDataSet = Filter.useFilter(dataSet, filter);
+
+			Evaluation eval = new Evaluation(modifedDataSet);
+			double ndcg = 0;
+			int ndcgNaNs = 0;
+			double relativeTopRank = 0;
+			int relativeTopRankNaNs = 0;
+			double topRank = 0;
+			double expectedRank = 0;
+			double top5relativeRank = 0;
+			int top5relativeRankNaNs = 0;
+			double top5expectedRank = 0;
+			double precision0At1 = 0;
+			double precision0At5 = 0;
+			double precision1At1 = 0;
+			double precision1At5 = 0;
+
+			Enumeration<Object> enumeration = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
+			while (enumeration.hasMoreElements()) {
+
+				Evaluation evalLocal = new Evaluation(modifedDataSet);
+				String fileName = (String) enumeration.nextElement();
+				Integer idx = modifedDataSet.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
+
+				Instances filtered = filterByFileName(modifedDataSet, idx, true);
+				RemoveByName stringFilter = new RemoveByName();
+				stringFilter.setExpression("(eventURI|fileName|user)");
+				stringFilter.setInputFormat(filtered);
+				Instances test = Filter.useFilter(filtered, stringFilter);
+				
+				
+				eval.evaluateModel(this.pretrainedRegressor, test);
+				evalLocal.evaluateModel(this.pretrainedRegressor, test);
+
+				double localNDCG = computeNDCG(evalLocal.predictions());
+				if (Double.isNaN(localNDCG))
+					ndcgNaNs++;
+				else
+					ndcg += localNDCG;
+				topRank += computeTopRank(evalLocal.predictions(), false, 1);
+				double localRelativeTopRank = computeTopRank(evalLocal.predictions(), true, 1);
+				if (Double.isNaN(localRelativeTopRank))
+					relativeTopRankNaNs++;
+				else
+					relativeTopRank += localRelativeTopRank;
+				expectedRank += computeExpectedRank(evalLocal.predictions(), evalLocal.predictions().size());
+				double localTop5relativeRank = computeTopRank(evalLocal.predictions(), true, 5);
+				if (Double.isNaN(localTop5relativeRank))
+					top5relativeRankNaNs++;
+				else
+					top5relativeRank += localTop5relativeRank;
+				top5expectedRank += computeExpectedRank(evalLocal.predictions(), 5);
+
+				precision0At1 += computePrecision(evalLocal.predictions(), 1, 0);
+				precision0At5 += computePrecision(evalLocal.predictions(), 5, 0);
+				precision1At1 += computePrecision(evalLocal.predictions(), 1, 1);
+				precision1At5 += computePrecision(evalLocal.predictions(), 5, 1);
+
+				if (this.outputRankings && log.isInfoEnabled())
+					logRankings(this.pretrainedRegressor, test);
+			}
+
+			ndcg /= (modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - ndcgNaNs);
+			topRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			relativeTopRank /= (modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - relativeTopRankNaNs);
+			expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			top5relativeRank /= (modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - top5relativeRankNaNs);
+			top5expectedRank /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			precision0At1 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			precision0At5 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			precision1At1 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+			precision1At5 /= modifedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+
+			if (log.isInfoEnabled()) {
+				log.info(String.format("pretrained regressor (file-based)"));
+				logEvalResults(eval, ndcg, topRank, relativeTopRank, expectedRank, top5relativeRank, top5expectedRank, precision0At1, precision0At5, precision1At1, precision1At5);
+			}
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error("cannot perform file-based evaluation of pre-trained regressor!");
+			if (log.isDebugEnabled())
+				log.debug("cannot perform file-based evaluation of pre-trained regressor!", e);
+		}
+
+	}
+	// endregion
+	
 	public void run() {
 		if (this.doFileBasedRegression)
 			fileBasedRegression();
@@ -798,6 +935,8 @@ public class RankingBenchmark {
 			recursiveFeatureElimination();
 		if (this.doFeatureAddition)
 			featureAddition();
+		if (this.doTestPretrainedRegressor)
+			testPretrainedRegressor();
 	}
 
 	public static void main(String[] args) {

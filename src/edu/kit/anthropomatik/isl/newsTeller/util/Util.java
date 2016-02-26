@@ -94,6 +94,7 @@ public class Util {
 	public static final String ATTRIBUTE_FILE = "fileName";
 	public static final String ATTRIBUTE_REASON = "reason_";
 	public static final String ATTRIBUTE_RELEVANCE = "relevance";
+	public static final String ATTRIBUTE_USER = "user";
 	
 	public static final String MENTION_PROPERTY_POS = "http://dkm.fbk.eu/ontologies/newsreader#pos";
 	public static final String MENTION_PROPERTY_POS_VERB = "http://dkm.fbk.eu/ontologies/newsreader#pos_verb";
