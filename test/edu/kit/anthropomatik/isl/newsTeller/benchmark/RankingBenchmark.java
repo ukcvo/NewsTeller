@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.LogManager;
 
@@ -33,6 +34,7 @@ import weka.classifiers.evaluation.NumericPrediction;
 import weka.classifiers.evaluation.Prediction;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.Randomizable;
 import weka.core.SerializationHelper;
 import weka.core.Utils;
 import weka.core.converters.XRFFLoader;
@@ -982,42 +984,84 @@ public class RankingBenchmark {
 				Instances train = filterByUserName(modifiedDataSet, userIdx, false);
 				Instances test = filterByUserName(modifiedDataSet, userIdx, true);
 
-				Classifier r = AbstractClassifier.makeCopy(regressor);
-				r.buildClassifier(train);
+				double avgNDCG = 0;
+				int avgNdcgNaNs = 0;
+				double avgRelativeTopRank = 0;
+				int avgRelativeTopRankNaNs = 0;
+				double avgPrecision0At1 = 0;
+				double avgPrecision1At1 = 0;
 				
-				StringToNominal fileFilter = new StringToNominal();
-				int fileAttributeIdx = test.attribute(Util.ATTRIBUTE_FILE).index() + 1; // conversion from 0-based to 1-based indices...
-				fileFilter.setAttributeRange(Integer.toString(fileAttributeIdx));
-				fileFilter.setInputFormat(test);
-				Instances modifiedTest = Filter.useFilter(test, fileFilter);
-
-				Enumeration<Object> fileEnumeration = modifiedTest.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
-				while (fileEnumeration.hasMoreElements()) {
-					Evaluation evalLocal = new Evaluation(modifiedTest);
-					String fileName = (String) fileEnumeration.nextElement();
-					Integer fileIdx = modifiedTest.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
-					
-					Instances query = filterByFileName(modifiedTest, fileIdx, true);
-					eval.evaluateModel(r, query);
-					evalLocal.evaluateModel(r, query);
-
-					double localNDCG = computeNDCG(evalLocal.predictions());
-					if (Double.isNaN(localNDCG))
-						ndcgNaNs++;
-					else
-						ndcg += localNDCG;
-					double localRelativeTopRank = computeTopRank(evalLocal.predictions(), true, 1);
-					if (Double.isNaN(localRelativeTopRank))
-						relativeTopRankNaNs++;
-					else
-						relativeTopRank += localRelativeTopRank;
-					
-					precision0At1 += computePrecision(evalLocal.predictions(), 1, 0);
-					precision1At1 += computePrecision(evalLocal.predictions(), 1, 1);
-					
-					if (this.outputRankings && log.isInfoEnabled())
-						logRankings(r, query);
+				List<Classifier> regressorsToAverage = new ArrayList<Classifier>();
+				if (regressor instanceof Randomizable) { 
+					// randomizable classifier, so take average over run with 10 different deterministic seeds
+					Random rand = new Random(1);
+					for (int i = 0; i < 10; i++) {
+						Classifier copy = AbstractClassifier.makeCopy(regressor);
+						((Randomizable) copy).setSeed(rand.nextInt());
+						regressorsToAverage.add(copy);
+					}
+				} else {
+					// not randomizable, so only do work once
+					regressorsToAverage.add(AbstractClassifier.makeCopy(regressor));
 				}
+				
+				for (Classifier r : regressorsToAverage) {
+
+					r.buildClassifier(train);
+					
+					StringToNominal fileFilter = new StringToNominal();
+					int fileAttributeIdx = test.attribute(Util.ATTRIBUTE_FILE).index() + 1; // conversion from 0-based to 1-based indices...
+					fileFilter.setAttributeRange(Integer.toString(fileAttributeIdx));
+					fileFilter.setInputFormat(test);
+					Instances modifiedTest = Filter.useFilter(test, fileFilter);
+
+					int localNdcgNaNs = 0;
+					int localRelativeTopRankNaNs = 0;
+					
+					Enumeration<Object> fileEnumeration = modifiedTest.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
+					while (fileEnumeration.hasMoreElements()) {
+						Evaluation evalLocal = new Evaluation(modifiedTest);
+						String fileName = (String) fileEnumeration.nextElement();
+						Integer fileIdx = modifiedTest.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
+						
+						Instances query = filterByFileName(modifiedTest, fileIdx, true);
+						eval.evaluateModel(r, query);
+						evalLocal.evaluateModel(r, query);
+
+						double localNDCG = computeNDCG(evalLocal.predictions());
+						if (Double.isNaN(localNDCG))
+							localNdcgNaNs++;
+						else
+							avgNDCG += localNDCG;
+						double localRelativeTopRank = computeTopRank(evalLocal.predictions(), true, 1);
+						if (Double.isNaN(localRelativeTopRank))
+							localRelativeTopRankNaNs++;
+						else
+							avgRelativeTopRank += localRelativeTopRank;
+						avgPrecision0At1 += computePrecision(evalLocal.predictions(), 1, 0);
+						avgPrecision1At1 += computePrecision(evalLocal.predictions(), 1, 1);
+						
+						if (this.outputRankings && log.isInfoEnabled())
+							logRankings(r, query);
+					}
+					
+					avgNdcgNaNs = Math.max(avgNdcgNaNs, localNdcgNaNs);
+					avgRelativeTopRankNaNs = Math.max(avgRelativeTopRankNaNs, localRelativeTopRankNaNs);
+				}
+				
+				avgNDCG /= regressorsToAverage.size();
+				ndcg += avgNDCG;
+				ndcgNaNs += avgNdcgNaNs;
+				
+				avgRelativeTopRank /= regressorsToAverage.size();
+				relativeTopRank += avgRelativeTopRank;
+				relativeTopRankNaNs += avgRelativeTopRankNaNs;
+				
+				avgPrecision0At1 /= regressorsToAverage.size();
+				precision0At1 += avgPrecision0At1;
+				
+				avgPrecision1At1 /= regressorsToAverage.size();
+				precision1At1 += avgPrecision1At1;
 			}
 
 			ndcg /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - ndcgNaNs);
