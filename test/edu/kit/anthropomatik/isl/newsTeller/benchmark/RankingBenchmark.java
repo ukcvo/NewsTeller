@@ -24,8 +24,6 @@ import org.springframework.util.StringUtils;
 
 import com.google.common.collect.Lists;
 
-import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
-import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.attributeSelection.AttributeSelection;
 import weka.classifiers.AbstractClassifier;
@@ -48,8 +46,6 @@ public class RankingBenchmark {
 	private static Log log = LogFactory.getLog(RankingBenchmark.class);
 
 	private Instances dataSet;
-
-	private Map<String, Map<String, GroundTruth>> benchmark;
 
 	private Map<String, Classifier> regressors;
 
@@ -144,24 +140,11 @@ public class RankingBenchmark {
 		this.outputRankings = outputRankings;
 	}
 
-	public RankingBenchmark(String dataSetFileName, String configFileName) {
+	public RankingBenchmark(String dataSetFileName) {
 		try {
 			XRFFLoader loader = new XRFFLoader();
 			loader.setSource(new File(dataSetFileName));
 			this.dataSet = loader.getDataSet();
-
-			Set<String> fileNames = Util.readBenchmarkConfigFile(configFileName).keySet();
-			this.benchmark = new HashMap<String, Map<String, GroundTruth>>();
-
-			for (String fileName : fileNames) {
-				Map<BenchmarkEvent, GroundTruth> fileContent = Util.readBenchmarkQueryFromFile(fileName);
-				Map<String, GroundTruth> internalMap = new HashMap<String, GroundTruth>();
-				for (Map.Entry<BenchmarkEvent, GroundTruth> entry : fileContent.entrySet()) {
-					internalMap.put(entry.getKey().getEventURI(), entry.getValue());
-				}
-				this.benchmark.put(fileName, internalMap);
-			}
-
 		} catch (IOException e) {
 			if (log.isErrorEnabled())
 				log.error("Can't read data set");

@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkUser;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
 
 public class UtilTest {
@@ -148,6 +149,18 @@ public class UtilTest {
 	public void shouldReturnCorrectNLGMap() {
 		Map<String, String> map = Util.readNLGQueries("config/SPARQL/test/NLGConfigTest.csv");
 		assertTrue(map.size() == 1);
+	}
+	
+	@Test
+	public void shouldReturnCorrectCompleteBenchmarkOld() {
+		List<BenchmarkUser> benchmark = Util.readCompleteUserBenchmark("resources/benchmark/onlyOld.csv");
+		assertTrue((benchmark.size() == 1) && (benchmark.get(0).getQueries().size() == 64) && (benchmark.get(0).getInterests().isEmpty()));
+	}
+	
+	@Test
+	public void shouldReturnCorrectCompleteBenchmarkUM() {
+		List<BenchmarkUser> benchmark = Util.readCompleteUserBenchmark("resources/benchmark/onlyUM.csv");
+		assertTrue((benchmark.size() == 11) && (benchmark.get(0).getQueries().size() == 10) && (benchmark.get(0).getInterests().size() == 6));
 	}
 	//endregion
 

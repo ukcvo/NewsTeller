@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkUser;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.GroundTruth;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.UsabilityRatingReason;
 
@@ -298,9 +300,14 @@ public class Util {
 
 	/**
 	 * Reads a benchmark config file and returns a map of benchmark query files
-	 * and corresponding keywords.
+	 * and corresponding keywords. Uses comma as standard delimiter.
 	 */
 	public static Map<String, List<Keyword>> readBenchmarkConfigFile(String fileName) {
+		return readBenchmarkConfigFile(fileName, ',');
+	}
+	
+	
+	public static Map<String, List<Keyword>> readBenchmarkConfigFile(String fileName, char delimiter) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("readBenchmarkConfigFile(fileName = '%s')", fileName));
 
@@ -308,8 +315,18 @@ public class Util {
 
 		try {
 			CsvReader in = new CsvReader(fileName);
+			in.setDelimiter(delimiter);
+			in.setTextQualifier('"');
+			in.setUseTextQualifier(true);
 			in.readHeaders();
 
+			if (in.getHeaderCount() < 2) {
+				in.close();
+				char otherDelimiter = (delimiter == ',') ? ';' : ',';
+				// TODO dirty hack, might produce infinite loop! --> remove
+				return readBenchmarkConfigFile(fileName, otherDelimiter);
+			}
+			
 			while (in.readRecord()) {
 				String queryFileName = in.get(Util.COLUMN_NAME_FILENAME);
 				List<Keyword> queryKeywords = new ArrayList<Keyword>(Util.MAX_NUMBER_OF_BENCHMARK_KEYWORDS);
@@ -606,6 +623,77 @@ public class Util {
 			if (log.isDebugEnabled())
 				log.debug("cannnot write file", e);
 		}
+	}
+	
+	// reads the structure of the meta config file and returns it as map from configFileName to user interests
+	private static Map<String, List<Keyword>> readMetaConfigFile(String fileName) {
+
+		Map<String, List<Keyword>> result = new HashMap<String, List<Keyword>>();
+
+		try {
+			CsvReader in = new CsvReader(fileName);
+			in.readHeaders();
+
+			while (in.readRecord()) {
+				String configFileName = in.get(Util.COLUMN_NAME_FILENAME);
+				List<Keyword> interestKeywords = new ArrayList<Keyword>(Util.MAX_NUMBER_OF_BENCHMARK_INTERESTS);
+				for (int i = 1; i <= Util.MAX_NUMBER_OF_BENCHMARK_INTERESTS; i++) {
+					String s = in.get(Util.COLUMN_NAME_INTEREST + i);
+					if (s != null && !s.isEmpty()) {
+						Keyword k = new Keyword(s);
+						stemKeyword(k);
+						interestKeywords.add(k);
+					}
+				}
+				result.put(configFileName, interestKeywords);
+			}
+
+			in.close();
+
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error(String.format("could not read meta config file, returning empty result: '%s'", fileName));
+			if (log.isDebugEnabled())
+				log.debug("cannnot read file", e);
+		}
+
+		return result;
+	}
+	
+	/**
+	 * Reads a complete user benchmark configuration, starting with the fileName of the file containting a list of individual config files to use.
+	 */
+	public static List<BenchmarkUser> readCompleteUserBenchmark(String fileName) {
+		List<BenchmarkUser> result = new ArrayList<BenchmarkUser>();
+		
+		// map of config files to list of user interests
+		Map<String, List<Keyword>> configFiles = readMetaConfigFile(fileName);
+		
+		for (String configFileName : configFiles.keySet()) {
+			Map<String, List<Keyword>> config = readBenchmarkConfigFile(configFileName);
+			String userName = configFileName.substring(configFileName.lastIndexOf('/') + 1, configFileName.lastIndexOf(".csv"));
+			List<Keyword> interests = configFiles.get(configFileName);
+			
+			Map<List<Keyword>, Map <BenchmarkEvent, GroundTruth>> queries = new HashMap<List<Keyword>, Map <BenchmarkEvent, GroundTruth>>();
+			for (String queryFileName : config.keySet()) {
+				Map<BenchmarkEvent, GroundTruth> fileContent = readBenchmarkQueryFromFile(queryFileName);
+				queries.put(config.get(queryFileName), fileContent);
+			}
+			
+			BenchmarkUser user = new BenchmarkUser(userName, interests, queries);
+			result.add(user);
+		}
+		
+		Collections.sort(result, new Comparator<BenchmarkUser>() {
+
+			@Override
+			public int compare(BenchmarkUser arg0, BenchmarkUser arg1) {
+				return arg0.getId().compareTo(arg1.getId());
+			}
+			
+		});
+		
+		return result;
 	}
 	
 	// endregion

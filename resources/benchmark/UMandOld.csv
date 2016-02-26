@@ -1,0 +1,13 @@
+filename,interest_1,interest_2,interest_3,interest_4,interest_5,interest_5,interest_6
+resources/benchmark/rankingFilteredQueries.csv,,,,,,
+resources/benchmark/userModel/usr_01.csv,tennis,RHCP,exchange rates,Putin,Germany,information technology
+resources/benchmark/userModel/usr_02.csv,football,video games,cars,movies,Internet,Breaking Bad
+resources/benchmark/userModel/usr_03.csv,graphic design,user experience design,football,new technologies,politics
+resources/benchmark/userModel/usr_04.csv,cricket,adventure,Italy,Big Bang Theory,Friends TV show,Albert Einstein
+resources/benchmark/userModel/usr_05.csv,politics,science,culture,women,travel,animals
+resources/benchmark/userModel/usr_06.csv,Machine Learning,Computer Science,Eurozone,Schengen visa,Italian recipes,politics
+resources/benchmark/userModel/usr_07.csv,travel,politics,movies,business,food,psychology
+resources/benchmark/userModel/usr_08.csv,politics,social media,cats,law,VIPs,Game of Thrones
+resources/benchmark/userModel/usr_09.csv,US politics,Super Bowl,planes,soccer,music
+resources/benchmark/userModel/usr_10.csv,cars,sports,politics,stock market, research advancement,travel
+resources/benchmark/userModel/usr_11.csv,Iran,religion,politics,Italy,touristic attractions
