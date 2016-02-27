@@ -229,7 +229,7 @@
 	</bean>
 
 	<bean id="rankingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RankingBenchmark">
-		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRankingAll.xrff" />
+		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRanking.xrff" />
 		<constructor-arg name="pretrainedRegressorFileName" value="resources/regressor.model" />
 		<property name="regressors">
 			<map>
@@ -292,7 +292,7 @@
 		<property name="doRecursiveFeatureElimination" value="false" />
 		<property name="doFeatureAddition" value="false" />
 		<property name="doTestPretrainedRegressor" value="false" />
-		<property name="doUserBasedRegression" value="true" />
+		<property name="doUserBasedRegression" value="false" />
 	</bean>
 
 </beans>

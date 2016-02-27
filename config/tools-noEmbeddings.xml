@@ -50,6 +50,7 @@
 			<bean class="weka.classifiers.trees.RandomForest">
 				<property name="numExecutionSlots" value="10" />
 				<property name="numTrees" value="200" />
+				<property name="seed" value="1" />
 			</bean>
 		</property>
 	</bean>
