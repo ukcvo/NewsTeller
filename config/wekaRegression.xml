@@ -244,7 +244,7 @@
 		</property>
 	</bean>
 
-	<bean id="r_randomForest" class="weka.classifiers.meta.FilteredClassifier">
+	<bean id="r_randomForest" class="weka.classifiers.meta.RandomizableFilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
@@ -253,7 +253,7 @@
 		</property>
 	</bean>
 
-	<bean id="r_randomForest2" class="weka.classifiers.meta.FilteredClassifier">
+	<bean id="r_randomForest2" class="weka.classifiers.meta.RandomizableFilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
@@ -304,7 +304,7 @@
 		</property>
 	</bean>
 
-	<bean id="r_randomForest_A" class="weka.classifiers.meta.FilteredClassifier">
+	<bean id="r_randomForest_A" class="weka.classifiers.meta.RandomizableFilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
@@ -319,7 +319,7 @@
 		</property>
 	</bean>
 
-	<bean id="r_randomForest_B" class="weka.classifiers.meta.FilteredClassifier">
+	<bean id="r_randomForest_B" class="weka.classifiers.meta.RandomizableFilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
@@ -334,7 +334,7 @@
 		</property>
 	</bean>
 	
-	<bean id="r_randomForest_C" class="weka.classifiers.meta.FilteredClassifier">
+	<bean id="r_randomForest_C" class="weka.classifiers.meta.RandomizableFilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
@@ -349,7 +349,7 @@
 		</property>
 	</bean>
 	
-	<bean id="r_randomForest_D" class="weka.classifiers.meta.FilteredClassifier">
+	<bean id="r_randomForest_D" class="weka.classifiers.meta.RandomizableFilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
@@ -364,7 +364,7 @@
 		</property>
 	</bean>
 	
-	<bean id="r_randomForest_E" class="weka.classifiers.meta.FilteredClassifier">
+	<bean id="r_randomForest_E" class="weka.classifiers.meta.RandomizableFilteredClassifier">
 		<property name="filter" ref="r_removeStringFilter" />
 		<property name="classifier">
 			<bean class="weka.classifiers.trees.RandomForest">
