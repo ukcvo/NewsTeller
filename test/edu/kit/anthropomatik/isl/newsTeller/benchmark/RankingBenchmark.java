@@ -245,126 +245,128 @@ public class RankingBenchmark {
 			filter.setInputFormat(dataSet);
 			Instances modifiedDataSet = Filter.useFilter(dataSet, filter);
 
-			Evaluation eval = new Evaluation(modifiedDataSet);
+			double rmse = 0;
+			double correlation = 0;
 			double ndcg = 0;
-			int ndcgNaNs = 0;
 			double relativeTopRank = 0;
-			int relativeTopRankNaNs = 0;
 			double topRank = 0;
 			double precision0At1 = 0;
 			double precision0At1Norm = 0;
-			int precision0At1NormNaNs = 0;
 			double precision1At1 = 0;
 			double precision1At1Norm = 0;
-			int precision1At1NormNaNs = 0;
 			
-			Enumeration<Object> enumeration = modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
-			while (enumeration.hasMoreElements()) {
-
-				Evaluation evalLocal = new Evaluation(modifiedDataSet);
-				String fileName = (String) enumeration.nextElement();
-				Integer idx = modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
-
-				Instances train = filterByFileName(modifiedDataSet, idx, false);
-				Instances test = filterByFileName(modifiedDataSet, idx, true);
-
-				double avgNDCG = 0;
-				int avgNdcgNaNs = 0;
-				double avgRelativeTopRank = 0;
-				int avgRelativeTopRankNaNs = 0;
-				double avgTopRank = 0;
-				double avgPrecision0At1 = 0;
-				double avgPrecision0At1Norm = 0;
-				int avgPrecision0At1NormNaNs = 0;
-				double avgPrecision1At1 = 0;
-				double avgPrecision1At1Norm = 0;
-				int avgPrecision1At1NormNaNs = 0;
-				
-				List<Classifier> regressorsToAverage = new ArrayList<Classifier>();
-				if (regressor instanceof Randomizable && !this.outputRankings) { 
-					// randomizable classifier, so take average over run with 10 different deterministic seeds
-					Random rand = new Random(1);
-					for (int i = 0; i < 10; i++) {
-						Classifier copy = AbstractClassifier.makeCopy(regressor);
-						((Randomizable) copy).setSeed(rand.nextInt());
-						regressorsToAverage.add(copy);
-					}
-				} else {
-					// not randomizable, so only do work once
-					regressorsToAverage.add(AbstractClassifier.makeCopy(regressor));
+			List<Classifier> regressorsToAverage = new ArrayList<Classifier>();
+			if (regressor instanceof Randomizable) { 
+				// randomizable classifier, so take average over run with 10 different deterministic seeds
+				Random rand = new Random(1);
+				for (int i = 0; i < 10; i++) {
+					Classifier copy = AbstractClassifier.makeCopy(regressor);
+					((Randomizable) copy).setSeed(rand.nextInt());
+					regressorsToAverage.add(copy);
 				}
+			} else {
+				// not randomizable, so only do work once
+				regressorsToAverage.add(AbstractClassifier.makeCopy(regressor));
+			}
+			
+			for (Classifier r : regressorsToAverage) {
 				
-				for (Classifier r : regressorsToAverage) {
+				Evaluation eval = new Evaluation(modifiedDataSet);
+				double regNDCG = 0;
+				int regNdcgNaNs = 0;
+				double regRelativeTopRank = 0;
+				int regRelativeTopRankNaNs = 0;
+				double regTopRank = 0;
+				double regPrecision0At1 = 0;
+				double regPrecision0At1Norm = 0;
+				int regPrecision0At1NormNaNs = 0;
+				double regPrecision1At1 = 0;
+				double regPrecision1At1Norm = 0;
+				int regPrecision1At1NormNaNs = 0;
+				
+				Enumeration<Object> enumeration = modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
+				while (enumeration.hasMoreElements()) {
+
+					Evaluation evalLocal = new Evaluation(modifiedDataSet);
+					String fileName = (String) enumeration.nextElement();
+					Integer idx = modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
+
+					Instances train = filterByFileName(modifiedDataSet, idx, false);
+					Instances test = filterByFileName(modifiedDataSet, idx, true);
+					
 					r.buildClassifier(train);
 					eval.evaluateModel(r, test);
 					evalLocal.evaluateModel(r, test);
 
 					double localNDCG = computeNDCG(evalLocal.predictions());
 					if (Double.isNaN(localNDCG))
-						avgNdcgNaNs = 1;
+						regNdcgNaNs = 1;
 					else
-						avgNDCG += localNDCG;
-					avgTopRank += computeTopRank(evalLocal.predictions(), false, 1);
+						regNDCG += localNDCG;
+					regTopRank += computeTopRank(evalLocal.predictions(), false, 1);
 					double localRelativeTopRank = computeTopRank(evalLocal.predictions(), true, 1);
 					if (Double.isNaN(localRelativeTopRank))
-						avgRelativeTopRankNaNs = 1;
+						regRelativeTopRankNaNs++;
 					else
-						avgRelativeTopRank += localRelativeTopRank;
+						regRelativeTopRank += localRelativeTopRank;
 					
-					avgPrecision0At1 += computePrecision(evalLocal.predictions(), 1, 0, false);
+					regPrecision0At1 += computePrecision(evalLocal.predictions(), 1, 0, false);
 					double localPrecision0At1Norm = computePrecision(evalLocal.predictions(), 1, 0, true);
 					if (Double.isNaN(localPrecision0At1Norm))
-						avgPrecision0At1NormNaNs = 1;
+						regPrecision0At1NormNaNs++;
 					else
-						avgPrecision0At1Norm += localPrecision0At1Norm;
+						regPrecision0At1Norm += localPrecision0At1Norm;
 					
-					avgPrecision1At1 += computePrecision(evalLocal.predictions(), 1, 1, false);
+					regPrecision1At1 += computePrecision(evalLocal.predictions(), 1, 1, false);
 					double localPrecision1At1Norm = computePrecision(evalLocal.predictions(), 1, 1, true);
 					if (Double.isNaN(localPrecision1At1Norm))
-						avgPrecision1At1NormNaNs = 1;
+						regPrecision1At1NormNaNs++;
 					else
-						avgPrecision1At1Norm += localPrecision1At1Norm;
+						regPrecision1At1Norm += localPrecision1At1Norm;
 					
 					if (this.outputRankings && log.isInfoEnabled())
 						logRankings(r, test);
 				}
+				if (this.outputRankings && log.isInfoEnabled())
+					log.info("-----------------------------");
+				rmse += eval.rootMeanSquaredError();
 				
-				avgNDCG /= regressorsToAverage.size();
-				ndcg += avgNDCG;
-				ndcgNaNs += avgNdcgNaNs;
+				correlation += eval.correlationCoefficient();
 				
-				avgRelativeTopRank /= regressorsToAverage.size();
-				relativeTopRank += avgRelativeTopRank;
-				relativeTopRankNaNs += avgRelativeTopRankNaNs;
+				regNDCG /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regNdcgNaNs);
+				ndcg += regNDCG;
 				
-				avgTopRank /= regressorsToAverage.size();
-				topRank += avgTopRank;
+				regRelativeTopRank /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regRelativeTopRankNaNs);
+				relativeTopRank += regRelativeTopRank;
 				
-				avgPrecision0At1 /= regressorsToAverage.size();
-				precision0At1 += avgPrecision0At1;
+				regTopRank /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				topRank += regTopRank;
 				
-				avgPrecision0At1Norm /= regressorsToAverage.size();
-				precision0At1Norm += avgPrecision0At1Norm;
-				precision0At1NormNaNs += avgPrecision0At1NormNaNs;
+				regPrecision0At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				precision0At1 += regPrecision0At1;
 				
-				avgPrecision1At1 /= regressorsToAverage.size();
-				precision1At1 += avgPrecision1At1;
+				regPrecision0At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision0At1NormNaNs);
+				precision0At1Norm += regPrecision0At1Norm;
 				
-				avgPrecision1At1Norm /= regressorsToAverage.size();
-				precision1At1Norm += avgPrecision1At1Norm;
-				precision1At1NormNaNs += avgPrecision1At1NormNaNs;
+				regPrecision1At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				precision1At1 += regPrecision1At1;
+				
+				regPrecision1At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision1At1NormNaNs);
+				precision1At1Norm += regPrecision1At1Norm;
 			}
 
-			ndcg /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - ndcgNaNs);
-			topRank /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			relativeTopRank /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - relativeTopRankNaNs);
-			precision0At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			precision0At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - precision0At1NormNaNs);
-			precision1At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			precision1At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - precision1At1NormNaNs);
+			rmse /= regressorsToAverage.size();
+			correlation /= regressorsToAverage.size();
+			ndcg /= regressorsToAverage.size();
+			topRank /= regressorsToAverage.size();
+			relativeTopRank /= regressorsToAverage.size();
+			precision0At1 /= regressorsToAverage.size();
+			precision0At1Norm /= regressorsToAverage.size();
+			precision1At1 /= regressorsToAverage.size();
+			precision1At1Norm /= regressorsToAverage.size();
 			
-			resultMap.put("RMSE", eval.rootMeanSquaredError());
-			resultMap.put("correlation", eval.correlationCoefficient());
+			resultMap.put("RMSE", rmse);
+			resultMap.put("correlation", correlation);
 			resultMap.put("NDCG", ndcg);
 			resultMap.put("avg top 1", topRank);
 			resultMap.put("avg top 1 norm", relativeTopRank);
@@ -375,7 +377,7 @@ public class RankingBenchmark {
 			
 			if (log.isInfoEnabled()) {
 				log.info(String.format("%s (query-based)", regressorName));
-				logEvalResults(eval, ndcg, topRank, relativeTopRank, precision0At1, precision0At1Norm, precision1At1, precision1At1Norm);
+				logEvalResults(rmse, correlation, ndcg, topRank, relativeTopRank, precision0At1, precision0At1Norm, precision1At1, precision1At1Norm);
 			}
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
@@ -981,56 +983,54 @@ public class RankingBenchmark {
 			userFilter.setInputFormat(dataSet);
 			Instances modifiedDataSet = Filter.useFilter(dataSet, userFilter);
 
-			Evaluation eval = new Evaluation(modifiedDataSet);
+			double rmse = 0;
+			double correlation = 0;
 			double ndcg = 0;
-			int ndcgNaNs = 0;
 			double relativeTopRank = 0;
-			int relativeTopRankNaNs = 0;
 			double topRank = 0;
 			double precision0At1 = 0;
 			double precision0At1Norm = 0;
-			int precision0At1NormNaNs = 0;
 			double precision1At1 = 0;
 			double precision1At1Norm = 0;
-			int precision1At1NormNaNs = 0;
 			
-			Enumeration<Object> userEnumeration = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).enumerateValues();
-			while (userEnumeration.hasMoreElements()) {
-
-				String userName = (String) userEnumeration.nextElement();
-				Integer userIdx = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).indexOfValue(userName) + 1;
-
-				Instances train = filterByUserName(modifiedDataSet, userIdx, false);
-				Instances test = filterByUserName(modifiedDataSet, userIdx, true);
-
-				double avgNDCG = 0;
-				int avgNdcgNaNs = 0;
-				double avgRelativeTopRank = 0;
-				int avgRelativeTopRankNaNs = 0;
-				double avgTopRank = 0;
-				double avgPrecision0At1 = 0;
-				double avgPrecision0At1Norm = 0;
-				int avgPrecision0At1NormNaNs = 0;
-				double avgPrecision1At1 = 0;
-				double avgPrecision1At1Norm = 0;
-				int avgPrecision1At1NormNaNs = 0;
-				
-				List<Classifier> regressorsToAverage = new ArrayList<Classifier>();
-				if (regressor instanceof Randomizable && !this.outputRankings) { 
-					// randomizable classifier, so take average over run with 10 different deterministic seeds
-					Random rand = new Random(1);
-					for (int i = 0; i < 10; i++) {
-						Classifier copy = AbstractClassifier.makeCopy(regressor);
-						((Randomizable) copy).setSeed(rand.nextInt());
-						regressorsToAverage.add(copy);
-					}
-				} else {
-					// not randomizable, so only do work once
-					regressorsToAverage.add(AbstractClassifier.makeCopy(regressor));
+			List<Classifier> regressorsToAverage = new ArrayList<Classifier>();
+			if (regressor instanceof Randomizable) { 
+				// randomizable classifier, so take average over run with 10 different deterministic seeds
+				Random rand = new Random(1);
+				for (int i = 0; i < 10; i++) {
+					Classifier copy = AbstractClassifier.makeCopy(regressor);
+					((Randomizable) copy).setSeed(rand.nextInt());
+					regressorsToAverage.add(copy);
 				}
-				
-				for (Classifier r : regressorsToAverage) {
+			} else {
+				// not randomizable, so only do work once
+				regressorsToAverage.add(AbstractClassifier.makeCopy(regressor));
+			}
+			
+			for (Classifier r : regressorsToAverage) {
 
+				Evaluation eval = new Evaluation(modifiedDataSet);
+				double regNDCG = 0;
+				int regNdcgNaNs = 0;
+				double regRelativeTopRank = 0;
+				int regRelativeTopRankNaNs = 0;
+				double regTopRank = 0;
+				double regPrecision0At1 = 0;
+				double regPrecision0At1Norm = 0;
+				int regPrecision0At1NormNaNs = 0;
+				double regPrecision1At1 = 0;
+				double regPrecision1At1Norm = 0;
+				int regPrecision1At1NormNaNs = 0;
+				
+				Enumeration<Object> userEnumeration = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).enumerateValues();
+				while (userEnumeration.hasMoreElements()) {
+
+					String userName = (String) userEnumeration.nextElement();
+					Integer userIdx = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).indexOfValue(userName) + 1;
+	
+					Instances train = filterByUserName(modifiedDataSet, userIdx, false);
+					Instances test = filterByUserName(modifiedDataSet, userIdx, true);
+	
 					r.buildClassifier(train);
 					
 					StringToNominal fileFilter = new StringToNominal();
@@ -1039,11 +1039,6 @@ public class RankingBenchmark {
 					fileFilter.setInputFormat(test);
 					Instances modifiedTest = Filter.useFilter(test, fileFilter);
 
-					int localNdcgNaNs = 0;
-					int localRelativeTopRankNaNs = 0;
-					int localPrecision0At1NormNaNs = 0;
-					int localPrecision1At1NormNaNs = 0;
-					
 					Enumeration<Object> fileEnumeration = modifiedTest.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
 					while (fileEnumeration.hasMoreElements()) {
 						Evaluation evalLocal = new Evaluation(modifiedTest);
@@ -1056,77 +1051,76 @@ public class RankingBenchmark {
 
 						double localNDCG = computeNDCG(evalLocal.predictions());
 						if (Double.isNaN(localNDCG))
-							localNdcgNaNs++;
+							regNdcgNaNs++;
 						else
-							avgNDCG += localNDCG;
+							regNDCG += localNDCG;
 						double localRelativeTopRank = computeTopRank(evalLocal.predictions(), true, 1);
 						if (Double.isNaN(localRelativeTopRank))
-							localRelativeTopRankNaNs++;
+							regRelativeTopRankNaNs++;
 						else
-							avgRelativeTopRank += localRelativeTopRank;
-						avgTopRank += computeTopRank(evalLocal.predictions(), false, 1);
+							regRelativeTopRank += localRelativeTopRank;
+						regTopRank += computeTopRank(evalLocal.predictions(), false, 1);
 						
-						avgPrecision0At1 += computePrecision(evalLocal.predictions(), 1, 0, false);
+						regPrecision0At1 += computePrecision(evalLocal.predictions(), 1, 0, false);
 						double localPrecision0At1Norm = computePrecision(evalLocal.predictions(), 1, 0, true);
 						if (Double.isNaN(localPrecision0At1Norm))
-							localPrecision0At1NormNaNs++;
+							regPrecision0At1NormNaNs++;
 						else
-							avgPrecision0At1Norm += localPrecision0At1Norm;
+							regPrecision0At1Norm += localPrecision0At1Norm;
 						
-						avgPrecision1At1 += computePrecision(evalLocal.predictions(), 1, 1, false);
+						regPrecision1At1 += computePrecision(evalLocal.predictions(), 1, 1, false);
 						double localPrecision1At1Norm = computePrecision(evalLocal.predictions(), 1, 1, true);
 						if (Double.isNaN(localPrecision1At1Norm))
-							localPrecision1At1NormNaNs++;
+							regPrecision1At1NormNaNs++;
 						else
-							avgPrecision1At1Norm += localPrecision1At1Norm;
+							regPrecision1At1Norm += localPrecision1At1Norm;
 						
 						if (this.outputRankings && log.isInfoEnabled())
 							logRankings(r, query);
 					}
 					
-					avgNdcgNaNs = Math.max(avgNdcgNaNs, localNdcgNaNs);
-					avgRelativeTopRankNaNs = Math.max(avgRelativeTopRankNaNs, localRelativeTopRankNaNs);
-					avgPrecision0At1NormNaNs = Math.max(avgPrecision0At1NormNaNs, localPrecision0At1NormNaNs);
-					avgPrecision1At1NormNaNs = Math.max(avgPrecision1At1NormNaNs, localPrecision1At1NormNaNs);
+					
 				}
 				
-				avgNDCG /= regressorsToAverage.size();
-				ndcg += avgNDCG;
-				ndcgNaNs += avgNdcgNaNs;
+				rmse += eval.rootMeanSquaredError();
 				
-				avgRelativeTopRank /= regressorsToAverage.size();
-				relativeTopRank += avgRelativeTopRank;
-				relativeTopRankNaNs += avgRelativeTopRankNaNs;
+				correlation += eval.correlationCoefficient();
 				
-				avgTopRank /= regressorsToAverage.size();
-				topRank += avgTopRank;
+				regNDCG /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regNdcgNaNs);
+				ndcg += regNDCG;
 				
-				avgPrecision0At1 /= regressorsToAverage.size();
-				precision0At1 += avgPrecision0At1;
+				regRelativeTopRank /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regRelativeTopRankNaNs);
+				relativeTopRank += regRelativeTopRank;
 				
-				avgPrecision0At1Norm /= regressorsToAverage.size();
-				precision0At1Norm += avgPrecision0At1Norm;
-				precision0At1NormNaNs += avgPrecision0At1NormNaNs;
+				regTopRank /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				topRank += regTopRank;
 				
-				avgPrecision1At1 /= regressorsToAverage.size();
-				precision1At1 += avgPrecision1At1;
+				regPrecision0At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				precision0At1 += regPrecision0At1;
 				
-				avgPrecision1At1Norm /= regressorsToAverage.size();
-				precision1At1Norm += avgPrecision1At1Norm;
-				precision1At1NormNaNs += avgPrecision1At1NormNaNs;
+				regPrecision0At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision0At1NormNaNs);
+				precision0At1Norm += regPrecision0At1Norm;
+				
+				regPrecision1At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				precision1At1 += regPrecision1At1;
+				
+				regPrecision1At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision1At1NormNaNs);
+				precision1At1Norm += regPrecision1At1Norm;
 				
 			}
 
-			ndcg /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - ndcgNaNs);
-			relativeTopRank /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - relativeTopRankNaNs);
-			topRank /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			precision0At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			precision0At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - precision0At1NormNaNs);
-			precision1At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
-			precision1At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - precision1At1NormNaNs);
+			rmse /= regressorsToAverage.size();
+			correlation /= regressorsToAverage.size();
+			ndcg /= regressorsToAverage.size();
+			relativeTopRank /= regressorsToAverage.size();
+			topRank /= regressorsToAverage.size();
+			precision0At1 /= regressorsToAverage.size();
+			precision0At1Norm /= regressorsToAverage.size();
+			precision1At1 /= regressorsToAverage.size();
+			precision1At1Norm /= regressorsToAverage.size();
 			
-			resultMap.put("RMSE", eval.rootMeanSquaredError());
-			resultMap.put("correlation", eval.correlationCoefficient());
+			resultMap.put("RMSE", rmse);
+			resultMap.put("correlation", correlation);
 			resultMap.put("NDCG", ndcg);
 			resultMap.put("avg top 1 norm", relativeTopRank);
 			resultMap.put("avg top 1", topRank);
@@ -1137,7 +1131,7 @@ public class RankingBenchmark {
 			
 			if (log.isInfoEnabled()) {
 				log.info(String.format("%s (user-based)", regressorName));
-				logEvalResults(eval, ndcg, topRank, relativeTopRank, precision0At1, precision0At1Norm, precision1At1, precision1At1Norm);
+				logEvalResults(rmse, correlation, ndcg, topRank, relativeTopRank, precision0At1, precision0At1Norm, precision1At1, precision1At1Norm);
 			}
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
@@ -1150,14 +1144,21 @@ public class RankingBenchmark {
 
 	}
 	
-	private void logEvalResults(Evaluation eval, double ndcg, double topRank, double relativeTopRank, double precision0At1, double precision0At1Norm, double precision1At1, double precision1At1Norm) {
-		log.info(String.format("RMSE: %f", eval.rootMeanSquaredError()));
+	private void logEvalResults(Evaluation eval, double ndcg, double topRank, double relativeTopRank, double precision0At1, double precision0At1Norm, 
+								double precision1At1, double precision1At1Norm) {
+		double rmse = eval.rootMeanSquaredError();
+		double correlation = 0;
 		try {
-			log.info(String.format("correlation coefficient: %f", eval.correlationCoefficient()));
+			correlation = eval.correlationCoefficient();
 		} catch (Exception e) {
 			if (log.isWarnEnabled())
 				log.warn("cannot compute correlation coefficient!");
 		}
+		logEvalResults(rmse, correlation, ndcg, topRank, relativeTopRank, precision0At1, precision0At1Norm, precision1At1, precision1At1Norm);
+	}
+	private void logEvalResults(double rmse, double correlation, double ndcg, double topRank, double relativeTopRank, double precision0At1, double precision0At1Norm, double precision1At1, double precision1At1Norm) {
+		log.info(String.format("RMSE: %f", rmse));
+		log.info(String.format("correlation coefficient: %f", correlation));
 		log.info(String.format("NDCG: %f", ndcg));
 		log.info(String.format("average rank of top 1: %f", topRank));
 		log.info(String.format("average normalized rank of top 1: %f", relativeTopRank));
