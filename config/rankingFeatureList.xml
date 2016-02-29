@@ -15,6 +15,15 @@
 	<util:list id="rankingFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
 
+		<!-- preselected UM -->
+		<ref bean="BM25FeatureSentence1.2true" />
+		<ref bean="BM25FeatureSentence1.4true" />
+		<ref bean="BM25FeatureText1.4true" />
+		<ref bean="BM25FeatureText1.7true" />
+		<ref bean="BM25FeatureTitle1.6true" />
+		<ref bean="BM25FeatureTitle1.9true" />
+		
+		<!-- all UM features
 		<ref bean="BM25FeatureSentence1.2true" />
 		<ref bean="BM25FeatureSentence1.3true" />
 		<ref bean="BM25FeatureSentence1.4true" />
@@ -400,7 +409,8 @@
 		<ref bean="interestQueryEmbeddingsFeature31" />
 		<ref bean="interestQueryEmbeddingsFeature32" />
 		<ref bean="interestQueryEmbeddingsFeature33" />
-		
+		 -->
+		 
 		<!-- final selected no UM
 		<ref bean="textEmbeddingsFeature11f" />
 		<ref bean="textEmbeddingsFeature13f" />

@@ -108,7 +108,8 @@ public class BM25Feature extends RankingFeature {
 		for (String keyword : keywordsToUse) {
 			double tf = termFrequency(keyword, eventDocuments);
 			double idf = inverseDocumentFrequency(keyword, allDocuments);
-			
+			if (this.useUserInterestsInsteadOfQuery && Double.isInfinite(idf)) // dirty bugfix...
+				idf = 0;
 			double localResult = idf * tf * (k1 + 1);
 			localResult = localResult / (tf + k1 * (0.25 + 0.75 * (allDocuments.size()/averageDocumentLength)));
 			result += localResult;
