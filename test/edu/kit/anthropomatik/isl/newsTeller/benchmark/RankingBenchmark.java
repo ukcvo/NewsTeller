@@ -89,6 +89,8 @@ public class RankingBenchmark {
 	
 	private boolean outputRankings;
 
+	private boolean includeIndividualUserMetrics;
+	
 	// region setters
 	public void setRegressors(Map<String, Classifier> regressors) {
 		this.regressors = regressors;
@@ -163,6 +165,10 @@ public class RankingBenchmark {
 	
 	public void setOutputRankings(boolean outputRankings) {
 		this.outputRankings = outputRankings;
+	}
+	
+	public void setIncludeIndividualUserMetrics(boolean includeIndividualUserMetrics) {
+		this.includeIndividualUserMetrics = includeIndividualUserMetrics;
 	}
 	// endregion
 	
@@ -246,12 +252,23 @@ public class RankingBenchmark {
 
 		try {
 
-			StringToNominal filter = new StringToNominal();
-			int attributeIdx = dataSet.attribute(Util.ATTRIBUTE_FILE).index() + 1; // conversion from 0-based to 1-based indices...
-			filter.setAttributeRange(Integer.toString(attributeIdx));
-			filter.setInputFormat(dataSet);
-			Instances modifiedDataSet = Filter.useFilter(dataSet, filter);
+			StringToNominal userFilter = new StringToNominal();
+			int userAttributeIdx = dataSet.attribute(Util.ATTRIBUTE_USER).index() + 1;
+			userFilter.setAttributeRange(Integer.toString(userAttributeIdx));
+			userFilter.setInputFormat(dataSet);
+			Instances modifiedDataSet = Filter.useFilter(dataSet, userFilter);
 
+			// also use old data set as "always train"
+			int oldDataUserIdx = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).indexOfValue(this.oldDataUserName) + 1;
+			Instances alwaysTrain = filterByUserName(modifiedDataSet, oldDataUserIdx, true);
+			Instances leaveOneOut = filterByUserName(modifiedDataSet, oldDataUserIdx, false);
+			
+			StringToNominal fileFilter = new StringToNominal();
+			int fileAttributeIdx = leaveOneOut.attribute(Util.ATTRIBUTE_FILE).index() + 1;
+			fileFilter.setAttributeRange(Integer.toString(fileAttributeIdx));
+			fileFilter.setInputFormat(leaveOneOut);
+			leaveOneOut = Filter.useFilter(leaveOneOut, fileFilter);
+			
 			double rmse = 0;
 			double correlation = 0;
 			double ndcg = 0;
@@ -276,9 +293,12 @@ public class RankingBenchmark {
 				regressorsToAverage.add(AbstractClassifier.makeCopy(regressor));
 			}
 			
-			for (Classifier r : regressorsToAverage) {
+			if (this.outputRankings && log.isInfoEnabled())
+				log.info("predicted;actual;max");
+			
+			for (Classifier reg : regressorsToAverage) {
 				
-				Evaluation eval = new Evaluation(modifiedDataSet);
+				Evaluation eval = new Evaluation(leaveOneOut);
 				double regNDCG = 0;
 				int regNdcgNaNs = 0;
 				double regRelativeTopRank = 0;
@@ -291,16 +311,20 @@ public class RankingBenchmark {
 				double regPrecision1At1Norm = 0;
 				int regPrecision1At1NormNaNs = 0;
 				
-				Enumeration<Object> enumeration = modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
+				Enumeration<Object> enumeration = leaveOneOut.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
 				while (enumeration.hasMoreElements()) {
 
-					Evaluation evalLocal = new Evaluation(modifiedDataSet);
+					Evaluation evalLocal = new Evaluation(leaveOneOut);
 					String fileName = (String) enumeration.nextElement();
-					Integer idx = modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
+					Integer idx = leaveOneOut.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
 
-					Instances train = filterByFileName(modifiedDataSet, idx, false);
-					Instances test = filterByFileName(modifiedDataSet, idx, true);
+					Instances train = filterByFileName(leaveOneOut, idx, false);
+					train.addAll(alwaysTrain);
+					Instances test = filterByFileName(leaveOneOut, idx, true);
+					if (test.isEmpty())
+						continue; // skip, as this file name is obsolete
 					
+					Classifier r = AbstractClassifier.makeCopy(reg);
 					r.buildClassifier(train);
 					eval.evaluateModel(r, test);
 					evalLocal.evaluateModel(r, test);
@@ -334,31 +358,30 @@ public class RankingBenchmark {
 					if (this.outputRankings && log.isInfoEnabled())
 						logRankings(r, test);
 				}
-				if (this.outputRankings && log.isInfoEnabled())
-					log.info("-----------------------------");
+
 				rmse += eval.rootMeanSquaredError();
 				
 				correlation += eval.correlationCoefficient();
 				
-				regNDCG /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regNdcgNaNs);
+				regNDCG /= (leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues() - regNdcgNaNs);
 				ndcg += regNDCG;
 				
-				regRelativeTopRank /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regRelativeTopRankNaNs);
+				regRelativeTopRank /= (leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues() - regRelativeTopRankNaNs);
 				relativeTopRank += regRelativeTopRank;
 				
-				regTopRank /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				regTopRank /= leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues();
 				topRank += regTopRank;
 				
-				regPrecision0At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				regPrecision0At1 /= leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues();
 				precision0At1 += regPrecision0At1;
 				
-				regPrecision0At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision0At1NormNaNs);
+				regPrecision0At1Norm /= (leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision0At1NormNaNs);
 				precision0At1Norm += regPrecision0At1Norm;
 				
-				regPrecision1At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				regPrecision1At1 /= leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues();
 				precision1At1 += regPrecision1At1;
 				
-				regPrecision1At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision1At1NormNaNs);
+				regPrecision1At1Norm /= (leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision1At1NormNaNs);
 				precision1At1Norm += regPrecision1At1Norm;
 			}
 
@@ -418,10 +441,14 @@ public class RankingBenchmark {
 
 		try {
 			List<RankEntry> ranking = new ArrayList<RankEntry>();
+			double max = 0;
 			for (Instance instance : testData) {
-				String eventURI = instance.stringValue(testData.attribute(Util.ATTRIBUTE_URI));
-				double actual = instance.classValue();
-				double predicted = regressor.classifyInstance(instance);
+				//String eventURI = instance.stringValue(testData.attribute(Util.ATTRIBUTE_URI));
+				String eventURI = "";
+				double actual = Util.regressionValueToRank(instance.classValue());
+				if (actual > max)
+					max = actual;
+				double predicted = Util.regressionValueToRank(regressor.classifyInstance(instance));
 				ranking.add(new RankEntry(eventURI, actual, predicted));
 			}
 
@@ -432,11 +459,12 @@ public class RankingBenchmark {
 				}
 			});
 
-			log.info(testData.get(0).stringValue(testData.attribute(Util.ATTRIBUTE_FILE)));
-			log.info("event;predicted;actual");
-			for (RankEntry e : ranking)
-				log.info(e.toString());
-			log.info("\n");
+//			log.info(testData.get(0).stringValue(testData.attribute(Util.ATTRIBUTE_FILE)));
+//			log.info("event;predicted;actual");
+//			for (RankEntry e : ranking)
+//				log.info(e.toString());
+//			log.info("\n");
+			log.info(String.format("%f;%f;%f", ranking.get(0).predicted, ranking.get(0).actual, max));
 
 		} catch (Exception e) {
 			if (log.isWarnEnabled())
@@ -883,6 +911,9 @@ public class RankingBenchmark {
 			double precision1At1Norm = 0;
 			int precision1At1NormNaNs = 0;
 			
+			if (this.outputRankings && log.isInfoEnabled())
+				log.info("predicted;actual;max");
+			
 			Enumeration<Object> enumeration = modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
 			while (enumeration.hasMoreElements()) {
 
@@ -960,11 +991,11 @@ public class RankingBenchmark {
 		for (Map.Entry<String, Classifier> entry : this.regressors.entrySet()) {
 			String regressorName = entry.getKey();
 			Classifier regressor = entry.getValue();
-			resultMap.put(regressorName, userBasedRegressionOneRegressor(this.dataSet, regressor, regressorName, true));
+			resultMap.putAll(userBasedRegressionOneRegressor(this.dataSet, regressor, regressorName, true));
 		}
 		
 		List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", ">0 precision @1", ">0 precision @1 norm", 
-														">1 precision @1", ">1 precision @1 norm");
+														">1 precision @1", ">1 precision @1 norm", "min avg top 1 norm", "min >0 precision @1 norm", "min >1 precision @1 norm");
 		Util.writeEvaluationToCsv(this.outputFileName, columnNames, resultMap);
 
 	}
@@ -975,14 +1006,15 @@ public class RankingBenchmark {
 			return new HashMap<String, Double>();
 		String regressorName = this.regressors.keySet().toArray(new String[1])[0];
 		Classifier regressor = this.regressors.get(regressorName);
-		return userBasedRegressionOneRegressor(dataSet, regressor, regressorName, false);
+		return userBasedRegressionOneRegressor(dataSet, regressor, regressorName, false).get(regressorName); // only use overall result
 	}
 	
-	private Map<String, Double> userBasedRegressionOneRegressor(Instances dataSet, Classifier regressor, String regressorName, 
+	private Map<String, Map<String, Double>> userBasedRegressionOneRegressor(Instances dataSet, Classifier regressor, String regressorName, 
 																	boolean averageRandomizables) {
 		
-		Map<String, Double> resultMap = new HashMap<String, Double>();
-
+		Map<String, Map<String, Double>> resultMap = new HashMap<String, Map<String, Double>>();
+		Map<String, Double> overallMap = new HashMap<String, Double>();
+		
 		try {
 
 			StringToNominal userFilter = new StringToNominal();
@@ -1006,6 +1038,10 @@ public class RankingBenchmark {
 			double precision1At1 = 0;
 			double precision1At1Norm = 0;
 			
+			double minRelativeTopRank = 0;
+			double minPrecision0At1Norm = 0;
+			double minPrecision1At1Norm = 0;
+			
 			List<Classifier> regressorsToAverage = new ArrayList<Classifier>();
 			if (regressor instanceof Randomizable && averageRandomizables) { 
 				// randomizable classifier, so take average over run with 10 different deterministic seeds
@@ -1020,7 +1056,7 @@ public class RankingBenchmark {
 				regressorsToAverage.add(AbstractClassifier.makeCopy(regressor));
 			}
 			
-			for (Classifier r : regressorsToAverage) {
+			for (Classifier reg : regressorsToAverage) {
 
 				Evaluation eval = new Evaluation(leaveOneOut);
 				double regNDCG = 0;
@@ -1035,6 +1071,10 @@ public class RankingBenchmark {
 				double regPrecision1At1Norm = 0;
 				int regPrecision1At1NormNaNs = 0;
 				
+				double regMinRelativeTopRank = 1.0;
+				double regMinPrecision0At1Norm = 1.0;
+				double regMinPrecision1At1Norm = 1.0; 
+				
 				Enumeration<Object> userEnumeration = leaveOneOut.attribute(Util.ATTRIBUTE_USER).enumerateValues();
 				while (userEnumeration.hasMoreElements()) {
 
@@ -1047,6 +1087,7 @@ public class RankingBenchmark {
 					train.addAll(alwaysTrain); // always use alwaysTrain
 					Instances test = filterByUserName(leaveOneOut, userIdx, true);
 	
+					Classifier r = AbstractClassifier.makeCopy(reg);
 					r.buildClassifier(train);
 					
 					StringToNominal fileFilter = new StringToNominal();
@@ -1055,6 +1096,19 @@ public class RankingBenchmark {
 					fileFilter.setInputFormat(test);
 					Instances modifiedTest = Filter.useFilter(test, fileFilter);
 
+					double userNDCG = 0;
+					int userNdcgNaNs = 0;
+					double userRelativeTopRank = 0;
+					int userRelativeTopRankNaNs = 0;
+					double userTopRank = 0;
+					double userPrecision0At1 = 0;
+					double userPrecision0At1Norm = 0;
+					int userPrecision0At1NormNaNs = 0;
+					double userPrecision1At1 = 0;
+					double userPrecision1At1Norm = 0;
+					int userPrecision1At1NormNaNs = 0;
+					int numberOfUserQueries = 0;
+					
 					Enumeration<Object> fileEnumeration = modifiedTest.attribute(Util.ATTRIBUTE_FILE).enumerateValues();
 					while (fileEnumeration.hasMoreElements()) {
 						Evaluation evalLocal = new Evaluation(modifiedTest);
@@ -1062,40 +1116,88 @@ public class RankingBenchmark {
 						Integer fileIdx = modifiedTest.attribute(Util.ATTRIBUTE_FILE).indexOfValue(fileName) + 1;
 						
 						Instances query = filterByFileName(modifiedTest, fileIdx, true);
+						if (query.isEmpty())
+							continue;
 						eval.evaluateModel(r, query);
 						evalLocal.evaluateModel(r, query);
 
 						double localNDCG = computeNDCG(evalLocal.predictions());
 						if (Double.isNaN(localNDCG))
-							regNdcgNaNs++;
+							userNdcgNaNs++;
 						else
-							regNDCG += localNDCG;
+							userNDCG += localNDCG;
 						double localRelativeTopRank = computeTopRank(evalLocal.predictions(), true, 1);
 						if (Double.isNaN(localRelativeTopRank))
-							regRelativeTopRankNaNs++;
+							userRelativeTopRankNaNs++;
 						else
-							regRelativeTopRank += localRelativeTopRank;
-						regTopRank += computeTopRank(evalLocal.predictions(), false, 1);
+							userRelativeTopRank += localRelativeTopRank;
+						userTopRank += computeTopRank(evalLocal.predictions(), false, 1);
 						
-						regPrecision0At1 += computePrecision(evalLocal.predictions(), 1, 0, false);
+						userPrecision0At1 += computePrecision(evalLocal.predictions(), 1, 0, false);
 						double localPrecision0At1Norm = computePrecision(evalLocal.predictions(), 1, 0, true);
 						if (Double.isNaN(localPrecision0At1Norm))
-							regPrecision0At1NormNaNs++;
+							userPrecision0At1NormNaNs++;
 						else
-							regPrecision0At1Norm += localPrecision0At1Norm;
+							userPrecision0At1Norm += localPrecision0At1Norm;
 						
-						regPrecision1At1 += computePrecision(evalLocal.predictions(), 1, 1, false);
+						userPrecision1At1 += computePrecision(evalLocal.predictions(), 1, 1, false);
 						double localPrecision1At1Norm = computePrecision(evalLocal.predictions(), 1, 1, true);
 						if (Double.isNaN(localPrecision1At1Norm))
-							regPrecision1At1NormNaNs++;
+							userPrecision1At1NormNaNs++;
 						else
-							regPrecision1At1Norm += localPrecision1At1Norm;
+							userPrecision1At1Norm += localPrecision1At1Norm;
 						
 						if (this.outputRankings && log.isInfoEnabled())
 							logRankings(r, query);
+						
+						numberOfUserQueries++;
 					}
 					
+					// hand over to overall aggregation
+					regNDCG += userNDCG;
+					regNdcgNaNs += userNdcgNaNs;
 					
+					regRelativeTopRank += userRelativeTopRank;
+					regRelativeTopRankNaNs += userRelativeTopRankNaNs;
+					regTopRank += userTopRank;
+					
+					regPrecision0At1 += userPrecision0At1;
+					regPrecision0At1Norm += userPrecision0At1Norm;
+					regPrecision0At1NormNaNs += userPrecision0At1NormNaNs;
+					
+					regPrecision1At1 += userPrecision1At1;
+					regPrecision1At1Norm += userPrecision1At1Norm;
+					regPrecision1At1NormNaNs += userPrecision1At1NormNaNs;
+					
+					// then aggregate locally
+					userNDCG /= numberOfUserQueries - userNdcgNaNs;
+					userRelativeTopRank /= numberOfUserQueries - userRelativeTopRankNaNs;
+					userTopRank /= numberOfUserQueries;
+					userPrecision0At1 /= numberOfUserQueries;
+					userPrecision0At1Norm /= numberOfUserQueries - userPrecision0At1NormNaNs;
+					userPrecision1At1 /= numberOfUserQueries;
+					userPrecision1At1Norm /= numberOfUserQueries - userPrecision1At1NormNaNs;
+					
+					regMinRelativeTopRank = Math.min(regMinRelativeTopRank, userRelativeTopRank);
+					regMinPrecision0At1Norm = Math.min(regMinPrecision0At1Norm, userPrecision0At1Norm);
+					regMinPrecision1At1Norm = Math.min(regMinPrecision1At1Norm, userPrecision1At1Norm);
+					
+					// now put into map if necessary
+					if (this.includeIndividualUserMetrics) {
+						String userKey = regressorName + "_" + userName;
+						Map<String, Double> userMap = resultMap.containsKey(userKey) ? resultMap.get(userKey) : new HashMap<String, Double>();
+						
+						userMap.put("NDCG", userMap.getOrDefault("NDCG", 0.0) + userNDCG);
+						userMap.put("avg top 1 norm", userMap.getOrDefault("avg top 1 norm", 0.0) + userRelativeTopRank);
+						userMap.put("avg top 1", userMap.getOrDefault("avg top 1", 0.0) + userTopRank);
+						userMap.put(">0 precision @1", userMap.getOrDefault(">0 precision @1", 0.0) + userPrecision0At1);
+						userMap.put(">0 precision @1 norm", userMap.getOrDefault(">0 precision @1 norm", 0.0) + userPrecision0At1Norm);
+						userMap.put(">1 precision @1", userMap.getOrDefault(">1 precision @1", 0.0) + userPrecision1At1);
+						userMap.put(">1 precision @1 norm", userMap.getOrDefault(">1 precision @1 norm", 0.0) + userPrecision1At1Norm);
+						
+						if (!resultMap.containsKey(userKey))
+							resultMap.put(userKey, userMap);
+					}
 				}
 				
 				rmse += eval.rootMeanSquaredError();
@@ -1123,6 +1225,9 @@ public class RankingBenchmark {
 				regPrecision1At1Norm /= (leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision1At1NormNaNs);
 				precision1At1Norm += regPrecision1At1Norm;
 				
+				minRelativeTopRank += regMinRelativeTopRank;
+				minPrecision0At1Norm += regMinPrecision0At1Norm;
+				minPrecision1At1Norm += regMinPrecision1At1Norm;
 			}
 
 			rmse /= regressorsToAverage.size();
@@ -1135,15 +1240,31 @@ public class RankingBenchmark {
 			precision1At1 /= regressorsToAverage.size();
 			precision1At1Norm /= regressorsToAverage.size();
 			
-			resultMap.put("RMSE", rmse);
-			resultMap.put("correlation", correlation);
-			resultMap.put("NDCG", ndcg);
-			resultMap.put("avg top 1 norm", relativeTopRank);
-			resultMap.put("avg top 1", topRank);
-			resultMap.put(">0 precision @1", precision0At1);
-			resultMap.put(">0 precision @1 norm", precision0At1Norm);
-			resultMap.put(">1 precision @1", precision1At1);
-			resultMap.put(">1 precision @1 norm", precision1At1Norm);
+			for (String userKey : resultMap.keySet()) {
+				Map<String, Double> userMap = resultMap.get(userKey);
+				for (Map.Entry<String, Double> entry : userMap.entrySet()) 
+					userMap.put(entry.getKey(), entry.getValue() / regressorsToAverage.size());
+			}
+			
+			minRelativeTopRank /= regressorsToAverage.size();
+			minPrecision0At1Norm /= regressorsToAverage.size();
+			minPrecision1At1Norm /= regressorsToAverage.size();
+			
+			overallMap.put("RMSE", rmse);
+			overallMap.put("correlation", correlation);
+			overallMap.put("NDCG", ndcg);
+			overallMap.put("avg top 1 norm", relativeTopRank);
+			overallMap.put("avg top 1", topRank);
+			overallMap.put(">0 precision @1", precision0At1);
+			overallMap.put(">0 precision @1 norm", precision0At1Norm);
+			overallMap.put(">1 precision @1", precision1At1);
+			overallMap.put(">1 precision @1 norm", precision1At1Norm);
+			
+			overallMap.put("min avg top 1 norm", minRelativeTopRank);
+			overallMap.put("min >0 precision @1 norm", minPrecision0At1Norm);
+			overallMap.put("min >1 precision @1 norm", minPrecision1At1Norm);
+			
+			resultMap.put(regressorName, overallMap);
 			
 			if (log.isInfoEnabled()) {
 				log.info(String.format("%s (user-based)", regressorName));
@@ -1186,7 +1307,7 @@ public class RankingBenchmark {
 
 	private Instances filterByUserName(Instances dataSet, Integer userNameIdx, boolean isTest) throws Exception {
 
-		if (userNameIdx < 0)  { // if illegal user name: return empty test set and full training set --> should actually never happen
+		if (userNameIdx <= 0)  { // if illegal user name: return empty test set and full training set --> should actually never happen
 			if (log.isWarnEnabled())
 				log.warn(String.format("illegal userNameIdx, returning %s set", isTest ? "empty" : "full"));
 			return isTest ? new Instances(dataSet, 0) : new Instances(dataSet);

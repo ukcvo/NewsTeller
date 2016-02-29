@@ -373,7 +373,7 @@ public class Util {
 				
 				out.write(classifierName);
 				for (String header : columnNames)
-					out.write(map.get(header).toString());
+					out.write(map.getOrDefault(header, 0.0).toString());
 				
 				out.endRecord();
 			}
