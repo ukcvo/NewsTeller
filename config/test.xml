@@ -7,6 +7,8 @@
 
 	<import resource="usabilityFeatures.xml" />
 	<import resource="rankingFeatures.xml" />
+	<import resource="rankingFeaturesUserInterests.xml" />
+	
 	
 	<bean id="ksAdapter"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">

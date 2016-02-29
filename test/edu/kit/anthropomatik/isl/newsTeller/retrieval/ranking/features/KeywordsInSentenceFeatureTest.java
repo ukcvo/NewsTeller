@@ -21,6 +21,7 @@ import com.google.common.collect.Sets;
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.ActualUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -37,7 +38,7 @@ private KnowledgeStoreAdapter ksAdapter;
 	private KeywordsInSentenceFeature containsFeature;
 	private KeywordsInSentenceFeature stemFeature;
 	private KeywordsInSentenceFeature splitFeature;
-	
+	private KeywordsInSentenceFeature interestFeature;
 	
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
@@ -97,6 +98,7 @@ private KnowledgeStoreAdapter ksAdapter;
 		containsFeature = (KeywordsInSentenceFeature) context.getBean("keywordInSentenceFeature00ftff");
 		stemFeature = (KeywordsInSentenceFeature) context.getBean("keywordInSentenceFeature00fftf");
 		splitFeature = (KeywordsInSentenceFeature) context.getBean("keywordInSentenceFeature00ffft");
+		interestFeature = (KeywordsInSentenceFeature) context.getBean("keywordInSentenceFeature00fffftrue");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
@@ -299,4 +301,36 @@ private KnowledgeStoreAdapter ksAdapter;
 		double result = splitFeature.getValue("event-3", Lists.newArrayList(k, k2), userModel);
 		assertTrue(result == 0.125);
 	}
+	
+	@Test
+	public void shouldReturnZeroInterest() {
+		double result = interestFeature.getValue("event-1", keywords, new ActualUserModel(keywords));
+		assertTrue(result == 0.0);
+	}
+
+	@Test
+	public void shouldReturnOneInterest() {
+		double result = interestFeature.getValue("event-2", keywords, new ActualUserModel(keywords));
+		assertTrue(result == 1.0);
+	}
+	
+	@Test
+	public void shouldReturnZeroPointFiveInterest() {
+		double result = interestFeature.getValue("event-3", keywords, new ActualUserModel(keywords));
+		assertTrue(result == 0.5);
+	}
+	
+	@Test
+	public void shouldReturnZeroPointTwoFiveInterest() {
+		double result = interestFeature.getValue("event-3", keywords, new ActualUserModel(twoKeywords));
+		assertTrue(result == 0.25);
+	}
+	
+	@Test
+	public void shouldReturnZeroPointFiveInterestEvent4() {
+		double result = interestFeature.getValue("event-4", keywords, new ActualUserModel(twoKeywords));
+		assertTrue(result == 0.5);
+	}
+	
+	
 }

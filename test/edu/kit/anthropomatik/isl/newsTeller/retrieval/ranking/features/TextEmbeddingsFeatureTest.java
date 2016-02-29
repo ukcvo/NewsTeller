@@ -20,6 +20,7 @@ import com.google.common.collect.Sets;
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.ActualUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -31,13 +32,15 @@ public class TextEmbeddingsFeatureTest {
 	private static TextEmbeddingsFeature maxFeature;
 	private static TextEmbeddingsFeature geomFeature;
 	private static TextEmbeddingsFeature titleFeature;
+	private static TextEmbeddingsFeature interestFeature;
 	
 	private static KnowledgeStoreAdapter ksAdapter;
 	
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 	private static List<Keyword> keywords = new ArrayList<Keyword>();
-	private static UserModel userModel = new DummyUserModel();
+	private static UserModel dummyUserModel = new DummyUserModel();
+	private static UserModel userModel;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -75,12 +78,15 @@ public class TextEmbeddingsFeatureTest {
 		Util.stemKeyword(k);
 		keywords.add(k);
 		
+		userModel = new ActualUserModel(keywords);
+		
 		ApplicationContext context = new FileSystemXmlApplicationContext("config/testEmbeddings.xml");
 		avgFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureAvg");
 		minFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureMin");
 		maxFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureMax");
 		geomFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureGeom");
 		titleFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureTitle");
+		interestFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureAvgUM");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
@@ -88,79 +94,97 @@ public class TextEmbeddingsFeatureTest {
 
 	@Test
 	public void shouldReturnOneAvg() {
-		double value = avgFeature.getValue("event-1", keywords, userModel);
+		double value = avgFeature.getValue("event-1", keywords, dummyUserModel);
 		assertTrue(value == 1.0);
 	}
 
 	@Test
 	public void shouldReturnOneMin() {
-		double value = minFeature.getValue("event-1", keywords, userModel);
+		double value = minFeature.getValue("event-1", keywords, dummyUserModel);
 		assertTrue(value == 1.0);
 	}
 	
 	@Test
 	public void shouldReturnOneMax() {
-		double value = maxFeature.getValue("event-1", keywords, userModel);
+		double value = maxFeature.getValue("event-1", keywords, dummyUserModel);
 		assertTrue(value == 1.0);
 	}
 	
 	@Test
 	public void shouldReturnOneGeom() {
-		double value = geomFeature.getValue("event-1", keywords, userModel);
+		double value = geomFeature.getValue("event-1", keywords, dummyUserModel);
 		assertTrue(value == 1.0);
 	}
 	
 	@Test
+	public void shouldReturnOneInterest() {
+		double value = interestFeature.getValue("event-1", keywords, userModel);
+		assertTrue(value == 1.0);
+	}
+
+	@Test
 	public void shouldReturnZeroPointSixEightAvg() {
-		double value = avgFeature.getValue("event-2", keywords, userModel);
+		double value = avgFeature.getValue("event-2", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 0.6880536740415572) < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnZeroPointTwoAvg() {
-		double value = avgFeature.getValue("event-3", keywords, userModel);
+		double value = avgFeature.getValue("event-3", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 0.20774005092950987) < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnZeroAvg() {
-		double value = avgFeature.getValue("event-4", keywords, userModel);
+		double value = avgFeature.getValue("event-4", keywords, dummyUserModel);
 		assertTrue(value == 0.0);
 	}
 	
 	@Test
+	public void shouldReturnZeroPointSixEightInterest() {
+		double value = interestFeature.getValue("event-2", keywords, userModel);
+		assertTrue(Math.abs(value - 0.6880536740415572) < Util.EPSILON);
+	}
+	
+	@Test
 	public void shouldReturnZeroPointFourFourAvg() {
-		double value = avgFeature.getValue("event-5", keywords, userModel);
+		double value = avgFeature.getValue("event-5", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 0.4478968624855335) < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnZeroPointTwoMin() {
-		double value = minFeature.getValue("event-5", keywords, userModel);
+		double value = minFeature.getValue("event-5", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 0.20774005092950987) < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnZeroPointSixEightMax() {
-		double value = maxFeature.getValue("event-5", keywords, userModel);
+		double value = maxFeature.getValue("event-5", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 0.6880536740415572) < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnZeroPointThreeSevenGeom() {
-		double value = geomFeature.getValue("event-5", keywords, userModel);
+		double value = geomFeature.getValue("event-5", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 0.3780691805577776) < Util.EPSILON);
 	}
 	
 	@Test
+	public void shouldReturnZeroPointFourFourInterest() {
+		double value = interestFeature.getValue("event-5", keywords, userModel);
+		assertTrue(Math.abs(value - 0.4478968624855335) < Util.EPSILON);
+	}
+	
+	@Test
 	public void shouldReturnZeroPointEightNineTitle() {
-		double value = titleFeature.getValue("event-1", keywords, userModel);
+		double value = titleFeature.getValue("event-1", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 0.8953319644352975) < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnZeroPointTwoThreeTitle() {
-		double value = titleFeature.getValue("event-2", keywords, userModel);
+		double value = titleFeature.getValue("event-2", keywords, dummyUserModel);
 		assertTrue(value == 0.23652349958527183);
 	}
 }

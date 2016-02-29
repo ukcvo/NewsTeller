@@ -43,6 +43,13 @@
 		<property name="aggregationType" value="3" />
 	</bean>
 	
+	<bean id="keywordComparisonFeatureAvgUM" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
+		<property name="embeddings" ref="testEmbeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordComparisonAvgUM" />
+		<property name="aggregationType" value="0" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
 
 	<!-- constituent embeddings features -->
 	<bean id="constituentEmbeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
@@ -57,6 +64,19 @@
 		<property name="needsKeywordIteration" value="false" />
 	</bean>
 
+	<bean id="constituentEmbeddingsFeatureAvgUM" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="testEmbeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings00epfUM" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="0" />
+		<property name="valueName" value="entityPrefLabel" />
+		<property name="entityName" value="entity" />
+		<property name="needsKeywordIteration" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
 	<!-- text embeddings features -->
 	<bean id="textEmbeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
@@ -107,5 +127,17 @@
 		<property name="innerAggregationType" value="3" />
 		<property name="useTitleInsteadOfSentence" value="false" />
 	</bean>
+
+	<bean id="textEmbeddingsFeatureAvgUM" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="testEmbeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="embeddings00fUM" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="0" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
 
 </beans>

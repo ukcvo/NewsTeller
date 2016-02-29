@@ -22,6 +22,8 @@ public class KeywordEntitiesFeature extends RankingFeature {
 	
 	private boolean normalizeResult;
 	
+	private boolean useUserInterestsInsteadOfQuery;
+	
 	public void setAggregationType(int aggregationType) {
 		this.aggregationType = aggregationType;
 	}
@@ -38,12 +40,15 @@ public class KeywordEntitiesFeature extends RankingFeature {
 		this.normalizeResult = normalizeResult;
 	}
 	
+	public void setUseUserInterestsInsteadOfQuery(boolean useUserInterestsInsteadOfQuery) {
+		this.useUserInterestsInsteadOfQuery = useUserInterestsInsteadOfQuery;
+	}
+	
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords, UserModel userModel) {
 		double result = (this.aggregationType == AGGREGATION_TYPE_MIN) ? Double.POSITIVE_INFINITY : 0.0;
 		
-		// TODO: userModel
-		List<Keyword> keywordsToUse = keywords;
+		List<Keyword> keywordsToUse = this.useUserInterestsInsteadOfQuery ? userModel.getInterests() : keywords;
 				
 		Set<String> entities = 	ksAdapter.getBufferedValues(Util.getRelationName("event", "entity", keywords.get(0).getWord()), eventURI);
 		

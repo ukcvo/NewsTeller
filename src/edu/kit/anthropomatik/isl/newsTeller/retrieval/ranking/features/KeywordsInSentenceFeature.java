@@ -28,6 +28,8 @@ public class KeywordsInSentenceFeature extends RankingFeature {
 	
 	private boolean splitKeywords;
 	
+	private boolean useUserInterestsInsteadOfQuery;
+	
 	public void setAggregationTypeKeyword(int aggregationTypeKeyword) {
 		this.aggregationTypeKeyword = aggregationTypeKeyword;
 	}
@@ -52,13 +54,16 @@ public class KeywordsInSentenceFeature extends RankingFeature {
 		this.splitKeywords = splitKeywords;
 	}
 	
+	public void setUseUserInterestsInsteadOfQuery(boolean useUserInterestsInsteadOfQuery) {
+		this.useUserInterestsInsteadOfQuery = useUserInterestsInsteadOfQuery;
+	}
+	
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords, UserModel userModel) {
 		
 		double result = (this.aggregationTypeKeyword == AGGREGATION_TYPE_MIN) ? Double.POSITIVE_INFINITY : 0.0;
 		
-		// TODO: can also use userModel.getInterests()
-		List<Keyword> keywordsToUse = keywords;
+		List<Keyword> keywordsToUse = this.useUserInterestsInsteadOfQuery ? userModel.getInterests() : keywords;
 		
 		Set<String> sentences = new HashSet<String>();
 		if (this.useTitleInsteadOfSentence)

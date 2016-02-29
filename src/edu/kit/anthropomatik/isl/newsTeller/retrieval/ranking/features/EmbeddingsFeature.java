@@ -32,6 +32,8 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 	
 	protected boolean shouldWarnIfNoComparisonStrings;
 	
+	private boolean useUserInterestsInsteadOfQuery;
+	
 	public void setInnerAggregationType(int sentenceAggregationType) {
 		this.innerAggregationType = sentenceAggregationType;
 	}
@@ -44,6 +46,11 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 		this.embeddings = embeddings;
 	}
 		
+	public void setUseUserInterestsInsteadOfQuery(boolean useUserInterestsInsteadOfQuery) {
+		this.useUserInterestsInsteadOfQuery = useUserInterestsInsteadOfQuery;
+	}
+	
+	
 	public EmbeddingsFeature(String stopWordsFileName) {
 		this.stopWords = new HashSet<String>();
 		stopWords.addAll(Util.readStringListFromFile(stopWordsFileName));
@@ -69,8 +76,7 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 			break;
 		}
 		
-		// TODO: can make this also applicable to userModel.getInterest() --> boolean flag in class
-		List<Keyword> keywordsToUse = keywords;
+		List<Keyword> keywordsToUse = useUserInterestsInsteadOfQuery ? userModel.getInterests() : keywords;
 		
 		Set<String> comparisonStrings = getComparisonStrings(eventURI, keywordsToUse, userModel);
 		

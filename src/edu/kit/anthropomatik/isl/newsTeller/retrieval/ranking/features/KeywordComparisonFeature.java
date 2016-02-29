@@ -19,12 +19,18 @@ public class KeywordComparisonFeature extends RankingFeature {
 	
 	private EmbeddingsProvider embeddings;
 	
+	private boolean useUserInterestsInsteadOfQuery;
+	
 	public void setAggregationType(int aggregationType) {
 		this.aggregationType = aggregationType;
 	}
 	
 	public void setEmbeddings(EmbeddingsProvider embeddings) {
 		this.embeddings = embeddings;
+	}
+	
+	public void setUseUserInterestsInsteadOfQuery(boolean useUserInterestsInsteadOfQuery) {
+		this.useUserInterestsInsteadOfQuery = useUserInterestsInsteadOfQuery;
 	}
 	
 	@Override
@@ -47,8 +53,7 @@ public class KeywordComparisonFeature extends RankingFeature {
 			break;
 		}
 		
-		// TODO: can make this also applicable to userModel.getInterest() --> boolean flag in class
-		List<Keyword> keywordsToUse = keywords;
+		List<Keyword> keywordsToUse = this.useUserInterestsInsteadOfQuery ? userModel.getInterests() : keywords;
 		
 		// create keyword vectors
 		List<double[]> keywordVectors = new ArrayList<double[]>();

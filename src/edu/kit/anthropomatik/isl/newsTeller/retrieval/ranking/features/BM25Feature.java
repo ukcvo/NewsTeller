@@ -17,6 +17,8 @@ public class BM25Feature extends RankingFeature {
 	
 	private double k1;
 	
+	private boolean useUserInterestsInsteadOfQuery;
+	
 	public void setUseTextInsteadOfSentence(boolean useTextInsteadOfSentence) {
 		this.useTextInsteadOfSentence = useTextInsteadOfSentence;
 	}
@@ -27,6 +29,10 @@ public class BM25Feature extends RankingFeature {
 	
 	public void setK1(double k1) {
 		this.k1 = k1;
+	}
+	
+	public void setUseUserInterestsInsteadOfQuery(boolean useUserInterestsInsteadOfQuery) {
+		this.useUserInterestsInsteadOfQuery = useUserInterestsInsteadOfQuery;
 	}
 	
 	// computes the tf for the given queryWord with respect to all the documents of the current event
@@ -76,9 +82,9 @@ public class BM25Feature extends RankingFeature {
 		
 		String arbitraryKeyword = keywords.get(0).getWord();
 		
-		// TODO: userModel.getInterests()
 		List<String> keywordsToUse = new ArrayList<String>();
-		for (Keyword k : keywords)
+		List<Keyword> originalKeywordsToUse = this.useUserInterestsInsteadOfQuery ? userModel.getInterests() : keywords;
+		for (Keyword k : originalKeywordsToUse)
 			keywordsToUse.addAll(Arrays.asList(k.getWord().split(" ")));
 		
 		Set<List<String>> eventDocuments;

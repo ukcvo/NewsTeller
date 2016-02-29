@@ -1,0 +1,2250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- BM25 features -->
+		<bean id="BM25FeatureSentence1.2true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence1.2true" />
+		<property name="k1" value="1.2" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureSentence1.3true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence1.3true" />
+		<property name="k1" value="1.3" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureSentence1.4true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence1.4true" />
+		<property name="k1" value="1.4" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureSentence1.5true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence1.5true" />
+		<property name="k1" value="1.5" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureSentence1.6true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence1.6true" />
+		<property name="k1" value="1.6" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureSentence1.7true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence1.7true" />
+		<property name="k1" value="1.7" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureSentence1.8true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence1.8true" />
+		<property name="k1" value="1.8" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureSentence1.9true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence1.9true" />
+		<property name="k1" value="1.9" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureSentence2.0true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Sentence2.0true" />
+		<property name="k1" value="2.0" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureText1.2true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.2true" />
+		<property name="k1" value="1.2" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureText1.3true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.3true" />
+		<property name="k1" value="1.3" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureText1.4true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.4true" />
+		<property name="k1" value="1.4" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureText1.5true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.5true" />
+		<property name="k1" value="1.5" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureText1.6true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.6true" />
+		<property name="k1" value="1.6" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureText1.7true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.7true" />
+		<property name="k1" value="1.7" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureText1.8true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.8true" />
+		<property name="k1" value="1.8" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureText1.9true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text1.9true" />
+		<property name="k1" value="1.9" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureText2.0true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Text2.0true" />
+		<property name="k1" value="2.0" />
+		<property name="useTextInsteadOfSentence" value="True" />
+		<property name="useTitleInsteadOfSentence" value="False" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.2true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.2true" />
+		<property name="k1" value="1.2" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.3true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.3true" />
+		<property name="k1" value="1.3" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.4true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.4true" />
+		<property name="k1" value="1.4" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.5true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.5true" />
+		<property name="k1" value="1.5" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.6true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.6true" />
+		<property name="k1" value="1.6" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.7true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.7true" />
+		<property name="k1" value="1.7" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.8true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.8true" />
+		<property name="k1" value="1.8" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureTitle1.9true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title1.9true" />
+		<property name="k1" value="1.9" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="BM25FeatureTitle2.0true" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="BM25Title2.0true" />
+		<property name="k1" value="2.0" />
+		<property name="useTextInsteadOfSentence" value="False" />
+		<property name="useTitleInsteadOfSentence" value="True" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<!-- keyword entities feature -->
+	<bean id="keywordEntitiesFeature0ffptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ffptrue" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ffdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ffdtrue" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ftptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ftptrue" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ftdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ftdtrue" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0tfptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0tfptrue" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0tfdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0tfdtrue" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ttptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ttptrue" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature0ttdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities0ttdtrue" />
+		<property name="aggregationType" value="0" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ffptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ffptrue" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ffdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ffdtrue" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ftptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ftptrue" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ftdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ftdtrue" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1tfptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1tfptrue" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1tfdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1tfdtrue" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ttptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ttptrue" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature1ttdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities1ttdtrue" />
+		<property name="aggregationType" value="1" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ffptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ffptrue" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ffdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ffdtrue" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ftptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ftptrue" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ftdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ftdtrue" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2tfptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2tfptrue" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2tfdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2tfdtrue" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="false" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ttptrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ttptrue" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityPrefLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="keywordEntitiesFeature2ttdtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordEntities2ttdtrue" />
+		<property name="aggregationType" value="2" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="normalizeResult" value="true" />
+		<property name="labelType" value="entityDbpediaLabel" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<!-- keyword in sentence features -->	
+	<bean id="keywordInSentenceFeature00fffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00fffftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00fffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00fffttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00fftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00fftftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00fftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00fftttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00ftfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00ftfftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00ftfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00ftfttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00fttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00fttftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00fttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00fttttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00tffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00tffftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00tffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00tffttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00tftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00tftftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00tftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00tftttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00ttfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00ttfftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00ttfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00ttfttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00tttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00tttftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature00tttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence00tttttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01fffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01fffftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01fffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01fffttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01fftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01fftftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01fftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01fftttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01ftfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01ftfftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01ftfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01ftfttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01fttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01fttftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01fttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01fttttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01tffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01tffftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01tffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01tffttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01tftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01tftftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01tftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01tftttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01ttfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01ttfftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01ttfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01ttfttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01tttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01tttftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature01tttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence01tttttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02fffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02fffftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02fffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02fffttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02fftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02fftftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02fftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02fftttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02ftfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02ftfftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02ftfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02ftfttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02fttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02fttftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02fttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02fttttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02tffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02tffftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02tffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02tffttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02tftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02tftftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02tftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02tftttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02ttfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02ttfftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02ttfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02ttfttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02tttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02tttftrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature02tttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence02tttttrue" />
+		<property name="aggregationTypeKeyword" value="0" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10fffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10fffftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10fffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10fffttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10fftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10fftftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10fftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10fftttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10ftfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10ftfftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10ftfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10ftfttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10fttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10fttftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10fttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10fttttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10tffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10tffftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10tffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10tffttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10tftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10tftftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10tftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10tftttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10ttfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10ttfftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10ttfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10ttfttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10tttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10tttftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature10tttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence10tttttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11fffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11fffftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11fffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11fffttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11fftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11fftftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11fftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11fftttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11ftfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11ftfftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11ftfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11ftfttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11fttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11fttftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11fttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11fttttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11tffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11tffftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11tffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11tffttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11tftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11tftftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11tftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11tftttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11ttfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11ttfftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11ttfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11ttfttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11tttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11tttftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature11tttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence11tttttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12fffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12fffftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12fffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12fffttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12fftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12fftftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12fftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12fftttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12ftfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12ftfftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12ftfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12ftfttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12fttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12fttftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12fttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12fttttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12tffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12tffftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12tffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12tffttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12tftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12tftftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12tftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12tftttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12ttfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12ttfftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12ttfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12ttfttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12tttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12tttftrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature12tttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence12tttttrue" />
+		<property name="aggregationTypeKeyword" value="1" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20fffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20fffftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20fffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20fffttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20fftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20fftftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20fftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20fftttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20ftfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20ftfftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20ftfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20ftfttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20fttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20fttftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20fttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20fttttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20tffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20tffftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20tffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20tffttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20tftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20tftftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20tftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20tftttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20ttfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20ttfftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20ttfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20ttfttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20tttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20tttftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature20tttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence20tttttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="0" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21fffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21fffftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21fffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21fffttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21fftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21fftftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21fftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21fftttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21ftfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21ftfftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21ftfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21ftfttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21fttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21fttftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21fttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21fttttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21tffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21tffftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21tffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21tffttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21tftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21tftftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21tftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21tftttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21ttfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21ttfftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21ttfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21ttfttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21tttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21tttftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature21tttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence21tttttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="1" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22fffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22fffftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22fffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22fffttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22fftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22fftftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22fftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22fftttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22ftfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22ftfftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22ftfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22ftfttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22fttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22fttftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22fttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22fttttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="false" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22tffftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22tffftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22tffttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22tffttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22tftftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22tftftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22tftttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22tftttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="false" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22ttfftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22ttfftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22ttfttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22ttfttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="false" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22tttftrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22tttftrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="false" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<bean id="keywordInSentenceFeature22tttttrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="keywordInSentence22tttttrue" />
+		<property name="aggregationTypeKeyword" value="2" />
+		<property name="aggregationTypeSentence" value="2" />
+		<property name="useTitleInsteadOfSentence" value="true" />
+		<property name="useContainsInsteadOfRegex" value="true" />
+		<property name="useStemInsteadOfWord" value="true" />
+		<property name="splitKeywords" value="true" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+
+	<!-- sparql count features -->
+	<bean id="numberOfKeywordEntitiesFeatureAvgtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfKeywordEntitiesAvgtrue" />
+		<property name="valueName" value="numberOfKeywordEntities" />
+		<property name="aggregationType" value="0" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="numberOfKeywordEntitiesFeatureMintrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfKeywordEntitiesMintrue" />
+		<property name="valueName" value="numberOfKeywordEntities" />
+		<property name="aggregationType" value="1" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	<bean id="numberOfKeywordEntitiesFeatureMaxtrue" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="numberOfKeywordEntitiesMaxtrue" />
+		<property name="valueName" value="numberOfKeywordEntities" />
+		<property name="aggregationType" value="2" />
+		<property name="useUserInterestsInsteadOfQuery" value="true" />
+	</bean>
+	
+	
+</beans>

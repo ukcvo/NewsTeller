@@ -21,6 +21,7 @@ import com.google.common.collect.Sets;
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.ActualUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -31,12 +32,15 @@ public class BM25FeatureTest {
 	private BM25Feature textFeature;
 	private BM25Feature titleFeature;
 	
+	private BM25Feature interestFeature;
+	
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
 	private static List<Keyword> keywords = new ArrayList<Keyword>();
-	private static UserModel userModel = new DummyUserModel();
+	private static UserModel dummyUserModel = new DummyUserModel();
+	private static UserModel userModel;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -70,6 +74,8 @@ public class BM25FeatureTest {
 		Keyword k = new Keyword("Barack Obama");
 		Util.stemKeyword(k);
 		keywords.add(k);
+		
+		userModel = new ActualUserModel(keywords);
 	}
 
 	@Before
@@ -78,6 +84,7 @@ public class BM25FeatureTest {
 		sentenceFeature = (BM25Feature) context.getBean("BM25FeatureSentence1.5");
 		textFeature = (BM25Feature) context.getBean("BM25FeatureText2.0");
 		titleFeature = (BM25Feature) context.getBean("BM25FeatureTitle1.2");
+		interestFeature = (BM25Feature) context.getBean("BM25FeatureSentence1.5true");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
@@ -85,37 +92,50 @@ public class BM25FeatureTest {
 
 	@Test
 	public void shouldReturnOnePointFiveFourSentence() {
-		double value = sentenceFeature.getValue("event-1", keywords, userModel);
+		double value = sentenceFeature.getValue("event-1", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 3.1237994879375193) < Util.EPSILON);
 	}
 
 	@Test
 	public void shouldReturnZeroSentence() {
-		double value = sentenceFeature.getValue("event-2", keywords, userModel);
+		double value = sentenceFeature.getValue("event-2", keywords, dummyUserModel);
 		assertTrue(value == 0.8421053994957518);
 	}
 	
 	@Test
 	public void shouldReturnOnePointSevenFiveText() {
-		double value = textFeature.getValue("event-1", keywords, userModel);
+		double value = textFeature.getValue("event-1", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 2.6105264717760224) < Util.EPSILON);
 	}
 
 	@Test
 	public void shouldReturnZeroText() {
-		double value = textFeature.getValue("event-2", keywords, userModel);
+		double value = textFeature.getValue("event-2", keywords, dummyUserModel);
 		assertTrue(value == 0.0);
 	}
 	
 	@Test
 	public void shouldReturnThreeTitle() {
-		double value = titleFeature.getValue("event-1", keywords, userModel);
+		double value = titleFeature.getValue("event-1", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 3.003761350311157) < Util.EPSILON);
 	}
 
 	@Test
 	public void shouldReturnZeroPointEightTitle() {
-		double value = titleFeature.getValue("event-2", keywords, userModel);
+		double value = titleFeature.getValue("event-2", keywords, dummyUserModel);
 		assertTrue(Math.abs(value - 0.809745843694904) < Util.EPSILON);
 	}
+	
+	@Test
+	public void shouldReturnOnePointFiveFourInterests() {
+		double value = interestFeature.getValue("event-1", keywords, userModel);
+		assertTrue(Math.abs(value - 3.1237994879375193) < Util.EPSILON);
+	}
+
+	@Test
+	public void shouldReturnZeroInterests() {
+		double value = interestFeature.getValue("event-2", keywords, userModel);
+		assertTrue(value == 0.8421053994957518);
+	}
+	
 }

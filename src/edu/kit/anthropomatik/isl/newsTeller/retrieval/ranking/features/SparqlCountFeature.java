@@ -24,11 +24,16 @@ public class SparqlCountFeature extends RankingFeature {
 		this.valueName = valueName;
 	}
 	
+	private boolean useUserInterestsInsteadOfQuery;
+	
+	public void setUseUserInterestsInsteadOfQuery(boolean useUserInterestsInsteadOfQuery) {
+		this.useUserInterestsInsteadOfQuery = useUserInterestsInsteadOfQuery;
+	}
+	
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords, UserModel userModel) {
 		
-		// TODO can use userModel.getInterests() here, too! 
-		List<Keyword> keywordsToUse = keywords;
+		List<Keyword> keywordsToUse = this.useUserInterestsInsteadOfQuery ? userModel.getInterests() : keywords;
 		double result = (this.aggregationType == AGGREGATION_TYPE_MIN) ? Double.POSITIVE_INFINITY : 0.0;
 		
 		for (Keyword keyword : keywordsToUse) {
@@ -36,7 +41,7 @@ public class SparqlCountFeature extends RankingFeature {
 
 			switch (this.aggregationType) {
 			case AGGREGATION_TYPE_AVG:
-				result += keywordResult / keywords.size();
+				result += keywordResult / keywordsToUse.size();
 				break;
 			case AGGREGATION_TYPE_MIN:
 				result = Math.min(result, keywordResult);

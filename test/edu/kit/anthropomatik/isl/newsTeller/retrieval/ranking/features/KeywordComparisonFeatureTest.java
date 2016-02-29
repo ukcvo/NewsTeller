@@ -2,6 +2,7 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.LogManager;
 
@@ -13,6 +14,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.google.common.collect.Lists;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.ActualUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -23,6 +25,7 @@ public class KeywordComparisonFeatureTest {
 	private static KeywordComparisonFeature minFeature;
 	private static KeywordComparisonFeature maxFeature;
 	private static KeywordComparisonFeature geomFeature;
+	private static KeywordComparisonFeature interestFeature;
 	
 	private static List<Keyword> twoSimilarKeywords = Lists.newArrayList(new Keyword("eruption"), new Keyword("volcano"));
 	private static List<Keyword> threeSimilarKeywords = Lists.newArrayList(new Keyword("volcano"), new Keyword("eruption"), new Keyword("lava"));
@@ -44,6 +47,7 @@ public class KeywordComparisonFeatureTest {
 		minFeature = (KeywordComparisonFeature) context.getBean("keywordComparisonFeatureMin");
 		maxFeature = (KeywordComparisonFeature) context.getBean("keywordComparisonFeatureMax");
 		geomFeature = (KeywordComparisonFeature) context.getBean("keywordComparisonFeatureGeom");
+		interestFeature = (KeywordComparisonFeature) context.getBean("keywordComparisonFeatureAvgUM");
 		((AbstractApplicationContext) context).close();
 	}
 
@@ -110,14 +114,32 @@ public class KeywordComparisonFeatureTest {
 	@Test
 	public void shouldReturnZeroPointSevenThreeGeom() {
 		double value = geomFeature.getValue("event-1", threeSimilarKeywords, userModel);
-		System.out.println("2 " + value);
 		assertTrue(Math.abs(value - 0.7328540520770158) < Util.EPSILON);
 	}
 	
 	@Test
 	public void shouldReturnZeroPointZeroSevenGeom() {
 		double value = geomFeature.getValue("event-1", threeKeywordsOneOutlier, userModel);
-		System.out.println("3 " + value);
 		assertTrue(Math.abs(value - 0.07692811562709764) < Util.EPSILON);
 	}
+	
+	@Test
+	public void shouldReturnZeroPointEightOneAvgUM() {
+		double value = interestFeature.getValue("event-1", new ArrayList<Keyword>(), new ActualUserModel(twoSimilarKeywords));
+		assertTrue(Math.abs(value - 0.8189652009443932) < Util.EPSILON);
+	}
+	
+	@Test
+	public void shouldReturnZeroPointSevenThreeAvgUM() {
+		double value = interestFeature.getValue("event-1", new ArrayList<Keyword>(), new ActualUserModel(threeSimilarKeywords));
+		assertTrue(Math.abs(value - 0.735441) < Util.EPSILON);
+	}
+	
+	@Test
+	public void shouldReturnZeroPointTwoTwoAvgUM() {
+		double value = interestFeature.getValue("event-1", new ArrayList<Keyword>(), new ActualUserModel(threeKeywordsOneOutlier));
+		assertTrue(Math.abs(value - 0.22723395897158813) < Util.EPSILON);
+	}
+
+	
 }

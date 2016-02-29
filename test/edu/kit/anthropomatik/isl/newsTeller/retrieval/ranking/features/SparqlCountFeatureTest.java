@@ -21,6 +21,7 @@ import com.google.common.collect.Sets;
 import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.ActualUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -33,6 +34,7 @@ public class SparqlCountFeatureTest {
 	private SparqlCountFeature avgFeature;
 	private SparqlCountFeature minFeature;
 	private SparqlCountFeature maxFeature;
+	private SparqlCountFeature interestFeature;
 	
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
@@ -81,6 +83,7 @@ public class SparqlCountFeatureTest {
 		avgFeature = (SparqlCountFeature) context.getBean("numberOfKeywordEntitiesFeatureAvg");
 		minFeature = (SparqlCountFeature) context.getBean("numberOfKeywordEntitiesFeatureMin");
 		maxFeature = (SparqlCountFeature) context.getBean("numberOfKeywordEntitiesFeatureMax");
+		interestFeature = (SparqlCountFeature) context.getBean("numberOfKeywordEntitiesFeatureAvgtrue");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
@@ -133,4 +136,18 @@ public class SparqlCountFeatureTest {
 		double result = maxFeature.getValue("event-2", twoKeywords, userModel);
 		assertTrue(result == 1.0);
 	}
+	
+	@Test
+	public void shouldReturnZeroInterest() {
+		double result = interestFeature.getValue("event-1", new ArrayList<Keyword>(), new ActualUserModel(twoKeywords));
+		assertTrue(result == 0.0);
+	}
+	
+	@Test
+	public void shouldReturnZeroPointFiveInterest() {
+		double result = interestFeature.getValue("event-2", new ArrayList<Keyword>(), new ActualUserModel(twoKeywords));
+		assertTrue(result == 0.5);
+	}
+	
+	
 }
