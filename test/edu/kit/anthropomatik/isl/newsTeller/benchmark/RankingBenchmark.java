@@ -69,6 +69,8 @@ public class RankingBenchmark {
 
 	private int minimumNumberOfFeatures;
 
+	private String oldDataUserName;
+	
 	private boolean doQueryBasedRegression;
 
 	private boolean doFeatureSelection;
@@ -123,6 +125,10 @@ public class RankingBenchmark {
 		this.minimumNumberOfFeatures = minimumNumberOfFeatures;
 	}
 
+	public void setOldDataUserName(String oldDataUserName) {
+		this.oldDataUserName = oldDataUserName;
+	}
+	
 	public void setDoQueryBasedRegression(boolean doQueryBasedRegression) {
 		this.doQueryBasedRegression = doQueryBasedRegression;
 	}
@@ -216,7 +222,7 @@ public class RankingBenchmark {
 		for (Map.Entry<String, Classifier> entry : this.regressors.entrySet()) {
 			String regressorName = entry.getKey();
 			Classifier regressor = entry.getValue();
-			resultMap.put(regressorName, queryBasedRegressionOneRegressor(this.dataSet, regressor, regressorName));
+			resultMap.put(regressorName, queryBasedRegressionOneRegressor(this.dataSet, regressor, regressorName, true));
 		}
 		
 		List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", ">0 precision @1", ">0 precision @1 norm", 
@@ -230,10 +236,11 @@ public class RankingBenchmark {
 			return new HashMap<String, Double>();
 		String regressorName = this.regressors.keySet().toArray(new String[1])[0];
 		Classifier regressor = this.regressors.get(regressorName);
-		return queryBasedRegressionOneRegressor(dataSet, regressor, regressorName);
+		return queryBasedRegressionOneRegressor(dataSet, regressor, regressorName, false);
 	}
 	
-	private Map<String, Double> queryBasedRegressionOneRegressor(Instances dataSet, Classifier regressor, String regressorName) {
+	private Map<String, Double> queryBasedRegressionOneRegressor(Instances dataSet, Classifier regressor, String regressorName, 
+			boolean averageRandomizables) {
 
 		Map<String, Double> resultMap = new HashMap<String, Double>();
 
@@ -256,7 +263,7 @@ public class RankingBenchmark {
 			double precision1At1Norm = 0;
 			
 			List<Classifier> regressorsToAverage = new ArrayList<Classifier>();
-			if (regressor instanceof Randomizable) { 
+			if (regressor instanceof Randomizable && averageRandomizables) { 
 				// randomizable classifier, so take average over run with 10 different deterministic seeds
 				Random rand = new Random(1);
 				for (int i = 0; i < 10; i++) {
@@ -953,7 +960,7 @@ public class RankingBenchmark {
 		for (Map.Entry<String, Classifier> entry : this.regressors.entrySet()) {
 			String regressorName = entry.getKey();
 			Classifier regressor = entry.getValue();
-			resultMap.put(regressorName, userBasedRegressionOneRegressor(this.dataSet, regressor, regressorName));
+			resultMap.put(regressorName, userBasedRegressionOneRegressor(this.dataSet, regressor, regressorName, true));
 		}
 		
 		List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", ">0 precision @1", ">0 precision @1 norm", 
@@ -968,10 +975,11 @@ public class RankingBenchmark {
 			return new HashMap<String, Double>();
 		String regressorName = this.regressors.keySet().toArray(new String[1])[0];
 		Classifier regressor = this.regressors.get(regressorName);
-		return userBasedRegressionOneRegressor(dataSet, regressor, regressorName);
+		return userBasedRegressionOneRegressor(dataSet, regressor, regressorName, false);
 	}
 	
-	private Map<String, Double> userBasedRegressionOneRegressor(Instances dataSet, Classifier regressor, String regressorName) {
+	private Map<String, Double> userBasedRegressionOneRegressor(Instances dataSet, Classifier regressor, String regressorName, 
+																	boolean averageRandomizables) {
 		
 		Map<String, Double> resultMap = new HashMap<String, Double>();
 
@@ -983,6 +991,11 @@ public class RankingBenchmark {
 			userFilter.setInputFormat(dataSet);
 			Instances modifiedDataSet = Filter.useFilter(dataSet, userFilter);
 
+			// first of all, split into alwaysTrain and leaveOneOut (old data vs. new data)
+			int oldDataUserIdx = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).indexOfValue(this.oldDataUserName) + 1;
+			Instances alwaysTrain = filterByUserName(modifiedDataSet, oldDataUserIdx, true);
+			Instances leaveOneOut = filterByUserName(modifiedDataSet, oldDataUserIdx, false);
+			
 			double rmse = 0;
 			double correlation = 0;
 			double ndcg = 0;
@@ -994,7 +1007,7 @@ public class RankingBenchmark {
 			double precision1At1Norm = 0;
 			
 			List<Classifier> regressorsToAverage = new ArrayList<Classifier>();
-			if (regressor instanceof Randomizable) { 
+			if (regressor instanceof Randomizable && averageRandomizables) { 
 				// randomizable classifier, so take average over run with 10 different deterministic seeds
 				Random rand = new Random(1);
 				for (int i = 0; i < 10; i++) {
@@ -1009,7 +1022,7 @@ public class RankingBenchmark {
 			
 			for (Classifier r : regressorsToAverage) {
 
-				Evaluation eval = new Evaluation(modifiedDataSet);
+				Evaluation eval = new Evaluation(leaveOneOut);
 				double regNDCG = 0;
 				int regNdcgNaNs = 0;
 				double regRelativeTopRank = 0;
@@ -1022,14 +1035,17 @@ public class RankingBenchmark {
 				double regPrecision1At1Norm = 0;
 				int regPrecision1At1NormNaNs = 0;
 				
-				Enumeration<Object> userEnumeration = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).enumerateValues();
+				Enumeration<Object> userEnumeration = leaveOneOut.attribute(Util.ATTRIBUTE_USER).enumerateValues();
 				while (userEnumeration.hasMoreElements()) {
 
 					String userName = (String) userEnumeration.nextElement();
-					Integer userIdx = modifiedDataSet.attribute(Util.ATTRIBUTE_USER).indexOfValue(userName) + 1;
+					if (userName.equals(this.oldDataUserName))
+						continue; // will have empty test data, so skip
+					Integer userIdx = leaveOneOut.attribute(Util.ATTRIBUTE_USER).indexOfValue(userName) + 1;
 	
-					Instances train = filterByUserName(modifiedDataSet, userIdx, false);
-					Instances test = filterByUserName(modifiedDataSet, userIdx, true);
+					Instances train = filterByUserName(leaveOneOut, userIdx, false);
+					train.addAll(alwaysTrain); // always use alwaysTrain
+					Instances test = filterByUserName(leaveOneOut, userIdx, true);
 	
 					r.buildClassifier(train);
 					
@@ -1086,25 +1102,25 @@ public class RankingBenchmark {
 				
 				correlation += eval.correlationCoefficient();
 				
-				regNDCG /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regNdcgNaNs);
+				regNDCG /= (leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues() - regNdcgNaNs);
 				ndcg += regNDCG;
 				
-				regRelativeTopRank /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regRelativeTopRankNaNs);
+				regRelativeTopRank /= (leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues() - regRelativeTopRankNaNs);
 				relativeTopRank += regRelativeTopRank;
 				
-				regTopRank /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				regTopRank /= leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues();
 				topRank += regTopRank;
 				
-				regPrecision0At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				regPrecision0At1 /= leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues();
 				precision0At1 += regPrecision0At1;
 				
-				regPrecision0At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision0At1NormNaNs);
+				regPrecision0At1Norm /= (leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision0At1NormNaNs);
 				precision0At1Norm += regPrecision0At1Norm;
 				
-				regPrecision1At1 /= modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues();
+				regPrecision1At1 /= leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues();
 				precision1At1 += regPrecision1At1;
 				
-				regPrecision1At1Norm /= (modifiedDataSet.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision1At1NormNaNs);
+				regPrecision1At1Norm /= (leaveOneOut.attribute(Util.ATTRIBUTE_FILE).numValues() - regPrecision1At1NormNaNs);
 				precision1At1Norm += regPrecision1At1Norm;
 				
 			}
@@ -1170,6 +1186,11 @@ public class RankingBenchmark {
 
 	private Instances filterByUserName(Instances dataSet, Integer userNameIdx, boolean isTest) throws Exception {
 
+		if (userNameIdx < 0)  { // if illegal user name: return empty test set and full training set --> should actually never happen
+			if (log.isWarnEnabled())
+				log.warn(String.format("illegal userNameIdx, returning %s set", isTest ? "empty" : "full"));
+			return isTest ? new Instances(dataSet, 0) : new Instances(dataSet);
+		}
 		RemoveWithValues filter = new RemoveWithValues();
 		int attributeIdx = dataSet.attribute(Util.ATTRIBUTE_USER).index() + 1; // conversion from 0-based to 1-based indices...
 		filter.setAttributeIndex(Integer.toString(attributeIdx));
