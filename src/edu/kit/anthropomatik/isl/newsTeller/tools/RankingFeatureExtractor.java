@@ -195,6 +195,10 @@ public class RankingFeatureExtractor {
 				if (log.isInfoEnabled())
 					log.info(StringUtils.collectionToCommaDelimitedString(keywords));
 				
+				List<Keyword> allKeywords = new ArrayList<Keyword>();
+				allKeywords.addAll(keywords);
+				allKeywords.addAll(userInterests);
+				
 				// run the queries
 				ksAdapter.flushBuffer();
 				List<Future<?>> futures = new ArrayList<Future<?>>();
@@ -208,8 +212,8 @@ public class RankingFeatureExtractor {
 					
 					@Override
 					public void run() {
-						ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, keywords);
-						Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", keywords.get(0).getWord())));
+						ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, allKeywords);
+						Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord())));
 						
 						List<Future<?>> futures = new ArrayList<Future<?>>();
 						futures.add(ksAdapter.submit(new Runnable() {
@@ -245,10 +249,7 @@ public class RankingFeatureExtractor {
 					
 					@Override
 					public void run() {
-						List<Keyword> statisticsKeywords = new ArrayList<Keyword>();
-						statisticsKeywords.addAll(keywords);
-						statisticsKeywords.addAll(userInterests);
-						ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, statisticsKeywords);
+						ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, allKeywords);
 					}
 				}));
 				
@@ -257,9 +258,9 @@ public class RankingFeatureExtractor {
 					
 					@Override
 					public void run() {
-						ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, keywords);
-						Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", keywords.get(0).getWord()));
-						ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, keywords);
+						ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, allKeywords);
+						Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", allKeywords.get(0).getWord()));
+						ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, allKeywords);
 					}
 				}));
 				

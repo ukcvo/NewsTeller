@@ -78,15 +78,15 @@ public class SequentialEventRanker implements IEventRanker {
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
-		List<Keyword> statisticsKeywords = new ArrayList<Keyword>();
-		statisticsKeywords.addAll(userQuery);
-		statisticsKeywords.addAll(userModel.getInterests());
+		List<Keyword> allKeywords = new ArrayList<Keyword>();
+		allKeywords.addAll(userQuery);
+		allKeywords.addAll(userModel.getInterests());
 		
-		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
-		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, statisticsKeywords);
-		Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", userQuery.get(0).getWord()));
-		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
-		Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord())));
+		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, allKeywords);
+		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, allKeywords);
+		Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", allKeywords.get(0).getWord()));
+		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, allKeywords);
+		Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord())));
 		ksAdapter.runKeyValueResourcePropertyQuery(Sets.newHashSet(Util.RESOURCE_PROPERTY_TIME, Util.RESOURCE_PROPERTY_TITLE) ,resourceURIs);
 		
 		
