@@ -245,7 +245,10 @@ public class RankingFeatureExtractor {
 					
 					@Override
 					public void run() {
-						ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, keywords);
+						List<Keyword> statisticsKeywords = new ArrayList<Keyword>();
+						statisticsKeywords.addAll(keywords);
+						statisticsKeywords.addAll(userInterests);
+						ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, statisticsKeywords);
 					}
 				}));
 				

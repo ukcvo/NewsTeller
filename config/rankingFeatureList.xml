@@ -384,6 +384,23 @@
 		<ref bean="numberOfKeywordEntitiesFeatureMintrue" />
 		<ref bean="numberOfKeywordEntitiesFeatureMaxtrue" />
 		
+		<ref bean="interestQueryEmbeddingsFeature00" />
+		<ref bean="interestQueryEmbeddingsFeature01" />
+		<ref bean="interestQueryEmbeddingsFeature02" />
+		<ref bean="interestQueryEmbeddingsFeature03" />
+		<ref bean="interestQueryEmbeddingsFeature10" />
+		<ref bean="interestQueryEmbeddingsFeature11" />
+		<ref bean="interestQueryEmbeddingsFeature12" />
+		<ref bean="interestQueryEmbeddingsFeature13" />
+		<ref bean="interestQueryEmbeddingsFeature20" />
+		<ref bean="interestQueryEmbeddingsFeature21" />
+		<ref bean="interestQueryEmbeddingsFeature22" />
+		<ref bean="interestQueryEmbeddingsFeature23" />
+		<ref bean="interestQueryEmbeddingsFeature30" />
+		<ref bean="interestQueryEmbeddingsFeature31" />
+		<ref bean="interestQueryEmbeddingsFeature32" />
+		<ref bean="interestQueryEmbeddingsFeature33" />
+		
 		<!-- final selected no UM
 		<ref bean="textEmbeddingsFeature11f" />
 		<ref bean="textEmbeddingsFeature13f" />

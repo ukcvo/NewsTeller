@@ -50,7 +50,6 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 		this.useUserInterestsInsteadOfQuery = useUserInterestsInsteadOfQuery;
 	}
 	
-	
 	public EmbeddingsFeature(String stopWordsFileName) {
 		this.stopWords = new HashSet<String>();
 		stopWords.addAll(Util.readStringListFromFile(stopWordsFileName));

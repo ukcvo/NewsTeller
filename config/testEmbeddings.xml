@@ -15,6 +15,33 @@
 		<property name="splitKeywordsIntoTokens" value="true" />
 	</bean>
 
+	<bean id="InterestQueryEmbeddingsFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.InterestQueryEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="testEmbeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="InterestQueryEmbeddingsFeatureAvg" />
+		<property name="keywordAggregationType" value="0" />
+		<property name="innerAggregationType" value="0" />
+	</bean>
+
+	<bean id="InterestQueryEmbeddingsFeatureMin" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.InterestQueryEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="testEmbeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="InterestQueryEmbeddingsFeatureMin" />
+		<property name="keywordAggregationType" value="1" />
+		<property name="innerAggregationType" value="1" />
+	</bean>
+
+	<bean id="InterestQueryEmbeddingsFeatureMax" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.InterestQueryEmbeddingsFeature">
+		<constructor-arg name="stopWordsFileName" value="resources/features/stopwords.txt" />
+		<property name="embeddings" ref="testEmbeddings" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="name" value="InterestQueryEmbeddingsFeatureMax" />
+		<property name="keywordAggregationType" value="2" />
+		<property name="innerAggregationType" value="2" />
+	</bean>
+
 	<bean id="keywordComparisonFeatureAvg" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
 		<property name="embeddings" ref="testEmbeddings" />
 		<property name="ksAdapter" ref="ksAdapter" />

@@ -78,8 +78,12 @@ public class SequentialEventRanker implements IEventRanker {
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
+		List<Keyword> statisticsKeywords = new ArrayList<Keyword>();
+		statisticsKeywords.addAll(userQuery);
+		statisticsKeywords.addAll(userModel.getInterests());
+		
 		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
-		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, statisticsKeywords);
 		Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", userQuery.get(0).getWord()));
 		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
 		Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord())));
