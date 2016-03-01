@@ -134,12 +134,12 @@
 	</bean>
 
 	<bean id="rankingFeatureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.RankingFeatureExtractor">
-		<constructor-arg name="configFileName" value="resources/benchmark/onlyUM.csv"/> <!-- UMandOld -->
+		<constructor-arg name="configFileName" value="resources/benchmark/UMandOld.csv"/> <!-- UMandOld	onlyUM -->
 		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics_FE.qry" />
 		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents_FE.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/ranking/entityProperties_FE.qry" />
 		<property name="ksAdapter" ref="ksAdapter"/>
-		<property name="outputFileName" value="resources/benchmark/dataSetRankingUM.xrff"/>
+		<property name="outputFileName" value="resources/benchmark/dataSetRankingAll.xrff"/>
 		<property name="features" ref="rankingFeatureList"/>
 		<property name="doAddEventInformation" value="true"/>
 		<property name="nThreads" value="1000" />

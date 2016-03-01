@@ -37,9 +37,13 @@ public class ConstituentEmbeddingsFeature extends EmbeddingsFeature {
 	protected Set<String> getComparisonStrings(String eventURI, List<Keyword> keywords, UserModel userModel) {
 		Set<String> comparisonStrings = new HashSet<String>();
 		
+		List<Keyword> keywordsToUse = this.useUserInterestsInsteadOfQuery ? userModel.getInterests() : keywords;
+		if (keywordsToUse.isEmpty())
+			return comparisonStrings;
+		
 		if (this.needsKeywordIteration) {
 			
-			for (Keyword keyword : keywords) {
+			for (Keyword keyword : keywordsToUse) {
 				Set<String> constituents = ksAdapter.getBufferedValues(Util.getRelationName("event", entityName, keyword.getWord()), eventURI);
 				
 				for (String entity : constituents)
@@ -47,7 +51,7 @@ public class ConstituentEmbeddingsFeature extends EmbeddingsFeature {
 			}
 			
 		} else {
-			String arbitraryKeyword = keywords.get(0).getWord();
+			String arbitraryKeyword = keywordsToUse.get(0).getWord();
 			Set<String> constituents = ksAdapter.getBufferedValues(Util.getRelationName("event", entityName, arbitraryKeyword), eventURI);
 			for (String entity : constituents)
 				comparisonStrings.addAll(ksAdapter.getBufferedValues(Util.getRelationName("entity", valueName, arbitraryKeyword), entity));

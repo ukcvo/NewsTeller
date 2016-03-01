@@ -18,7 +18,7 @@
 	<util:properties id="wekaProperties">
 		<prop key="toSelect">4</prop>
 		<prop key="numFeatures">8</prop>
-		<prop key="toSelectReg">8</prop>
+		<prop key="toSelectReg">12</prop>
 	</util:properties>
 	
 	<bean id="ksAdapter"
@@ -229,7 +229,7 @@
 	</bean>
 
 	<bean id="rankingBenchmark" class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RankingBenchmark">
-		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRankingUM-FS.xrff" />
+		<constructor-arg name="dataSetFileName" value="resources/benchmark/dataSetRankingUM.xrff" />
 		<constructor-arg name="pretrainedRegressorFileName" value="resources/regressor.model" />
 		<property name="regressors">
 			<map>

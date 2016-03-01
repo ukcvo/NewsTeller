@@ -32,7 +32,7 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 	
 	protected boolean shouldWarnIfNoComparisonStrings;
 	
-	private boolean useUserInterestsInsteadOfQuery;
+	protected boolean useUserInterestsInsteadOfQuery;
 	
 	public void setInnerAggregationType(int sentenceAggregationType) {
 		this.innerAggregationType = sentenceAggregationType;
@@ -77,7 +77,7 @@ public abstract class EmbeddingsFeature extends RankingFeature {
 		
 		List<Keyword> keywordsToUse = useUserInterestsInsteadOfQuery ? userModel.getInterests() : keywords;
 		
-		Set<String> comparisonStrings = getComparisonStrings(eventURI, keywordsToUse, userModel);
+		Set<String> comparisonStrings = getComparisonStrings(eventURI, keywords, userModel);
 		
 		if (comparisonStrings.isEmpty()) {
 			if (this.shouldWarnIfNoComparisonStrings && log.isWarnEnabled())

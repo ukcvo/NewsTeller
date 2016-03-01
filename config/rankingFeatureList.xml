@@ -15,6 +15,20 @@
 	<util:list id="rankingFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
 
+		<ref bean="textEmbeddingsFeature11f" />
+		<ref bean="textEmbeddingsFeature13f" />
+		<ref bean="constituentEmbeddingsFeature02ed" />
+		<ref bean="constituentEmbeddingsFeature11ed" />
+		<ref bean="constituentEmbeddingsFeature12em" />
+		<ref bean="sentenceLengthFeatureCharMin" />
+		<ref bean="numberOfNonEntitiesFeature" />
+		<ref bean="numberOfDummyEntitiesFeature" />
+		<ref bean="recencyFeatureMonths" />
+		<ref bean="keywordEntitiesFeature1ffd" />
+		<ref bean="keywordInSentenceFeature11ftft" />
+		<ref bean="keywordInSentenceFeature11ttft" />
+		<ref bean="BM25FeatureSentence1.2" />
+
 		<!-- preselected UM -->
 		<ref bean="BM25FeatureSentence1.2true" />
 		<ref bean="BM25FeatureSentence1.4true" />
@@ -22,6 +36,47 @@
 		<ref bean="BM25FeatureText1.7true" />
 		<ref bean="BM25FeatureTitle1.6true" />
 		<ref bean="BM25FeatureTitle1.9true" />
+		
+		<ref bean="textEmbeddingsFeature03ftrue" />
+		<ref bean="textEmbeddingsFeature12ftrue" />
+		<ref bean="textEmbeddingsFeature21ftrue" />
+		<ref bean="textEmbeddingsFeature22ttrue" />
+		<ref bean="textEmbeddingsFeature31ftrue" />
+		<ref bean="textEmbeddingsFeature32ttrue" />
+		<ref bean="textEmbeddingsFeature33ttrue" />
+		
+		<ref bean="constituentEmbeddingsFeature02edtrue" />
+		<ref bean="constituentEmbeddingsFeature11eltrue" />
+		<ref bean="constituentEmbeddingsFeature11emtrue" />
+		<ref bean="constituentEmbeddingsFeature12eptrue" />
+		<ref bean="constituentEmbeddingsFeature12eltrue" />
+		<ref bean="constituentEmbeddingsFeature22kltrue" />
+		
+		<ref bean="keywordEntitiesFeature0ffdtrue" />
+		<ref bean="keywordEntitiesFeature0ftptrue" />
+		<ref bean="keywordEntitiesFeature2ftptrue" />
+		<ref bean="keywordEntitiesFeature2tfdtrue" />
+		
+		<ref bean="keywordInSentenceFeature00fttttrue" />
+		<ref bean="keywordInSentenceFeature02ftfftrue" />
+		<ref bean="keywordInSentenceFeature20ftfftrue" />
+		<ref bean="keywordInSentenceFeature22ftfftrue" />
+		<ref bean="keywordInSentenceFeature22fttttrue" />
+		<ref bean="keywordInSentenceFeature22tftttrue" />
+
+		<ref bean="numberOfKeywordEntitiesFeatureAvgtrue" />
+		<ref bean="numberOfKeywordEntitiesFeatureMintrue" />
+		<ref bean="numberOfKeywordEntitiesFeatureMaxtrue" />
+		
+		<ref bean="interestQueryEmbeddingsFeature01" />
+		<ref bean="interestQueryEmbeddingsFeature12" />
+		<ref bean="interestQueryEmbeddingsFeature21" />
+		<ref bean="interestQueryEmbeddingsFeature22" />
+
+		<ref bean="keywordComparisonFeatureAvgtrue" />
+		<ref bean="keywordComparisonFeatureMintrue" />
+		<ref bean="keywordComparisonFeatureMaxtrue" />
+		<ref bean="keywordComparisonFeatureGeomtrue" />
 		
 		<!-- all UM features
 		<ref bean="BM25FeatureSentence1.2true" />
