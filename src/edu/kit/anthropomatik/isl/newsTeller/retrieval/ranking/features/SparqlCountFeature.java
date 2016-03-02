@@ -54,6 +54,9 @@ public class SparqlCountFeature extends RankingFeature {
 			}
 		}
 		
+		if (Double.isInfinite(result)) // dirty fix to avoid Infinities
+			result = Double.NaN;
+		
 		return result;
 	}
 

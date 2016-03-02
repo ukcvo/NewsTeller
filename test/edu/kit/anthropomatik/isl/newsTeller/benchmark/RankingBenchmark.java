@@ -93,6 +93,8 @@ public class RankingBenchmark {
 	
 	private boolean useUserBasedRegressionForFeatureSelection;
 	
+	private boolean forceOnlyOneRegressor;
+	
 	// region setters
 	public void setRegressors(Map<String, Classifier> regressors) {
 		this.regressors = regressors;
@@ -176,6 +178,10 @@ public class RankingBenchmark {
 	public void setUseUserBasedRegressionForFeatureSelection(boolean useUserBasedRegressionForFeatureSelection) {
 		this.useUserBasedRegressionForFeatureSelection = useUserBasedRegressionForFeatureSelection;
 	}
+	
+	public void setForceOnlyOneRegressor(boolean forceOnlyOneRegressor) {
+		this.forceOnlyOneRegressor = forceOnlyOneRegressor;
+	}
 	// endregion
 	
 	public RankingBenchmark(String dataSetFileName, String pretrainedRegressorFileName) {
@@ -234,7 +240,7 @@ public class RankingBenchmark {
 		for (Map.Entry<String, Classifier> entry : this.regressors.entrySet()) {
 			String regressorName = entry.getKey();
 			Classifier regressor = entry.getValue();
-			resultMap.put(regressorName, queryBasedRegressionOneRegressor(this.dataSet, regressor, regressorName, true));
+			resultMap.put(regressorName, queryBasedRegressionOneRegressor(this.dataSet, regressor, regressorName, !forceOnlyOneRegressor));
 		}
 		
 		List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", ">0 precision @1", ">0 precision @1 norm", 
@@ -646,7 +652,7 @@ public class RankingBenchmark {
 			removeFilter.setInvertSelection(true);
 			removeFilter.setInputFormat(this.dataSet);
 			Instances baselineData = Filter.useFilter(this.dataSet, removeFilter);
-			Map<String, Double> baselineResults = this.queryBasedRegressionOneRegressor(baselineData);
+			Map<String, Double> baselineResults = this.useUserBasedRegressionForFeatureSelection ? this.userBasedRegressionOneRegressor(baselineData) : this.queryBasedRegressionOneRegressor(baselineData);
 			resultMap.put("baseline", baselineResults);
 
 			for (int i = 0; i < featureIndices.size(); i++) {
@@ -659,11 +665,13 @@ public class RankingBenchmark {
 				filter.setInvertSelection(true);
 				filter.setInputFormat(this.dataSet);
 				Instances filtered = Filter.useFilter(this.dataSet, filter);
-				Map<String, Double> localResults = this.queryBasedRegressionOneRegressor(filtered);
-				resultMap.put(String.format("without %d", featureIndices.get(i)), localResults);
+				Map<String, Double> localResults = this.useUserBasedRegressionForFeatureSelection ? this.userBasedRegressionOneRegressor(filtered) : this.queryBasedRegressionOneRegressor(filtered);
+				resultMap.put(StringUtils.collectionToCommaDelimitedString(indices), localResults);
 			}
 
-			List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", "expected", "avg top 5 norm", "expected top 5", ">0 precision @1", ">0 precision @5", ">1 precision @1", ">1 precision @5");
+			List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", ">0 precision @1", ">0 precision @1 norm", ">1 precision @1", ">1 precision @1 norm");
+			if (this.useUserBasedRegressionForFeatureSelection)
+				columnNames.addAll(Lists.newArrayList("min avg top 1 norm", "min >0 precision @1 norm", "min >1 precision @1 norm"));
 			Util.writeEvaluationToCsv(this.outputFileName, columnNames, resultMap);
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
@@ -1001,7 +1009,7 @@ public class RankingBenchmark {
 		for (Map.Entry<String, Classifier> entry : this.regressors.entrySet()) {
 			String regressorName = entry.getKey();
 			Classifier regressor = entry.getValue();
-			resultMap.putAll(userBasedRegressionOneRegressor(this.dataSet, regressor, regressorName, true));
+			resultMap.putAll(userBasedRegressionOneRegressor(this.dataSet, regressor, regressorName, !forceOnlyOneRegressor));
 		}
 		
 		List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", ">0 precision @1", ">0 precision @1 norm", 

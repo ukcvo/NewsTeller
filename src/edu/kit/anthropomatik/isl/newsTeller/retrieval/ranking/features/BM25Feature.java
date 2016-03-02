@@ -115,6 +115,9 @@ public class BM25Feature extends RankingFeature {
 			result += localResult;
 		}
 		
+		if (Double.isInfinite(result))	// another dirty bugfix to avoid infities
+			result = Double.NaN;
+		
 		return result;
 	}
 
