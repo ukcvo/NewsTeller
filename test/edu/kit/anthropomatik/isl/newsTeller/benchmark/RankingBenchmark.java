@@ -888,7 +888,7 @@ public class RankingBenchmark {
 				Instances filtered = Filter.useFilter(this.dataSet, filter);
 				Map<String, Double> localResults = useUserBasedRegressionForFeatureSelection ? 
 						this.userBasedRegressionOneRegressor(filtered) : this.queryBasedRegressionOneRegressor(filtered);
-				resultMap.put(String.format("with %d", newFeatureIndices.get(i)), localResults);
+				resultMap.put(StringUtils.collectionToCommaDelimitedString(indices), localResults);
 			}
 
 			List<String> columnNames = Lists.newArrayList("RMSE", "correlation", "NDCG", "avg top 1", "avg top 1 norm", ">0 precision @1", ">0 precision @1 norm", ">1 precision @1", ">1 precision @1 norm");

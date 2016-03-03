@@ -18,12 +18,10 @@
 					<property name="expression" value="(eventURI|fileName|user)" />
 				</bean>
 			 
-			<!--		 	<bean class="weka.filters.unsupervised.attribute.Remove">
-					<property name="attributeIndices" value="2,3,5,6,7,9,10,11,13,15,27,43,51,54" />
-					 2,3,5,7,10,14,16,20,21,25,29,32,33,35,58
-					 2,3,5,7,10,14,16,20,25,32,33,35,46,58
-					 2,3,5,7,10,14,20,21,25,29,32,33,35,58
-					 
+		<!--			 	<bean class="weka.filters.unsupervised.attribute.Remove">
+					<property name="attributeIndices" value="2,3,4,8,10,11,38,47,56,57,58,78,88,96,99" />
+					 set A: 2,3,4,8,10,11,33,38,45,47,58,63,75,91,96,99
+						 set B: 2,3,4,8,10,11,38,47,56,57,58,78,88,96,99 
 					<property name="invertSelection" value="true" />
 				</bean>-->
 			</array>
@@ -273,6 +271,19 @@
 		</property>
 	</bean>
 	
+	<bean id="r_randomForest4" class="weka.classifiers.meta.RandomizableFilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numTrees" value="500" />
+				<property name="maxDepth" value="0" />
+				<property name="numFeatures" value="1" />
+				<property name="numExecutionSlots" value="10" />
+			</bean>
+		</property>
+	</bean>
+	
+
 
 	<bean id="r_bestFeature" class="weka.classifiers.meta.FilteredClassifier">
 		<property name="filter">
@@ -321,10 +332,10 @@
 			<bean class="weka.classifiers.trees.RandomForest">
 				<property name="numExecutionSlots" value="10" />
 				
-				<property name="breakTiesRandomly" value="false" />
+				<property name="breakTiesRandomly" value="true" />
 				<property name="maxDepth" value="0" />
-				<property name="numFeatures" value="11" />
-				<property name="numTrees" value="200" />
+				<property name="numFeatures" value="1" />
+				<property name="numTrees" value="500" />
 				<property name="seed" value="1" />
 			</bean>
 		</property>
@@ -336,10 +347,10 @@
 			<bean class="weka.classifiers.trees.RandomForest">
 				<property name="numExecutionSlots" value="10" />
 				
-				<property name="breakTiesRandomly" value="false" />
-				<property name="maxDepth" value="0" />
-				<property name="numFeatures" value="12" />
-				<property name="numTrees" value="200" />
+				<property name="breakTiesRandomly" value="true" />
+				<property name="maxDepth" value="8" />
+				<property name="numFeatures" value="0" />
+				<property name="numTrees" value="500" />
 				<property name="seed" value="1" />
 			</bean>
 		</property>
@@ -354,8 +365,8 @@
 				<property name="breakTiesRandomly" value="false" />
 				<property name="maxDepth" value="0" />
 				<property name="numFeatures" value="13" />
-				<property name="numTrees" value="200" />
-				<property name="seed" value="1" />
+				<property name="numTrees" value="500" />
+				<property name="seed" value="6" />
 			</bean>
 		</property>
 	</bean>
@@ -368,8 +379,8 @@
 				
 				<property name="breakTiesRandomly" value="false" />
 				<property name="maxDepth" value="0" />
-				<property name="numFeatures" value="0" />
-				<property name="numTrees" value="200" />
+				<property name="numFeatures" value="14" />
+				<property name="numTrees" value="500" />
 				<property name="seed" value="1" />
 			</bean>
 		</property>
@@ -381,10 +392,10 @@
 			<bean class="weka.classifiers.trees.RandomForest">
 				<property name="numExecutionSlots" value="10" />
 				
-				<property name="breakTiesRandomly" value="true" />
+				<property name="breakTiesRandomly" value="false" />
 				<property name="maxDepth" value="0" />
-				<property name="numFeatures" value="0" />
-				<property name="numTrees" value="200" />
+				<property name="numFeatures" value="15" />
+				<property name="numTrees" value="500" />
 				<property name="seed" value="1" />
 			</bean>
 		</property>
