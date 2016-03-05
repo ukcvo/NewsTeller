@@ -15,77 +15,37 @@
 	<util:list id="rankingFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
 
-		<ref bean="textEmbeddingsFeature11f" />
+		<!-- UM with addition v2 
 		<ref bean="textEmbeddingsFeature13f" />
-		<ref bean="constituentEmbeddingsFeature02ed" />
+		<ref bean="constituentEmbeddingsFeature11ed" />
+		<ref bean="numberOfNonEntitiesFeature" />
+		<ref bean="numberOfDummyEntitiesFeature" />
+		<ref bean="keywordInSentenceFeature11ftft" />
+		<ref bean="keywordInSentenceFeature11ttft" />
+		<ref bean="BM25FeatureSentence1.2" />
+		<ref bean="textEmbeddingsFeature31t" />
+		<ref bean="constituentContainsFeature_it_ep" />
+		<ref bean="sameDocumentFeature1tt" />
+		<ref bean="constituentEmbeddingsFeature02edtrue" />
+		<ref bean="numberOfKeywordEntitiesFeatureAvgtrue" />
+		<ref bean="keywordComparisonFeatureMaxtrue" />
+		-->
+		
+		<!-- no-UM with addition 
+		<ref bean="textEmbeddingsFeature13f" />
 		<ref bean="constituentEmbeddingsFeature11ed" />
 		<ref bean="constituentEmbeddingsFeature12em" />
 		<ref bean="sentenceLengthFeatureCharMin" />
 		<ref bean="numberOfNonEntitiesFeature" />
 		<ref bean="numberOfDummyEntitiesFeature" />
-		<ref bean="recencyFeatureMonths" />
 		<ref bean="keywordEntitiesFeature1ffd" />
 		<ref bean="keywordInSentenceFeature11ftft" />
 		<ref bean="keywordInSentenceFeature11ttft" />
 		<ref bean="BM25FeatureSentence1.2" />
-		
-
-		<ref bean="textEmbeddingsFeature01f" />
 		<ref bean="textEmbeddingsFeature31t" />
-		
-		<ref bean="constituentEmbeddingsFeature02kd" />
-		<ref bean="constituentEmbeddingsFeature11kp" />
-		<ref bean="constituentEmbeddingsFeature12ep" />
-		<ref bean="constituentEmbeddingsFeature32kl" />
-				
-		<ref bean="sentenceLengthFeatureWordMin" />
-		<ref bean="sentenceLengthFeatureCharAvg" />
-		
-		<ref bean="numberOfKeywordEntitiesFeatureAvg" />
-		<ref bean="numberOfKeywordEntitiesFeatureMin" />
-		<ref bean="numberOfKeywordEntitiesFeatureMax" />
-		<ref bean="numberOfDbpediaEntitiesFeature" />
-		<ref bean="numberOfEntitiesFeature" />
-		<ref bean="numberOfMentionsRegFeature" />
-		<ref bean="numberOfKeywordNonEntitiesFeature" />
-		
-		<ref bean="recencyFeatureWeeks" />
-		<ref bean="recencyFeatureYears" />
-		
-		<ref bean="keywordEntitiesFeature0ffd" />
-		<ref bean="keywordEntitiesFeature1ffp" />
-		<ref bean="keywordEntitiesFeature1ftd" />
-		
-		<ref bean="keywordInSentenceFeature10ftft" />
-		<ref bean="keywordInSentenceFeature12ftft" />
-		
-		<ref bean="BM25FeatureSentence1.6" />
-		<ref bean="BM25FeatureSentence2.0" />
-		<ref bean="BM25FeatureTitle1.5" />
-		
-		<ref bean="sentenceContainsQuotationFeature" />
-		<ref bean="sentenceContainsYouFeature" />
-		<ref bean="sentenceContainsHeSheItFeature" />
-		<ref bean="sentenceContainsStopwordFeature" />
-
-		<ref bean="keywordComparisonFeatureAvg" />
-		<ref bean="keywordComparisonFeatureMin" />
-		<ref bean="keywordComparisonFeatureMax" />
-		<ref bean="keywordComparisonFeatureGeom" />
-
-		<ref bean="constituentContainsFeature_quotation_el" />
-		<ref bean="constituentContainsFeature_I_el" />
-		<ref bean="constituentContainsFeature_heShe_kp" />
 		<ref bean="constituentContainsFeature_it_ep" />
-		<ref bean="constituentContainsFeature_they_kp" />
-		<ref bean="constituentContainsFeature_thisThat_ep" />
-		<ref bean="constituentContainsFeature_stopwords_np" />
-		
-		<ref bean="sameDocumentFeature0ft" />
-		<ref bean="sameDocumentFeature0tt" />
 		<ref bean="sameDocumentFeature1tt" />
-		<ref bean="sameDocumentFeature2tt" />
-
+		-->
 		
 		<!-- UM with elimination
 

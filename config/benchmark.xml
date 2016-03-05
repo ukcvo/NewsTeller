@@ -248,6 +248,9 @@
 				
 				<entry key="UM addition" value-ref="r_randomForest3" />
 				
+				<entry key="UM elimination" value-ref="r_randomForest4" />
+				
+				<entry key="no-UM addition" value-ref="r_randomForest5" />
 				
 				<entry key="MLP" value-ref="r_MLP" />
 				<entry key="MLP2" value-ref="r_MLP2" />
@@ -259,7 +262,7 @@
 				<entry key="linearRegression" value-ref="r_linearRegression" />
 				  -->
 				
-				<entry key="UM elimination" value-ref="r_randomForest4" />
+				<entry key="UM addition v2" value-ref="r_randomForest6" />
 				
 				
 			</map>
@@ -277,14 +280,14 @@
 				<ref bean="r_wrapperRF"/>
 			</list>
 		</property>
-		<property name="groundTruthAttributes" value="58,59,60,61" />
+		<property name="groundTruthAttributes" value="54,55,56,57" />
 		<property name="outputFileName" value="out/featureElimination.csv" />
-		<property name="featureIndices" value="1,2,3,4,5,6,7,8,9,10,11,12,13,58,59,60,61" />
-		<property name="newFeatureIndices" value="14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57" />
+		<property name="featureIndices" value="1,2,5,6,7,8,9,10,11,12,13,27,43,52,54,55,56,57" />
+		<property name="newFeatureIndices" value="14,15,16,17,18,19,20,21,23,25,26,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,53" />
 		<property name="oldDataUserName" value="rankingFilteredQueries" /> <!-- rankingFilteredQueries -->
 		
-		<!-- 1,2,3,4,5,6,7,8,9,10,11,12,13,58,59,60,61 -->
-		<!-- 14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57 -->
+		<!-- 1,2,3,4,5,6,7,8,9,10,11,12,13,54,55,56,57 -->
+		<!-- 14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53 -->
 		<property name="minimumNumberOfFeatures" value="22" />
 		
 		<property name="outputRankings" value="false" />
@@ -297,9 +300,9 @@
 		<property name="doSearchBestNDCGFeature" value="false" />
 		<property name="doFeatureElimination" value="false" />
 		<property name="doRecursiveFeatureElimination" value="false" />
-		<property name="doFeatureAddition" value="true" />
+		<property name="doFeatureAddition" value="false" />
 		<property name="doTestPretrainedRegressor" value="false" />
-		<property name="doUserBasedRegression" value="false" />
+		<property name="doUserBasedRegression" value="true" />
 	</bean>
 
 </beans>
