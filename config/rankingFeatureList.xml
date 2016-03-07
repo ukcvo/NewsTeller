@@ -12,6 +12,40 @@
 	<import resource="rankingEmbeddingsFeatures.xml"/>
 	<import resource="rankingEmbeddingsFeaturesUserInterests.xml"/>
 
+	<util:list id="rankingFeatureListNoUM"
+		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
+		<ref bean="textEmbeddingsFeature13f" />
+		<ref bean="constituentEmbeddingsFeature11ed" />
+		<ref bean="constituentEmbeddingsFeature12em" />
+		<ref bean="sentenceLengthFeatureCharMin" />
+		<ref bean="numberOfNonEntitiesFeature" />
+		<ref bean="numberOfDummyEntitiesFeature" />
+		<ref bean="keywordEntitiesFeature1ffd" />
+		<ref bean="keywordInSentenceFeature11ftft" />
+		<ref bean="keywordInSentenceFeature11ttft" />
+		<ref bean="BM25FeatureSentence1.2" />
+		<ref bean="textEmbeddingsFeature31t" />
+		<ref bean="constituentContainsFeature_it_ep" />
+		<ref bean="sameDocumentFeature1tt" />
+	</util:list>
+
+	<util:list id="rankingFeatureListUM"
+		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
+		<ref bean="textEmbeddingsFeature13f" />
+		<ref bean="constituentEmbeddingsFeature11ed" />
+		<ref bean="numberOfNonEntitiesFeature" />
+		<ref bean="numberOfDummyEntitiesFeature" />
+		<ref bean="keywordInSentenceFeature11ftft" />
+		<ref bean="keywordInSentenceFeature11ttft" />
+		<ref bean="BM25FeatureSentence1.2" />
+		<ref bean="textEmbeddingsFeature31t" />
+		<ref bean="constituentContainsFeature_it_ep" />
+		<ref bean="sameDocumentFeature1tt" />
+		<ref bean="constituentEmbeddingsFeature02edtrue" />
+		<ref bean="numberOfKeywordEntitiesFeatureAvgtrue" />
+		<ref bean="keywordComparisonFeatureMaxtrue" />
+	</util:list>
+	
 	<util:list id="rankingFeatureList"
 		value-type="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.RankingFeature">
 

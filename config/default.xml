@@ -16,7 +16,7 @@
 			value="resources/SPARQL/general/getEventFromMention.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="20000" />
-		<property name="maxNumberOfConnections" value="10"/>
+		<property name="maxNumberOfConnections" value="100"/>
 	</bean>
 
 	<bean id="searcher"
@@ -40,17 +40,17 @@
 
 	<bean id="ranker"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
-		<constructor-arg name="regressorFileName" value="resources/regressor.model" />
+		<constructor-arg name="regressorFileName" value="resources/regressorNoUM.model" />
 		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/ranking/entityProperties.qry" />
 		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="features" ref="rankingFeatureList" />
+		<property name="features" ref="rankingFeatureListNoUM" />
 	</bean>
 
 	<bean id="selector"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
-		<property name="threshold" value="0.74" />
+		<property name="threshold" value="0.86" />
 	</bean>
 
 	<bean id="retriever"
@@ -134,7 +134,7 @@
 	</bean>
 
 	<bean id="rankingFeatureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.RankingFeatureExtractor">
-		<constructor-arg name="configFileName" value="resources/benchmark/UMandOld.csv"/> <!-- UMandOld	onlyUM -->
+		<constructor-arg name="configFileName" value="resources/benchmark/UMandOld.csv"/> <!-- UMandOld	onlyUM onlyOld -->
 		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics_FE.qry" />
 		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents_FE.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/ranking/entityProperties_FE.qry" />

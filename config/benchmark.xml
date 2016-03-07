@@ -252,6 +252,8 @@
 				
 				<entry key="no-UM addition" value-ref="r_randomForest5" />
 				
+				<entry key="UM addition v2" value-ref="r_randomForest6" />
+				
 				<entry key="MLP" value-ref="r_MLP" />
 				<entry key="MLP2" value-ref="r_MLP2" />
 				<entry key="RBF" value-ref="r_RBF" />
@@ -262,8 +264,7 @@
 				<entry key="linearRegression" value-ref="r_linearRegression" />
 				  -->
 				
-				<entry key="UM addition v2" value-ref="r_randomForest6" />
-				
+				<entry key="UM elimination" value-ref="r_randomForest4" />
 				
 			</map>
 		</property>
@@ -296,13 +297,13 @@
 		<property name="forceOnlyOneRegressor" value="false" />
 		
 		<property name="doFeatureSelection" value="false" />
-		<property name="doQueryBasedRegression" value="false" />
+		<property name="doQueryBasedRegression" value="true" />
 		<property name="doSearchBestNDCGFeature" value="false" />
 		<property name="doFeatureElimination" value="false" />
 		<property name="doRecursiveFeatureElimination" value="false" />
 		<property name="doFeatureAddition" value="false" />
 		<property name="doTestPretrainedRegressor" value="false" />
-		<property name="doUserBasedRegression" value="true" />
+		<property name="doUserBasedRegression" value="false" />
 	</bean>
 
 </beans>

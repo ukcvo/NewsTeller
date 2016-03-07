@@ -48,8 +48,10 @@
 		<property name="fileName" value="resources/regressor.model" />
 		<property name="regressor">
 			<bean class="weka.classifiers.trees.RandomForest">
+				<property name="numTrees" value="250" />
+				<property name="maxDepth" value="16" />
+				<property name="numFeatures" value="0" />
 				<property name="numExecutionSlots" value="10" />
-				<property name="numTrees" value="200" />
 				<property name="seed" value="1" />
 			</bean>
 		</property>
