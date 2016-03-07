@@ -38,7 +38,17 @@
 		<property name="numThreads" value="1000" />
 	</bean>
 
-	<bean id="ranker"
+	<bean id="rankerUM"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressorUM.model" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="features" ref="rankingFeatureListUM" />
+	</bean>
+
+	<bean id="rankerNoUM"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
 		<constructor-arg name="regressorFileName" value="resources/regressorNoUM.model" />
 		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/ranking/eventConstituents.qry" />
@@ -47,40 +57,60 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="features" ref="rankingFeatureListNoUM" />
 	</bean>
+	
 
-	<bean id="selector"
+	<bean id="selectorUM"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.97" />
+	</bean>
+
+	<bean id="selectorNoUM"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
 		<property name="threshold" value="0.86" />
 	</bean>
+	
 
-	<bean id="retriever"
+	<bean id="retrieverUM"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
 		<property name="eventSearcher" ref="searcher" />
 		<property name="eventFilter" ref="filter" />
-		<property name="eventRanker" ref="ranker" />
-		<property name="eventSelector" ref="selector" />
+		<property name="eventRanker" ref="rankerUM" />
+		<property name="eventSelector" ref="selectorUM" />
 	</bean>
+
+	<bean id="retrieverNoUM"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.EventRetriever">
+		<property name="eventSearcher" ref="searcher" />
+		<property name="eventFilter" ref="filter" />
+		<property name="eventRanker" ref="rankerNoUM" />
+		<property name="eventSelector" ref="selectorNoUM" />
+	</bean>
+	
 
 	<bean id="generator"
 		class="edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker">
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
-	<bean id="userModel"
-		class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel">
-	</bean>
-
-	<bean id="newsTeller"
+	<bean id="newsTellerUM"
 		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
 		<constructor-arg value="./config/logging.properties" />
-		<property name="userModel" ref="userModel" />
-		<property name="retriever" ref="retriever" />
+		<property name="retriever" ref="retrieverUM" />
+		<property name="generator" ref="generator" />
+		<property name="ksAdapter" ref="ksAdapter" />
+	</bean>
+
+	<bean id="newsTellerNoUM"
+		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
+		<constructor-arg value="./config/logging.properties" />
+		<property name="retriever" ref="retrieverNoUM" />
 		<property name="generator" ref="generator" />
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
 	<bean id="main" class="edu.kit.anthropomatik.isl.newsTeller.main.Main">
-		<property name="newsTeller" ref="newsTeller" />
+		<property name="newsTellerUM" ref="newsTellerUM" />
+		<property name="newsTellerNoUM" ref="newsTellerNoUM" />
 	</bean>
 
 	<bean id="usabilityFeatureExtractor" class="edu.kit.anthropomatik.isl.newsTeller.tools.UsabilityFeatureExtractor">

@@ -83,7 +83,7 @@ public class NewsEvent implements Comparable<NewsEvent>{
 	}
 	
 	public String toVerboseString() {
-		return String.format("[%s|%.2f|%.2f]", eventURI, usabilityProbability, expectedRelevance);
+		return String.format("[%s|%.2f|%.2f]", eventURI, usabilityProbability, this.getExpectedRelevanceScoring());
 	}
 	
 	@Override

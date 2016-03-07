@@ -68,7 +68,7 @@ public class EventRetriever {
 			old = l;
 		}
 		//endregion
-		Set<NewsEvent> filteredEvents = eventFilter.filterEvents(events, userQuery);
+		Set<NewsEvent> filteredEvents = eventFilter.filterEvents(events, userQuery, userModel);
 		//region time logging
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();
@@ -85,7 +85,7 @@ public class EventRetriever {
 			old = l;
 		}
 		//endregion
-		NewsEvent event = eventSelector.selectEvent(rankedEvents);
+		NewsEvent event = eventSelector.selectEvent(rankedEvents, userModel);
 		//region time logging
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();

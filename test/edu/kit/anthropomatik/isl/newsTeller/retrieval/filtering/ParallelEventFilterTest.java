@@ -19,6 +19,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class ParallelEventFilterTest {
@@ -60,7 +61,7 @@ public class ParallelEventFilterTest {
 		NewsEvent target = new NewsEvent("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev22");
 		events.add(target);
 		events.add(new NewsEvent("http://en.wikinews.org/wiki/Brazil_wins_Confederations_Cup#ev23"));
-		Set<NewsEvent> result = filter.filterEvents(events, keywords);
+		Set<NewsEvent> result = filter.filterEvents(events, keywords, new DummyUserModel());
 		assertTrue(result.size() == 1 && result.contains(target));
 	}
 

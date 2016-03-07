@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.ConversationCycle;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 
 /**
  * Implementation of an actual user model.
@@ -23,10 +24,6 @@ public class ActualUserModel extends UserModel {
 		this.history = new ArrayList<ConversationCycle>();
 	}
 	
-	public void addCycleToHistory(ConversationCycle cycle) {
-		this.history.add(cycle);
-	}
-	
 	@Override
 	public List<Keyword> getInterests() {
 		return this.interests;
@@ -35,6 +32,22 @@ public class ActualUserModel extends UserModel {
 	@Override
 	public List<ConversationCycle> getHistory() {
 		return this.history;
+	}
+
+	@Override
+	public void addCycleToHistory(ConversationCycle cycle) {
+		this.history.add(cycle);
+	}
+	
+	@Override
+	public boolean historyContainsEvent(NewsEvent event) {
+		
+		for (ConversationCycle cycle : this.history) {
+			if (cycle.getEventURI().equals(event.getEventURI()))
+				return true;
+		}
+		
+		return false;
 	}
 
 }

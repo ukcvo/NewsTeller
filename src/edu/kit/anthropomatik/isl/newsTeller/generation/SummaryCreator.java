@@ -5,9 +5,11 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.kit.anthropomatik.isl.newsTeller.data.ConversationCycle;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
@@ -33,7 +35,7 @@ public abstract class SummaryCreator {
 	/**
 	 * Summarize the given event.
 	 */
-	public String summarizeEvent(NewsEvent event, List<Keyword> keywords) {
+	public String summarizeEvent(NewsEvent event, List<Keyword> keywords, UserModel userModel) {
 		
 		String result;
 		
@@ -48,6 +50,9 @@ public abstract class SummaryCreator {
 			result = createSummary(event, keywords);
 			if (result.isEmpty())
 				result = Util.EMPTY_EVENT_RESPONSE;
+			
+			ConversationCycle cycle = new ConversationCycle(keywords, event.getEventURI(), result);
+			userModel.addCycleToHistory(cycle);
 		}
 		
 		return result;

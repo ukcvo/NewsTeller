@@ -19,6 +19,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class SequentialEventFilterTest {
@@ -67,7 +68,7 @@ public class SequentialEventFilterTest {
 	
 	@Test
 	public void shouldReturnOneElementedResult() {
-		Set<NewsEvent> result = filter.filterEvents(events, keywords);
+		Set<NewsEvent> result = filter.filterEvents(events, keywords, new DummyUserModel());
 		assertTrue(result.size() == 1 && result.contains(target));
 	}
 }

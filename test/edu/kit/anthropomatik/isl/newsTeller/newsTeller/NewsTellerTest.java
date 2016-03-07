@@ -14,6 +14,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class NewsTellerTest {
@@ -44,7 +45,7 @@ public class NewsTellerTest {
 	public void shouldReturnDummySummary() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial intelligence"));
-		assertTrue(newsTellerScope0.getNews(keywords).equals("dummySummary"));
+		assertTrue(newsTellerScope0.getNews(keywords, new DummyUserModel()).equals("dummySummary"));
 	}
 	//endregion
 	
@@ -53,7 +54,7 @@ public class NewsTellerTest {
 	public void shouldReturnExtractedSentence() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial intelligence"));
-		String result = newsTellerScope2.getNews(keywords);
+		String result = newsTellerScope2.getNews(keywords, new DummyUserModel());
 		assertTrue(!result.isEmpty() && !result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 	
@@ -61,7 +62,7 @@ public class NewsTellerTest {
 	public void shouldReturnEmptyEventResponse() {
 		List<Keyword> keywords = new ArrayList<Keyword>();
 		keywords.add(new Keyword("artificial brain"));
-		String result = newsTellerScope2.getNews(keywords);
+		String result = newsTellerScope2.getNews(keywords, new DummyUserModel());
 		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 	

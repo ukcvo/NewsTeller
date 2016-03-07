@@ -42,6 +42,12 @@ public class ConversationCycle {
 		this.systemResponse = systemResponse;
 	}
 	
+	public ConversationCycle(List<Keyword> userQuery, String eventURI, String systemResponse) {
+		this.userQuery = userQuery;
+		this.eventURI = eventURI;
+		this.systemResponse = systemResponse;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("[userQuery = <%s>, event = '%s', systemResponse = '%s']", 

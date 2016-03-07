@@ -25,8 +25,6 @@ public class NewsTeller {
 	
 	private Log log;
 	
-	private UserModel userModel;
-	
 	private EventRetriever retriever;
 	
 	private SummaryCreator generator;
@@ -34,10 +32,6 @@ public class NewsTeller {
 	private KnowledgeStoreAdapter ksAdapter;
 	
 	//region setters
-	public void setUserModel(UserModel userModel) {
-		this.userModel = userModel;
-	}
-
 	public void setRetriever(EventRetriever retriever) {
 		this.retriever = retriever;
 	}
@@ -68,7 +62,7 @@ public class NewsTeller {
 		}
 	}
 	
-	public String getNews(List<Keyword> userQuery) {
+	public String getNews(List<Keyword> userQuery, UserModel userModel) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("getNews(user query = <%s>)", StringUtils.collectionToCommaDelimitedString(userQuery)));
 		
@@ -76,7 +70,7 @@ public class NewsTeller {
 			ksAdapter.openConnection();
 		
 		NewsEvent selectedEvent = retriever.retrieveEvent(userQuery, userModel);
-		String summary = generator.summarizeEvent(selectedEvent, userQuery);
+		String summary = generator.summarizeEvent(selectedEvent, userQuery, userModel);
 		
 		return summary;
 	}

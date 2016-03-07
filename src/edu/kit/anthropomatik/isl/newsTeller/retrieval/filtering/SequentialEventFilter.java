@@ -1,5 +1,6 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,7 @@ import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.classifiers.Classifier;
 import weka.core.DenseInstance;
@@ -72,7 +74,7 @@ public class SequentialEventFilter implements IEventFilter {
 		this.entityMentionsQuery = Util.readStringFromFile(entityMentionsQueryFileName);
 	}
 	
-	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery) {
+	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery, UserModel userModel) {
 		
 		ksAdapter.flushBuffer();
 		
@@ -83,8 +85,13 @@ public class SequentialEventFilter implements IEventFilter {
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
-		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, userQuery);
-		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord()));
+		List<Keyword> allKeywords = new ArrayList<Keyword>();
+		allKeywords.addAll(userQuery);
+		allKeywords.addAll(userModel.getInterests());
+		
+		
+		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, allKeywords);
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord()));
 		
 		Set<String> mentionProperties = new HashSet<String>();
 		for (UsabilityFeature feature : this.features) {
@@ -94,12 +101,12 @@ public class SequentialEventFilter implements IEventFilter {
 		ksAdapter.runKeyValueMentionPropertyQuery(mentionProperties, Util.RELATION_NAME_MENTION_PROPERTY, mentionURIs);
 		ksAdapter.runKeyValueResourceTextQuery(Util.resourceURIsFromMentionURIs(mentionURIs));
 		
-		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
-		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, allKeywords);
+		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, allKeywords);
 
-		Set<String> entities = ksAdapter.getAllRelationValues("event-entity-" + userQuery.get(0).getWord());
-		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
-		ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
+		Set<String> entities = ksAdapter.getAllRelationValues("event-entity-" + allKeywords.get(0).getWord());
+		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, allKeywords);
+		ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, allKeywords);
 		
 		t = System.currentTimeMillis() - t;
 		if (log.isInfoEnabled())

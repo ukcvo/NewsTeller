@@ -457,7 +457,7 @@ public class RuntimeTester {
 		int i = 0;
 		long t1 = System.currentTimeMillis();
 		for (Map.Entry<List<Keyword>, Set<NewsEvent>> entry : this.keywordsToEventsMap.entrySet()) {
-			filter.filterEvents(entry.getValue(), entry.getKey());
+			filter.filterEvents(entry.getValue(), entry.getKey(), new DummyUserModel());
 			i += entry.getValue().size();
 			if (i >= maxNumberOfEvents)
 				break;
@@ -722,7 +722,7 @@ public class RuntimeTester {
 			total += search;
 			
 			long filter = System.currentTimeMillis();
-			Set<NewsEvent> filtered = this.parallelFilter.filterEvents(found, query);
+			Set<NewsEvent> filtered = this.parallelFilter.filterEvents(found, query, um);
 			filter = System.currentTimeMillis() - filter;
 			filterTime += filter;
 			relFilterTime += filter / found.size();

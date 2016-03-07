@@ -12,6 +12,10 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.ActualUserModel;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
+import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 /**
  * Main executable for interactive testing purposes.
@@ -23,10 +27,15 @@ public class Main {
 
 	private static Log log = LogFactory.getLog(Main.class);
 	
-	private NewsTeller newsTeller;
+	private NewsTeller newsTellerUM;
+	private NewsTeller newsTellerNoUM;
 	
-	public void setNewsTeller(NewsTeller newsTeller) {
-		this.newsTeller = newsTeller;
+	public void setNewsTellerUM(NewsTeller newsTellerUM) {
+		this.newsTellerUM = newsTellerUM;
+	}
+	
+	public void setNewsTellerNoUM(NewsTeller newsTellerNoUM) {
+		this.newsTellerNoUM = newsTellerNoUM;
 	}
 		
 	// command-line interface to NewsTeller
@@ -39,21 +48,46 @@ public class Main {
 		System.out.print("> ");
 		String input = in.nextLine();
 		
+		UserModel um = new DummyUserModel();
+		NewsTeller newsTeller = this.newsTellerNoUM;
+		
 		while (!input.equalsIgnoreCase("quit")) {
-			List<Keyword> keywords = new ArrayList<Keyword>();
 			
-			String[] words = input.split(",");
-			for (String word : words) {
-				keywords.add(new Keyword(word.trim()));
+			if (input.equals("UM")) {
+				List<Keyword> interests = new ArrayList<Keyword>();
+				System.out.print("> ");
+				input = in.nextLine();
+				String[] tokens = input.split(",");
+				for (String token : tokens) {
+					Keyword k = new Keyword(token);
+					Util.stemKeyword(k);
+					interests.add(k);
+				}
+				um = new ActualUserModel(interests);
+				newsTeller = this.newsTellerUM;
+				
+			} else if (input.equals("noUM")) {
+				um = new DummyUserModel();
+				newsTeller = this.newsTellerUM;
+				
+			} else {
+				List<Keyword> keywords = new ArrayList<Keyword>();
+				
+				String[] words = input.split(",");
+				for (String word : words) {
+					keywords.add(new Keyword(word.trim()));
+				}
+				
+				System.out.println(newsTeller.getNews(keywords, um));
+				
 			}
 			
-			System.out.println(newsTeller.getNews(keywords));
 			System.out.print("> ");
 			input = in.nextLine();
 		}
 		
 		in.close();
-		newsTeller.shutDown();
+		newsTellerUM.shutDown();
 	}
 	
 	public static void main(String[] args) {

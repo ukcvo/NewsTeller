@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 
 /**
  * Selects one event to be summarized to the user.
@@ -27,7 +28,7 @@ public class EventSelector {
 	/**
 	 * Select the highest scoring event. (assume that list is sorted in descending order)
 	 */
-	public NewsEvent selectEvent(List<NewsEvent> events) {
+	public NewsEvent selectEvent(List<NewsEvent> events, UserModel userModel) {
 		if (log.isTraceEnabled())
 			log.trace(String.format("selectEvent(events = <%s>)", StringUtils.collectionToCommaDelimitedString(events)));
 		
@@ -36,12 +37,19 @@ public class EventSelector {
 			if(log.isErrorEnabled())
 				log.error("empty event list, cannot select anything!");
 		} else {
-			selectedEvent = events.get(0);
-			if (selectedEvent.getExpectedRelevanceScoring() < this.threshold) {
-				if (log.isInfoEnabled())
-					log.info("Not confident enough in top event, returning nothing.");
-				selectedEvent = null;
+			boolean isEventSelected = false;
+			for (int i = 0; (i < events.size()) && !isEventSelected; i++) {
+				selectedEvent = events.get(i);
+				if (selectedEvent.getExpectedRelevanceScoring() < this.threshold) {
+					if (log.isInfoEnabled())
+						log.info("Not confident enough in top event, returning nothing.");
+					selectedEvent = null;
+					isEventSelected = true;
+				}
+				if (!userModel.historyContainsEvent(selectedEvent))
+					isEventSelected = true;
 			}
+			
 		}
 		
 		if (log.isInfoEnabled())

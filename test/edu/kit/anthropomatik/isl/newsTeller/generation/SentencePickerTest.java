@@ -22,6 +22,7 @@ import edu.kit.anthropomatik.isl.newsTeller.data.KSMention;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
 public class SentencePickerTest {
@@ -66,19 +67,19 @@ public class SentencePickerTest {
 	
 	@Test
 	public void shouldReturnEmptyEventResponseBecauseOfNullEvent() {
-		String result = sentencePicker.summarizeEvent(null, keywords);
+		String result = sentencePicker.summarizeEvent(null, keywords, new DummyUserModel());
 		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 
 	@Test
 	public void shouldReturnEmptyEventResponseBecauseOfNonexistentEvent() {
-		String result = sentencePicker.summarizeEvent(new NewsEvent("http://en.wikinews.org/wiki/Non_existing_text#ev999"), keywords);
+		String result = sentencePicker.summarizeEvent(new NewsEvent("http://en.wikinews.org/wiki/Non_existing_text#ev999"), keywords, new DummyUserModel());
 		assertTrue(result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 	
 	@Test
 	public void shouldReturnRegularResponse() {
-		String result = sentencePicker.summarizeEvent(new NewsEvent("event-1"), keywords);
+		String result = sentencePicker.summarizeEvent(new NewsEvent("event-1"), keywords, new DummyUserModel());
 		assertTrue(!result.isEmpty() && !result.equals(Util.EMPTY_EVENT_RESPONSE));
 	}
 }

@@ -18,6 +18,7 @@ import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 import weka.classifiers.Classifier;
 import weka.core.DenseInstance;
@@ -139,7 +140,7 @@ public class ParallelEventFilter implements IEventFilter {
 		
 	}
 	
-	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery) {
+	public Set<NewsEvent> filterEvents(Set<NewsEvent> events, List<Keyword> userQuery, UserModel userModel) {
 		
 		ksAdapter.flushBuffer();
 		
@@ -150,6 +151,10 @@ public class ParallelEventFilter implements IEventFilter {
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
+		List<Keyword> allKeywords = new ArrayList<Keyword>();
+		allKeywords.addAll(userQuery);
+		allKeywords.addAll(userModel.getInterests());
+		
 		List<Future<?>> futures = new ArrayList<Future<?>>();
 		
 		// task 1: get all mentions and based on that both the resources and the mention properties
@@ -157,8 +162,8 @@ public class ParallelEventFilter implements IEventFilter {
 			
 			@Override
 			public void run() {
-				ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, userQuery);
-				Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord()));
+				ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, allKeywords);
+				Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord()));
 				
 				List<Future<?>> futures = new ArrayList<Future<?>>();
 				
@@ -200,7 +205,7 @@ public class ParallelEventFilter implements IEventFilter {
 			
 			@Override
 			public void run() {
-				ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
+				ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, allKeywords);
 			}
 		}));
 		
@@ -209,8 +214,8 @@ public class ParallelEventFilter implements IEventFilter {
 			
 			@Override
 			public void run() {
-				ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
-				Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", userQuery.get(0).getWord()));
+				ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, allKeywords);
+				Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", allKeywords.get(0).getWord()));
 				
 				List<Future<?>> futures = new ArrayList<Future<?>>();
 				
@@ -218,7 +223,7 @@ public class ParallelEventFilter implements IEventFilter {
 					
 					@Override
 					public void run() {
-						ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
+						ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, allKeywords);
 					}
 				}));
 				
@@ -226,7 +231,7 @@ public class ParallelEventFilter implements IEventFilter {
 					
 					@Override
 					public void run() {
-						ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
+						ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, allKeywords);
 					}
 				}));
 				

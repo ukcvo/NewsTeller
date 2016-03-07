@@ -144,7 +144,7 @@ public class RankingExamplesGenerator {
 				queryKeywords.add(new Keyword(word));
 			
 			Set<NewsEvent> events = searcher.findEvents(queryKeywords, dummyUserModel);
-			Set<NewsEvent> filteredEvents = filter.filterEvents(events, queryKeywords);
+			Set<NewsEvent> filteredEvents = filter.filterEvents(events, queryKeywords, dummyUserModel);
 			List<NewsEvent> rankedEvents = ranker.rankEvents(filteredEvents, queryKeywords, dummyUserModel);
 
 			List<EventSentenceTuple> sentenceTuples = new ArrayList<EventSentenceTuple>();

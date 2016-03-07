@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 
 import edu.kit.anthropomatik.isl.newsTeller.data.ConversationCycle;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
+import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 
 /**
  * Encapsulates the user model: interests (keywords the user is interested in) and the conversation history.
@@ -18,6 +19,10 @@ public abstract class UserModel {
 	public abstract List<Keyword> getInterests();
 	
 	public abstract List<ConversationCycle> getHistory();
+	
+	public abstract boolean historyContainsEvent(NewsEvent event);
+	
+	public abstract void addCycleToHistory(ConversationCycle cycle);
 	
 	@Override
 	public String toString() {
