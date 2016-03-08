@@ -24,6 +24,7 @@ import org.springframework.util.StringUtils;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkEvent;
+import edu.kit.anthropomatik.isl.newsTeller.data.benchmark.BenchmarkUser;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.IEventFilter;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter;
@@ -31,6 +32,7 @@ import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventF
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher;
+import edu.kit.anthropomatik.isl.newsTeller.userModel.ActualUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -83,7 +85,7 @@ public class RuntimeTester {
 	private boolean doBulkMentionTest;
 	
 	private boolean doEndToEndTest;
-	
+		
 	private KnowledgeStoreAdapter ksAdapter;
 
 	private Map<String, String> sparqlSearchQueries;
@@ -118,6 +120,8 @@ public class RuntimeTester {
 
 	private Classifier classifier;
 
+	private List<BenchmarkUser> users;
+	
 	// region setters
 	public void setDoKSAccessTests(boolean doKSAccessTests) {
 		this.doKSAccessTests = doKSAccessTests;
@@ -231,9 +235,10 @@ public class RuntimeTester {
 	
 	// endregion
 
-	public RuntimeTester(String configFileName, String dataSetFileName, String classifierFileName) {
+	public RuntimeTester(String configFileName, String dataSetFileName, String classifierFileName, String metaConfigFileName) {
 
 		// handle benchmark files
+		this.users = Util.readCompleteUserBenchmark(metaConfigFileName);
 		Map<String, List<Keyword>> benchmarkConfig = Util.readBenchmarkConfigFile(configFileName);
 		this.keywords = new HashSet<List<Keyword>>();
 		for (List<Keyword> queryKeywords : benchmarkConfig.values()) {
@@ -706,43 +711,43 @@ public class RuntimeTester {
 		long overallTime = 0;
 		long relOverallTime = 0;
 		
-		UserModel um = new DummyUserModel();
-		
 		if (log.isInfoEnabled())
-			log.info("query;total;totalRel;search;searchRel;filter;filterRel;rank;rankRel");
+			log.info("query;kw;um;total;totalRel;search;searchRel;filter;filterRel;rank;rankRel");
 		
-		for (List<Keyword> query : this.keywords) {
+		for (BenchmarkUser user : this.users) {
+			UserModel um = new ActualUserModel(user.getInterests());
 			
-			long total = 0;
-			long search = System.currentTimeMillis();
-			Set<NewsEvent> found = this.parallelSearcher.findEvents(query, um);
-			search = System.currentTimeMillis() - search;
-			searchTime += search;
-			relSearchTime += search / found.size();
-			total += search;
-			
-			long filter = System.currentTimeMillis();
-			Set<NewsEvent> filtered = this.parallelFilter.filterEvents(found, query, um);
-			filter = System.currentTimeMillis() - filter;
-			filterTime += filter;
-			relFilterTime += filter / found.size();
-			total += filter;
-			
-			long rank = System.currentTimeMillis();
-			this.sequentialRanker.rankEvents(filtered, query, um);
-			rank = System.currentTimeMillis() - rank;
-			rankTime += rank;
-			relRankTime += rank / filtered.size();
-			total += rank;
-			
-			overallTime += total;
-			relOverallTime += total / found.size();
-			
-			if (log.isInfoEnabled())
-				log.info(String.format("%s;%d;%d;%d;%d;%d;%d;%d;%d", 
-						StringUtils.collectionToCommaDelimitedString(query), 
-						total, total / found.size(), search, search / found.size(), filter, filter / found.size(), rank, rank / filtered.size()));
-			
+			for (List<Keyword> query : user.getQueries().keySet()) {
+				long total = 0;
+				long search = System.currentTimeMillis();
+				Set<NewsEvent> found = this.parallelSearcher.findEvents(query, um);
+				search = System.currentTimeMillis() - search;
+				searchTime += search;
+				relSearchTime += search / found.size();
+				total += search;
+				
+				long filter = System.currentTimeMillis();
+				Set<NewsEvent> filtered = this.parallelFilter.filterEvents(found, query, um);
+				filter = System.currentTimeMillis() - filter;
+				filterTime += filter;
+				relFilterTime += filter / found.size();
+				total += filter;
+				
+				long rank = System.currentTimeMillis();
+				this.sequentialRanker.rankEvents(filtered, query, um);
+				rank = System.currentTimeMillis() - rank;
+				rankTime += rank;
+				relRankTime += rank / filtered.size();
+				total += rank;
+				
+				overallTime += total;
+				relOverallTime += total / found.size();
+				
+				if (log.isInfoEnabled())
+					log.info(String.format("%s;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d", 
+							StringUtils.collectionToCommaDelimitedString(query), query.size(), um.getInterests().size(),
+							total, total / found.size(), search, search / found.size(), filter, filter / found.size(), rank, rank / filtered.size()));
+			}
 		}
 		
 		searchTime /= this.keywords.size();

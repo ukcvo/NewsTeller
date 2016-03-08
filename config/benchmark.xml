@@ -28,8 +28,8 @@
 		<constructor-arg name="getEventFromMentionFileName"
 			value="resources/SPARQL/general/getEventFromMention.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
-		<property name="timeoutMsec" value="10000" />
-		<property name="maxNumberOfConnections" value="100" />
+		<property name="timeoutMsec" value="20000" />
+		<property name="maxNumberOfConnections" value="50" />
 		<property name="useStanford" value="true" />
 	</bean>
 
@@ -37,14 +37,14 @@
 		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
 		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="maxNumberOfEvents" value="10000" />
+		<property name="maxNumberOfEvents" value="1000" />
 	</bean>
 
 	<bean id="searcher2" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
 		<constructor-arg name="standardSparqlQueryFileName"	value="resources/SPARQL/search/searchQuery.qry" />
 		<constructor-arg name="fallbackSparqlQueryFileName"	value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter" />
-		<property name="maxNumberOfEvents" value="10000" />
+		<property name="maxNumberOfEvents" value="1000" />
 	</bean>
 
 	<bean id="filter2a"
