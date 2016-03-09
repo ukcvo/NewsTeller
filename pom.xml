@@ -260,7 +260,6 @@
 		<dependency>
 			<groupId>org.nd4j</groupId>
 			<artifactId>nd4j-x86</artifactId>
-			<version>${nd4j.version}</version>
 		</dependency>
 		<dependency>
 			<artifactId>canova-nd4j-image</artifactId>
@@ -416,12 +415,28 @@
 			<version>${sesame.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- exclusions for web frontend -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>3.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+
 	</dependencies>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.source.version>1.7</java.source.version>
-		<java.target.version>1.7</java.target.version>
+		<java.source.version>1.8</java.source.version>
+		<java.target.version>1.8</java.target.version>
 
 		<nd4j.version>0.4-rc3.8</nd4j.version>
 		<dl4j.version> 0.4-rc3.8</dl4j.version>

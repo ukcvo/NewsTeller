@@ -105,6 +105,18 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.el</artifactId>
+      <version>3.0.0</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <dependencyManagement>
     <dependencies>
@@ -122,9 +134,9 @@
     <rdfpro.version>0.4.1</rdfpro.version>
     <assembly-plugin.version>2.4</assembly-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.source.version>1.7</java.source.version>
+    <java.source.version>1.8</java.source.version>
     <nd4j.version>0.4-rc3.8</nd4j.version>
-    <java.target.version>1.7</java.target.version>
+    <java.target.version>1.8</java.target.version>
     <dl4j.version>0.4-rc3.8</dl4j.version>
     <jackson.version>2.5.1</jackson.version>
     <sesame.version>2.7.10</sesame.version>
