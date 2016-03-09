@@ -114,7 +114,7 @@ public class ParallelEventFilter implements IEventFilter {
 		public void run() {
 			double[] values = new double[features.size() + 1];
 			
-			List<Future<?>> futures = new ArrayList<Future<?>>();
+			List<Future<Double>> futures = new ArrayList<Future<Double>>();
 			for (int i = 0; i < features.size(); i++) {
 				FeatureWorker w = new FeatureWorker(features.get(i), event.getEventURI(), userQuery);
 				futures.add(threadPool.submit(w));

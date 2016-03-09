@@ -103,14 +103,11 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
 
-	<bean id="userModel0"
-		class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel">
-	</bean>
+	<bean id="userModel0" class="edu.kit.anthropomatik.isl.newsTeller.userModel.DummyUserModel" />
 
 	<bean id="newsTeller0"
 		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
 		<constructor-arg value="./config/logging-test.properties" />
-		<property name="userModel" ref="userModel0" />
 		<property name="retriever" ref="retriever0" />
 		<property name="generator" ref="generator0" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -119,7 +116,6 @@
 	<bean id="newsTeller2"
 		class="edu.kit.anthropomatik.isl.newsTeller.newsTeller.NewsTeller">
 		<constructor-arg value="./config/logging-test.properties" />
-		<property name="userModel" ref="userModel0" />
 		<property name="retriever" ref="retriever2" />
 		<property name="generator" ref="generator1" />
 		<property name="ksAdapter" ref="ksAdapter" />

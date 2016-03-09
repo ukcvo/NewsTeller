@@ -27,6 +27,7 @@ import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
 
+
 public class KnowledgeStoreAdapterTest {
 
 	private KnowledgeStoreAdapter ksAdapter;
@@ -310,10 +311,11 @@ public class KnowledgeStoreAdapterTest {
 		assertTrue(expectedResult.equals(result));
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldReturnEventSentenceTokens() {
-		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", "."));
+		List<String> dummy = Lists.newArrayList("Expected", "result", "number", "one", ".");
+		Set<List<String>> expectedResult = new HashSet<List<String>>();
+		expectedResult.add(dummy);
 		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
 		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2"));
@@ -329,10 +331,11 @@ public class KnowledgeStoreAdapterTest {
 		assertTrue(expectedResult.equals(result));
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldReturnEventTextTokens() {
-		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", ".", "Irrelevant", "Sentence", "."));
+		List<String> dummy = Lists.newArrayList("Expected", "result", "number", "one", ".", "Irrelevant", "Sentence", ".");
+		Set<List<String>> expectedResult = new HashSet<List<String>>();
+		expectedResult.add(dummy);
 		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
 		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2"));
