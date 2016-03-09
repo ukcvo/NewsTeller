@@ -147,11 +147,11 @@ public class ParallelEventFilter implements IEventFilter {
 		Set<NewsEvent> result = new HashSet<NewsEvent>();
 		
 		long t = System.currentTimeMillis();
-		Set<String> eventURIs = new HashSet<String>();
+		final Set<String> eventURIs = new HashSet<String>();
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
-		List<Keyword> allKeywords = new ArrayList<Keyword>();
+		final List<Keyword> allKeywords = new ArrayList<Keyword>();
 		allKeywords.addAll(userQuery);
 		allKeywords.addAll(userModel.getInterests());
 		
@@ -163,7 +163,7 @@ public class ParallelEventFilter implements IEventFilter {
 			@Override
 			public void run() {
 				ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, allKeywords);
-				Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord()));
+				final Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord()));
 				
 				List<Future<?>> futures = new ArrayList<Future<?>>();
 				
@@ -215,7 +215,7 @@ public class ParallelEventFilter implements IEventFilter {
 			@Override
 			public void run() {
 				ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, allKeywords);
-				Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", allKeywords.get(0).getWord()));
+				final Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", allKeywords.get(0).getWord()));
 				
 				List<Future<?>> futures = new ArrayList<Future<?>>();
 				

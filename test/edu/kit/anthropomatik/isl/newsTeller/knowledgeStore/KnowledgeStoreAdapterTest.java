@@ -274,7 +274,7 @@ public class KnowledgeStoreAdapterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldReturnAllSentenceTokens() {
-		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", "."), 
+		Set<ArrayList<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", "."), 
 															Lists.newArrayList("ExpectedResultNumberTwo", "."));
 		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
@@ -294,7 +294,7 @@ public class KnowledgeStoreAdapterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldReturnAllTextTokens() {
-		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", ".", "Irrelevant", "Sentence", "."),
+		Set<ArrayList<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", ".", "Irrelevant", "Sentence", "."),
 															Lists.newArrayList("ExpectedResultNumberTwo", ".", "Another", "irrelevant", "Sentence", "."));
 		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
@@ -354,7 +354,7 @@ public class KnowledgeStoreAdapterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldReturnAllTitleTokens() {
-		Set<List<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", "."), 
+		Set<ArrayList<String>> expectedResult = Sets.newHashSet(Lists.newArrayList("Expected", "result", "number", "one", "."), 
 															Lists.newArrayList("ExpectedResultNumberTwo", "."));
 		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
@@ -373,7 +373,7 @@ public class KnowledgeStoreAdapterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldReturnAllTextURIs() {
-		List<Set<String>> expectedResult = Lists.newArrayList(Sets.newHashSet("mention-1"),	Sets.newHashSet("mention-1", "mention-2"));
+		List<HashSet<String>> expectedResult = Lists.newArrayList(Sets.newHashSet("mention-1"),	Sets.newHashSet("mention-1", "mention-2"));
 		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();
 		mentionMap.put("event-1", Sets.newHashSet("mention-1#char=1,2"));
@@ -388,7 +388,7 @@ public class KnowledgeStoreAdapterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldReturnAllSentences() {
-		List<Set<String>> expectedResult = Lists.newArrayList(Sets.newHashSet("Expected result number one."), 
+		List<HashSet<String>> expectedResult = Lists.newArrayList(Sets.newHashSet("Expected result number one."), 
 																Sets.newHashSet("ExpectedResultNumberTwo.", "Expected result number one."));
 		ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 		ConcurrentMap<String, Set<String>> mentionMap = new ConcurrentHashMap<String, Set<String>>();

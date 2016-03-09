@@ -195,7 +195,7 @@ public class RankingFeatureExtractor {
 				if (log.isInfoEnabled())
 					log.info(StringUtils.collectionToCommaDelimitedString(keywords));
 				
-				List<Keyword> allKeywords = new ArrayList<Keyword>();
+				final List<Keyword> allKeywords = new ArrayList<Keyword>();
 				allKeywords.addAll(keywords);
 				allKeywords.addAll(userInterests);
 				
@@ -203,7 +203,7 @@ public class RankingFeatureExtractor {
 				ksAdapter.flushBuffer();
 				List<Future<?>> futures = new ArrayList<Future<?>>();
 				
-				Set<String> eventURIs = new HashSet<String>();
+				final Set<String> eventURIs = new HashSet<String>();
 				for (BenchmarkEvent e : content.keySet())
 					eventURIs.add(e.getEventURI());
 				
@@ -213,7 +213,7 @@ public class RankingFeatureExtractor {
 					@Override
 					public void run() {
 						ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, allKeywords);
-						Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord())));
+						final Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord())));
 						
 						List<Future<?>> futures = new ArrayList<Future<?>>();
 						futures.add(ksAdapter.submit(new Runnable() {

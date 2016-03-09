@@ -3,6 +3,7 @@ package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +48,7 @@ public class MentionPropertyFeatureTest {
 		eventMentionMap.put("event-2", Sets.newHashSet("mention-2#char=123,456"));
 		eventMentionMap.put("event-3", Sets.newHashSet("mention-3#char=123,456"));
 		ConcurrentMap<String, Set<String>> mentionPropertyMap = new ConcurrentHashMap<String, Set<String>>();
-		mentionPropertyMap.put("mention-1#char=123,456", Sets.newHashSet());
+		mentionPropertyMap.put("mention-1#char=123,456", new HashSet<String>());
 		mentionPropertyMap.put("mention-2#char=123,456", Sets.newHashSet("one"));
 		mentionPropertyMap.put("mention-3#char=123,456", Sets.newHashSet("one", "two"));
 		
