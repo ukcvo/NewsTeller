@@ -710,12 +710,17 @@ public class Util {
 			substring = str.substring(0, str.indexOf("^")).replace("\"", "");
 		else
 			substring = str;
-		double result = Double.parseDouble(substring);
-		if (Double.isNaN(result)) {
+		double result;
+		try {
+			result = Double.parseDouble(substring);
+			if (Double.isNaN(result)) 
+				throw new NumberFormatException();
+		} catch (Exception e) {
 			if (log.isWarnEnabled())
 				log.warn(String.format("error parsing double: '%s'", str));
 			result = 0;
 		}
+		
 
 		return result;
 	}
