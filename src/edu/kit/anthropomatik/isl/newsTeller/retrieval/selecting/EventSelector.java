@@ -45,8 +45,7 @@ public class EventSelector {
 						log.info("Not confident enough in top event, returning nothing.");
 					selectedEvent = null;
 					isEventSelected = true;
-				}
-				if (!userModel.historyContainsEvent(selectedEvent))
+				} else if (!userModel.historyContainsEvent(selectedEvent))
 					isEventSelected = true;
 			}
 			

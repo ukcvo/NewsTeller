@@ -16,7 +16,8 @@
 			value="resources/SPARQL/general/getEventFromMention.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="20000" />
-		<property name="maxNumberOfConnections" value="10"/>
+		<property name="maxNumberOfConnections" value="50"/>
+		<property name="maximumQueryLength" value="2000" />
 	</bean>
 
 	<bean id="searcher"

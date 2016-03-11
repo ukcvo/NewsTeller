@@ -87,7 +87,7 @@ public class SequentialEventFilter implements IEventFilter {
 		
 		List<Keyword> allKeywords = new ArrayList<Keyword>();
 		allKeywords.addAll(userQuery);
-		allKeywords.addAll(userModel.getInterests());
+		//allKeywords.addAll(userModel.getInterests());
 		
 		
 		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, allKeywords);

@@ -2,5 +2,5 @@ SELECT ?entity ?mention
 WHERE
 {
 	VALUES ?entity { *keys* } .
-	?entity gaf:denotedBy ?entityMention
+	?entity gaf:denotedBy ?mention
 }

@@ -1,8 +1,9 @@
-SELECT ?event ?nonEntity
+SELECT ?event ?nonEntity ?entity
 WHERE
 {
 	VALUES ?event { *keys* } .
-	?event sem:hasActor|sem:hasPlace ?nonEntity .
-	FILTER NOT EXISTS { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?nonEntity ?link ?object } }
-	
+	{ ?event sem:hasActor|sem:hasPlace ?entity } UNION
+	{ ?event sem:hasActor|sem:hasPlace ?nonEntity .
+	FILTER NOT EXISTS { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?nonEntity ?link ?object } } }
+		
 }

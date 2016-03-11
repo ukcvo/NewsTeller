@@ -73,7 +73,7 @@ public class EventRetriever {
 		if (log.isDebugEnabled()) {
 			long l = System.currentTimeMillis();
 			log.debug(String.format("filter events: % d ms", l - old));
-			log.debug(String.format("keeping %d of %d events", events.size(), filteredEvents.size()));
+			log.debug(String.format("keeping %d of %d events", filteredEvents.size(), events.size()));
 			old = l;
 		}
 		//endregion

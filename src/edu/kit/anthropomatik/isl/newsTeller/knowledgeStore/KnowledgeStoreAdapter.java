@@ -52,6 +52,8 @@ public class KnowledgeStoreAdapter {
 
 	private int maxNumberOfConnections;
 
+	private int maximumQueryLength = MAXIMUM_QUERY_LENGTH;
+	
 	private boolean useStanford;
 	
 	private boolean isConnectionOpen = false;
@@ -94,6 +96,10 @@ public class KnowledgeStoreAdapter {
 		this.useStanford = useStanford;
 	}
 	
+	public void setMaximumQueryLength(int maximumQueryLength) {
+		this.maximumQueryLength = maximumQueryLength;
+	}
+	
 	public boolean isConnectionOpen() {
 		return isConnectionOpen;
 	}
@@ -121,7 +127,8 @@ public class KnowledgeStoreAdapter {
 			if (log.isWarnEnabled())
 				log.warn("Trying to open a second connection before closing the first one. Request ignored.");
 		} else {
-			this.knowledgeStore = Client.builder(serverURL).compressionEnabled(true).maxConnections(maxNumberOfConnections).validateServer(false).connectionTimeout(timeoutMsec).build();
+			int extendedTimeout = (int) (1.5 * timeoutMsec);
+			this.knowledgeStore = Client.builder(serverURL).compressionEnabled(true).maxConnections(maxNumberOfConnections).validateServer(false).connectionTimeout(extendedTimeout).build();
 			this.threadPool = Executors.newFixedThreadPool(maxNumberOfConnections);
 			this.isConnectionOpen = true;
 		}
@@ -300,7 +307,7 @@ public class KnowledgeStoreAdapter {
 			StringBuilder sb = new StringBuilder();
 			for (String uri : keyValues) {
 				String s = String.format("<%s> ", uri);
-				if (sb.length() + s.length() + queryWithKeyword.length() > MAXIMUM_QUERY_LENGTH) {
+				if (sb.length() + s.length() + queryWithKeyword.length() > this.maximumQueryLength) {
 					queries.add(queryWithKeyword.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
 					sb = new StringBuilder();
 				}
@@ -406,7 +413,7 @@ public class KnowledgeStoreAdapter {
 		Set<URI> currentSet = new HashSet<URI>();
 		int currentLength = 0;
 		for (String mentionURI : resourceURIs) {
-			if (currentLength + mentionURI.length() > 6000) {
+			if (currentLength + mentionURI.length() > this.maximumQueryLength) {
 				queryURISets.add(currentSet);
 				currentSet = new HashSet<URI>();
 				currentLength = 0;

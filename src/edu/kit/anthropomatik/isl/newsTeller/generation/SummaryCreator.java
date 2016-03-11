@@ -50,10 +50,10 @@ public abstract class SummaryCreator {
 			result = createSummary(event, keywords);
 			if (result.isEmpty())
 				result = Util.EMPTY_EVENT_RESPONSE;
-			
-			ConversationCycle cycle = new ConversationCycle(keywords, event.getEventURI(), result);
-			userModel.addCycleToHistory(cycle);
 		}
+		
+		ConversationCycle cycle = new ConversationCycle(keywords, (event == null) ? "" : event.getEventURI(), result);
+		userModel.addCycleToHistory(cycle);
 		
 		return result;
 	}
