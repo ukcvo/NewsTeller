@@ -1,6 +1,0 @@
-SELECT ?label
-WHERE
-{
-	<*e*> sem:hasTime ?time .
-	?time rdfs:label ?label .
-}

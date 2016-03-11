@@ -1,4 +1,4 @@
-SELECT ?event (COUNT(?a0) AS ?a0) (COUNT(?a1) AS ?a1) (COUNT(?a2) AS ?a2) (COUNT(?place) AS ?place) (COUNT(?mention) AS ?numberOfMentions) (COUNT(DISTINCT ?entity) AS ?numberOfKeywordEntities)
+SELECT ?event (COUNT(?a0) AS ?a0) (COUNT(?a1) AS ?a1) (COUNT(?a2) AS ?a2) (COUNT(?place) AS ?place) (COUNT(?mention) AS ?numberOfMentions)
 WHERE
 {
 	VALUES ?event { *keys* } .
@@ -6,12 +6,6 @@ WHERE
 	{ ?event propbank:A1 ?a1 } UNION
 	{ ?event propbank:A2 ?a2 } UNION
 	{ ?event sem:hasPlace ?place } UNION
-	{ ?event gaf:denotedBy ?mention } UNION
-	{ ?event sem:hasActor|sem:hasPlace ?entity .
-	GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en>
-	{
-		?entity rdfs:label ?label .
-		FILTER(REGEX(STR(?label),"*k*", "i"))
-	} }
+	{ ?event gaf:denotedBy ?mention }
 }
 GROUP BY ?event

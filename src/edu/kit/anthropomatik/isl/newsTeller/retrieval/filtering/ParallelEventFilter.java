@@ -42,10 +42,16 @@ public class ParallelEventFilter implements IEventFilter {
 	
 	private String eventStatisticsQuery;
 	
+	private String eventStatisticsKeywordQuery;
+		
 	private String eventConstituentsQuery;
+	
+	private String eventConstituentsKeywordQuery;
 	
 	private String entityPropertiesQuery;
 	
+	private String entityPropertiesKeywordQuery;
+		
 	private String entityMentionsQuery;
 	
 	public void setFeatures(List<UsabilityFeature> features) {
@@ -60,8 +66,9 @@ public class ParallelEventFilter implements IEventFilter {
 		this.threadPool = Executors.newFixedThreadPool(numThreads);
 	}
 	
-	public ParallelEventFilter(String classifierFileName, String eventStatisticsQueryFileName, String eventConstituentsQueryFileName,
-			String entityPropertiesQueryFileName, String entityMentionsQueryFileName) {
+	public ParallelEventFilter(String classifierFileName, String eventStatisticsQueryFileName, String eventStatisticsKeywordQueryFileName,
+								String eventConstituentsQueryFileName, String eventConstituentsKeywordQueryFileName,
+								String entityPropertiesQueryFileName, String entityPropertiesKeywordQueryFileName, String entityMentionsQueryFileName) {
 		try {
 			Object[] input = SerializationHelper.readAll(classifierFileName);
 			this.classifier = (Classifier) input[0];
@@ -73,8 +80,11 @@ public class ParallelEventFilter implements IEventFilter {
 				log.debug("can't read classifier from file", e);
 		}
 		this.eventStatisticsQuery = Util.readStringFromFile(eventStatisticsQueryFileName);
+		this.eventStatisticsKeywordQuery = Util.readStringFromFile(eventStatisticsKeywordQueryFileName);
 		this.eventConstituentsQuery = Util.readStringFromFile(eventConstituentsQueryFileName);
+		this.eventConstituentsKeywordQuery = Util.readStringFromFile(eventConstituentsKeywordQueryFileName);
 		this.entityPropertiesQuery = Util.readStringFromFile(entityPropertiesQueryFileName);
+		this.entityPropertiesKeywordQuery = Util.readStringFromFile(entityPropertiesKeywordQueryFileName);
 		this.entityMentionsQuery = Util.readStringFromFile(entityMentionsQueryFileName);
 	}
 	
@@ -151,10 +161,6 @@ public class ParallelEventFilter implements IEventFilter {
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
-		final List<Keyword> allKeywords = new ArrayList<Keyword>();
-		allKeywords.addAll(userQuery);
-		//allKeywords.addAll(userModel.getInterests());
-		
 		List<Future<?>> futures = new ArrayList<Future<?>>();
 		
 		// task 1: get all mentions and based on that both the resources and the mention properties
@@ -162,8 +168,8 @@ public class ParallelEventFilter implements IEventFilter {
 			
 			@Override
 			public void run() {
-				ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, allKeywords);
-				final Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord()));
+				ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, userQuery);
+				final Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord()));
 				
 				List<Future<?>> futures = new ArrayList<Future<?>>();
 				
@@ -205,17 +211,31 @@ public class ParallelEventFilter implements IEventFilter {
 			
 			@Override
 			public void run() {
-				ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, allKeywords);
+				ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
 			}
 		}));
-		
+		futures.add(ksAdapter.submit(new Runnable() {
+	
+			@Override
+			public void run() {
+				ksAdapter.runKeyValueSparqlQuery(eventStatisticsKeywordQuery, eventURIs, userQuery);
+			}
+		}));
+
 		// task 3: get the event constituents and based on that the entity properties and entity mentions
 		futures.add(ksAdapter.submit(new Runnable() {
 			
 			@Override
 			public void run() {
-				ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, allKeywords);
-				final Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", allKeywords.get(0).getWord()));
+				ksAdapter.runKeyValueSparqlQuery(eventConstituentsKeywordQuery, eventURIs, userQuery);
+			}
+		}));
+		futures.add(ksAdapter.submit(new Runnable() {
+			
+			@Override
+			public void run() {
+				ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
+				final Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", userQuery.get(0).getWord()));
 				
 				List<Future<?>> futures = new ArrayList<Future<?>>();
 				
@@ -223,7 +243,7 @@ public class ParallelEventFilter implements IEventFilter {
 					
 					@Override
 					public void run() {
-						ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, allKeywords);
+						ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
 					}
 				}));
 				
@@ -231,7 +251,15 @@ public class ParallelEventFilter implements IEventFilter {
 					
 					@Override
 					public void run() {
-						ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, allKeywords);
+						ksAdapter.runKeyValueSparqlQuery(entityPropertiesKeywordQuery, entities, userQuery);
+					}
+				}));
+				
+				futures.add(ksAdapter.submit(new Runnable() {
+					
+					@Override
+					public void run() {
+						ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
 					}
 				}));
 				

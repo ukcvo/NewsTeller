@@ -81,12 +81,9 @@ public class RankingSentenceExtractor {
 			
 			// retrieve the original texts for the events
 			ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, keywords);
-			for (Keyword k : keywords) {
-				Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(
-						Util.getRelationName("event", "mention", k.getWord())));
+			Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(
+						Util.getRelationName("event", "mention", keywords.get(0).getWord())));
 				ksAdapter.runKeyValueResourceTextQuery(resourceURIs);
-
-			}
 			
 			for (BenchmarkEvent event : fileMap.keySet()) {
 				Set<String> sentences = new HashSet<String>();

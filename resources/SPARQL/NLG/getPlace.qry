@@ -1,9 +1,0 @@
-SELECT ?label
-WHERE
-{
-	<*e*> sem:hasPlace ?place .
-	GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> 
-    {
-        ?place rdfs:label ?label
-    }
-}

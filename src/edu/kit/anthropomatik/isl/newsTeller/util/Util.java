@@ -134,6 +134,16 @@ public class Util {
 	public static final String RELATION_NAME_RESOURCE_TEXT = "resource-text-";
 	public static final String RELATION_NAME_RESOURCE_PROPERTY = "resource-property-";
 		
+	public static final List<Keyword> EMPTY_KEYWORD_LIST;
+	public static final Keyword EMPTY_KEYWORD;
+	
+	static {
+		EMPTY_KEYWORD_LIST = new ArrayList<Keyword>();
+		EMPTY_KEYWORD = new Keyword("");
+		Util.stemKeyword(EMPTY_KEYWORD);
+		EMPTY_KEYWORD_LIST.add(EMPTY_KEYWORD);
+	}
+	
 	// private constructor to prevent instantiation
 	private Util() {
 	}

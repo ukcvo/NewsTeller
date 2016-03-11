@@ -213,7 +213,8 @@ public class RankingFeatureExtractor {
 					@Override
 					public void run() {
 						ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, allKeywords);
-						final Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord())));
+						final Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(
+								ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord())));
 						
 						List<Future<?>> futures = new ArrayList<Future<?>>();
 						futures.add(ksAdapter.submit(new Runnable() {

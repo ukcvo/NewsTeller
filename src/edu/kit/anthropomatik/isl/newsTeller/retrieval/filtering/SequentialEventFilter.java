@@ -1,6 +1,5 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,10 +41,16 @@ public class SequentialEventFilter implements IEventFilter {
 	
 	private String eventStatisticsQuery;
 	
+	private String eventStatisticsKeywordQuery;
+		
 	private String eventConstituentsQuery;
+	
+	private String eventConstituentsKeywordQuery;
 	
 	private String entityPropertiesQuery;
 	
+	private String entityPropertiesKeywordQuery;
+		
 	private String entityMentionsQuery;
 	
 	public void setKsAdapter(KnowledgeStoreAdapter ksAdapter) {
@@ -56,8 +61,9 @@ public class SequentialEventFilter implements IEventFilter {
 		this.features = features;
 	}
 	
-	public SequentialEventFilter(String classifierFileName, String eventStatisticsQueryFileName, String eventConstituentsQueryFileName,
-									String entityPropertiesQueryFileName, String entityMentionsQueryFileName) {
+	public SequentialEventFilter(String classifierFileName, String eventStatisticsQueryFileName, String eventStatisticsKeywordQueryFileName,
+									String eventConstituentsQueryFileName, String eventConstituentsKeywordQueryFileName,
+									String entityPropertiesQueryFileName, String entityPropertiesKeywordQueryFileName, String entityMentionsQueryFileName) {
 		try {
 			Object[] input = SerializationHelper.readAll(classifierFileName);
 			this.classifier = (Classifier) input[0];
@@ -69,8 +75,11 @@ public class SequentialEventFilter implements IEventFilter {
 				log.debug("can't read classifier from file", e);
 		}
 		this.eventStatisticsQuery = Util.readStringFromFile(eventStatisticsQueryFileName);
+		this.eventStatisticsKeywordQuery = Util.readStringFromFile(eventStatisticsKeywordQueryFileName);
 		this.eventConstituentsQuery = Util.readStringFromFile(eventConstituentsQueryFileName);
+		this.eventConstituentsKeywordQuery = Util.readStringFromFile(eventConstituentsKeywordQueryFileName);
 		this.entityPropertiesQuery = Util.readStringFromFile(entityPropertiesQueryFileName);
+		this.entityPropertiesKeywordQuery = Util.readStringFromFile(entityPropertiesKeywordQueryFileName);
 		this.entityMentionsQuery = Util.readStringFromFile(entityMentionsQueryFileName);
 	}
 	
@@ -85,13 +94,8 @@ public class SequentialEventFilter implements IEventFilter {
 		for (NewsEvent e : events)
 			eventURIs.add(e.getEventURI());
 		
-		List<Keyword> allKeywords = new ArrayList<Keyword>();
-		allKeywords.addAll(userQuery);
-		//allKeywords.addAll(userModel.getInterests());
-		
-		
-		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, allKeywords);
-		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", allKeywords.get(0).getWord()));
+		ksAdapter.runKeyValueMentionFromEventQuery(eventURIs, userQuery);
+		Set<String> mentionURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord()));
 		
 		Set<String> mentionProperties = new HashSet<String>();
 		for (UsabilityFeature feature : this.features) {
@@ -101,12 +105,15 @@ public class SequentialEventFilter implements IEventFilter {
 		ksAdapter.runKeyValueMentionPropertyQuery(mentionProperties, Util.RELATION_NAME_MENTION_PROPERTY, mentionURIs);
 		ksAdapter.runKeyValueResourceTextQuery(Util.resourceURIsFromMentionURIs(mentionURIs));
 		
-		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, allKeywords);
-		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, allKeywords);
+		ksAdapter.runKeyValueSparqlQuery(eventStatisticsQuery, eventURIs, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(eventStatisticsKeywordQuery, eventURIs, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(eventConstituentsKeywordQuery, eventURIs, userQuery);
 
-		Set<String> entities = ksAdapter.getAllRelationValues("event-entity-" + allKeywords.get(0).getWord());
-		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, allKeywords);
-		ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, allKeywords);
+		Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", userQuery.get(0).getWord()));
+		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(entityPropertiesKeywordQuery, entities, userQuery);
+		ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
 		
 		t = System.currentTimeMillis() - t;
 		if (log.isInfoEnabled())
@@ -158,10 +165,10 @@ public class SequentialEventFilter implements IEventFilter {
 		if (log.isInfoEnabled())
 			log.info(String.format("feature extraction & classification: %d ms", t));
 		
-//		for (UsabilityFeature f : features) {
-//			if (log.isInfoEnabled())
-//				log.info(String.format("%s: %d ms", f.getName(), featureRuntime.get(f)));
-//		}
+		for (UsabilityFeature f : features) {
+			if (log.isInfoEnabled())
+				log.info(String.format("%s: %d ms", f.getName(), featureRuntime.get(f)));
+		}
 		
 		return result;
 	}

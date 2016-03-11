@@ -1,9 +1,0 @@
-SELECT ?label
-WHERE
-{
-	<*e*> propbank:A1 ?actor .
-	GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> 
-    {
-        ?actor rdfs:label ?label
-    }
-}

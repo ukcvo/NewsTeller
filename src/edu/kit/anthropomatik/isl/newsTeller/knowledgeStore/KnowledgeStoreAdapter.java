@@ -127,7 +127,7 @@ public class KnowledgeStoreAdapter {
 			if (log.isWarnEnabled())
 				log.warn("Trying to open a second connection before closing the first one. Request ignored.");
 		} else {
-			int extendedTimeout = (int) (1.5 * timeoutMsec);
+			int extendedTimeout = (int) (1.2 * timeoutMsec);
 			this.knowledgeStore = Client.builder(serverURL).compressionEnabled(true).maxConnections(maxNumberOfConnections).validateServer(false).connectionTimeout(extendedTimeout).build();
 			this.threadPool = Executors.newFixedThreadPool(maxNumberOfConnections);
 			this.isConnectionOpen = true;
@@ -295,45 +295,61 @@ public class KnowledgeStoreAdapter {
 		while (matcherAS.find())
 			valueVariables.add(matcherAS.group(1));
 		
+		boolean doOnce = !sparqlQueryTemplate.contains(Util.PLACEHOLDER_KEYWORD);
+		boolean first = true;
 		// TODO: parallelize for multiple keywords if necessary
 		for (Keyword keyword : keywords) {
-			String queryWithKeyword = sparqlQueryTemplate.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex());
 			
-			ConcurrentMap<String, ConcurrentMap<String, Set<String>>> relationMaps = new ConcurrentHashMap<String, ConcurrentMap<String,Set<String>>>();
-			for (String valueVariable : valueVariables)
-				relationMaps.putIfAbsent(Util.getRelationName(keyVariable, valueVariable, keyword.getWord()), new ConcurrentHashMap<String, Set<String>>());
-			
-			List<String> queries = new ArrayList<String>();
-			StringBuilder sb = new StringBuilder();
-			for (String uri : keyValues) {
-				String s = String.format("<%s> ", uri);
-				if (sb.length() + s.length() + queryWithKeyword.length() > this.maximumQueryLength) {
-					queries.add(queryWithKeyword.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
-					sb = new StringBuilder();
+			if (doOnce && !first) {
+				// if we only need to run the queries once: just copy results of first run for all other keywords
+				ConcurrentMap<String, ConcurrentMap<String, Set<String>>> relationMaps = new ConcurrentHashMap<String, ConcurrentMap<String,Set<String>>>();
+				for (String valueVariable : valueVariables) {
+					String oldRelationName = Util.getRelationName(keyVariable, valueVariable, keywords.get(0).getWord());
+					String newRelationName = Util.getRelationName(keyVariable, valueVariable, keyword.getWord());
+					relationMaps.putIfAbsent(newRelationName, this.sparqlCache.get(oldRelationName));
 				}
-				sb.append(s);
-			}
-			queries.add(queryWithKeyword.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
-			
-			List<Future<?>> futures = new ArrayList<Future<?>>();
-			
-			for (String query : queries) {
-				KeyValueWorker w = new KeyValueWorker(query, keyVariable, valueVariables, keyword, relationMaps);
-				futures.add(this.submit(w));
-			}
-			
-			for (Future<?> f : futures) {
-				try {
-					f.get();
-				} catch (Exception e) {
-					if (log.isErrorEnabled())
-						log.error("thread execution somehow failed!");
-					if (log.isDebugEnabled())
-						log.debug("thread execution exception", e);
+				this.sparqlCache.putAll(relationMaps);				
+			} else {
+				String queryWithKeyword = sparqlQueryTemplate.replace(Util.PLACEHOLDER_KEYWORD, keyword.getStemmedRegex());
+				
+				ConcurrentMap<String, ConcurrentMap<String, Set<String>>> relationMaps = new ConcurrentHashMap<String, ConcurrentMap<String,Set<String>>>();
+				for (String valueVariable : valueVariables)
+					relationMaps.putIfAbsent(Util.getRelationName(keyVariable, valueVariable, keyword.getWord()), new ConcurrentHashMap<String, Set<String>>());
+				
+				List<String> queries = new ArrayList<String>();
+				StringBuilder sb = new StringBuilder();
+				for (String uri : keyValues) {
+					String s = String.format("<%s> ", uri);
+					if (sb.length() + s.length() + queryWithKeyword.length() > this.maximumQueryLength) {
+						queries.add(queryWithKeyword.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
+						sb = new StringBuilder();
+					}
+					sb.append(s);
 				}
+				queries.add(queryWithKeyword.replace(Util.PLACEHOLDER_KEYS, sb.toString().trim()));
+				
+				List<Future<?>> futures = new ArrayList<Future<?>>();
+				
+				for (String query : queries) {
+					KeyValueWorker w = new KeyValueWorker(query, keyVariable, valueVariables, keyword, relationMaps);
+					futures.add(this.submit(w));
+				}
+				
+				for (Future<?> f : futures) {
+					try {
+						f.get();
+					} catch (Exception e) {
+						if (log.isErrorEnabled())
+							log.error("thread execution somehow failed!");
+						if (log.isDebugEnabled())
+							log.debug("thread execution exception", e);
+					}
+				}
+				
+				this.sparqlCache.putAll(relationMaps);
+				
+				first = false;
 			}
-			
-			this.sparqlCache.putAll(relationMaps);
 		}
 	}
 	// endregion

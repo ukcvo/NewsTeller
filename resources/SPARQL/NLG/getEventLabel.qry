@@ -1,5 +1,0 @@
-SELECT ?label
-WHERE
-{
-    <*e*> rdfs:label ?label
-}
