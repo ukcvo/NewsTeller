@@ -70,7 +70,7 @@ public class RecencyFeatureTest {
 		yearsFeature = (RecencyFeature) context.getBean("recencyFeatureYears");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
-		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
+		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache, new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 	}
 	
 	@Test

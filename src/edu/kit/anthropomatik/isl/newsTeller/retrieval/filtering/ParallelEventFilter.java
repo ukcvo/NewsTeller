@@ -52,8 +52,6 @@ public class ParallelEventFilter implements IEventFilter {
 	
 	private String entityPropertiesKeywordQuery;
 		
-	private String entityMentionsQuery;
-	
 	public void setFeatures(List<UsabilityFeature> features) {
 		this.features = features;
 	}
@@ -68,7 +66,7 @@ public class ParallelEventFilter implements IEventFilter {
 	
 	public ParallelEventFilter(String classifierFileName, String eventStatisticsQueryFileName, String eventStatisticsKeywordQueryFileName,
 								String eventConstituentsQueryFileName, String eventConstituentsKeywordQueryFileName,
-								String entityPropertiesQueryFileName, String entityPropertiesKeywordQueryFileName, String entityMentionsQueryFileName) {
+								String entityPropertiesQueryFileName, String entityPropertiesKeywordQueryFileName) {
 		try {
 			Object[] input = SerializationHelper.readAll(classifierFileName);
 			this.classifier = (Classifier) input[0];
@@ -85,7 +83,6 @@ public class ParallelEventFilter implements IEventFilter {
 		this.eventConstituentsKeywordQuery = Util.readStringFromFile(eventConstituentsKeywordQueryFileName);
 		this.entityPropertiesQuery = Util.readStringFromFile(entityPropertiesQueryFileName);
 		this.entityPropertiesKeywordQuery = Util.readStringFromFile(entityPropertiesKeywordQueryFileName);
-		this.entityMentionsQuery = Util.readStringFromFile(entityMentionsQueryFileName);
 	}
 	
 	private class FeatureWorker implements Callable<Double> {
@@ -254,14 +251,7 @@ public class ParallelEventFilter implements IEventFilter {
 						ksAdapter.runKeyValueSparqlQuery(entityPropertiesKeywordQuery, entities, userQuery);
 					}
 				}));
-				
-				futures.add(ksAdapter.submit(new Runnable() {
-					
-					@Override
-					public void run() {
-						ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
-					}
-				}));
+
 				
 				for (Future<?> f : futures) {
 					try {
@@ -287,6 +277,11 @@ public class ParallelEventFilter implements IEventFilter {
 					log.debug("thread execution exception", e);
 			}
 		}
+		
+		// TODO: also parallelize?
+		Set<String> entityURIs = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", userQuery.get(0).getWord()));
+		Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(ksAdapter.getAllRelationValues(Util.getRelationName("event", "mention", userQuery.get(0).getWord())));
+		ksAdapter.runKeyValueEntityMentionQuery(entityURIs, resourceURIs);
 		
 		t = System.currentTimeMillis() - t;
 //		if (log.isInfoEnabled())

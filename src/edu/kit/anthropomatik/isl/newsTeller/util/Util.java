@@ -54,6 +54,7 @@ public class Util {
 	public static final String PLACEHOLDER_ENTITY = "*x*";
 	public static final String PLACEHOLDER_LINK = "*l*";
 	public static final String PLACEHOLDER_KEYS = "*keys*";
+	public static final String PLACEHOLDER_RESOURCES = "*res*";
 	public static final String PLACEHOLDER_BIF_CONTAINS = "*b*";
 
 	public static final String VARIABLE_EVENT = "event";

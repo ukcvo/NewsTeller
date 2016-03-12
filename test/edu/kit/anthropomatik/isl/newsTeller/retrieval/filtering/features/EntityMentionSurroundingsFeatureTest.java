@@ -31,6 +31,7 @@ public class EntityMentionSurroundingsFeatureTest {
 	
 	private static ConcurrentMap<String, ConcurrentMap<String, Set<String>>> sparqlCache = new ConcurrentHashMap<String, ConcurrentMap<String, Set<String>>>();
 	private static ConcurrentMap<String, Set<KSMention>> eventMentionCache = new ConcurrentHashMap<String, Set<KSMention>>();
+	private static ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>> entityMentionCache = new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>();
 	private static List<Keyword> keywords = new ArrayList<Keyword>();
 	
 	@BeforeClass
@@ -48,17 +49,25 @@ public class EntityMentionSurroundingsFeatureTest {
 		ConcurrentMap<String, Set<String>> eventActorMap = new ConcurrentHashMap<String, Set<String>>();
 		eventActorMap.put("event-1", Sets.newHashSet("actor-1a"));
 		eventActorMap.put("event-2", Sets.newHashSet("actor-2a"));
-		ConcurrentMap<String, Set<String>> entityMentionMap = new ConcurrentHashMap<String, Set<String>>();
-		entityMentionMap.put("actor-1a", Sets.newHashSet("mention-1#char=17,21"));
-		entityMentionMap.put("actor-2a", Sets.newHashSet("mention-2#char=19,23"));
+//		ConcurrentMap<String, Set<String>> entityMentionMap = new ConcurrentHashMap<String, Set<String>>();
+//		entityMentionMap.put("actor-1a", Sets.newHashSet("mention-1#char=17,21"));
+//		entityMentionMap.put("actor-2a", Sets.newHashSet("mention-2#char=19,23"));
 		ConcurrentMap<String, Set<String>> resourceTextMap = new ConcurrentHashMap<String, Set<String>>();
 		resourceTextMap.put("mention-1", Sets.newHashSet("One two three at five six seven."));
 		resourceTextMap.put("mention-2", Sets.newHashSet("One two three four five six seven."));
 		
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), eventMentionMap);
 		sparqlCache.put(Util.getRelationName("event", "actor", "keyword"), eventActorMap);
-		sparqlCache.put(Util.getRelationName("entity", "mention", "keyword"), entityMentionMap);
+//		sparqlCache.put(Util.getRelationName("entity", "mention", "keyword"), entityMentionMap);
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
+		
+		ConcurrentMap<String, Set<KSMention>> actor1aMap = new ConcurrentHashMap<String, Set<KSMention>>();
+		actor1aMap.put("mention-1", Sets.newHashSet(new KSMention("mention-1#char=17,21")));
+		entityMentionCache.put("actor-1a", actor1aMap);
+		
+		ConcurrentMap<String, Set<KSMention>> actor2aMap = new ConcurrentHashMap<String, Set<KSMention>>();
+		actor2aMap.put("mention-2", Sets.newHashSet(new KSMention("mention-2#char=19,23")));
+		entityMentionCache.put("actor-2a", actor2aMap);
 		
 		Keyword k = new Keyword("keyword");
 		Util.stemKeyword(k);
@@ -71,7 +80,7 @@ public class EntityMentionSurroundingsFeatureTest {
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		feature = (EntityMentionSurroundingsFeature) context.getBean("locationPrepBeforeActorFeature");
 		((AbstractApplicationContext) context).close();
-		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
+		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache, entityMentionCache);
 	}
 
 	@Test

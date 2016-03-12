@@ -14,9 +14,11 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<constructor-arg name="getEventFromMentionFileName"
 			value="resources/SPARQL/general/getEventFromMention.qry" />
+		<constructor-arg name="getMentionFromEntityFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
 		<property name="timeoutMsec" value="30000" />
 		<property name="maxNumberOfConnections" value="100"/>
+		<property name="useStanford" value="true" />
 		<property name="maximumQueryLength" value="6000" />
 	</bean>
 
@@ -27,7 +29,7 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="maxNumberOfEvents" value="1000" />
 	</bean>
-<!-- 
+<!--
 	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter">
 		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
 		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
@@ -36,11 +38,15 @@
 		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
 		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
-		<constructor-arg name="entityMentionsQueryFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="features" ref="activeFeatureList" />
+	 	<property name="features">
+			<list>
+				<ref bean="overlapFeature" />
+			</list>
+		</property> 
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
- -->
+-->
 
 	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
 		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
@@ -50,7 +56,6 @@
 		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
 		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
-		<constructor-arg name="entityMentionsQueryFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="features" ref="activeFeatureList" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="numThreads" value="1000" />

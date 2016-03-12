@@ -96,7 +96,7 @@ public class SingleFeatureEventRankerTest {
 		ranker = (SingleFeatureEventRanker) context.getBean("rankerFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
-		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
+		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache, new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 	}
 	
 	@Test

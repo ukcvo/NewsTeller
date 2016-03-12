@@ -14,9 +14,12 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<constructor-arg name="getEventFromMentionFileName"
 			value="resources/SPARQL/general/getEventFromMention.qry" />
+		<constructor-arg name="getMentionFromEntityFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
-		<property name="timeoutMsec" value="10000" />
+		<property name="timeoutMsec" value="30000" />
 		<property name="maxNumberOfConnections" value="100"/>
+		<property name="useStanford" value="true" />
+		<property name="maximumQueryLength" value="6000" />
 	</bean>
 
 	<bean id="searcher"

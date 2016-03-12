@@ -16,9 +16,12 @@
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
 		<constructor-arg name="getEventFromMentionFileName"
 			value="resources/SPARQL/general/getEventFromMention.qry" />
+		<constructor-arg name="getMentionFromEntityFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
-		<property name="timeoutMsec" value="10000" />
-		<property name="maxNumberOfConnections" value="100" />
+		<property name="timeoutMsec" value="30000" />
+		<property name="maxNumberOfConnections" value="100"/>
+		<property name="useStanford" value="true" />
+		<property name="maximumQueryLength" value="6000" />
 	</bean>
 
 	<bean id="searcher"
@@ -42,7 +45,6 @@
 		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
 		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
-		<constructor-arg name="entityMentionsQueryFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="features" ref="activeFeatureList" />
 		<property name="ksAdapter" ref="ksAdapter" />
 	</bean>
@@ -56,7 +58,6 @@
 		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
 		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
-		<constructor-arg name="entityMentionsQueryFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="features" ref="activeFeatureList" />
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="numThreads" value="1000" />

@@ -44,28 +44,28 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 		String arbitraryKeyword = keywords.get(0).getWord();
 		
 		Set<String> constituents = ksAdapter.getBufferedValues(Util.getRelationName("event", "entity", arbitraryKeyword), eventURI);
-		List<KSMention> constituentMentions = new ArrayList<KSMention>();
-		for (String constituent : constituents) {
-			Set<String> mentionURIs =  
-					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
-			List<KSMention> mentions = new ArrayList<KSMention>();
-			for (String mentionURI : mentionURIs) {
-				boolean shouldAdd = true;
-				KSMention newMention = new KSMention(mentionURI);
-				List<KSMention> toRemove = new ArrayList<KSMention>();
-				for (KSMention m : mentions) {
-					if (m.contains(newMention)) {
-						shouldAdd = false;
-					} else if (newMention.contains(m)) {
-						toRemove.add(m);
-					}
-				}
-				mentions.removeAll(toRemove);
-				if (shouldAdd)
-					mentions.add(newMention);
-			}
-			constituentMentions.addAll(mentions);
-		}
+//		List<KSMention> constituentMentions = new ArrayList<KSMention>();
+//		for (String constituent : constituents) {
+//			Set<String> mentionURIs =  
+//					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
+//			List<KSMention> mentions = new ArrayList<KSMention>();
+//			for (String mentionURI : mentionURIs) {
+//				boolean shouldAdd = true;
+//				KSMention newMention = new KSMention(mentionURI);
+//				List<KSMention> toRemove = new ArrayList<KSMention>();
+//				for (KSMention m : mentions) {
+//					if (m.contains(newMention)) {
+//						shouldAdd = false;
+//					} else if (newMention.contains(m)) {
+//						toRemove.add(m);
+//					}
+//				}
+//				mentions.removeAll(toRemove);
+//				if (shouldAdd)
+//					mentions.add(newMention);
+//			}
+//			constituentMentions.addAll(mentions);
+//		}
 		
 		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", arbitraryKeyword), eventURI);
 
@@ -81,6 +81,11 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 			
 			int numberOfCheckedMentions = 0;
 			double mentionResult = (this.operationType == OPERATION_TYPE_MIN) ? Double.POSITIVE_INFINITY : 0;
+			
+			String resourceURI = Util.resourceURIFromMentionURI(mentionURI);
+			Set<KSMention> constituentMentions = new HashSet<KSMention>();
+			for (String entityURI : constituents)
+				constituentMentions.addAll(ksAdapter.getEntityMentions(entityURI, resourceURI));
 			
 			for (KSMention mention : constituentMentions) {
 				if (sentenceMention.overlap(mention) > 0) {

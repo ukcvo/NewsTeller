@@ -32,28 +32,28 @@ public class ConstituentSeparatedByEventFeature extends UsabilityFeature {
 		String arbitraryKeyword = keywords.get(0).getWord();
 		
 		Set<String> constituents = ksAdapter.getBufferedValues(Util.getRelationName("event", "entity", arbitraryKeyword), eventURI);
-		Set<KSMention> constituentMentions = new HashSet<KSMention>();
-		for (String constituent : constituents) {
-			Set<String> mentionURIs = 
-					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
-			List<KSMention> mentions = new ArrayList<KSMention>();
-			for (String mentionURI : mentionURIs) {
-				boolean shouldAdd = true;
-				KSMention newMention = new KSMention(mentionURI);
-				List<KSMention> toRemove = new ArrayList<KSMention>();
-				for (KSMention m : mentions) {
-					if (m.contains(newMention)) {
-						shouldAdd = false;
-					} else if (newMention.contains(m)) {
-						toRemove.add(m);
-					}
-				}
-				mentions.removeAll(toRemove);
-				if (shouldAdd)
-					mentions.add(newMention);
-			}
-			constituentMentions.addAll(mentions);
-		}
+//		Set<KSMention> constituentMentions = new HashSet<KSMention>();
+//		for (String constituent : constituents) {
+//			Set<String> mentionURIs = 
+//					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
+//			List<KSMention> mentions = new ArrayList<KSMention>();
+//			for (String mentionURI : mentionURIs) {
+//				boolean shouldAdd = true;
+//				KSMention newMention = new KSMention(mentionURI);
+//				List<KSMention> toRemove = new ArrayList<KSMention>();
+//				for (KSMention m : mentions) {
+//					if (m.contains(newMention)) {
+//						shouldAdd = false;
+//					} else if (newMention.contains(m)) {
+//						toRemove.add(m);
+//					}
+//				}
+//				mentions.removeAll(toRemove);
+//				if (shouldAdd)
+//					mentions.add(newMention);
+//			}
+//			constituentMentions.addAll(mentions);
+//		}
 
 		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", arbitraryKeyword), eventURI);
 		
@@ -64,6 +64,11 @@ public class ConstituentSeparatedByEventFeature extends UsabilityFeature {
 			Set<KSMention> allEventMentions = ksAdapter.getAllEventMentions(sentenceMention.getResourceURI());
 			allEventMentions.remove(eventMention);
 
+			String resourceURI = Util.resourceURIFromMentionURI(mentionURI);
+			Set<KSMention> constituentMentions = new HashSet<KSMention>();
+			for (String entityURI : constituents)
+				constituentMentions.addAll(ksAdapter.getEntityMentions(entityURI, resourceURI));
+			
 			int numberOfCheckedMentions = 0;
 			double mentionResult = 0;
 			for (KSMention constituentMention : constituentMentions) {

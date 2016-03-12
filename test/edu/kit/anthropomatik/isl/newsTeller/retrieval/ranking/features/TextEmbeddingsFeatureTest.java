@@ -89,7 +89,7 @@ public class TextEmbeddingsFeatureTest {
 		interestFeature = (TextEmbeddingsFeature) context.getBean("textEmbeddingsFeatureAvgUM");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
-		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache);
+		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache, new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 	}
 
 	@Test

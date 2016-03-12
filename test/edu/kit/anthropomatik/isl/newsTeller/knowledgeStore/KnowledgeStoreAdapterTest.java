@@ -101,7 +101,7 @@ public class KnowledgeStoreAdapterTest {
 		mentionMap.put("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev41", 
 				Sets.newHashSet("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#char=841,848"));
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC"));
 		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/'Bad_language'_at_Live_8_concerts_trigger_complaints_to_the_BBC#ev41", "keyword");
 		assertTrue(expectedResult.equals(retrievedSentence));
@@ -117,7 +117,7 @@ public class KnowledgeStoreAdapterTest {
 		mentionMap.put("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", 
 				Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=829,836", "http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=1013,1016"));
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race"));
 		String retrievedSentence = ksAdapter.retrieveSentencefromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", "keyword");
 		assertTrue(expectedResults.contains(retrievedSentence));
@@ -134,7 +134,7 @@ public class KnowledgeStoreAdapterTest {
 		mentionMap.put("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", 
 				Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=829,836", "http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#char=1013,1016"));
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race"));
 		Set<String> retrievedSentences = new HashSet<String>(ksAdapter.retrieveSentencesFromEvent("http://en.wikinews.org/wiki/Dennis_Kucinich_quits_U.S._Presidential_race#ev22", "keyword"));
 		assertTrue(expectedResults.equals(retrievedSentences));
@@ -172,7 +172,7 @@ public class KnowledgeStoreAdapterTest {
 		mentionMap.put("http://www.newsreader-project.eu/data/wikinews/non-entities/videos+uploaded+by+their+users", 
 				Sets.newHashSet("http://en.wikinews.org/wiki/Movie_'The_Assassination_of_Jesse_James'_leaked_on_the_internet#char=352,382"));
 		sparqlCache.put(Util.getRelationName("entity", "mention", "upload"), mentionMap);
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		ksAdapter.runKeyValueResourceTextQuery(Sets.newHashSet("http://en.wikinews.org/wiki/Movie_'The_Assassination_of_Jesse_James'_leaked_on_the_internet"));
 		List<String> retrievedSentences = ksAdapter.retrievePhrasesFromEntity("http://www.newsreader-project.eu/data/wikinews/non-entities/videos+uploaded+by+their+users", "upload");
 		assertTrue(retrievedSentences.size() == 1 && retrievedSentences.contains(expectedResult));
@@ -286,7 +286,7 @@ public class KnowledgeStoreAdapterTest {
 		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
 		
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		Set<List<String>> result = ksAdapter.getAllQuerySentenceTokens("keyword");
 		assertTrue(expectedResult.equals(result));
 	}
@@ -306,7 +306,7 @@ public class KnowledgeStoreAdapterTest {
 		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
 		
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		Set<List<String>> result = ksAdapter.getAllQueryTextTokens("keyword");
 		assertTrue(expectedResult.equals(result));
 	}
@@ -326,7 +326,7 @@ public class KnowledgeStoreAdapterTest {
 		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
 		
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		Set<List<String>> result = ksAdapter.retrieveSentenceTokensFromEvent("event-1", "keyword");
 		assertTrue(expectedResult.equals(result));
 	}
@@ -346,7 +346,7 @@ public class KnowledgeStoreAdapterTest {
 		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
 		
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		Set<List<String>> result = ksAdapter.retrieveOriginalTextTokens("event-1", "keyword");
 		assertTrue(expectedResult.equals(result));
 	}
@@ -365,7 +365,7 @@ public class KnowledgeStoreAdapterTest {
 		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo."));
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_PROPERTY + Util.RESOURCE_PROPERTY_TITLE, resourceMap);
 		
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		Set<List<String>> result = ksAdapter.retrieveTitleTokensFromEvent("event-1", "keyword");
 		assertTrue(expectedResult.equals(result));
 	}
@@ -380,7 +380,7 @@ public class KnowledgeStoreAdapterTest {
 		mentionMap.put("event-2", Sets.newHashSet("mention-1#char=1,2", "mention-2#char=1,2"));
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), mentionMap);
 		
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		List<Set<String>> result = ksAdapter.getAllQueryResourceURIs("keyword");
 		assertTrue(expectedResult.equals(result));
 	}
@@ -400,8 +400,19 @@ public class KnowledgeStoreAdapterTest {
 		resourceMap.put("mention-2", Sets.newHashSet("ExpectedResultNumberTwo. Another irrelevant Sentence."));
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceMap);
 		
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 		List<Set<String>> result = ksAdapter.getAllQuerySentences("keyword");
 		assertTrue(expectedResult.equals(result));
+	}
+	
+	@Test
+	public void shouldFindCorrectEntityMentions() {
+		Set<KSMention> expectedResult = Sets.newHashSet(new KSMention("http://en.wikinews.org/wiki/Apple_Computer_CEO_Steve_Jobs_gives_opening_keynote_to_WWDC_2005#char=1709,1714"),
+				new KSMention("http://en.wikinews.org/wiki/Apple_Computer_CEO_Steve_Jobs_gives_opening_keynote_to_WWDC_2005#char=1631,1634"));
+		String entityURI = "http://dbpedia.org/resource/IBM";
+		String resourceURI = "http://en.wikinews.org/wiki/Apple_Computer_CEO_Steve_Jobs_gives_opening_keynote_to_WWDC_2005";
+		
+		ksAdapter.runKeyValueEntityMentionQuery(Sets.newHashSet(entityURI), Sets.newHashSet(resourceURI));
+		assertTrue(expectedResult.equals(ksAdapter.getEntityMentions(entityURI, resourceURI)));
 	}
 }

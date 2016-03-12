@@ -76,7 +76,7 @@ public class ActorPositionFeatureTest {
 		feature = (ActorPositionFeature) context.getBean("actorPositionLeftFeature");
 		ksAdapter = (KnowledgeStoreAdapter) context.getBean("ksAdapter");
 		((AbstractApplicationContext) context).close();
-		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>());
+		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 	}
 
 	@Test

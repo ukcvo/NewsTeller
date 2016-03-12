@@ -32,20 +32,25 @@ public class ConstituentsPerMentionFeature extends UsabilityFeature {
 
 		double result = (this.operationType == OPERATION_TYPE_MIN) ? Double.POSITIVE_INFINITY : 0;
 		String arbitraryKeyword = keywords.get(0).getWord();
+
+		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", arbitraryKeyword), eventURI);
+		Set<String> resourceURIs = Util.resourceURIsFromMentionURIs(mentionURIs);
 		
 		Set<String> constituents = ksAdapter.getBufferedValues(Util.getRelationName("event", "entity", arbitraryKeyword), eventURI);
 		List<List<KSMention>> constituentMentions = new ArrayList<List<KSMention>>();
 		for (String constituent : constituents) {
-			Set<String> mentionURIs = 
-					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
 			List<KSMention> mentions = new ArrayList<KSMention>();
-			for (String mentionURI : mentionURIs) {
-				mentions.add(new KSMention(mentionURI));
-			}
+			for (String resourceURI : resourceURIs) 
+				mentions.addAll(ksAdapter.getEntityMentions(constituent, resourceURI));
 			constituentMentions.add(mentions);
+//			Set<String> mentionURIs = 
+//					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
+//			List<KSMention> mentions = new ArrayList<KSMention>();
+//			for (String mentionURI : mentionURIs) {
+//				mentions.add(new KSMention(mentionURI));
+//			}
+//			constituentMentions.add(mentions);
 		}
-
-		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", arbitraryKeyword), eventURI);
 		
 		for (String mentionURI : mentionURIs) {
 			KSMention sentenceMention = ksAdapter.retrieveKSMentionFromMentionURI(mentionURI, true);
