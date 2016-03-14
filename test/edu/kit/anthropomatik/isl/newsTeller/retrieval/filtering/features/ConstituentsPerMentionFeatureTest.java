@@ -50,18 +50,12 @@ public class ConstituentsPerMentionFeatureTest {
 		ConcurrentMap<String, Set<String>> eventEntityMap = new ConcurrentHashMap<String, Set<String>>();
 		eventEntityMap.put("event-1", Sets.newHashSet("actor-1a", "actor-1b"));
 		eventEntityMap.put("event-2", Sets.newHashSet("actor-2a", "actor-2b"));
-//		ConcurrentMap<String, Set<String>> entityMentionMap = new ConcurrentHashMap<String, Set<String>>();
-//		entityMentionMap.put("actor-1a", Sets.newHashSet("mention-1#char=8,13"));
-//		entityMentionMap.put("actor-1b", Sets.newHashSet("mention-2#char=19,23"));
-//		entityMentionMap.put("actor-2a", Sets.newHashSet("mention-2#char=0,4"));
-//		entityMentionMap.put("actor-2b", Sets.newHashSet("mention-2#char=19,23"));
 		ConcurrentMap<String, Set<String>> resourceTextMap = new ConcurrentHashMap<String, Set<String>>();
 		resourceTextMap.put("mention-1", Sets.newHashSet("One two three four five six seven."));
 		resourceTextMap.put("mention-2", Sets.newHashSet("One two three four five six seven."));
 		
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), eventMentionMap);
 		sparqlCache.put(Util.getRelationName("event", "entity", "keyword"), eventEntityMap);
-//		sparqlCache.put(Util.getRelationName("entity", "mention", "keyword"), entityMentionMap);
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
 		
 		ConcurrentMap<String, Set<KSMention>> actor1aMap = new ConcurrentHashMap<String, Set<KSMention>>();

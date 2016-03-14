@@ -43,13 +43,6 @@ public class ConstituentsPerMentionFeature extends UsabilityFeature {
 			for (String resourceURI : resourceURIs) 
 				mentions.addAll(ksAdapter.getEntityMentions(constituent, resourceURI));
 			constituentMentions.add(mentions);
-//			Set<String> mentionURIs = 
-//					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
-//			List<KSMention> mentions = new ArrayList<KSMention>();
-//			for (String mentionURI : mentionURIs) {
-//				mentions.add(new KSMention(mentionURI));
-//			}
-//			constituentMentions.add(mentions);
 		}
 		
 		for (String mentionURI : mentionURIs) {

@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.LogManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -62,6 +63,11 @@ public class KeywordInFullTextFeatureTest {
 		ksAdapter.manuallyFillCaches(sparqlCache, new ConcurrentHashMap<String, Set<KSMention>>(), new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 	}
 
+	@After
+	public void shutDown() {
+		feature.shutDown();
+	}
+	
 	@Test
 	public void shouldReturnZero() {
 		Keyword k = new Keyword("Michael Jackson");

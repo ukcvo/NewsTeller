@@ -52,11 +52,6 @@ public class ConstituentOverlapFeatureTest {
 		eventEntityMap.put("event-1", Sets.newHashSet("actor-1"));
 		eventEntityMap.put("event-2", Sets.newHashSet("actor-2"));
 		eventEntityMap.put("event-3", Sets.newHashSet("actor-3a","actor-3b"));
-//		ConcurrentMap<String, Set<String>> entityMentionMap = new ConcurrentHashMap<String, Set<String>>();
-//		entityMentionMap.put("actor-1", Sets.newHashSet("mention-1#char=6,11"));
-//		entityMentionMap.put("actor-2", Sets.newHashSet("mention-2#char=0,7"));
-//		entityMentionMap.put("actor-3a", Sets.newHashSet("mention-3#char=0,13"));
-//		entityMentionMap.put("actor-3b", Sets.newHashSet("mention-3#char=9,13"));
 		ConcurrentMap<String, Set<String>> resourceTextMap = new ConcurrentHashMap<String, Set<String>>();
 		resourceTextMap.put("mention-1", Sets.newHashSet("I saw Alice yesterday."));
 		resourceTextMap.put("mention-2", Sets.newHashSet("Bob saw me yesterday."));
@@ -64,7 +59,6 @@ public class ConstituentOverlapFeatureTest {
 		
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), eventMentionMap);
 		sparqlCache.put(Util.getRelationName("event", "entity", "keyword"), eventEntityMap);
-//		sparqlCache.put(Util.getRelationName("entity", "mention", "keyword"), entityMentionMap);
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
 		
 		ConcurrentMap<String, Set<KSMention>> actor1Map = new ConcurrentHashMap<String, Set<KSMention>>();

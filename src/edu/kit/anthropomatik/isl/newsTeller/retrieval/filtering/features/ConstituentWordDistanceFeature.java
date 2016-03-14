@@ -1,6 +1,5 @@
 package edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,29 +43,6 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 		String arbitraryKeyword = keywords.get(0).getWord();
 		
 		Set<String> constituents = ksAdapter.getBufferedValues(Util.getRelationName("event", "entity", arbitraryKeyword), eventURI);
-//		List<KSMention> constituentMentions = new ArrayList<KSMention>();
-//		for (String constituent : constituents) {
-//			Set<String> mentionURIs =  
-//					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), constituent);
-//			List<KSMention> mentions = new ArrayList<KSMention>();
-//			for (String mentionURI : mentionURIs) {
-//				boolean shouldAdd = true;
-//				KSMention newMention = new KSMention(mentionURI);
-//				List<KSMention> toRemove = new ArrayList<KSMention>();
-//				for (KSMention m : mentions) {
-//					if (m.contains(newMention)) {
-//						shouldAdd = false;
-//					} else if (newMention.contains(m)) {
-//						toRemove.add(m);
-//					}
-//				}
-//				mentions.removeAll(toRemove);
-//				if (shouldAdd)
-//					mentions.add(newMention);
-//			}
-//			constituentMentions.addAll(mentions);
-//		}
-		
 		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", arbitraryKeyword), eventURI);
 
 		for (String mentionURI : mentionURIs) {
@@ -98,7 +74,7 @@ public class ConstituentWordDistanceFeature extends UsabilityFeature {
 					
 					int order = eventMention.compareTo(mention);
 					if (order > 0) { // event mention comes AFTER entity mention
-						for (int idx = endIdx; idx < eventStartIdx; idx++) { // start walking at end of entity mention until you hit start of event mention
+						for (int idx = endIdx; idx < Math.min(eventStartIdx, sentenceString.length()); idx++) { // start walking at end of entity mention until you hit start of event mention
 							if (Util.STOP_CHARS.contains(sentenceString.charAt(idx)))
 								inWord = false;
 							else {

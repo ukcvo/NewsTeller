@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.LogManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -92,6 +93,12 @@ public class DBPediaLabelInFullTextFeatureTest {
 		ksAdapter.manuallyFillCaches(sparqlCache, eventMentionCache, new ConcurrentHashMap<String, ConcurrentMap<String,Set<KSMention>>>());
 	}
 
+	@After
+	public void shutDown() {
+		feature.shutDown();
+		keywordFeature.shutDown();
+	}
+	
 	@Test
 	public void ShouldReturnZeroPointFive() {
 		double value = feature.getValue("event-1", keywords);

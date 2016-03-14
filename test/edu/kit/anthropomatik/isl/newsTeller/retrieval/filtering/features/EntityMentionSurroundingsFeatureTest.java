@@ -49,16 +49,12 @@ public class EntityMentionSurroundingsFeatureTest {
 		ConcurrentMap<String, Set<String>> eventActorMap = new ConcurrentHashMap<String, Set<String>>();
 		eventActorMap.put("event-1", Sets.newHashSet("actor-1a"));
 		eventActorMap.put("event-2", Sets.newHashSet("actor-2a"));
-//		ConcurrentMap<String, Set<String>> entityMentionMap = new ConcurrentHashMap<String, Set<String>>();
-//		entityMentionMap.put("actor-1a", Sets.newHashSet("mention-1#char=17,21"));
-//		entityMentionMap.put("actor-2a", Sets.newHashSet("mention-2#char=19,23"));
 		ConcurrentMap<String, Set<String>> resourceTextMap = new ConcurrentHashMap<String, Set<String>>();
 		resourceTextMap.put("mention-1", Sets.newHashSet("One two three at five six seven."));
 		resourceTextMap.put("mention-2", Sets.newHashSet("One two three four five six seven."));
 		
 		sparqlCache.put(Util.getRelationName("event", "mention", "keyword"), eventMentionMap);
 		sparqlCache.put(Util.getRelationName("event", "actor", "keyword"), eventActorMap);
-//		sparqlCache.put(Util.getRelationName("entity", "mention", "keyword"), entityMentionMap);
 		sparqlCache.put(Util.RELATION_NAME_RESOURCE_TEXT, resourceTextMap);
 		
 		ConcurrentMap<String, Set<KSMention>> actor1aMap = new ConcurrentHashMap<String, Set<KSMention>>();

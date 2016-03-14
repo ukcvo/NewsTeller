@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.FullTextFeature;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -107,12 +108,11 @@ public class SequentialEventFilter implements IEventFilter {
 		ksAdapter.runKeyValueSparqlQuery(eventStatisticsKeywordQuery, eventURIs, userQuery);
 		ksAdapter.runKeyValueSparqlQuery(eventConstituentsQuery, eventURIs, userQuery);
 		ksAdapter.runKeyValueSparqlQuery(eventConstituentsKeywordQuery, eventURIs, userQuery);
-
+		
 		Set<String> entities = ksAdapter.getAllRelationValues(Util.getRelationName("event", "entity", userQuery.get(0).getWord()));
 		ksAdapter.runKeyValueSparqlQuery(entityPropertiesQuery, entities, userQuery);
 		ksAdapter.runKeyValueSparqlQuery(entityPropertiesKeywordQuery, entities, userQuery);
 		
-//		ksAdapter.runKeyValueSparqlQuery(entityMentionsQuery, entities, userQuery);
 		ksAdapter.runKeyValueEntityMentionQuery(entities, resourceURIs);
 		
 		t = System.currentTimeMillis() - t;
@@ -166,6 +166,9 @@ public class SequentialEventFilter implements IEventFilter {
 			log.info(String.format("feature extraction & classification: %d ms", t));
 		
 		for (UsabilityFeature f : features) {
+//			if (f instanceof FullTextFeature)
+//				log.info(String.format("%s getLabel: %d getText: %d checkLabel: %d, aggregate: %d", f.getName(), 
+//						((FullTextFeature) f).getLabelTime, ((FullTextFeature) f).getTextsTime, ((FullTextFeature) f).checkLabelsTime, ((FullTextFeature) f).aggregationTime));
 			if (log.isInfoEnabled())
 				log.info(String.format("%s: %d ms", f.getName(), featureRuntime.get(f)));
 		}
@@ -174,7 +177,10 @@ public class SequentialEventFilter implements IEventFilter {
 	}
 
 	public void shutDown() {
-		// nothing to do
+		for (UsabilityFeature f : features) {
+			if (f instanceof FullTextFeature)
+				((FullTextFeature) f).shutDown();
+		}
 	}
 
 }

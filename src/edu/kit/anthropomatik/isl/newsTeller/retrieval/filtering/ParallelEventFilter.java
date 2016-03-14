@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import edu.kit.anthropomatik.isl.newsTeller.data.Keyword;
 import edu.kit.anthropomatik.isl.newsTeller.data.NewsEvent;
 import edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter;
+import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.FullTextFeature;
 import edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.UsabilityFeature;
 import edu.kit.anthropomatik.isl.newsTeller.userModel.UserModel;
 import edu.kit.anthropomatik.isl.newsTeller.util.Util;
@@ -346,6 +347,10 @@ public class ParallelEventFilter implements IEventFilter {
 
 	public void shutDown() {
 		this.threadPool.shutdown();
+		for (UsabilityFeature f : features) {
+			if (f instanceof FullTextFeature)
+				((FullTextFeature) f).shutDown();
+		}
 	}
 
 }

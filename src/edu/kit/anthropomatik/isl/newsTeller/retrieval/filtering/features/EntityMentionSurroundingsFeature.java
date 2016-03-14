@@ -43,14 +43,6 @@ public class EntityMentionSurroundingsFeature extends UsabilityFeature {
 			for (String resourceURI : resourceURIs) 
 				mentions.addAll(ksAdapter.getEntityMentions(entity, resourceURI));
 			entityMentions.add(mentions);
-//			Set<String> mentionURIs = 
-//					ksAdapter.getBufferedValues(Util.getRelationName("entity", "mention", arbitraryKeyword), entity);
-//			List<KSMention> mentions = new ArrayList<KSMention>();
-//			for (String mention : mentionURIs) {
-//				mentions.add(new KSMention(mention));
-//			}
-//
-//			entityMentions.add(mentions);
 		}
 
 		
