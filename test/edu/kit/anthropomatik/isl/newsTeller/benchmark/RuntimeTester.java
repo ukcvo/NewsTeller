@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -329,29 +331,123 @@ public class RuntimeTester {
 	// endregion
 
 	// region sparqlSearchTests
+	
+	private class SearchWorker implements Callable<List<NewsEvent>> {
+
+		private String sparqlQuery;
+		
+		public SearchWorker(String sparqlQuery) {
+			this.sparqlQuery = sparqlQuery;
+		}
+		
+		@Override
+		public List<NewsEvent> call() throws Exception {
+			return ksAdapter.runSingleVariableEventQuery(sparqlQuery, Util.VARIABLE_EVENT);
+		}
+		
+	}
+	
 	private void sparqlSearchTests() {
 
+		Set<List<Keyword>> queries = new HashSet<List<Keyword>>();
+		for (BenchmarkUser user : this.users)
+			queries.addAll(user.getQueries().keySet());
+		
 		for (Map.Entry<String, String> entry : sparqlSearchQueries.entrySet()) {
-			String fileName = entry.getKey();
-			String query = entry.getValue();
-			long averageQueryTime = 0;
-			for (int i = 0; i < this.numberOfRepetitions; i++) {
-				if (log.isInfoEnabled())
-					log.info(i);
-				for (String keyword : this.stemmedKeywords) {
-					String modifiedQuery = query.replace(Util.PLACEHOLDER_KEYWORD, keyword);
-					long t1 = System.currentTimeMillis();
-					ksAdapter.runSingleVariableStringQuery(modifiedQuery, Util.VARIABLE_EVENT);
-					long t2 = System.currentTimeMillis();
-					averageQueryTime += (t2 - t1);
+			
+			String queryName = entry.getKey();
+			String sparqlQuery = entry.getValue();
+			
+			long seqTime = 0;
+			long parTime = 0;
+			long bulkTime = 0;
+			
+			for (List<Keyword> query : queries) {
+				
+				long t = System.currentTimeMillis();
+				Set<NewsEvent> seqResult = new HashSet<NewsEvent>();
+				for (Keyword k : query) 
+					seqResult.addAll(ksAdapter.runSingleVariableEventQuery(
+							sparqlQuery.replace(Util.PLACEHOLDER_BIF_CONTAINS, k.getBifContainsString()).replace(Util.PLACEHOLDER_KEYWORD, k.getStemmedRegex()), 
+							Util.VARIABLE_EVENT));
+				seqTime += System.currentTimeMillis() - t;
+				
+				t = System.currentTimeMillis();
+				Set<NewsEvent> parResult = new HashSet<NewsEvent>();
+				List<Future<List<NewsEvent>>> futures = new ArrayList<Future<List<NewsEvent>>>();
+				for (Keyword k : query)
+					futures.add(ksAdapter.submit(
+							new SearchWorker(sparqlQuery.replace(Util.PLACEHOLDER_BIF_CONTAINS, k.getBifContainsString())
+									.replace(Util.PLACEHOLDER_KEYWORD, k.getStemmedRegex()))));
+				
+				for (Future<List<NewsEvent>> f : futures) {
+					try {
+						parResult.addAll(f.get());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+				parTime += System.currentTimeMillis() - t;
+				
+				t = System.currentTimeMillis();
+				Set<NewsEvent> bulkResult = new HashSet<NewsEvent>();
+				StringBuilder bifString = new StringBuilder();
+				StringBuilder regexString = new StringBuilder();
+				regexString.append(Util.KEYWORD_REGEX_PREFIX);
+				regexString.append("(");
+				for (int i = 0; i < query.size(); i++) {
+					Keyword k = query.get(i);
+					if (i > 0) {
+						bifString.append(" or ");
+						regexString.append("|");
+					}
+					bifString.append("(");
+					bifString.append(k.getBifContainsString());
+					bifString.append(")");
+					String regex = k.getStemmedRegex().replace(Util.KEYWORD_REGEX_PREFIX, "").replace(Util.KEYWORD_REGEX_SUFFIX, "");
+					regexString.append("(");
+					regexString.append(regex);
+					regexString.append(")");
+				}
+				regexString.append(")");
+				regexString.append(Util.KEYWORD_REGEX_SUFFIX);
+				
+				bulkResult.addAll(ksAdapter.runSingleVariableEventQuery(
+						sparqlQuery.replace(Util.PLACEHOLDER_BIF_CONTAINS, bifString.toString()).replace(Util.PLACEHOLDER_KEYWORD, regexString.toString()), 
+						Util.VARIABLE_EVENT));
+				bulkTime += System.currentTimeMillis() - t;
+				
+				if (!(seqResult.equals(parResult) && seqResult.equals(bulkResult)) && log.isInfoEnabled())
+					log.info(String.format("different results: %s  %d - %d - %d", 
+							StringUtils.collectionToCommaDelimitedString(query), seqResult.size(), parResult.size(), bulkResult.size()));
 			}
-			averageQueryTime /= this.numberOfRepetitions;
-			averageQueryTime /= this.stemmedKeywords.size();
-
 			if (log.isInfoEnabled())
-				log.info(String.format("%s: %d ms", fileName, averageQueryTime));
+				log.info(String.format("%s: seq %d par %d bulk %d", queryName, seqTime, parTime, bulkTime));
 		}
+		
+		
+//		for (Map.Entry<String, String> entry : sparqlSearchQueries.entrySet()) {
+//			String fileName = entry.getKey();
+//			String query = entry.getValue();
+//			long averageQueryTime = 0;
+//			for (int i = 0; i < this.numberOfRepetitions; i++) {
+//				if (log.isInfoEnabled())
+//					log.info(i);
+//				for (String keyword : this.stemmedKeywords) {
+//					String modifiedQuery = query.replace(Util.PLACEHOLDER_KEYWORD, keyword);
+//					long t1 = System.currentTimeMillis();
+//					ksAdapter.runSingleVariableStringQuery(modifiedQuery, Util.VARIABLE_EVENT);
+//					long t2 = System.currentTimeMillis();
+//					averageQueryTime += (t2 - t1);
+//				}
+//			}
+//			averageQueryTime /= this.numberOfRepetitions;
+//			averageQueryTime /= this.stemmedKeywords.size();
+//
+//			if (log.isInfoEnabled())
+//				log.info(String.format("%s: %d ms", fileName, averageQueryTime));
+//		}
 
 	}
 	// endregion

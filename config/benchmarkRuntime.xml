@@ -96,6 +96,13 @@
 			</set>
 		</property>
 
+		<property name="sparqlSearchQueries">
+			<set>
+				<value>resources/SPARQL/search/searchQuery.qry</value>
+				<!-- <value>resources/SPARQL/search/fallbackSearchQuery.qry</value> -->
+			</set>
+		</property>
+
 		<property name="sequentialSearcher" ref="searcher1" />
 		<property name="parallelSearcher" ref="searcher2" />
 		<property name="sequentialFilter" ref="filter2a" />
@@ -105,7 +112,7 @@
 		<property name="features" ref="activeFeatureList" />
 
 		<property name="doKSAccessTests" value="false" />
-		<property name="doSparqlSearchTests" value="false" />
+		<property name="doSparqlSearchTests" value="true" />
 		<property name="doSparqlFeatureTests" value="false" />
 		<property name="doSequentialSearcherTest" value="false" />
 		<property name="doParallelSearcherTest" value="false" />
@@ -117,7 +124,7 @@
 		<property name="doClassifierTest" value="false" />
 		<property name="doBulkSparqlTest" value="false"/>
 		<property name="doBulkMentionTest" value="false"/>
-		<property name="doEndToEndTest" value="true" />
+		<property name="doEndToEndTest" value="false" />
 
 		<property name="maxNumberOfEvents" value="500" />
 		<property name="numberOfRepetitions" value="1" />

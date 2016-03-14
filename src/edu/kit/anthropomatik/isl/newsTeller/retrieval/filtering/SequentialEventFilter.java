@@ -166,9 +166,6 @@ public class SequentialEventFilter implements IEventFilter {
 			log.info(String.format("feature extraction & classification: %d ms", t));
 		
 		for (UsabilityFeature f : features) {
-//			if (f instanceof FullTextFeature)
-//				log.info(String.format("%s getLabel: %d getText: %d checkLabel: %d, aggregate: %d", f.getName(), 
-//						((FullTextFeature) f).getLabelTime, ((FullTextFeature) f).getTextsTime, ((FullTextFeature) f).checkLabelsTime, ((FullTextFeature) f).aggregationTime));
 			if (log.isInfoEnabled())
 				log.info(String.format("%s: %d ms", f.getName(), featureRuntime.get(f)));
 		}

@@ -58,7 +58,6 @@
 		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
 		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
-		<constructor-arg name="entityMentionsQueryFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		
 		<property name="features" ref="activeFeatureList" />
 		<property name="ksAdapter" ref="ksAdapter" />
@@ -73,7 +72,6 @@
 		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
 		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
-		<constructor-arg name="entityMentionsQueryFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		
 		<property name="features" ref="activeFeatureList" />
 		<property name="ksAdapter" ref="ksAdapter" />

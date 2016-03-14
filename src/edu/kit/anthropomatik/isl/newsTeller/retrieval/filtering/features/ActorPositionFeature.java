@@ -23,16 +23,11 @@ public class ActorPositionFeature extends UsabilityFeature {
 		super();
 	}
 
-	public long preparationTime = 0;
-	public long mentionPrepTime = 0;
-	public long actorIterationTime = 0;
-	
 	@Override
 	public double getValue(String eventURI, List<Keyword> keywords) {
 		
 		double result = 0;
 		
-		long t = System.currentTimeMillis();
 		String arbitraryKeyword = keywords.get(0).getWord();
 		
 		Set<String> mentionURIs = ksAdapter.getBufferedValues(Util.getRelationName("event", "mention", arbitraryKeyword), eventURI);
@@ -42,11 +37,8 @@ public class ActorPositionFeature extends UsabilityFeature {
 		for (String actor : actors) {
 			actorLabels.add(ksAdapter.getBufferedValues(Util.getRelationName("entity", "entityPrefLabel", arbitraryKeyword), actor));
 		}
-		this.preparationTime += System.currentTimeMillis() - t;
-		
+				
 		for (String mentionURI : mentionURIs) {
-			
-			t = System.currentTimeMillis();
 			String sentence = ksAdapter.retrieveSentenceFromMention(mentionURI);
 			String eventLabel = ksAdapter.getFirstBufferedValue(Util.RELATION_NAME_MENTION_PROPERTY + Util.MENTION_PROPERTY_ANCHOR_OF, mentionURI);
 			
@@ -57,9 +49,6 @@ public class ActorPositionFeature extends UsabilityFeature {
 				continue;
 			
 			String sentencePart = sentenceParts[directionToLookAt].toLowerCase(); // case-insensitive
-			
-			this.mentionPrepTime += System.currentTimeMillis() - t;
-			t = System.currentTimeMillis();
 			
 			double mentionResult = 0;
 			
@@ -74,11 +63,8 @@ public class ActorPositionFeature extends UsabilityFeature {
 				}
 				mentionResult += actorResult;
 			}
-			
 			if (!actors.isEmpty())
 				result += mentionResult / actors.size();
-			
-			this.actorIterationTime += System.currentTimeMillis() - t;
 		}
 		
 		result /= mentionURIs.size();

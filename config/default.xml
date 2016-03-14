@@ -30,7 +30,7 @@
 		<property name="maxNumberOfEvents" value="1000" />
 	</bean>
 
-<!--	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter">
+	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.SequentialEventFilter">
 		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
 		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
 		<constructor-arg name="eventStatisticsKeywordQueryFileName" value="resources/SPARQL/usability/eventStatisticsKeyword.qry" />
@@ -38,17 +38,17 @@
 		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
 		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
-		<property name="features" ref="activeFeatureList" />  
+		<!-- <property name="features" ref="activeFeatureList" />  -->
 		<property name="features">
 			<list>
-				<ref bean="appearSplitDescriptionsInTextFeature" />
-				<ref bean="appearKeywordDescriptionPartsInTextFeature" />
+				<ref bean="actorPositionLeftFeature" />
+				<ref bean="actorPositionRightFeature" />
 			</list>
 		</property>
 		<property name="ksAdapter" ref="ksAdapter" />
-	</bean>-->
+	</bean>
 
-
+<!-- 
 	<bean id="filter" class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
 		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
 		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
@@ -61,7 +61,7 @@
 		<property name="ksAdapter" ref="ksAdapter" />
 		<property name="numThreads" value="1000" />
 	</bean>
-
+ -->
 	<bean id="rankerUM"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
 		<constructor-arg name="regressorFileName" value="resources/regressorUM.model" />

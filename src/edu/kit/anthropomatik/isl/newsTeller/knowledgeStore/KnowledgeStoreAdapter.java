@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
@@ -178,6 +179,10 @@ public class KnowledgeStoreAdapter {
 		return this.threadPool.submit(task);
 	}
 
+	public <T> Future<T> submit(Callable<T> task) {
+		return this.threadPool.submit(task);
+	}
+	
 	/**
 	 * Used for unit tests to provide some cached values without running costly
 	 * bulk-queries. Copies the given contents into the local cache.
