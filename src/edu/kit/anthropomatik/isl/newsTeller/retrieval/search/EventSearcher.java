@@ -55,25 +55,46 @@ public class EventSearcher {
 
 		Set<NewsEvent> events = new HashSet<NewsEvent>();
 		
-		for (Keyword keyword : userQuery) {
-			Util.stemKeyword(keyword);
-			String keywordRegex = keyword.getStemmedRegex();
-			String bifContainsString = keyword.getBifContainsString();
-			List<NewsEvent> keywordEvents = ksAdapter.runSingleVariableEventQuery(
-					standardSparqlQuery.replace(Util.PLACEHOLDER_BIF_CONTAINS, bifContainsString).replace(Util.PLACEHOLDER_KEYWORD, keywordRegex), 
-					Util.VARIABLE_EVENT, 6000L);
-			if (keywordEvents.isEmpty())
-				keywordEvents = ksAdapter.runSingleVariableEventQuery(
-						fallbackSparqlQuery.replace(Util.PLACEHOLDER_KEYWORD, keywordRegex), Util.VARIABLE_EVENT, 6000L);
-			events.addAll(keywordEvents);
+		for (Keyword k : userQuery)
+			Util.stemKeyword(k);
+		
+		// create the replacement strings
+		StringBuilder bifString = new StringBuilder();
+		StringBuilder regexString = new StringBuilder();
+		regexString.append(Util.KEYWORD_REGEX_PREFIX);
+		regexString.append("(");
+		for (int i = 0; i < userQuery.size(); i++) {
+			Keyword k = userQuery.get(i);
+			if (i > 0) {
+				bifString.append(" or ");
+				regexString.append("|");
+			}
+			bifString.append("(");
+			bifString.append(k.getBifContainsString());
+			bifString.append(")");
+			String regex = k.getStemmedRegex().replace(Util.KEYWORD_REGEX_PREFIX, "").replace(Util.KEYWORD_REGEX_SUFFIX, "");
+			regexString.append("(");
+			regexString.append(regex);
+			regexString.append(")");
 		}
+		regexString.append(")");
+		regexString.append(Util.KEYWORD_REGEX_SUFFIX);
+		
+		// try with standard query first, if this doesn't work: use fallback query
+		events.addAll(ksAdapter.runSingleVariableEventQuery(
+				standardSparqlQuery.replace(Util.PLACEHOLDER_BIF_CONTAINS, bifString.toString()).replace(Util.PLACEHOLDER_KEYWORD, regexString.toString()), 
+				Util.VARIABLE_EVENT));
+		if (events.isEmpty())
+			events.addAll(ksAdapter.runSingleVariableEventQuery(
+				fallbackSparqlQuery.replace(Util.PLACEHOLDER_BIF_CONTAINS, bifString.toString()).replace(Util.PLACEHOLDER_KEYWORD, regexString.toString()), 
+				Util.VARIABLE_EVENT));
 		
 		if (events.size() > maxNumberOfEvents) {
 			// throw away some of the events to make further processing faster
 			List<NewsEvent> eventsAsList = new ArrayList<NewsEvent>(events);
 			Collections.shuffle(eventsAsList);
 			if (log.isDebugEnabled())
-				log.debug(String.format("found %d events, selecting first %d for further processing", events.size(), maxNumberOfEvents));
+				log.debug(String.format("found %d events, selecting randomly %d for further processing", events.size(), maxNumberOfEvents));
 			events = new HashSet<NewsEvent>(eventsAsList.subList(0, maxNumberOfEvents));
 			
 		}

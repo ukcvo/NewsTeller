@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -94,6 +93,7 @@ public class RuntimeTester {
 
 	private Map<String, String> sparqlFeatureQueries;
 
+	@SuppressWarnings("unused")
 	private Set<String> stemmedKeywords;
 
 	private Set<String> eventURIs;
@@ -425,29 +425,6 @@ public class RuntimeTester {
 			if (log.isInfoEnabled())
 				log.info(String.format("%s: seq %d par %d bulk %d", queryName, seqTime, parTime, bulkTime));
 		}
-		
-		
-//		for (Map.Entry<String, String> entry : sparqlSearchQueries.entrySet()) {
-//			String fileName = entry.getKey();
-//			String query = entry.getValue();
-//			long averageQueryTime = 0;
-//			for (int i = 0; i < this.numberOfRepetitions; i++) {
-//				if (log.isInfoEnabled())
-//					log.info(i);
-//				for (String keyword : this.stemmedKeywords) {
-//					String modifiedQuery = query.replace(Util.PLACEHOLDER_KEYWORD, keyword);
-//					long t1 = System.currentTimeMillis();
-//					ksAdapter.runSingleVariableStringQuery(modifiedQuery, Util.VARIABLE_EVENT);
-//					long t2 = System.currentTimeMillis();
-//					averageQueryTime += (t2 - t1);
-//				}
-//			}
-//			averageQueryTime /= this.numberOfRepetitions;
-//			averageQueryTime /= this.stemmedKeywords.size();
-//
-//			if (log.isInfoEnabled())
-//				log.info(String.format("%s: %d ms", fileName, averageQueryTime));
-//		}
 
 	}
 	// endregion

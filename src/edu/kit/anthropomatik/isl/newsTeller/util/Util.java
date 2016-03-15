@@ -39,14 +39,6 @@ public class Util {
 
 	private static Log log = LogFactory.getLog(Util.class);
 
-	private static SnowballStemmer stemmer = null;
-
-	private static SnowballStemmer getStemmer() {
-		if (stemmer == null)
-			stemmer = new englishStemmer();
-		return stemmer;
-	}
-
 	public static final String PLACEHOLDER_EVENT = "*e*";
 	public static final String PLACEHOLDER_KEYWORD = "*k*";
 	public static final String PLACEHOLDER_HISTORICAL_EVENT = "*h*";
@@ -135,16 +127,6 @@ public class Util {
 	public static final String RELATION_NAME_RESOURCE_TEXT = "resource-text-";
 	public static final String RELATION_NAME_RESOURCE_PROPERTY = "resource-property-";
 		
-	public static final List<Keyword> EMPTY_KEYWORD_LIST;
-	public static final Keyword EMPTY_KEYWORD;
-	
-	static {
-		EMPTY_KEYWORD_LIST = new ArrayList<Keyword>();
-		EMPTY_KEYWORD = new Keyword("");
-		Util.stemKeyword(EMPTY_KEYWORD);
-		EMPTY_KEYWORD_LIST.add(EMPTY_KEYWORD);
-	}
-	
 	// private constructor to prevent instantiation
 	private Util() {
 	}
@@ -791,7 +773,12 @@ public class Util {
 	 * Stems the given keyword.
 	 */
 	public static void stemKeyword(Keyword keyword) {
-		SnowballStemmer stemmer = getStemmer();
+		if (keyword.getWord().isEmpty() && log.isErrorEnabled()) {
+			log.error(String.format("Empty keyword! %s", keyword.getWord()));
+			Thread.dumpStack();
+			throw new IllegalArgumentException("empty keyword cannot be stemmed!");
+		}
+		SnowballStemmer stemmer = new englishStemmer();
 		stemmer.setCurrent(keyword.getWord());
 		stemmer.stem();
 		String stemmedKeyword = stemmer.getCurrent();

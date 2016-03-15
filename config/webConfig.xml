@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+    
+	<context:property-placeholder properties-ref="serverProperties" />
+	<util:properties id="serverProperties">
+		<prop key="ksConnections">50</prop>
+		<prop key="ksTimeout">20000</prop>
+		<prop key="ksQueryLength">6000</prop>
+	</util:properties>
+    
+    
+	<bean id="serverMain" class="edu.kit.anthropomatik.isl.newsTeller.server.Main">
+		<property name="newsTellerQueue">
+			<list>
+				<ref bean="newsTellerWorker0" />
+				<ref bean="newsTellerWorker1" />
+				<!-- <ref bean="newsTellerWorker2" />
+				<ref bean="newsTellerWorker3" />
+				<ref bean="newsTellerWorker4" />  -->
+			</list>
+		</property>
+		<property name="timeoutSeconds" value="150"	/>
+	</bean>
+    
+    
 	<bean id="embeddings"
 		class="edu.kit.anthropomatik.isl.newsTeller.util.embeddings.EmbeddingsProvider">
 		<constructor-arg name="embeddingsFileName"
@@ -13,7 +40,7 @@
 		<property name="splitKeywordsIntoTokens" value="false" />
 	</bean>
 
-	<bean id="ksAdapter"
+	<bean id="ksAdapter0"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
 		<constructor-arg name="getMentionFromEventFileName"
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
@@ -21,23 +48,23 @@
 			value="resources/SPARQL/general/getEventFromMention.qry" />
 		<constructor-arg name="getMentionFromEntityFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
-		<property name="timeoutMsec" value="30000" />
-		<property name="maxNumberOfConnections" value="100"/>
+		<property name="timeoutMsec" value="${ksTimeout}" />
+		<property name="maxNumberOfConnections" value="${ksConnections}"/>
 		<property name="useStanford" value="true" />
-		<property name="maximumQueryLength" value="6000" />
+		<property name="maximumQueryLength" value="${ksQueryLength}" />
 	</bean>
 
-	<bean id="searcher"
+	<bean id="searcher0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
 		<constructor-arg name="standardSparqlQueryFileName"
 			value="resources/SPARQL/search/searchQuery.qry" />
 		<constructor-arg name="fallbackSparqlQueryFileName"
 			value="resources/SPARQL/search/fallbackSearchQuery.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="ksAdapter" ref="ksAdapter0" />
 		<property name="maxNumberOfEvents" value="1000" />
 	</bean>
 
-	<bean id="filter"
+	<bean id="filter0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
 		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
 		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
@@ -46,26 +73,25 @@
 		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
 		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
 		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
-		<constructor-arg name="entityMentionsQueryFileName" value="resources/SPARQL/usability/entityMentions.qry" />
 		<property name="features">
 			<list>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="A1" />
 					<property name="valueName" value="a1" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="actorPositionLeft" />
 					<property name="directionToLookAt" value="0" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="actorPositionRight" />
 					<property name="directionToLookAt" value="1" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="appearKeywordLabelPartsInText" />
 					<property name="splitLabels" value="true" />
 					<property name="doOnlyUseSentence" value="false" />
@@ -77,7 +103,7 @@
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
 					<property name="splitLabels" value="false" />
 					<property name="doOnlyUseSentence" value="true" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="appearKeywordLabelsInSentence" />
 					<property name="entityType" value="keywordEntity" />
 					<property name="directLabelType" value="entityLabel" />
@@ -87,7 +113,7 @@
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
 					<property name="splitLabels" value="true" />
 					<property name="doOnlyUseSentence" value="false" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="appearKeywordDescriptionPartsInText" />
 					<property name="entityType" value="keywordEntity" />
 					<property name="directLabelType" value="entityDescription" />
@@ -96,7 +122,7 @@
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
 					<property name="splitLabels" value="false" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="appearLabelsInText" />
 					<property name="entityType" value="entity" />
 					<property name="directLabelType" value="entityLabel" />
@@ -105,7 +131,7 @@
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
 					<property name="splitLabels" value="true" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="appearSplitDescriptionsInText" />
 					<property name="entityType" value="entity" />
 					<property name="directLabelType" value="entityDescription" />
@@ -114,7 +140,7 @@
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
 					<property name="splitLabels" value="true" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="appearSplitLabelsInText" />
 					<property name="entityType" value="entity" />
 					<property name="directLabelType" value="entityLabel" />
@@ -122,16 +148,16 @@
 					<property name="usesKeyword" value="false" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="hasDBpediaEntities" />
 					<property name="valueName" value="numberOfKeywordEntities" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordEntityMatchingKeywordFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="keywordEntityMatchingKeyword" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="keywordInTextContains" />
 					<property name="doOnlyUseSentence" value="false" />
 					<property name="doUseContainsInsteadOfRegex" value="true" />
@@ -143,23 +169,23 @@
 					<constructor-arg name="targetWordsFileName"
 						value="resources/features/prepositions-local.txt" />
 					<property name="operationType" value="1" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="locationPrepBeforeActor" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentSeparatedByEventFeature">
 					<property name="operationType" value="2" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="maxConstituentSeparatedByEvent" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
 					<property name="operationType" value="1" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="maxConstituentsPerMention" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
 					<property name="normalize" value="false" />
 					<property name="operationType" value="1" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="minWordDistance" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankNeedsArgumentFeature">
@@ -167,39 +193,39 @@
 						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
 					<constructor-arg name="argument" value="2" />
 					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="needsA2" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
 					<property name="operationType" value="4" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="nonzeroConstituentsPerMention" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="numberOfMentions" />
 					<property name="valueName" value="numberOfMentions" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentOverlapFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="overlap" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.POSFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="pos" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
 					<constructor-arg name="prepositionFileName"
 						value="resources/features/prepositions.txt" />
 					<property name="doSearchInsidePhrase" value="false" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="prepPhrase" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
 					<constructor-arg name="prepositionFileName"
 						value="resources/features/prepositions-local.txt" />
 					<property name="doSearchInsidePhrase" value="false" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="prepPhraseLocation" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
@@ -209,7 +235,7 @@
 					<property name="doAutomaticallyChooseProperty" value="false" />
 					<property name="doComputeAverageInsteadOfMax" value="false" />
 					<property name="doUseVerbAsFallback" value="false" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="propbankArgument" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
@@ -219,7 +245,7 @@
 					<property name="doAutomaticallyChooseProperty" value="false" />
 					<property name="doComputeAverageInsteadOfMax" value="true" />
 					<property name="doUseVerbAsFallback" value="false" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="propbankAvgArgument" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
@@ -229,29 +255,29 @@
 					<property name="doAutomaticallyChooseProperty" value="true" />
 					<property name="doComputeAverageInsteadOfMax" value="true" />
 					<property name="doUseVerbAsFallback" value="true" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="smartPropbankFallbackAvgArgument" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="wordnet" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionPropertyFeature">
 					<constructor-arg name="propertyURI"
 						value="http://dkm.fbk.eu/ontologies/newsreader#wordnetRef" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="wordnetRef" />
 				</bean>
 			</list>
 		</property>
-		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="ksAdapter" ref="ksAdapter0" />
 		<property name="numThreads" value="1000" />
 	</bean>
 
-	<bean id="rankerRand"
+	<bean id="rankerRand0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.RandomEventRanker" />
 
-	<bean id="rankerNoUM"
+	<bean id="rankerNoUM0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
 		<constructor-arg name="regressorFileName" value="resources/regressorNoUM.model" />
 		<constructor-arg name="eventConstituentsQueryFileName"
@@ -260,14 +286,14 @@
 			value="resources/SPARQL/ranking/entityProperties.qry" />
 		<constructor-arg name="eventStatisticsQueryFileName"
 			value="resources/SPARQL/ranking/eventStatistics.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="ksAdapter" ref="ksAdapter0" />
 		<property name="features">
 			<list>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 					<constructor-arg name="stopWordsFileName"
 						value="resources/features/stopwords.txt" />
 					<property name="embeddings" ref="embeddings" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="textEmbeddings13f" />
 					<property name="keywordAggregationType" value="1" />
 					<property name="innerAggregationType" value="3" />
@@ -277,7 +303,7 @@
 					<constructor-arg name="stopWordsFileName"
 						value="resources/features/stopwords.txt" />
 					<property name="embeddings" ref="embeddings" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="constituentEmbeddings11ed" />
 					<property name="keywordAggregationType" value="1" />
 					<property name="innerAggregationType" value="1" />
@@ -289,7 +315,7 @@
 					<constructor-arg name="stopWordsFileName"
 						value="resources/features/stopwords.txt" />
 					<property name="embeddings" ref="embeddings" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="constituentEmbeddings12em" />
 					<property name="keywordAggregationType" value="1" />
 					<property name="innerAggregationType" value="2" />
@@ -298,25 +324,25 @@
 					<property name="needsKeywordIteration" value="True" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceLengthFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="sentenceLengthCharMin" />
 					<property name="useWordCount" value="false" />
 					<property name="aggregationType" value="1" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="numberOfNonEntities" />
 					<property name="valueName" value="numberOfNonEntities" />
 					<property name="aggregationType" value="0" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="numberOfDummyEntities" />
 					<property name="valueName" value="numberOfDummyEntities" />
 					<property name="aggregationType" value="0" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="keywordEntities1ffd" />
 					<property name="aggregationType" value="1" />
 					<property name="useStemInsteadOfWord" value="false" />
@@ -324,7 +350,7 @@
 					<property name="labelType" value="entityDbpediaLabel" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="keywordInSentence11ftft" />
 					<property name="aggregationTypeKeyword" value="1" />
 					<property name="aggregationTypeSentence" value="1" />
@@ -334,7 +360,7 @@
 					<property name="splitKeywords" value="true" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="keywordInSentence11ttft" />
 					<property name="aggregationTypeKeyword" value="1" />
 					<property name="aggregationTypeSentence" value="1" />
@@ -344,7 +370,7 @@
 					<property name="splitKeywords" value="true" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="BM25Sentence1.2" />
 					<property name="k1" value="1.2" />
 					<property name="useTextInsteadOfSentence" value="False" />
@@ -354,7 +380,7 @@
 					<constructor-arg name="stopWordsFileName"
 						value="resources/features/stopwords.txt" />
 					<property name="embeddings" ref="embeddings" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="textEmbeddings31t" />
 					<property name="keywordAggregationType" value="3" />
 					<property name="innerAggregationType" value="1" />
@@ -362,14 +388,14 @@
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
 					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="constituentContains_it_ep" />
 					<property name="entityName" value="entity" />
 					<property name="valueName" value="entityPrefLabel" />
 					<property name="needsKeywordIteration" value="False" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="sameDocument1tt" />
 					<property name="aggregationType" value="1" />
 					<property name="useSentenceInsteadOfText" value="true" />
@@ -380,7 +406,7 @@
 		</property>
 	</bean>
 
-	<bean id="rankerUM"
+	<bean id="rankerUM0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
 		<constructor-arg name="regressorFileName" value="resources/regressorUM.model" />
 		<constructor-arg name="eventConstituentsQueryFileName"
@@ -389,14 +415,14 @@
 			value="resources/SPARQL/ranking/entityProperties.qry" />
 		<constructor-arg name="eventStatisticsQueryFileName"
 			value="resources/SPARQL/ranking/eventStatistics.qry" />
-		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="ksAdapter" ref="ksAdapter0" />
 		<property name="features">
 			<list>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
 					<constructor-arg name="stopWordsFileName"
 						value="resources/features/stopwords.txt" />
 					<property name="embeddings" ref="embeddings" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="textEmbeddings13f" />
 					<property name="keywordAggregationType" value="1" />
 					<property name="innerAggregationType" value="3" />
@@ -406,7 +432,7 @@
 					<constructor-arg name="stopWordsFileName"
 						value="resources/features/stopwords.txt" />
 					<property name="embeddings" ref="embeddings" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="constituentEmbeddings11ed" />
 					<property name="keywordAggregationType" value="1" />
 					<property name="innerAggregationType" value="1" />
@@ -415,19 +441,19 @@
 					<property name="needsKeywordIteration" value="False" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="numberOfNonEntities" />
 					<property name="valueName" value="numberOfNonEntities" />
 					<property name="aggregationType" value="0" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="numberOfDummyEntities" />
 					<property name="valueName" value="numberOfDummyEntities" />
 					<property name="aggregationType" value="0" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="keywordInSentence11ftft" />
 					<property name="aggregationTypeKeyword" value="1" />
 					<property name="aggregationTypeSentence" value="1" />
@@ -437,7 +463,7 @@
 					<property name="splitKeywords" value="true" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="keywordInSentence11ttft" />
 					<property name="aggregationTypeKeyword" value="1" />
 					<property name="aggregationTypeSentence" value="1" />
@@ -447,7 +473,7 @@
 					<property name="splitKeywords" value="true" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="BM25Sentence1.2" />
 					<property name="k1" value="1.2" />
 					<property name="useTextInsteadOfSentence" value="False" />
@@ -457,7 +483,7 @@
 					<constructor-arg name="stopWordsFileName"
 						value="resources/features/stopwords.txt" />
 					<property name="embeddings" ref="embeddings" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="textEmbeddings31t" />
 					<property name="keywordAggregationType" value="3" />
 					<property name="innerAggregationType" value="1" />
@@ -465,14 +491,14 @@
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
 					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="constituentContains_it_ep" />
 					<property name="entityName" value="entity" />
 					<property name="valueName" value="entityPrefLabel" />
 					<property name="needsKeywordIteration" value="False" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="sameDocument1tt" />
 					<property name="aggregationType" value="1" />
 					<property name="useSentenceInsteadOfText" value="true" />
@@ -483,7 +509,7 @@
 					<constructor-arg name="stopWordsFileName"
 						value="resources/features/stopwords.txt" />
 					<property name="embeddings" ref="embeddings" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="constituentEmbeddings02edtrue" />
 					<property name="keywordAggregationType" value="0" />
 					<property name="innerAggregationType" value="2" />
@@ -493,7 +519,7 @@
 					<property name="useUserInterestsInsteadOfQuery" value="true" />
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="numberOfKeywordEntitiesAvgtrue" />
 					<property name="valueName" value="numberOfKeywordEntities" />
 					<property name="aggregationType" value="0" />
@@ -501,7 +527,7 @@
 				</bean>
 				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
 					<property name="embeddings" ref="embeddings" />
-					<property name="ksAdapter" ref="ksAdapter" />
+					<property name="ksAdapter" ref="ksAdapter0" />
 					<property name="name" value="keywordComparisonMaxtrue" />
 					<property name="aggregationType" value="2" />
 					<property name="useUserInterestsInsteadOfQuery" value="true" />
@@ -510,24 +536,2154 @@
 		</property>
 	</bean>
 
-	<bean id="selectorRand"
+	<bean id="selectorRand0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
 		<property name="threshold" value="0.00" />
 	</bean>
 
-	<bean id="selectorNoUM"
+	<bean id="selectorNoUM0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
 		<property name="threshold" value="0.86" />
 	</bean>
 
-	<bean id="selectorUM"
+	<bean id="selectorUM0"
 		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
 		<property name="threshold" value="0.97" />
 	</bean>
 	
-	<bean id="generator"
+	<bean id="generator0"
 		class="edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker">
-		<property name="ksAdapter" ref="ksAdapter" />
+		<property name="ksAdapter" ref="ksAdapter0" />
 	</bean>
+
+	<bean id="newsTellerWorker0" class="edu.kit.anthropomatik.isl.newsTeller.server.NewsTellerWorker">
+		<property name="ksAdapter" ref="ksAdapter0" />
+		<property name="searcher" ref="searcher0" />
+		<property name="filter" ref="filter0" />
+		<property name="randomRanker" ref="rankerRand0" />
+		<property name="noUMRanker" ref="rankerNoUM0" />
+		<property name="umRanker" ref="rankerUM0" />
+		<property name="randomSelector" ref="selectorRand0" />
+		<property name="noUMSelector" ref="selectorNoUM0" />
+		<property name="umSelector" ref="selectorUM0" />
+		<property name="generator" ref="generator0" />
+	</bean>
+
+	<bean id="ksAdapter1"
+		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
+		<constructor-arg name="getMentionFromEventFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="getEventFromMentionFileName"
+			value="resources/SPARQL/general/getEventFromMention.qry" />
+		<constructor-arg name="getMentionFromEntityFileName" value="resources/SPARQL/usability/entityMentions.qry" />
+		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
+		<property name="timeoutMsec" value="${ksTimeout}" />
+		<property name="maxNumberOfConnections" value="${ksConnections}"/>
+		<property name="useStanford" value="true" />
+		<property name="maximumQueryLength" value="${ksQueryLength}" />
+	</bean>
+
+	<bean id="searcher1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
+		<constructor-arg name="standardSparqlQueryFileName"
+			value="resources/SPARQL/search/searchQuery.qry" />
+		<constructor-arg name="fallbackSparqlQueryFileName"
+			value="resources/SPARQL/search/fallbackSearchQuery.qry" />
+		<property name="ksAdapter" ref="ksAdapter1" />
+		<property name="maxNumberOfEvents" value="1000" />
+	</bean>
+
+	<bean id="filter1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
+		<constructor-arg name="eventStatisticsKeywordQueryFileName" value="resources/SPARQL/usability/eventStatisticsKeyword.qry" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/usability/eventConstituents.qry" />
+		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
+		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="A1" />
+					<property name="valueName" value="a1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="actorPositionLeft" />
+					<property name="directionToLookAt" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="actorPositionRight" />
+					<property name="directionToLookAt" value="1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="appearKeywordLabelPartsInText" />
+					<property name="splitLabels" value="true" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="inheritedLabel" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="false" />
+					<property name="doOnlyUseSentence" value="true" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="appearKeywordLabelsInSentence" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="inheritedLabel" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="appearKeywordDescriptionPartsInText" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityDescription" />
+					<property name="indirectLabelType" value="inheritedDescription" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="false" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="appearLabelsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="appearSplitDescriptionsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityDescription" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="appearSplitLabelsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="hasDBpediaEntities" />
+					<property name="valueName" value="numberOfKeywordEntities" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordEntityMatchingKeywordFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="keywordEntityMatchingKeyword" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="keywordInTextContains" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="doUseContainsInsteadOfRegex" value="true" />
+					<property name="useOriginalString" value="true" />
+					<property name="useStem" value="false" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.EntityMentionSurroundingsFeature">
+					<constructor-arg name="targetWordsFileName"
+						value="resources/features/prepositions-local.txt" />
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="locationPrepBeforeActor" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentSeparatedByEventFeature">
+					<property name="operationType" value="2" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="maxConstituentSeparatedByEvent" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="maxConstituentsPerMention" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+					<property name="normalize" value="false" />
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="minWordDistance" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankNeedsArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="argument" value="2" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="needsA2" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+					<property name="operationType" value="4" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="nonzeroConstituentsPerMention" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="numberOfMentions" />
+					<property name="valueName" value="numberOfMentions" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentOverlapFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="overlap" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.POSFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="pos" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+					<constructor-arg name="prepositionFileName"
+						value="resources/features/prepositions.txt" />
+					<property name="doSearchInsidePhrase" value="false" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="prepPhrase" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+					<constructor-arg name="prepositionFileName"
+						value="resources/features/prepositions-local.txt" />
+					<property name="doSearchInsidePhrase" value="false" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="prepPhraseLocation" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="false" />
+					<property name="doComputeAverageInsteadOfMax" value="false" />
+					<property name="doUseVerbAsFallback" value="false" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="propbankArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="false" />
+					<property name="doComputeAverageInsteadOfMax" value="true" />
+					<property name="doUseVerbAsFallback" value="false" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="propbankAvgArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="true" />
+					<property name="doComputeAverageInsteadOfMax" value="true" />
+					<property name="doUseVerbAsFallback" value="true" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="smartPropbankFallbackAvgArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="wordnet" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionPropertyFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#wordnetRef" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="wordnetRef" />
+				</bean>
+			</list>
+		</property>
+		<property name="ksAdapter" ref="ksAdapter1" />
+		<property name="numThreads" value="1000" />
+	</bean>
+
+	<bean id="rankerRand1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.RandomEventRanker" />
+
+	<bean id="rankerNoUM1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressorNoUM.model" />
+		<constructor-arg name="eventConstituentsQueryFileName"
+			value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName"
+			value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName"
+			value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter1" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="textEmbeddings13f" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="3" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="constituentEmbeddings11ed" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="1" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="constituentEmbeddings12em" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="2" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="matchingEntityLabel" />
+					<property name="needsKeywordIteration" value="True" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceLengthFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="sentenceLengthCharMin" />
+					<property name="useWordCount" value="false" />
+					<property name="aggregationType" value="1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="numberOfNonEntities" />
+					<property name="valueName" value="numberOfNonEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="numberOfDummyEntities" />
+					<property name="valueName" value="numberOfDummyEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="keywordEntities1ffd" />
+					<property name="aggregationType" value="1" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="normalizeResult" value="false" />
+					<property name="labelType" value="entityDbpediaLabel" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="keywordInSentence11ftft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="keywordInSentence11ttft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="BM25Sentence1.2" />
+					<property name="k1" value="1.2" />
+					<property name="useTextInsteadOfSentence" value="False" />
+					<property name="useTitleInsteadOfSentence" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="textEmbeddings31t" />
+					<property name="keywordAggregationType" value="3" />
+					<property name="innerAggregationType" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="constituentContains_it_ep" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityPrefLabel" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="sameDocument1tt" />
+					<property name="aggregationType" value="1" />
+					<property name="useSentenceInsteadOfText" value="true" />
+					<property name="normalizeOverNumberOfTotalDocuments"
+						value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="rankerUM1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressorUM.model" />
+		<constructor-arg name="eventConstituentsQueryFileName"
+			value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName"
+			value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName"
+			value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter1" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="textEmbeddings13f" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="3" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="constituentEmbeddings11ed" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="1" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="numberOfNonEntities" />
+					<property name="valueName" value="numberOfNonEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="numberOfDummyEntities" />
+					<property name="valueName" value="numberOfDummyEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="keywordInSentence11ftft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="keywordInSentence11ttft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="BM25Sentence1.2" />
+					<property name="k1" value="1.2" />
+					<property name="useTextInsteadOfSentence" value="False" />
+					<property name="useTitleInsteadOfSentence" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="textEmbeddings31t" />
+					<property name="keywordAggregationType" value="3" />
+					<property name="innerAggregationType" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="constituentContains_it_ep" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityPrefLabel" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="sameDocument1tt" />
+					<property name="aggregationType" value="1" />
+					<property name="useSentenceInsteadOfText" value="true" />
+					<property name="normalizeOverNumberOfTotalDocuments"
+						value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="constituentEmbeddings02edtrue" />
+					<property name="keywordAggregationType" value="0" />
+					<property name="innerAggregationType" value="2" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="numberOfKeywordEntitiesAvgtrue" />
+					<property name="valueName" value="numberOfKeywordEntities" />
+					<property name="aggregationType" value="0" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter1" />
+					<property name="name" value="keywordComparisonMaxtrue" />
+					<property name="aggregationType" value="2" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="selectorRand1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.00" />
+	</bean>
+
+	<bean id="selectorNoUM1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.86" />
+	</bean>
+
+	<bean id="selectorUM1"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.97" />
+	</bean>
+	
+	<bean id="generator1"
+		class="edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker">
+		<property name="ksAdapter" ref="ksAdapter1" />
+	</bean>
+
+	<bean id="newsTellerWorker1" class="edu.kit.anthropomatik.isl.newsTeller.server.NewsTellerWorker">
+		<property name="ksAdapter" ref="ksAdapter1" />
+		<property name="searcher" ref="searcher1" />
+		<property name="filter" ref="filter1" />
+		<property name="randomRanker" ref="rankerRand1" />
+		<property name="noUMRanker" ref="rankerNoUM1" />
+		<property name="umRanker" ref="rankerUM1" />
+		<property name="randomSelector" ref="selectorRand1" />
+		<property name="noUMSelector" ref="selectorNoUM1" />
+		<property name="umSelector" ref="selectorUM1" />
+		<property name="generator" ref="generator1" />
+	</bean>
+<!-- 
+	<bean id="ksAdapter2"
+		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
+		<constructor-arg name="getMentionFromEventFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="getEventFromMentionFileName"
+			value="resources/SPARQL/general/getEventFromMention.qry" />
+		<constructor-arg name="getMentionFromEntityFileName" value="resources/SPARQL/usability/entityMentions.qry" />
+		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
+		<property name="timeoutMsec" value="${ksTimeout}" />
+		<property name="maxNumberOfConnections" value="${ksConnections}"/>
+		<property name="useStanford" value="true" />
+		<property name="maximumQueryLength" value="${ksQueryLength}" />
+	</bean>
+
+	<bean id="searcher2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
+		<constructor-arg name="standardSparqlQueryFileName"
+			value="resources/SPARQL/search/searchQuery.qry" />
+		<constructor-arg name="fallbackSparqlQueryFileName"
+			value="resources/SPARQL/search/fallbackSearchQuery.qry" />
+		<property name="ksAdapter" ref="ksAdapter2" />
+		<property name="maxNumberOfEvents" value="1000" />
+	</bean>
+
+	<bean id="filter2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
+		<constructor-arg name="eventStatisticsKeywordQueryFileName" value="resources/SPARQL/usability/eventStatisticsKeyword.qry" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/usability/eventConstituents.qry" />
+		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
+		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="A1" />
+					<property name="valueName" value="a1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="actorPositionLeft" />
+					<property name="directionToLookAt" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="actorPositionRight" />
+					<property name="directionToLookAt" value="1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="appearKeywordLabelPartsInText" />
+					<property name="splitLabels" value="true" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="inheritedLabel" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="false" />
+					<property name="doOnlyUseSentence" value="true" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="appearKeywordLabelsInSentence" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="inheritedLabel" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="appearKeywordDescriptionPartsInText" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityDescription" />
+					<property name="indirectLabelType" value="inheritedDescription" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="false" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="appearLabelsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="appearSplitDescriptionsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityDescription" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="appearSplitLabelsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="hasDBpediaEntities" />
+					<property name="valueName" value="numberOfKeywordEntities" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordEntityMatchingKeywordFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="keywordEntityMatchingKeyword" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="keywordInTextContains" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="doUseContainsInsteadOfRegex" value="true" />
+					<property name="useOriginalString" value="true" />
+					<property name="useStem" value="false" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.EntityMentionSurroundingsFeature">
+					<constructor-arg name="targetWordsFileName"
+						value="resources/features/prepositions-local.txt" />
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="locationPrepBeforeActor" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentSeparatedByEventFeature">
+					<property name="operationType" value="2" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="maxConstituentSeparatedByEvent" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="maxConstituentsPerMention" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+					<property name="normalize" value="false" />
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="minWordDistance" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankNeedsArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="argument" value="2" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="needsA2" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+					<property name="operationType" value="4" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="nonzeroConstituentsPerMention" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="numberOfMentions" />
+					<property name="valueName" value="numberOfMentions" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentOverlapFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="overlap" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.POSFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="pos" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+					<constructor-arg name="prepositionFileName"
+						value="resources/features/prepositions.txt" />
+					<property name="doSearchInsidePhrase" value="false" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="prepPhrase" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+					<constructor-arg name="prepositionFileName"
+						value="resources/features/prepositions-local.txt" />
+					<property name="doSearchInsidePhrase" value="false" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="prepPhraseLocation" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="false" />
+					<property name="doComputeAverageInsteadOfMax" value="false" />
+					<property name="doUseVerbAsFallback" value="false" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="propbankArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="false" />
+					<property name="doComputeAverageInsteadOfMax" value="true" />
+					<property name="doUseVerbAsFallback" value="false" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="propbankAvgArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="true" />
+					<property name="doComputeAverageInsteadOfMax" value="true" />
+					<property name="doUseVerbAsFallback" value="true" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="smartPropbankFallbackAvgArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="wordnet" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionPropertyFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#wordnetRef" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="wordnetRef" />
+				</bean>
+			</list>
+		</property>
+		<property name="ksAdapter" ref="ksAdapter2" />
+		<property name="numThreads" value="1000" />
+	</bean>
+
+	<bean id="rankerRand2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.RandomEventRanker" />
+
+	<bean id="rankerNoUM2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressorNoUM.model" />
+		<constructor-arg name="eventConstituentsQueryFileName"
+			value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName"
+			value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName"
+			value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter2" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="textEmbeddings13f" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="3" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="constituentEmbeddings11ed" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="1" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="constituentEmbeddings12em" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="2" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="matchingEntityLabel" />
+					<property name="needsKeywordIteration" value="True" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceLengthFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="sentenceLengthCharMin" />
+					<property name="useWordCount" value="false" />
+					<property name="aggregationType" value="1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="numberOfNonEntities" />
+					<property name="valueName" value="numberOfNonEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="numberOfDummyEntities" />
+					<property name="valueName" value="numberOfDummyEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="keywordEntities1ffd" />
+					<property name="aggregationType" value="1" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="normalizeResult" value="false" />
+					<property name="labelType" value="entityDbpediaLabel" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="keywordInSentence11ftft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="keywordInSentence11ttft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="BM25Sentence1.2" />
+					<property name="k1" value="1.2" />
+					<property name="useTextInsteadOfSentence" value="False" />
+					<property name="useTitleInsteadOfSentence" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="textEmbeddings31t" />
+					<property name="keywordAggregationType" value="3" />
+					<property name="innerAggregationType" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="constituentContains_it_ep" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityPrefLabel" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="sameDocument1tt" />
+					<property name="aggregationType" value="1" />
+					<property name="useSentenceInsteadOfText" value="true" />
+					<property name="normalizeOverNumberOfTotalDocuments"
+						value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="rankerUM2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressorUM.model" />
+		<constructor-arg name="eventConstituentsQueryFileName"
+			value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName"
+			value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName"
+			value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter2" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="textEmbeddings13f" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="3" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="constituentEmbeddings11ed" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="1" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="numberOfNonEntities" />
+					<property name="valueName" value="numberOfNonEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="numberOfDummyEntities" />
+					<property name="valueName" value="numberOfDummyEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="keywordInSentence11ftft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="keywordInSentence11ttft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="BM25Sentence1.2" />
+					<property name="k1" value="1.2" />
+					<property name="useTextInsteadOfSentence" value="False" />
+					<property name="useTitleInsteadOfSentence" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="textEmbeddings31t" />
+					<property name="keywordAggregationType" value="3" />
+					<property name="innerAggregationType" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="constituentContains_it_ep" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityPrefLabel" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="sameDocument1tt" />
+					<property name="aggregationType" value="1" />
+					<property name="useSentenceInsteadOfText" value="true" />
+					<property name="normalizeOverNumberOfTotalDocuments"
+						value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="constituentEmbeddings02edtrue" />
+					<property name="keywordAggregationType" value="0" />
+					<property name="innerAggregationType" value="2" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="numberOfKeywordEntitiesAvgtrue" />
+					<property name="valueName" value="numberOfKeywordEntities" />
+					<property name="aggregationType" value="0" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter2" />
+					<property name="name" value="keywordComparisonMaxtrue" />
+					<property name="aggregationType" value="2" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="selectorRand2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.00" />
+	</bean>
+
+	<bean id="selectorNoUM2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.86" />
+	</bean>
+
+	<bean id="selectorUM2"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.97" />
+	</bean>
+	
+	<bean id="generator2"
+		class="edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker">
+		<property name="ksAdapter" ref="ksAdapter2" />
+	</bean>
+
+	<bean id="newsTellerWorker2" class="edu.kit.anthropomatik.isl.newsTeller.server.NewsTellerWorker">
+		<property name="ksAdapter" ref="ksAdapter2" />
+		<property name="searcher" ref="searcher2" />
+		<property name="filter" ref="filter2" />
+		<property name="randomRanker" ref="rankerRand2" />
+		<property name="noUMRanker" ref="rankerNoUM2" />
+		<property name="umRanker" ref="rankerUM2" />
+		<property name="randomSelector" ref="selectorRand2" />
+		<property name="noUMSelector" ref="selectorNoUM2" />
+		<property name="umSelector" ref="selectorUM2" />
+		<property name="generator" ref="generator2" />
+	</bean>
+
+	<bean id="ksAdapter3"
+		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
+		<constructor-arg name="getMentionFromEventFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="getEventFromMentionFileName"
+			value="resources/SPARQL/general/getEventFromMention.qry" />
+		<constructor-arg name="getMentionFromEntityFileName" value="resources/SPARQL/usability/entityMentions.qry" />
+		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
+		<property name="timeoutMsec" value="${ksTimeout}" />
+		<property name="maxNumberOfConnections" value="${ksConnections}"/>
+		<property name="useStanford" value="true" />
+		<property name="maximumQueryLength" value="${ksQueryLength}" />
+	</bean>
+
+	<bean id="searcher3"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
+		<constructor-arg name="standardSparqlQueryFileName"
+			value="resources/SPARQL/search/searchQuery.qry" />
+		<constructor-arg name="fallbackSparqlQueryFileName"
+			value="resources/SPARQL/search/fallbackSearchQuery.qry" />
+		<property name="ksAdapter" ref="ksAdapter3" />
+		<property name="maxNumberOfEvents" value="1000" />
+	</bean>
+
+	<bean id="filter3"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
+		<constructor-arg name="eventStatisticsKeywordQueryFileName" value="resources/SPARQL/usability/eventStatisticsKeyword.qry" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/usability/eventConstituents.qry" />
+		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
+		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="A1" />
+					<property name="valueName" value="a1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="actorPositionLeft" />
+					<property name="directionToLookAt" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="actorPositionRight" />
+					<property name="directionToLookAt" value="1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="appearKeywordLabelPartsInText" />
+					<property name="splitLabels" value="true" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="inheritedLabel" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="false" />
+					<property name="doOnlyUseSentence" value="true" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="appearKeywordLabelsInSentence" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="inheritedLabel" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="appearKeywordDescriptionPartsInText" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityDescription" />
+					<property name="indirectLabelType" value="inheritedDescription" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="false" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="appearLabelsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="appearSplitDescriptionsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityDescription" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="appearSplitLabelsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="hasDBpediaEntities" />
+					<property name="valueName" value="numberOfKeywordEntities" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordEntityMatchingKeywordFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="keywordEntityMatchingKeyword" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="keywordInTextContains" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="doUseContainsInsteadOfRegex" value="true" />
+					<property name="useOriginalString" value="true" />
+					<property name="useStem" value="false" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.EntityMentionSurroundingsFeature">
+					<constructor-arg name="targetWordsFileName"
+						value="resources/features/prepositions-local.txt" />
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="locationPrepBeforeActor" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentSeparatedByEventFeature">
+					<property name="operationType" value="2" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="maxConstituentSeparatedByEvent" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="maxConstituentsPerMention" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+					<property name="normalize" value="false" />
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="minWordDistance" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankNeedsArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="argument" value="2" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="needsA2" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+					<property name="operationType" value="4" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="nonzeroConstituentsPerMention" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="numberOfMentions" />
+					<property name="valueName" value="numberOfMentions" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentOverlapFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="overlap" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.POSFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="pos" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+					<constructor-arg name="prepositionFileName"
+						value="resources/features/prepositions.txt" />
+					<property name="doSearchInsidePhrase" value="false" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="prepPhrase" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+					<constructor-arg name="prepositionFileName"
+						value="resources/features/prepositions-local.txt" />
+					<property name="doSearchInsidePhrase" value="false" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="prepPhraseLocation" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="false" />
+					<property name="doComputeAverageInsteadOfMax" value="false" />
+					<property name="doUseVerbAsFallback" value="false" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="propbankArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="false" />
+					<property name="doComputeAverageInsteadOfMax" value="true" />
+					<property name="doUseVerbAsFallback" value="false" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="propbankAvgArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="true" />
+					<property name="doComputeAverageInsteadOfMax" value="true" />
+					<property name="doUseVerbAsFallback" value="true" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="smartPropbankFallbackAvgArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="wordnet" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionPropertyFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#wordnetRef" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="wordnetRef" />
+				</bean>
+			</list>
+		</property>
+		<property name="ksAdapter" ref="ksAdapter3" />
+		<property name="numThreads" value="1000" />
+	</bean>
+
+	<bean id="rankerRand3"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.RandomEventRanker" />
+
+	<bean id="rankerNoUM3"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressorNoUM.model" />
+		<constructor-arg name="eventConstituentsQueryFileName"
+			value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName"
+			value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName"
+			value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter3" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="textEmbeddings13f" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="3" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="constituentEmbeddings11ed" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="1" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="constituentEmbeddings12em" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="2" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="matchingEntityLabel" />
+					<property name="needsKeywordIteration" value="True" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceLengthFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="sentenceLengthCharMin" />
+					<property name="useWordCount" value="false" />
+					<property name="aggregationType" value="1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="numberOfNonEntities" />
+					<property name="valueName" value="numberOfNonEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="numberOfDummyEntities" />
+					<property name="valueName" value="numberOfDummyEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="keywordEntities1ffd" />
+					<property name="aggregationType" value="1" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="normalizeResult" value="false" />
+					<property name="labelType" value="entityDbpediaLabel" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="keywordInSentence11ftft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="keywordInSentence11ttft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="BM25Sentence1.2" />
+					<property name="k1" value="1.2" />
+					<property name="useTextInsteadOfSentence" value="False" />
+					<property name="useTitleInsteadOfSentence" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="textEmbeddings31t" />
+					<property name="keywordAggregationType" value="3" />
+					<property name="innerAggregationType" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="constituentContains_it_ep" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityPrefLabel" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="sameDocument1tt" />
+					<property name="aggregationType" value="1" />
+					<property name="useSentenceInsteadOfText" value="true" />
+					<property name="normalizeOverNumberOfTotalDocuments"
+						value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="rankerUM3"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressorUM.model" />
+		<constructor-arg name="eventConstituentsQueryFileName"
+			value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName"
+			value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName"
+			value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter3" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="textEmbeddings13f" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="3" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="constituentEmbeddings11ed" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="1" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="numberOfNonEntities" />
+					<property name="valueName" value="numberOfNonEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="numberOfDummyEntities" />
+					<property name="valueName" value="numberOfDummyEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="keywordInSentence11ftft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="keywordInSentence11ttft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="BM25Sentence1.2" />
+					<property name="k1" value="1.2" />
+					<property name="useTextInsteadOfSentence" value="False" />
+					<property name="useTitleInsteadOfSentence" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="textEmbeddings31t" />
+					<property name="keywordAggregationType" value="3" />
+					<property name="innerAggregationType" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="constituentContains_it_ep" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityPrefLabel" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="sameDocument1tt" />
+					<property name="aggregationType" value="1" />
+					<property name="useSentenceInsteadOfText" value="true" />
+					<property name="normalizeOverNumberOfTotalDocuments"
+						value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="constituentEmbeddings02edtrue" />
+					<property name="keywordAggregationType" value="0" />
+					<property name="innerAggregationType" value="2" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="numberOfKeywordEntitiesAvgtrue" />
+					<property name="valueName" value="numberOfKeywordEntities" />
+					<property name="aggregationType" value="0" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter3" />
+					<property name="name" value="keywordComparisonMaxtrue" />
+					<property name="aggregationType" value="2" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="selectorRand3"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.00" />
+	</bean>
+
+	<bean id="selectorNoUM3"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.86" />
+	</bean>
+
+	<bean id="selectorUM3"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.97" />
+	</bean>
+	
+	<bean id="generator3"
+		class="edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker">
+		<property name="ksAdapter" ref="ksAdapter3" />
+	</bean>
+
+	<bean id="newsTellerWorker3" class="edu.kit.anthropomatik.isl.newsTeller.server.NewsTellerWorker">
+		<property name="ksAdapter" ref="ksAdapter3" />
+		<property name="searcher" ref="searcher3" />
+		<property name="filter" ref="filter3" />
+		<property name="randomRanker" ref="rankerRand3" />
+		<property name="noUMRanker" ref="rankerNoUM3" />
+		<property name="umRanker" ref="rankerUM3" />
+		<property name="randomSelector" ref="selectorRand3" />
+		<property name="noUMSelector" ref="selectorNoUM3" />
+		<property name="umSelector" ref="selectorUM3" />
+		<property name="generator" ref="generator3" />
+	</bean>
+
+	<bean id="ksAdapter4"
+		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
+		<constructor-arg name="getMentionFromEventFileName"
+			value="resources/SPARQL/general/getMentionFromEvent.qry" />
+		<constructor-arg name="getEventFromMentionFileName"
+			value="resources/SPARQL/general/getEventFromMention.qry" />
+		<constructor-arg name="getMentionFromEntityFileName" value="resources/SPARQL/usability/entityMentions.qry" />
+		<property name="serverURL" value="https://knowledgestore2.fbk.eu/nwr/wikinews" />
+		<property name="timeoutMsec" value="${ksTimeout}" />
+		<property name="maxNumberOfConnections" value="${ksConnections}"/>
+		<property name="useStanford" value="true" />
+		<property name="maximumQueryLength" value="${ksQueryLength}" />
+	</bean>
+
+	<bean id="searcher4"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.search.EventSearcher">
+		<constructor-arg name="standardSparqlQueryFileName"
+			value="resources/SPARQL/search/searchQuery.qry" />
+		<constructor-arg name="fallbackSparqlQueryFileName"
+			value="resources/SPARQL/search/fallbackSearchQuery.qry" />
+		<property name="ksAdapter" ref="ksAdapter4" />
+		<property name="maxNumberOfEvents" value="1000" />
+	</bean>
+
+	<bean id="filter4"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.ParallelEventFilter">
+		<constructor-arg name="classifierFileName" value="resources/filtering.model" />
+		<constructor-arg name="eventStatisticsQueryFileName" value="resources/SPARQL/usability/eventStatistics.qry" />
+		<constructor-arg name="eventStatisticsKeywordQueryFileName" value="resources/SPARQL/usability/eventStatisticsKeyword.qry" />
+		<constructor-arg name="eventConstituentsQueryFileName" value="resources/SPARQL/usability/eventConstituents.qry" />
+		<constructor-arg name="eventConstituentsKeywordQueryFileName" value="resources/SPARQL/usability/eventConstituentsKeyword.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName" value="resources/SPARQL/usability/entityProperties.qry" />
+		<constructor-arg name="entityPropertiesKeywordQueryFileName" value="resources/SPARQL/usability/entityPropertiesKeyword.qry" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="A1" />
+					<property name="valueName" value="a1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="actorPositionLeft" />
+					<property name="directionToLookAt" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ActorPositionFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="actorPositionRight" />
+					<property name="directionToLookAt" value="1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="appearKeywordLabelPartsInText" />
+					<property name="splitLabels" value="true" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="inheritedLabel" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="false" />
+					<property name="doOnlyUseSentence" value="true" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="appearKeywordLabelsInSentence" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="inheritedLabel" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="appearKeywordDescriptionPartsInText" />
+					<property name="entityType" value="keywordEntity" />
+					<property name="directLabelType" value="entityDescription" />
+					<property name="indirectLabelType" value="inheritedDescription" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="false" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="appearLabelsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="appearSplitDescriptionsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityDescription" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.DBPediaLabelInFullTextFeature">
+					<property name="splitLabels" value="true" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="appearSplitLabelsInText" />
+					<property name="entityType" value="entity" />
+					<property name="directLabelType" value="entityLabel" />
+					<property name="indirectLabelType" value="" />
+					<property name="usesKeyword" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="hasDBpediaEntities" />
+					<property name="valueName" value="numberOfKeywordEntities" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordEntityMatchingKeywordFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="keywordEntityMatchingKeyword" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.KeywordInFullTextFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="keywordInTextContains" />
+					<property name="doOnlyUseSentence" value="false" />
+					<property name="doUseContainsInsteadOfRegex" value="true" />
+					<property name="useOriginalString" value="true" />
+					<property name="useStem" value="false" />
+					<property name="usesKeyword" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.EntityMentionSurroundingsFeature">
+					<constructor-arg name="targetWordsFileName"
+						value="resources/features/prepositions-local.txt" />
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="locationPrepBeforeActor" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentSeparatedByEventFeature">
+					<property name="operationType" value="2" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="maxConstituentSeparatedByEvent" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="maxConstituentsPerMention" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentWordDistanceFeature">
+					<property name="normalize" value="false" />
+					<property name="operationType" value="1" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="minWordDistance" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankNeedsArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="argument" value="2" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="needsA2" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentsPerMentionFeature">
+					<property name="operationType" value="4" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="nonzeroConstituentsPerMention" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.SparqlFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="numberOfMentions" />
+					<property name="valueName" value="numberOfMentions" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.ConstituentOverlapFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="overlap" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.POSFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="pos" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+					<constructor-arg name="prepositionFileName"
+						value="resources/features/prepositions.txt" />
+					<property name="doSearchInsidePhrase" value="false" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="prepPhrase" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PrepPhraseFeature">
+					<constructor-arg name="prepositionFileName"
+						value="resources/features/prepositions-local.txt" />
+					<property name="doSearchInsidePhrase" value="false" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="prepPhraseLocation" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="false" />
+					<property name="doComputeAverageInsteadOfMax" value="false" />
+					<property name="doUseVerbAsFallback" value="false" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="propbankArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="false" />
+					<property name="doComputeAverageInsteadOfMax" value="true" />
+					<property name="doUseVerbAsFallback" value="false" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="propbankAvgArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.PropbankArgumentFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#propbankRef" />
+					<constructor-arg name="propbankFolderName" value="resources/propbank-frames" />
+					<property name="doAutomaticallyChooseProperty" value="true" />
+					<property name="doComputeAverageInsteadOfMax" value="true" />
+					<property name="doUseVerbAsFallback" value="true" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="smartPropbankFallbackAvgArgument" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.WordNetVerbCountFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="wordnet" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.filtering.features.MentionPropertyFeature">
+					<constructor-arg name="propertyURI"
+						value="http://dkm.fbk.eu/ontologies/newsreader#wordnetRef" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="wordnetRef" />
+				</bean>
+			</list>
+		</property>
+		<property name="ksAdapter" ref="ksAdapter4" />
+		<property name="numThreads" value="1000" />
+	</bean>
+
+	<bean id="rankerRand4"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.RandomEventRanker" />
+
+	<bean id="rankerNoUM4"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressorNoUM.model" />
+		<constructor-arg name="eventConstituentsQueryFileName"
+			value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName"
+			value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName"
+			value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter4" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="textEmbeddings13f" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="3" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="constituentEmbeddings11ed" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="1" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="constituentEmbeddings12em" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="2" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="matchingEntityLabel" />
+					<property name="needsKeywordIteration" value="True" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SentenceLengthFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="sentenceLengthCharMin" />
+					<property name="useWordCount" value="false" />
+					<property name="aggregationType" value="1" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="numberOfNonEntities" />
+					<property name="valueName" value="numberOfNonEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="numberOfDummyEntities" />
+					<property name="valueName" value="numberOfDummyEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordEntitiesFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="keywordEntities1ffd" />
+					<property name="aggregationType" value="1" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="normalizeResult" value="false" />
+					<property name="labelType" value="entityDbpediaLabel" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="keywordInSentence11ftft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="keywordInSentence11ttft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="BM25Sentence1.2" />
+					<property name="k1" value="1.2" />
+					<property name="useTextInsteadOfSentence" value="False" />
+					<property name="useTitleInsteadOfSentence" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="textEmbeddings31t" />
+					<property name="keywordAggregationType" value="3" />
+					<property name="innerAggregationType" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="constituentContains_it_ep" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityPrefLabel" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="sameDocument1tt" />
+					<property name="aggregationType" value="1" />
+					<property name="useSentenceInsteadOfText" value="true" />
+					<property name="normalizeOverNumberOfTotalDocuments"
+						value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="rankerUM4"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.SequentialEventRanker">
+		<constructor-arg name="regressorFileName" value="resources/regressorUM.model" />
+		<constructor-arg name="eventConstituentsQueryFileName"
+			value="resources/SPARQL/ranking/eventConstituents.qry" />
+		<constructor-arg name="entityPropertiesQueryFileName"
+			value="resources/SPARQL/ranking/entityProperties.qry" />
+		<constructor-arg name="eventStatisticsQueryFileName"
+			value="resources/SPARQL/ranking/eventStatistics.qry" />
+		<property name="ksAdapter" ref="ksAdapter4" />
+		<property name="features">
+			<list>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="textEmbeddings13f" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="3" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="constituentEmbeddings11ed" />
+					<property name="keywordAggregationType" value="1" />
+					<property name="innerAggregationType" value="1" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="numberOfNonEntities" />
+					<property name="valueName" value="numberOfNonEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="numberOfDummyEntities" />
+					<property name="valueName" value="numberOfDummyEntities" />
+					<property name="aggregationType" value="0" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="keywordInSentence11ftft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="false" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordsInSentenceFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="keywordInSentence11ttft" />
+					<property name="aggregationTypeKeyword" value="1" />
+					<property name="aggregationTypeSentence" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+					<property name="useContainsInsteadOfRegex" value="true" />
+					<property name="useStemInsteadOfWord" value="false" />
+					<property name="splitKeywords" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.BM25Feature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="BM25Sentence1.2" />
+					<property name="k1" value="1.2" />
+					<property name="useTextInsteadOfSentence" value="False" />
+					<property name="useTitleInsteadOfSentence" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.TextEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="textEmbeddings31t" />
+					<property name="keywordAggregationType" value="3" />
+					<property name="innerAggregationType" value="1" />
+					<property name="useTitleInsteadOfSentence" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentContainsStringsFeature">
+					<constructor-arg name="stringFileName" value="resources/features/it.txt" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="constituentContains_it_ep" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityPrefLabel" />
+					<property name="needsKeywordIteration" value="False" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SameDocumentFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="sameDocument1tt" />
+					<property name="aggregationType" value="1" />
+					<property name="useSentenceInsteadOfText" value="true" />
+					<property name="normalizeOverNumberOfTotalDocuments"
+						value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.ConstituentEmbeddingsFeature">
+					<constructor-arg name="stopWordsFileName"
+						value="resources/features/stopwords.txt" />
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="constituentEmbeddings02edtrue" />
+					<property name="keywordAggregationType" value="0" />
+					<property name="innerAggregationType" value="2" />
+					<property name="entityName" value="entity" />
+					<property name="valueName" value="entityDescription" />
+					<property name="needsKeywordIteration" value="False" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.SparqlCountFeature">
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="numberOfKeywordEntitiesAvgtrue" />
+					<property name="valueName" value="numberOfKeywordEntities" />
+					<property name="aggregationType" value="0" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+				<bean class="edu.kit.anthropomatik.isl.newsTeller.retrieval.ranking.features.KeywordComparisonFeature">
+					<property name="embeddings" ref="embeddings" />
+					<property name="ksAdapter" ref="ksAdapter4" />
+					<property name="name" value="keywordComparisonMaxtrue" />
+					<property name="aggregationType" value="2" />
+					<property name="useUserInterestsInsteadOfQuery" value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="selectorRand4"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.00" />
+	</bean>
+
+	<bean id="selectorNoUM4"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.86" />
+	</bean>
+
+	<bean id="selectorUM4"
+		class="edu.kit.anthropomatik.isl.newsTeller.retrieval.selecting.EventSelector">
+		<property name="threshold" value="0.97" />
+	</bean>
+	
+	<bean id="generator4"
+		class="edu.kit.anthropomatik.isl.newsTeller.generation.SentencePicker">
+		<property name="ksAdapter" ref="ksAdapter4" />
+	</bean>
+
+	<bean id="newsTellerWorker4" class="edu.kit.anthropomatik.isl.newsTeller.server.NewsTellerWorker">
+		<property name="ksAdapter" ref="ksAdapter4" />
+		<property name="searcher" ref="searcher4" />
+		<property name="filter" ref="filter4" />
+		<property name="randomRanker" ref="rankerRand4" />
+		<property name="noUMRanker" ref="rankerNoUM4" />
+		<property name="umRanker" ref="rankerUM4" />
+		<property name="randomSelector" ref="selectorRand4" />
+		<property name="noUMSelector" ref="selectorNoUM4" />
+		<property name="umSelector" ref="selectorUM4" />
+		<property name="generator" ref="generator4" />
+	</bean>
+ -->
 
 </beans>
