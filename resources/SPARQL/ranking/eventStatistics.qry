@@ -1,20 +1,13 @@
-SELECT ?event (COUNT(?entity) AS ?numberOfEntities) (COUNT(DISTINCT ?dbpediaEntity) AS ?numberOfDbpediaEntities) (COUNT(DISTINCT ?nonEntity) AS ?numberOfNonEntities) (COUNT(DISTINCT ?dummyEntity) AS ?numberOfDummyEntities) (COUNT(DISTINCT ?keywordNonEntity) AS ?numberOfKeywordNonEntities) (COUNT(DISTINCT ?keywordEntity) AS ?numberOfKeywordEntities)
+SELECT ?event (COUNT(DISTINCT ?nonEntity) AS ?numberOfNonEntities) (COUNT(DISTINCT ?dummyEntity) AS ?numberOfDummyEntities) (COUNT(DISTINCT ?keywordEntity) AS ?numberOfKeywordEntities)
 WHERE
 {
 	VALUES ?event { *keys* } .
-	{ ?event sem:hasActor|sem:hasPlace ?entity } UNION
-	{ ?event sem:hasActor|sem:hasPlace ?dbpediaEntity .
-		GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en>	{ ?dbpediaEntity rdfs:label ?label } } UNION
+	{ ?event rdf:type sem:Event } UNION
 	{ ?event sem:hasActor|sem:hasPlace ?nonEntity .
 		FILTER NOT EXISTS { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?nonEntity ?link ?object } } } UNION
 	{ ?event sem:hasActor|sem:hasPlace ?dummyEntity .
 		FILTER NOT EXISTS { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?dummyEntity ?link ?object } }
 		FILTER NOT EXISTS { ?dummyEntity rdf:type ?class } } UNION
-	{ ?event sem:hasActor|sem:hasPlace ?keywordNonEntity.
-		FILTER NOT EXISTS { GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en> { ?keywordNonEntity ?link ?object } } .
-		?keywordNonEntity rdf:type* ?class .
-		GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en>
-		{ ?class rdfs:label ?classLabel . FILTER(REGEX(STR(?classLabel),"*k*", "i")) } } UNION
 	{ ?event sem:hasActor|sem:hasPlace ?keywordEntity .
 		GRAPH <http://www.newsreader-project.eu/modules/dbpedia-en>
 		{ ?keywordEntity rdfs:label ?keywordLabel .	FILTER(REGEX(STR(?keywordLabel),"*k*", "i")) } }
