@@ -47,7 +47,7 @@ public abstract class FullTextFeature extends UsabilityFeature {
 	
 	public FullTextFeature() {
 		super();
-		this.threadPool = Executors.newCachedThreadPool();//Executors.newFixedThreadPool(5000);//Executors.newCachedThreadPool();
+		this.threadPool = Executors.newCachedThreadPool();
 	}
 
 	public void shutDown() {
@@ -70,6 +70,9 @@ public abstract class FullTextFeature extends UsabilityFeature {
 			String regex = Util.KEYWORD_REGEX_PREFIX_JAVA + labelPart.toLowerCase() + Util.KEYWORD_REGEX_SUFFIX_JAVA;
 						
 			for (String line : lowerCaseText) {
+				if (Thread.interrupted())
+					throw new InterruptedException("thread was killed");
+				
 				if (line.isEmpty())
 					continue;
 				if ((doUseContainsInsteadOfRegex && line.contains(labelPart)) || (line.matches(regex))) { // ignoring case
@@ -100,15 +103,6 @@ public abstract class FullTextFeature extends UsabilityFeature {
 				if (labelPart.isEmpty())
 					continue;
 				futures.add(threadPool.submit(new LabelPartWorker(labelPart, lowerCaseText)));
-//				String regex = Util.KEYWORD_REGEX_PREFIX_JAVA + labelPart.toLowerCase() + Util.KEYWORD_REGEX_SUFFIX_JAVA;
-//				for (String line : lowerCaseText) {
-//					if (line.isEmpty())
-//						continue;
-//					if ((doUseContainsInsteadOfRegex && line.contains(labelPart)) || (line.matches(regex))) { // ignoring case
-//						sum++;
-//						break;
-//					}
-//				}
 				
 			}
 			
@@ -120,6 +114,7 @@ public abstract class FullTextFeature extends UsabilityFeature {
 						log.warn("Thread execution somehow failed!");
 					if (log.isDebugEnabled())
 						log.debug("Thread execution error", e);
+					future.cancel(true);
 				}
 			}
 			
@@ -131,29 +126,6 @@ public abstract class FullTextFeature extends UsabilityFeature {
 	
 	private double checkLabel(List<String> labelParts, Set<String> originalTexts) {
 		double max = 0.0;
-//		for (String text : originalTexts) { // take max over all texts
-//			
-//			String[] lowerCaseText = text.toLowerCase().split("\n");
-//			double sum = 0.0;
-//			for (String labelPart : labelParts) { // compute fraction of label parts that are actually mentioned
-//				if (labelPart.isEmpty())
-//					continue;
-//				String regex = Util.KEYWORD_REGEX_PREFIX_JAVA + labelPart.toLowerCase() + Util.KEYWORD_REGEX_SUFFIX_JAVA;
-//				for (String line : lowerCaseText) {
-//					if (line.isEmpty())
-//						continue;
-//					if ((this.doUseContainsInsteadOfRegex && line.contains(labelPart)) || (line.matches(regex))) { // ignoring case
-//						sum++;
-//						break;
-//					}
-//				}
-//				
-//			}
-//			sum /= labelParts.size();
-//			if (sum > max)
-//				max = sum;
-//		}
-		
 		List<Future<Double>> futures = new ArrayList<Future<Double>>();
 		for (String text : originalTexts)
 			futures.add(threadPool.submit(new TextWorker(labelParts, text)));
@@ -166,6 +138,7 @@ public abstract class FullTextFeature extends UsabilityFeature {
 					log.warn("Thread execution somehow failed!");
 				if (log.isDebugEnabled())
 					log.debug("Thread execution error", e);
+				future.cancel(true);
 			}
 		}
 		
@@ -216,18 +189,11 @@ public abstract class FullTextFeature extends UsabilityFeature {
 						log.warn("Thread execution somehow failed!");
 					if (log.isDebugEnabled())
 						log.debug("Thread execution error", e);
+					future.cancel(true);
 				}
 			}
 			
 			return appeared;
-			
-//			double appeared = 0;
-//			for (List<String> labelParts : labels) {
-//				appeared = checkLabel(labelParts, originalTexts);
-//				if (appeared > 0)
-//					break;
-//			}
-//			return appeared;
 		}
 		
 	}
@@ -249,6 +215,7 @@ public abstract class FullTextFeature extends UsabilityFeature {
 					log.warn("Thread execution somehow failed!");
 				if (log.isDebugEnabled())
 					log.debug("Thread execution error", e);
+				future.cancel(true);
 			}
 		}
 		

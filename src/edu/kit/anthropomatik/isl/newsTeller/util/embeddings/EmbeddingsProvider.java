@@ -47,8 +47,8 @@ public class EmbeddingsProvider {
 			else
 				this.wordVectors = WordVectorSerializer.loadGoogleModel(new File(embeddingsFileName), true);
 		} catch (Exception e) {
-			if (log.isErrorEnabled())
-				log.error("Could not load word vectors!");
+			if (log.isFatalEnabled())
+				log.fatal("Could not load word vectors!");
 			if (log.isDebugEnabled())
 				log.debug("Could not load word vectors", e);
 		}

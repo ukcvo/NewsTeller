@@ -130,6 +130,9 @@ public class ParallelEventFilter implements IEventFilter {
 			
 			for (int i = 0; i < futures.size(); i++) {
 				try {
+					if (Thread.interrupted())
+						throw new InterruptedException("thread was killed");
+					
 					values[i] = (double) futures.get(i).get();
 					event.addUsabilityFeatureValue(features.get(i).getName(), values[i]);
 				} catch (Exception e) {
@@ -137,6 +140,10 @@ public class ParallelEventFilter implements IEventFilter {
 						log.error("thread execution somehow failed!");
 					if (log.isDebugEnabled())
 						log.debug("thread execution exception", e);
+					values[i] = 0;
+					futures.get(i).cancel(true);
+					if (e instanceof InterruptedException)
+						break;
 				} 
 			}
 			
@@ -199,6 +206,7 @@ public class ParallelEventFilter implements IEventFilter {
 							log.error("thread execution somehow failed!");
 						if (log.isDebugEnabled())
 							log.debug("thread execution exception", e);
+						f.cancel(true);
 					}
 				}
 			}
@@ -262,6 +270,7 @@ public class ParallelEventFilter implements IEventFilter {
 							log.error("thread execution somehow failed!");
 						if (log.isDebugEnabled())
 							log.debug("thread execution exception", e);
+						f.cancel(true);
 					}
 				}
 			}
@@ -276,6 +285,7 @@ public class ParallelEventFilter implements IEventFilter {
 					log.error("thread execution somehow failed!");
 				if (log.isDebugEnabled())
 					log.debug("thread execution exception", e);
+				f.cancel(true);
 			}
 		}
 		
@@ -297,7 +307,7 @@ public class ParallelEventFilter implements IEventFilter {
 		// parallel feature extraction
 		for (NewsEvent e : events) {
 			EventWorker w = new EventWorker(e, userQuery, resultMap);
-			futures.add(threadPool.submit(w));//ksAdapter.submit(w));
+			futures.add(threadPool.submit(w));
 		}
 		
 		for (Future<?> f : futures) {
@@ -308,6 +318,7 @@ public class ParallelEventFilter implements IEventFilter {
 					log.error("thread execution somehow failed!");
 				if (log.isDebugEnabled())
 					log.debug("thread execution exception", e);
+				f.cancel(true);
 			}
 		}
 		

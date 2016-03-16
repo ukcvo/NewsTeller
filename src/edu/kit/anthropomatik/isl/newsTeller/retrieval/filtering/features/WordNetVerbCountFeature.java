@@ -31,8 +31,8 @@ public class WordNetVerbCountFeature extends UsabilityFeature {
 		try {
 			this.dict = Dictionary.getDefaultResourceInstance();
 		} catch (JWNLException e) {
-			if (log.isErrorEnabled())
-				log.error("failed to open WordNet dictionary!");
+			if (log.isFatalEnabled())
+				log.fatal("failed to open WordNet dictionary!");
 			if (log.isDebugEnabled())
 				log.debug("failed to open WordNet dictionary", e);
 		}

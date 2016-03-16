@@ -233,6 +233,9 @@ public class KnowledgeStoreAdapter {
 				for (BindingSet tuple : tuples) {
 					String key = tuple.getValue(keyVariable).toString();
 					for (String valueVariable : valueVariables) {
+						if (Thread.interrupted())
+							throw new InterruptedException("thread was killed");
+						
 						ConcurrentMap<String, Set<String>> relationMap = relationMaps.get(Util.getRelationName(keyVariable, valueVariable, keyword.getWord()));
 						Set<String> values = relationMap.containsKey(key) ? relationMap.get(key) : new HashSet<String>();
 
@@ -362,6 +365,7 @@ public class KnowledgeStoreAdapter {
 							log.error("thread execution somehow failed!");
 						if (log.isDebugEnabled())
 							log.debug("thread execution exception", e);
+						f.cancel(true);
 					}
 				}
 
@@ -396,6 +400,9 @@ public class KnowledgeStoreAdapter {
 				stream.close();
 				session.close();
 				for (BindingSet tuple : tuples) {
+					if (Thread.interrupted())
+						throw new InterruptedException("thread was killed");
+					
 					String entityURI = tuple.getValue("entity").toString();
 					ConcurrentMap<String, Set<KSMention>> entityMap = resultMap.get(entityURI);
 
@@ -469,6 +476,7 @@ public class KnowledgeStoreAdapter {
 					log.error("thread execution somehow failed!");
 				if (log.isDebugEnabled())
 					log.debug("thread execution exception", e);
+				f.cancel(true);
 			}
 		}
 		
@@ -524,6 +532,9 @@ public class KnowledgeStoreAdapter {
 				for (Record r : records) {
 					String key = r.getID().toString();
 					for (String propertyURI : propertyURIs) {
+						if (Thread.interrupted())
+							throw new InterruptedException("thread was killed");
+						
 						Set<String> values = new HashSet<String>(r.get(new URIImpl(propertyURI), String.class));
 						propertyMap.get(propertyURI).put(key, values);
 					}
@@ -598,6 +609,7 @@ public class KnowledgeStoreAdapter {
 					log.error("thread execution somehow failed!");
 				if (log.isDebugEnabled())
 					log.debug("thread execution exception", e);
+				f.cancel(true);
 			}
 		}
 
@@ -677,6 +689,7 @@ public class KnowledgeStoreAdapter {
 					log.error("thread execution somehow failed!");
 				if (log.isDebugEnabled())
 					log.debug("thread execution exception", e);
+				f.cancel(true);
 			}
 		}
 
@@ -1296,6 +1309,9 @@ public class KnowledgeStoreAdapter {
 				session.close();
 
 				for (Record r : records) {
+					if (Thread.interrupted())
+						throw new InterruptedException("thread was killed");
+					
 					String key = r.getID().toString();
 					Set<String> stringValues = new HashSet<String>(r.get(new URIImpl("http://dkm.fbk.eu/ontologies/knowledgestore#hasMention"), String.class));
 					runKeyValueSparqlQuery(getEventFromMentionTemplate, stringValues, keywords);
@@ -1350,6 +1366,7 @@ public class KnowledgeStoreAdapter {
 					log.error("thread execution somehow failed!");
 				if (log.isDebugEnabled())
 					log.debug("thread execution exception", e);
+				f.cancel(true);
 			}
 		}
 	}
