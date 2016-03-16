@@ -279,6 +279,8 @@ public class ParallelEventFilter implements IEventFilter {
 		// wait until everything is done
 		for (Future<?> f : futures) {
 			try {
+				if (Thread.interrupted())
+					throw new InterruptedException("ParallelEventFilter was interrupted!");
 				f.get();
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
@@ -312,6 +314,8 @@ public class ParallelEventFilter implements IEventFilter {
 		
 		for (Future<?> f : futures) {
 			try {
+				if (Thread.interrupted())
+					throw new InterruptedException("ParallelEventFilter was interrupted!");
 				f.get();
 			} catch (Exception e) {
 				if (log.isErrorEnabled())
