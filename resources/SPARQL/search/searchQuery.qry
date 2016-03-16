@@ -18,4 +18,3 @@ WHERE
     }
     FILTER(REGEX(STR(?label),"*k*", "i")) #case-insensitive matching
 }
-GROUP BY ?event

@@ -700,8 +700,8 @@ public class KnowledgeStoreAdapter {
 		}
 		ConcurrentMap<String, Set<String>> relationMap = this.sparqlCache.get(relationName);
 		if (!relationMap.containsKey(key)) {
-			if (log.isDebugEnabled())
-				log.debug(String.format("relation '%s' does not contain key '%s'. Returning empty set.", relationName, key));
+			if (log.isTraceEnabled())
+				log.trace(String.format("relation '%s' does not contain key '%s'. Returning empty set.", relationName, key));
 			return new HashSet<String>();
 		}
 		return relationMap.get(key);

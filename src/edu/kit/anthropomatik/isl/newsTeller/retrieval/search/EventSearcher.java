@@ -53,8 +53,8 @@ public class EventSearcher {
 		if (log.isTraceEnabled())
 			log.trace(String.format("findEvents(userQuery = <%s>, userModel = %s)", StringUtils.collectionToCommaDelimitedString(userQuery), userModel.toString()));
 
-		Set<NewsEvent> events = new HashSet<NewsEvent>();
-		
+		Set<NewsEvent> result = new HashSet<NewsEvent>();
+		List<NewsEvent> events = new ArrayList<NewsEvent>();
 		for (Keyword k : userQuery)
 			Util.stemKeyword(k);
 		
@@ -89,16 +89,13 @@ public class EventSearcher {
 				fallbackSparqlQuery.replace(Util.PLACEHOLDER_BIF_CONTAINS, bifString.toString()).replace(Util.PLACEHOLDER_KEYWORD, regexString.toString()), 
 				Util.VARIABLE_EVENT));
 		
-		if (events.size() > maxNumberOfEvents) {
-			// throw away some of the events to make further processing faster
-			List<NewsEvent> eventsAsList = new ArrayList<NewsEvent>(events);
-			Collections.shuffle(eventsAsList);
-			if (log.isDebugEnabled())
-				log.debug(String.format("found %d events, selecting randomly %d for further processing", events.size(), maxNumberOfEvents));
-			events = new HashSet<NewsEvent>(eventsAsList.subList(0, maxNumberOfEvents));
-			
-		}
+		// throw away some of the events to make further processing faster - if necessary
+		Collections.shuffle(events);
+		int numberOfEventsToKeep = Math.min(events.size(), maxNumberOfEvents);
+		if (log.isDebugEnabled())
+			log.debug(String.format("found %d events, selecting randomly %d for further processing", events.size(), numberOfEventsToKeep));
+		result = new HashSet<NewsEvent>(events.subList(0, numberOfEventsToKeep));
 		
-		return events;
+		return result;
 	}	
 }

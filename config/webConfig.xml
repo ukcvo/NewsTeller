@@ -12,9 +12,10 @@
     
 	<context:property-placeholder properties-ref="serverProperties" />
 	<util:properties id="serverProperties">
-		<prop key="ksConnections">50</prop>
+		<prop key="ksConnections">20</prop>
 		<prop key="ksTimeout">20000</prop>
-		<prop key="ksQueryLength">6000</prop>
+		<prop key="ksQueryLength">5000</prop>
+		<prop key="searchLimit">1000</prop>
 	</util:properties>
     
     
@@ -23,8 +24,8 @@
 			<list>
 				<ref bean="newsTellerWorker0" />
 				<ref bean="newsTellerWorker1" />
-				<!-- <ref bean="newsTellerWorker2" />
-				<ref bean="newsTellerWorker3" />
+				<ref bean="newsTellerWorker2" />
+				<!-- <ref bean="newsTellerWorker3" />
 				<ref bean="newsTellerWorker4" />  -->
 			</list>
 		</property>
@@ -61,7 +62,7 @@
 		<constructor-arg name="fallbackSparqlQueryFileName"
 			value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter0" />
-		<property name="maxNumberOfEvents" value="1000" />
+		<property name="maxNumberOfEvents" value="${searchLimit}" />
 	</bean>
 
 	<bean id="filter0"
@@ -590,7 +591,7 @@
 		<constructor-arg name="fallbackSparqlQueryFileName"
 			value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter1" />
-		<property name="maxNumberOfEvents" value="1000" />
+		<property name="maxNumberOfEvents" value="${searchLimit}" />
 	</bean>
 
 	<bean id="filter1"
@@ -1097,7 +1098,7 @@
 		<property name="umSelector" ref="selectorUM1" />
 		<property name="generator" ref="generator1" />
 	</bean>
-<!-- 
+ 
 	<bean id="ksAdapter2"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
 		<constructor-arg name="getMentionFromEventFileName"
@@ -1119,7 +1120,7 @@
 		<constructor-arg name="fallbackSparqlQueryFileName"
 			value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter2" />
-		<property name="maxNumberOfEvents" value="1000" />
+		<property name="maxNumberOfEvents" value="${searchLimit}" />
 	</bean>
 
 	<bean id="filter2"
@@ -1627,7 +1628,7 @@
 		<property name="generator" ref="generator2" />
 	</bean>
 
-	<bean id="ksAdapter3"
+<!--	<bean id="ksAdapter3"
 		class="edu.kit.anthropomatik.isl.newsTeller.knowledgeStore.KnowledgeStoreAdapter">
 		<constructor-arg name="getMentionFromEventFileName"
 			value="resources/SPARQL/general/getMentionFromEvent.qry" />
@@ -1648,7 +1649,7 @@
 		<constructor-arg name="fallbackSparqlQueryFileName"
 			value="resources/SPARQL/search/fallbackSearchQuery.qry" />
 		<property name="ksAdapter" ref="ksAdapter3" />
-		<property name="maxNumberOfEvents" value="1000" />
+		<property name="maxNumberOfEvents" value="${searchLimit}" />
 	</bean>
 
 	<bean id="filter3"
@@ -2167,7 +2168,7 @@
 		<property name="timeoutMsec" value="${ksTimeout}" />
 		<property name="maxNumberOfConnections" value="${ksConnections}"/>
 		<property name="useStanford" value="true" />
-		<property name="maximumQueryLength" value="${ksQueryLength}" />
+		<property name="maximumQueryLength" value="${searchLimit}" />
 	</bean>
 
 	<bean id="searcher4"
