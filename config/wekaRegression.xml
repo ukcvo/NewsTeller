@@ -421,4 +421,11 @@
 			</bean>
 		</property>
 	</bean>
+	
+	<bean id="r_random" class="weka.classifiers.meta.RandomizableFilteredClassifier">
+		<property name="filter" ref="r_removeStringFilter" />
+		<property name="classifier">
+			<bean class="edu.kit.anthropomatik.isl.newsTeller.benchmark.RandomRanker" />
+		</property>
+	</bean>
 </beans>

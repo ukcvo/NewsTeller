@@ -295,7 +295,7 @@ public class RankingBenchmark {
 			if (regressor instanceof Randomizable && averageRandomizables) { 
 				// randomizable classifier, so take average over run with 10 different deterministic seeds
 				Random rand = new Random(1);
-				for (int i = 0; i < 10; i++) {
+				for (int i = 0; i < 100; i++) {
 					Classifier copy = AbstractClassifier.makeCopy(regressor);
 					((Randomizable) copy).setSeed(rand.nextInt());
 					regressorsToAverage.add(copy);
